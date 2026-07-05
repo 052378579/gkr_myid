@@ -1,0 +1,10 @@
+# Abaikan seluruh isi folder writable (termasuk cache, logs, session, dll)
+writable/*
+# Kecualikan file index.html di dalam writable agar folder strukturnya tetap ada
+!writable/index.html
+
+# Abaikan konfigurasi env lokal
+.env
+
+# Abaikan konfigurasi aplikasi utama yang spesifik per server (Dev vs Prod)
+app/Config/App.php
