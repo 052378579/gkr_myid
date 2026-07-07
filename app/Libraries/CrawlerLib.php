@@ -21,16 +21,19 @@ class CrawlerLib
 
     public function linkExists($url) 
     {
+        $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
         return $this->siteModel->where('url', $url)->first() !== null;
     }
     
     public function imageExists($src) 
     {
+        $src = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $src);
         return $this->imageModel->where('imageUrl', $src)->first() !== null;
     }
     
     public function insertLink($url, $title, $description, $keywords)
     {
+        $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
         return $this->siteModel->insert([
             'url' => $url,
             'title' => $title,
@@ -42,6 +45,8 @@ class CrawlerLib
     
     public function insertImage($url, $src, $alt, $title) 
     {
+        $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
+        $src = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $src);
         return $this->imageModel->insert([
             'siteUrl' => $url,
             'imageUrl' => $src,
@@ -162,5 +167,109 @@ class CrawlerLib
         foreach($this->crawling as $site) {
             $this->followLinks($site, $depth + 1, $maxDepth);
         }
+    }
+    public function crawlLocalDirectory($targetPath)
+    {
+        $rootPath = '/var/www/FOTO';
+        $baseDomain = 'https://foto.gkr.my.id/';
+        
+        $sitesAdded = 0;
+        $imagesAdded = 0;
+        
+        // Remove trailing slash for consistency
+        $targetPath = rtrim($targetPath, '/');
+        
+        if (!str_starts_with($targetPath, $rootPath)) {
+            echo "<span style='color: #dc3545;'>[ERROR] Path harus berawalan $rootPath</span><br>\n";
+            return;
+        }
+
+        echo "<span style='color: #a9a9a9;'>Memulai scan direktori lokal:</span> $targetPath<br>\n";
+        @ob_flush(); @flush();
+        
+        // Determine folders to scan
+        if ($targetPath === $rootPath) {
+            $foldersToScan = [$rootPath . '/BUYER', $rootPath . '/GRACIA', $rootPath . '/SWATCHES'];
+        } else {
+            $foldersToScan = [$targetPath];
+        }
+
+        foreach ($foldersToScan as $folderPath) {
+            if (!is_dir($folderPath)) {
+                echo "<span style='color: #dc3545;'>[ERROR] Folder tidak ditemukan:</span> $folderPath<br>\n";
+                @ob_flush(); @flush();
+                continue;
+            }
+
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($folderPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            foreach ($iterator as $item) {
+                // Get relative path without leading slash relative to rootPath '/var/www/FOTO'
+                $relativePath = substr($item->getPathname(), strlen(rtrim($rootPath, '/')) + 1);
+                $relativePath = str_replace('\\', '/', $relativePath); // for windows compatibility if any
+
+                if ($item->isFile()) {
+                    $ext = strtolower($item->getExtension());
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+                        $filename = $item->getFilename();
+                        $filenameWithoutExt = pathinfo($filename, PATHINFO_FILENAME);
+                        
+                        $parentFolder = basename($item->getPath());
+                        
+                        // Check naming logic
+                        if (str_starts_with(strtoupper($filename), 'IMG_') || str_starts_with(strtoupper($filename), 'DCIM_')) {
+                            $title = $parentFolder;
+                        } else {
+                            // Extract from filename: Play-Adobe 40616-0011 -> Play Adobe 40616 0011
+                            $title = str_replace(['-', '_'], ' ', $filenameWithoutExt);
+                            // Format FG codes, e.g. (fg 42918) -> (FG-42918)
+                            $title = preg_replace('/\(?\bfg\s*([0-9]+)\)?/i', '(FG-$1)', $title);
+                        }
+                        
+                        $description = $title;
+                        
+                        // Keywords: split title by space
+                        $keywordsArray = explode(' ', strtolower($title));
+                        $keywords = implode(', ', $keywordsArray);
+                        
+                        $alt = $title;
+                        
+                        // imageUrl format: https://foto.gkr.my.id/SWATCHES/FABRIC/SUNBRELLA/Play-Adobe 40616-0011.webp
+                        $imageUrl = $baseDomain . $relativePath;
+                        
+                        // siteUrl format: https://foto.gkr.my.id/?SWATCHES/FABRIC/SUNBRELLA#pid=Play-Adobe 40616-0011.webp
+                        $parentRelativeDir = dirname($relativePath);
+                        if ($parentRelativeDir === '.') {
+                            $parentRelativeDir = '';
+                        }
+                        
+                        $siteUrl = rtrim($baseDomain, '/') . '/?' . $parentRelativeDir . '#pid=' . $filename;
+                        
+                        if ($this->imageExists($imageUrl)) {
+                             echo "<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #4a9c8f;'>Skip: $title sudah ada</span><br>\n";
+                        } else {
+                            // Insert into cari_sites
+                            if (!$this->linkExists($siteUrl)) {
+                                if ($this->insertLink($siteUrl, $title, $description, $keywords)) {
+                                    $sitesAdded++;
+                                }
+                            }
+                            
+                            // Insert into cari_images
+                            if ($this->insertImage($siteUrl, $imageUrl, $alt, $title)) {
+                                $imagesAdded++;
+                                echo "<span style='color: #28a745;'>[SUCCESS]</span> <span style='color: #d4d4d4;'>Menambahkan: $title</span><br>\n";
+                            }
+                        }
+                    }
+                }
+                @ob_flush(); @flush();
+            }
+        }
+        
+        echo "<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>SELESAI: Berhasil menambahkan $sitesAdded tautan ke cari_sites dan $imagesAdded gambar ke cari_images.</span><br>\n";
     }
 }

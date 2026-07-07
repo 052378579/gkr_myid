@@ -13,7 +13,7 @@ class Crawler extends BaseController
 
     public function doCrawl()
     {
-        // Disable output buffering for live stream
+        // Nonaktifkan output buffering untuk mengirim aliran langsung (live stream) ke layar
         ini_set('output_buffering', 'off');
         ini_set('zlib.output_compression', false);
         while (@ob_end_flush());
@@ -21,19 +21,34 @@ class Crawler extends BaseController
         ob_implicit_flush(true);
         header('Cache-Control: no-cache');
 
-        $url = $this->request->getPost('url');
+        $tautan = $this->request->getPost('url');
         
-        if (empty($url)) {
-            echo "URL is required.\n";
+        if (empty($tautan)) {
+            echo "URL/Tautan wajib diisi.\n";
             return;
         }
 
-        echo "Mulai crawling URL: $url <br>\n";
+        echo "Mulai memindai (crawling) URL: $tautan <br>\n";
         @ob_flush(); @flush();
 
-        $crawler = new CrawlerLib();
-        $crawler->followLinks($url, 1, 3); // max depth 3
+        $mesinPencari = new CrawlerLib();
         
-        echo "<br>Selesai crawling.<br>\n";
+        if (str_starts_with($tautan, '/var/www/FOTO')) {
+            // URL Statis untuk pemetaan akan ditangani oleh CrawlerLib
+            $mesinPencari->crawlLocalDirectory($tautan);
+        } else {
+            $mesinPencari->followLinks($tautan, 1, 3); // Batas kedalaman rekursif (max depth 3)
+        }
+    }
+
+    public function resetDb()
+    {
+        $basisData = \Config\Database::connect();
+        
+        // Mengosongkan tabel data
+        $basisData->table('cari_sites')->truncate();
+        $basisData->table('cari_images')->truncate();
+        
+        return $this->response->setJSON(['status' => 'sukses']);
     }
 }

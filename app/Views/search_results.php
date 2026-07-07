@@ -183,6 +183,7 @@
         font-size: 18px;
         text-decoration: none;
         font-weight: 400;
+        text-transform: capitalize;
     }
     .site-result .title a:hover {
         text-decoration: underline;
@@ -198,6 +199,7 @@
         color: #545454;
         font-size: 13px;
         line-height: 1.4;
+        text-transform: capitalize;
     }
     
     .masonry-grid { width: 100%; }
@@ -219,6 +221,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-transform: capitalize;
     }
     .grid-item .image-domain {
         font-size: 10px;
@@ -405,8 +408,17 @@
                 </div>
             </div>
             
-            <a href="#" class="profile-btn rounded-circle overflow-hidden d-inline-block" style="width: 32px; height: 32px;">
-                <img src="https://ui-avatars.com/api/?name=Budi&background=0D8ABC&color=fff" alt="Profile" class="w-100 h-100 object-fit-cover">
+            <?php 
+                $namaLengkap = session()->get('nama_lengkap') ?? 'User';
+                $fotoProfil = session()->get('foto_profil');
+                if (!empty($fotoProfil)) {
+                    $avatarUrl = base_url('dokumen/karyawan/' . $fotoProfil);
+                } else {
+                    $avatarUrl = "https://ui-avatars.com/api/?name=" . urlencode($namaLengkap) . "&background=2B3385&color=fff";
+                }
+            ?>
+            <a href="<?= base_url('profile') ?>" class="profile-btn rounded-circle overflow-hidden d-inline-block text-decoration-none shadow-sm" style="width: 38px; height: 38px; border: 2px solid #ffffff;">
+                <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
             </a>
         </div>
     </div>

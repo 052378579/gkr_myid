@@ -1,14 +1,24 @@
-# Memory Document: Doogle (gkr_my.id) - CodeIgniter 4 Version
+# Memory Document: Mesin Pencari Gracia (gkr.my.id) - CodeIgniter 4 Version
 
-Dokumen ini berfungsi sebagai "ingatan" teknis atau basis pengetahuan (*knowledge base*) terkait arsitektur dan struktur proyek Doogle pasca-refactoring ke CodeIgniter 4.
+Dokumen ini berfungsi sebagai "ingatan" teknis atau basis pengetahuan (*knowledge base*) terkait arsitektur dan struktur proyek Mesin Pencari Gracia pasca-refactoring ke CodeIgniter 4.
 
 ## 1. Ikhtisar Proyek
-* **Nama Proyek:** Doogle (Gracia)
+* **Nama Proyek:** Mesin Pencari Gracia
 * **Tujuan:** Mesin pencari khusus katalog furniture dan gambar terkait.
 * **Stack Utama:** CodeIgniter 4 (PHP), Vue.js 3 (CDN), Bootstrap 5.3.
 * **Database:** `gkr_myid` (MySQL/MariaDB). Konfigurasi database diatur secara eksklusif lewat file `.env`.
 
-## 2. Arsitektur Database
+## 2. Arsitektur Jaringan & Topologi Server
+Sistem beroperasi dalam dua environment utama:
+* **Lingkungan Development (Dev):** 
+  * Akses via IP Lokal (LAN): `192.168.1.4`
+  * Akses via VPN (ZeroTier): `10.147.17.40`
+* **Lingkungan Production (Prod):**
+  * Akses via IP Lokal (LAN): Dinamis (saat ini `192.168.1.17`)
+  * Akses via VPN (ZeroTier): `10.147.17.60`
+* **Penyajian Gambar Statis:** Gambar dan foto dari direktori lokal server (`/var/www/FOTO`) dilayani secara statis melalui subdomain `https://foto.gkr.my.id`.
+
+## 3. Arsitektur Database
 Sistem menggunakan dua tabel utama yang kini direpresentasikan penuh oleh CI4 Models:
 1. **`cari_sites` (Model: `SiteModel`)**:
    * Kolom: `id`, `url`, `title`, `description`, `keywords`, `clicks`, `deleted_at`.
@@ -18,7 +28,7 @@ Sistem menggunakan dua tabel utama yang kini direpresentasikan penuh oleh CI4 Mo
    * Data direktori dan galeri gambar.
 *Catatan:* Konsep *Soft Delete* otomatis ditangani framework CI4 melalui konfigurasi parameter model.
 
-## 3. Struktur Direktori CI4 Utama
+## 4. Struktur Direktori CI4 Utama
 Migrasi dari *flat PHP files* ke arsitektur *MVC*:
 * `app/Controllers/`: 
   * `Home.php`: Menangani halaman muka.
@@ -33,15 +43,15 @@ Migrasi dari *flat PHP files* ke arsitektur *MVC*:
 * `app/Libraries/`: 
   * Lokasi baru untuk logika kelas `CrawlerLib.php`, `DomDocumentParser.php`, dan `UrlRewriter.php`.
 * `public/`:
-  * Dokumen root web server (`index.php`). Semua *assets* (CSS Bootstrap/kustom, script Vue/JS, library jQuery/Fancybox/Masonry, images) dipindahkan ke `public/assets/`.
+  * Dokumen root web server (`index.php`). File *stylesheet* (CSS) ditempatkan di `public/css/` dan *script* (JS) di `public/js/`.
 
-## 4. Pola Implementasi Saat Ini
+## 5. Pola Implementasi Saat Ini
 * **Frontend:** Tampilan visual UI sepenuhnya ditenagai oleh **Bootstrap 5.3**. Sedangkan state, interaktivitas, dan reaktivitas diurus oleh **Vue.js 3** melalui CDN, yang dimuat di dalam layout view CodeIgniter.
 * **Routing:** Seluruh akses URL dipusatkan pada Controller melalui routing terstruktur (dideklarasikan di `app/Config/Routes.php`), menggantikan file `.php` murni lama.
 * **Metode Crawling:**
-  * Mendukung pembacaan direktori file lokal dan ekstraksi DOM situs eksternal yang di-package sebagai *CI4 Library*.
+  * Mendukung pembacaan direktori file lokal (`/var/www/FOTO`) dan ekstraksi DOM situs eksternal yang di-package sebagai *CI4 Library*.
   * Menggunakan *flush streaming mechanism* di dalam Controller khusus yang melepas buffer (bypass view renderer CI4) untuk melayani *Fetch API ReadableStream* pada front-end crawler secara real-time.
 
-## 5. Resolusi Utang Teknis (Technical Debt)
-* **Keamanan Endpoint:** Akses halaman administratif (`/admin`, `/crawl`, `/reset-db`) dapat dilindungi secara elegan dengan memanfaatkan fitur **CI4 Filters** (Middleware) tanpa mengotori logika bisnis.
+## 6. Resolusi Utang Teknis (Technical Debt)
+* **Keamanan Endpoint:** Akses halaman administratif (`/admin`, `/crawl`, `/crawler/resetDb`) dapat dilindungi secara elegan dengan memanfaatkan fitur **CI4 Filters** (Middleware) tanpa mengotori logika bisnis.
 * **Isolasi Logika:** Pemisahan fungsional sangat kentara di mana endpoint pengambilan/perubahan data dipusatkan di `Api` Controller terpisah, sedangkan presentasi dikunci di dalam Views.

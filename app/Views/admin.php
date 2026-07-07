@@ -69,8 +69,8 @@
             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center py-3" v-if="totalSitePages > 1">
                 <span class="text-muted small">Halaman {{ currentPageSites }} dari {{ totalSitePages }}</span>
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageSites === 1" @click="currentPageSites--">Prev</button>
-                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageSites === totalSitePages" @click="currentPageSites++">Next</button>
+                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageSites === 1" @click="currentPageSites--">Sebelumnya</button>
+                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageSites === totalSitePages" @click="currentPageSites++">Berikutnya</button>
                 </div>
             </div>
         </div>
@@ -117,8 +117,8 @@
             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center py-3" v-if="totalImagePages > 1">
                 <span class="text-muted small">Halaman {{ currentPageImages }} dari {{ totalImagePages }}</span>
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageImages === 1" @click="currentPageImages--">Prev</button>
-                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageImages === totalImagePages" @click="currentPageImages++">Next</button>
+                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageImages === 1" @click="currentPageImages--">Sebelumnya</button>
+                    <button class="btn btn-sm btn-outline-secondary" :disabled="currentPageImages === totalImagePages" @click="currentPageImages++">Berikutnya</button>
                 </div>
             </div>
         </div>
@@ -128,6 +128,19 @@
 
 <?= $this->section('scripts') ?>
 <script>
+    const escapeHtml = (unsafe) => {
+        if (unsafe == null) return '';
+        return (unsafe + '').replace(/[&<"'>]/g, function (m) {
+            switch (m) {
+                case '&': return '&amp;';
+                case '<': return '&lt;';
+                case '>': return '&gt;';
+                case '"': return '&quot;';
+                case "'": return '&#039;';
+            }
+        });
+    };
+
     const { createApp, ref, computed, onMounted } = Vue;
 
     createApp({
@@ -181,10 +194,10 @@
                 const { value: formValues } = await Swal.fire({
                     title: 'Edit Situs',
                     html:
-                        '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-s1" class="form-control" value="' + (site.title || '') + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">URL</label><input id="swal-s2" class="form-control" value="' + (site.url || '') + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Deskripsi</label><textarea id="swal-s3" class="form-control">' + (site.description || '') + '</textarea></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Kata Kunci</label><input id="swal-s4" class="form-control" value="' + (site.keywords || '') + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-s1" class="form-control" value="' + escapeHtml(site.title) + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">URL</label><input id="swal-s2" class="form-control" value="' + escapeHtml(site.url) + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">Deskripsi</label><textarea id="swal-s3" class="form-control">' + escapeHtml(site.description) + '</textarea></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">Kata Kunci</label><input id="swal-s4" class="form-control" value="' + escapeHtml(site.keywords) + '"></div>' +
                         '<div class="mb-3 text-start"><label class="form-label">Klik</label><input type="number" id="swal-s5" class="form-control" value="' + (site.clicks || '0') + '"></div>',
                     focusConfirm: false,
                     showCancelButton: true,
@@ -221,10 +234,10 @@
                 const { value: formValues } = await Swal.fire({
                     title: 'Edit Gambar',
                     html:
-                        '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-i1" class="form-control" value="' + (img.title || '') + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Alt (Alternatif)</label><input id="swal-i2" class="form-control" value="' + (img.alt || '') + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">URL Gambar (Source)</label><input id="swal-i3" class="form-control" value="' + (img.imageUrl || '') + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">URL Situs Induk</label><input id="swal-i4" class="form-control" value="' + (img.siteUrl || '') + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-i1" class="form-control" value="' + escapeHtml(img.title) + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">Alt (Alternatif)</label><input id="swal-i2" class="form-control" value="' + escapeHtml(img.alt) + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">URL Gambar (Source)</label><input id="swal-i3" class="form-control" value="' + escapeHtml(img.imageUrl) + '"></div>' +
+                        '<div class="mb-3 text-start"><label class="form-label">URL Situs Induk</label><input id="swal-i4" class="form-control" value="' + escapeHtml(img.siteUrl) + '"></div>' +
                         '<div class="mb-3 text-start"><label class="form-label">Klik</label><input type="number" id="swal-i5" class="form-control" value="' + (img.clicks || '0') + '"></div>' +
                         '<div class="mb-3 text-start"><label class="form-label">Status (0=Aktif, 1=Rusak)</label><input type="number" id="swal-i6" class="form-control" value="' + (img.broken || '0') + '" min="0" max="1"></div>',
                     focusConfirm: false,

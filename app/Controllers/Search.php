@@ -9,48 +9,49 @@ class Search extends BaseController
 {
     public function index()
     {
-        $query = $this->request->getGet('q') ?? '';
-        $type = $this->request->getGet('type') ?? 'sites';
-        $page = (int)($this->request->getGet('page') ?? 1);
-        $pageSize = 20;
+        // Sanitasi input pencarian untuk mencegah Reflected XSS
+        $kataKunci = esc($this->request->getGet('q') ?? '');
+        $tipe = esc($this->request->getGet('type') ?? 'sites');
+        $halaman = (int)($this->request->getGet('page') ?? 1);
+        $batasHalaman = 20;
 
-        if (empty(trim($query))) {
+        if (empty(trim($kataKunci))) {
             return redirect()->to('/');
         }
 
-        $siteModel = new SiteModel();
-        $imageModel = new ImageModel();
+        $modelSitus = new SiteModel();
+        $modelGambar = new ImageModel();
 
-        $data = [
-            'query' => $query,
-            'type'  => $type,
-            'page'  => $page,
+        $dataPencarian = [
+            'query' => $kataKunci, // Dipertahankan 'query' untuk kompatibilitas View
+            'type'  => $tipe,      // Dipertahankan 'type' untuk kompatibilitas View
+            'page'  => $halaman,
         ];
 
-        if ($type === 'sites') {
-            $data['totalResults'] = $siteModel->like('title', $query)
-                                              ->orLike('description', $query)
-                                              ->orLike('url', $query)
-                                              ->countAllResults(false);
-            $data['results'] = $siteModel->like('title', $query)
-                                         ->orLike('description', $query)
-                                         ->orLike('url', $query)
-                                         ->paginate($pageSize, 'default', $page);
-            $data['pager'] = $siteModel->pager;
+        if ($tipe === 'sites') {
+            $dataPencarian['totalResults'] = $modelSitus->like('title', $kataKunci)
+                                                        ->orLike('description', $kataKunci)
+                                                        ->orLike('url', $kataKunci)
+                                                        ->countAllResults(false);
+            $dataPencarian['results'] = $modelSitus->like('title', $kataKunci)
+                                                   ->orLike('description', $kataKunci)
+                                                   ->orLike('url', $kataKunci)
+                                                   ->paginate($batasHalaman, 'default', $halaman);
+            $dataPencarian['pager'] = $modelSitus->pager;
         } else {
-            $data['totalResults'] = $imageModel->like('title', $query)
-                                               ->orLike('alt', $query)
-                                               ->orLike('imageUrl', $query)
-                                               ->where('broken', 0)
-                                               ->countAllResults(false);
-            $data['results'] = $imageModel->like('title', $query)
-                                          ->orLike('alt', $query)
-                                          ->orLike('imageUrl', $query)
-                                          ->where('broken', 0)
-                                          ->paginate($pageSize, 'default', $page);
-            $data['pager'] = $imageModel->pager;
+            $dataPencarian['totalResults'] = $modelGambar->like('title', $kataKunci)
+                                                         ->orLike('alt', $kataKunci)
+                                                         ->orLike('imageUrl', $kataKunci)
+                                                         ->where('broken', 0)
+                                                         ->countAllResults(false);
+            $dataPencarian['results'] = $modelGambar->like('title', $kataKunci)
+                                                    ->orLike('alt', $kataKunci)
+                                                    ->orLike('imageUrl', $kataKunci)
+                                                    ->where('broken', 0)
+                                                    ->paginate($batasHalaman, 'default', $halaman);
+            $dataPencarian['pager'] = $modelGambar->pager;
         }
 
-        return view('search_results', $data);
+        return view('search_results', $dataPencarian);
     }
 }

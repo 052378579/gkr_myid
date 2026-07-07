@@ -19,23 +19,23 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg border-0 rounded-4" style="width: 320px; background-color: #f0f4f9;">
             <div class="row g-3 text-center">
                 <div class="col-4">
-                    <a href="#" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Google_Business_Profile_Icon.svg/512px-Google_Business_Profile_Icon.svg.png" style="width:45px; height:45px;" class="mb-1">
-                        <div class="small text-truncate">Pengelola...</div>
+                    <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                        <img src="assets/icon/erp.png" style="width:45px; height:45px;" class="mb-1">
+                        <div class="small text-truncate">ERP</div>
                     </a>
                 </div>
                 <div class="col-4">
-                    <a href="#" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Google_Maps_icon_%282020%29.svg/512px-Google_Maps_icon_%282020%29.svg.png" style="width:45px; height:45px;" class="mb-1">
-                        <div class="small">Maps</div>
+                    <a href="https://wickerkane.com/" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                        <img src="assets/icon/wickerkane.png" style="width:45px; height:45px;" class="mb-1">
+                        <div class="small">WIckerKAne</div>
                     </a>
                 </div>
                 <div class="col-4">
-                    <a href="#" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/512px-Google_%22G%22_logo.svg.png" style="width:45px; height:45px;" class="mb-1">
-                        <div class="small">Telusuri</div>
+                    <a href="https://srv180.niagahoster.com:2096/" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                        <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
+                        <div class="small">WebMail</div>
                     </a>
-                </div>
+                </div><!--
                 <div class="col-4">
                     <a href="#" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/512px-Google_Calendar_icon_%282020%29.svg.png" style="width:45px; height:45px;" class="mb-1">
@@ -53,19 +53,80 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Google_Meet_icon_%282020%29.svg/512px-Google_Meet_icon_%282020%29.svg.png" style="width:45px; height:45px;" class="mb-1">
                         <div class="small">Meet</div>
                     </a>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
 
-    <div class="rounded-circle overflow-hidden" style="width: 32px; height: 32px; cursor: pointer;">
-        <img src="https://ui-avatars.com/api/?name=Budi&background=0D8ABC&color=fff" alt="Avatar" class="w-100 h-100 object-fit-cover">
-    </div>
+    <?php 
+        $namaLengkap = session()->get('nama_lengkap') ?? 'User';
+        $fotoProfil = session()->get('foto_profil');
+        if (!empty($fotoProfil)) {
+            $avatarUrl = base_url('dokumen/karyawan/' . $fotoProfil);
+        } else {
+            $avatarUrl = "https://ui-avatars.com/api/?name=" . urlencode($namaLengkap) . "&background=2B3385&color=fff";
+        }
+    ?>
+    <a href="<?= base_url('profile') ?>" class="rounded-circle overflow-hidden text-decoration-none shadow-sm" style="width: 38px; height: 38px; cursor: pointer; display: inline-block; border: 2px solid #ffffff;" title="Profil Karyawan">
+        <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
+    </a>
+
+    <a href="<?= base_url('logout') ?>" class="text-danger text-decoration-none fw-medium d-flex align-items-center">
+        <i class="fas fa-sign-out-alt me-1" style="font-size: 32px;"></i>
+    </a>
 </div>
 
 <style>
     .hover-bg:hover {
         background-color: #e4e7eb;
+    }
+
+    /* --- Rainbow Animation for Cari Button --- */
+    .google-ai-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .google-ai-container::before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: -2px;
+        right: 2px;
+        bottom: -4px;
+        z-index: 1;
+        background: linear-gradient(
+            90deg, 
+            #4285F4 0%, 
+            #34A853 30%, 
+            #FBBC05 60%, 
+            #EA4335 100%
+        );
+        background-size: 200% auto;
+        border-radius: 100px;
+        filter: blur(5px);
+        opacity: 0;
+        transition: opacity 0.4s ease, background-position 0.4s ease;
+    }
+
+    .google-ai-container:hover::before {
+        opacity: 0.85;
+        animation: geserPelangi 2s linear infinite;
+    }
+
+    .google-ai-container:hover .btn-mode-ai {
+        background-color: #ffffff !important;
+    }
+
+    @keyframes geserPelangi {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
+    }
+
+    .btn-mode-ai {
+        position: relative;
+        z-index: 2;
+        transition: background-color 0.3s ease;
     }
 </style>
 
@@ -82,9 +143,11 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     <div class="w-100" style="max-width: 580px;">
         <form @submit.prevent="search" class="d-flex flex-column align-items-center gap-4">
             <input type="text" v-model="query" class="form-control form-control-lg rounded-pill px-4 border" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px;" autofocus required>
-            <button type="submit" class="btn btn-light rounded-pill text-secondary shadow-sm" style="background-color: #f8f9fa; min-width: 120px; font-size: 0.95rem;">
-                Cari
-            </button>
+            <div class="google-ai-container">
+                <button type="submit" class="btn btn-light rounded-pill text-secondary shadow-sm btn-mode-ai" style="background-color: #f8f9fa; min-width: 120px; font-size: 0.95rem;">
+                    Cari
+                </button>
+            </div>
             <div class="mt-2">
                 <a href="https://docs.google.com/viewer?url=https://wickerkane.com/WIckerKAne-IFEX-2026.pdf" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: #2B3385; font-size: 0.95rem;">
                     <i class="fa-solid fa-book-open"></i> Katalog 2026

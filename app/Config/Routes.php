@@ -4,10 +4,19 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
+$routes->get('/login', 'Auth::index');
+$routes->post('/login/process', 'Auth::process');
+$routes->get('/logout', 'Auth::logout');
+
+$routes->get('/profile', 'Profile::index');
+$routes->post('/profile/update', 'Profile::update');
+$routes->get('/dokumen/karyawan/(:segment)', 'Dokumen::karyawan/$1');
+
 $routes->get('/cari', 'Search::index');
 $routes->get('/admin', 'Admin::index');
 $routes->get('/crawl', 'Crawler::index');
 $routes->post('/crawler/doCrawl', 'Crawler::doCrawl');
+$routes->post('/crawler/resetDb', 'Crawler::resetDb');
 
 $routes->post('/api/updateLinkCount', 'Api::updateLinkCount');
 $routes->post('/api/updateImageCount', 'Api::updateImageCount');

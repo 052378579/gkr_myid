@@ -1,8 +1,8 @@
-# Struktur Folder Doogle (Refactoring CodeIgniter 4)
+# Struktur Folder Mesin Pencari Gracia (Refactoring CodeIgniter 4)
 
-Struktur berikut memvisualisasikan bagaimana aplikasi Doogle direfaktor menggunakan standar kerangka kerja **CodeIgniter 4**, dengan balutan frontend **Bootstrap 5.3** dan **Vue.js 3 (CDN)**.
+Struktur berikut memvisualisasikan bagaimana aplikasi Mesin Pencari Gracia direfaktor menggunakan standar kerangka kerja **CodeIgniter 4**, dengan balutan frontend **Bootstrap 5.3** dan **Vue.js 3 (CDN)**.
 
-📁 doogle
+📁 gkr_myid
 ├── 📁 app
 │   ├── 📁 Config
 │   │   ├── 📄 Database.php        <- Definisi pengaturan dasar koneksi (timpa dengan .env)
@@ -33,22 +33,21 @@ Struktur berikut memvisualisasikan bagaimana aplikasi Doogle direfaktor mengguna
 ├── 📁 public
 │   ├── 📄 index.php               <- Entry Point CodeIgniter 4 Front Controller
 │   ├── 📄 .htaccess
-│   └── 📁 assets                  <- Seluruh aset publik dipindah ke sini
-│       ├── 📁 css
-│       │   ├── 📁 fancybox
-│       │   │   └── 📄 jquery.fancybox.min.css
-│       │   └── 📄 style.css       <- Kustomisasi minor (Glassmorphism dll)
-│       ├── 📁 images
-│       │   ├── 📁 favicon
-│       │   ├── 📁 icons
-│       │   └── 📄 doogleLogo.png
-│       └── 📁 js
-│           ├── 📁 fancybox
-│           │   └── 📄 jquery.fancybox.min.js
-│           ├── 📁 masonry
-│           │   └── 📄 masonry.pkgd.min.js
-│           ├── 📄 jquery-3.3.1.min.js  <- Dibiarkan hanya untuk depedensi Fancybox/Masonry
-│           └── 📄 app.js          <- Skrip Vue.js murni aplikasi
+│   ├── 📁 css
+│   │   ├── 📁 fancybox
+│   │   │   └── 📄 jquery.fancybox.min.css
+│   │   └── 📄 style.css       <- Kustomisasi minor (Glassmorphism dll)
+│   ├── 📁 images
+│   │   ├── 📁 favicon
+│   │   ├── 📁 icons
+│   │   └── 📄 doogleLogo.png
+│   └── 📁 js
+│       ├── 📁 fancybox
+│       │   └── 📄 jquery.fancybox.min.js
+│       ├── 📁 masonry
+│       │   └── 📄 masonry.pkgd.min.js
+│       ├── 📄 jquery-3.3.1.min.js  <- Dibiarkan hanya untuk depedensi Fancybox/Masonry
+│       └── 📄 app.js          <- Skrip Vue.js murni aplikasi
 ├── 📄 .env                        <- Konfigurasi env, termasuk kredensial Database
 ├── 📄 spark                       <- CLI Utility CodeIgniter 4
 ├── 📄 PRD.md

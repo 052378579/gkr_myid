@@ -39,6 +39,23 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
 
 /*
  *---------------------------------------------------------------
+ * AUTO-DETECT ENVIRONMENT (DEV / PROD)
+ *---------------------------------------------------------------
+ */
+if (isset($_SERVER['HTTP_HOST'])) {
+    $host = $_SERVER['HTTP_HOST'];
+    // Jika diakses via IP LAN (192.168.*), VPN ZeroTier (10.147.*), atau localhost
+    if (strpos($host, '192.168.') === 0 || strpos($host, '10.147.') === 0 || strpos($host, 'localhost') === 0) {
+        $_SERVER['CI_ENVIRONMENT'] = 'development';
+    } 
+    // Jika diakses via Domain Publik (gkr.budi.biz.id, gkr.my.id, dll)
+    else {
+        $_SERVER['CI_ENVIRONMENT'] = 'production';
+    }
+}
+
+/*
+ *---------------------------------------------------------------
  * BOOTSTRAP THE APPLICATION
  *---------------------------------------------------------------
  * This process sets up the path constants, loads and registers

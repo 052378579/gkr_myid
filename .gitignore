@@ -3,8 +3,17 @@ writable/*
 # Kecualikan file index.html di dalam writable agar folder strukturnya tetap ada
 !writable/index.html
 
-# Abaikan konfigurasi env lokal
+# Abaikan konfigurasi env lokal dan Konfigurasi AI Vibe Coding 
 .env
+PRD.md
+Memory.md
+Skills.md
+StyleGuide.md
+Tasks.md
 
 # Abaikan konfigurasi aplikasi utama yang spesifik per server (Dev vs Prod)
 app/Config/App.php
+public/index.php
+
+# Abaikan file Database
+gkr_myid.sql

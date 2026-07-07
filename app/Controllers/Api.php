@@ -7,98 +7,123 @@ use App\Models\ImageModel;
 
 class Api extends BaseController
 {
+    public function __construct()
+    {
+        // Mengizinkan akses CORS lintas lingkungan (Dev/Prod IP & ZeroTier)
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+    }
+
     public function updateLinkCount()
     {
         $id = $this->request->getPost('id');
         if ($id) {
-            $siteModel = new SiteModel();
-            $siteModel->where('id', $id)->set('clicks', 'clicks+1', false)->update();
-            return $this->response->setJSON(['status' => 'success']);
+            $modelSitus = new SiteModel();
+            // Bypass validasi agar rule 'required' pada URL tidak memblokir penambahan counter
+            $modelSitus->skipValidation(true)->where('id', $id)->set('clicks', 'clicks+1', false)->update();
+            return $this->response->setJSON(['status' => 'sukses']);
         }
-        return $this->response->setJSON(['status' => 'error']);
+        return $this->response->setJSON(['status' => 'gagal']);
     }
 
     public function updateImageCount()
     {
         $id = $this->request->getPost('id');
         if ($id) {
-            $imageModel = new ImageModel();
-            $imageModel->where('id', $id)->set('clicks', 'clicks+1', false)->update();
-            return $this->response->setJSON(['status' => 'success']);
+            $modelGambar = new ImageModel();
+            // Bypass validasi
+            $modelGambar->skipValidation(true)->where('id', $id)->set('clicks', 'clicks+1', false)->update();
+            return $this->response->setJSON(['status' => 'sukses']);
         }
-        return $this->response->setJSON(['status' => 'error']);
+        return $this->response->setJSON(['status' => 'gagal']);
     }
 
     public function setBroken()
     {
-        $src = $this->request->getPost('src');
-        if ($src) {
-            $imageModel = new ImageModel();
-            $imageModel->where('imageUrl', $src)->set(['broken' => 1])->update();
-            return $this->response->setJSON(['status' => 'success']);
+        $sumberGambar = $this->request->getPost('src');
+        if ($sumberGambar) {
+            // Sanitasi sederhana
+            $sumberGambar = esc($sumberGambar);
+            
+            $modelGambar = new ImageModel();
+            // Bypass validasi
+            $modelGambar->skipValidation(true)->where('imageUrl', $sumberGambar)->set(['broken' => 1])->update();
+            return $this->response->setJSON(['status' => 'sukses']);
         }
-        return $this->response->setJSON(['status' => 'error']);
+        return $this->response->setJSON(['status' => 'gagal']);
     }
 
-    // For Vue.js Admin panel
+    // Untuk antarmuka Vue.js di Panel Admin
     public function getSites()
     {
-        $siteModel = new SiteModel();
-        return $this->response->setJSON(['data' => $siteModel->findAll()]);
+        $modelSitus = new SiteModel();
+        return $this->response->setJSON(['data' => $modelSitus->findAll()]);
     }
 
     public function getImages()
     {
-        $imageModel = new ImageModel();
-        return $this->response->setJSON(['data' => $imageModel->findAll()]);
+        $modelGambar = new ImageModel();
+        return $this->response->setJSON(['data' => $modelGambar->findAll()]);
     }
 
     public function deleteSite($id)
     {
-        $siteModel = new SiteModel();
-        $siteModel->delete($id);
-        return $this->response->setJSON(['status' => 'success']);
+        $modelSitus = new SiteModel();
+        $modelSitus->delete($id);
+        return $this->response->setJSON(['status' => 'sukses']);
     }
 
     public function deleteImage($id)
     {
-        $imageModel = new ImageModel();
-        $imageModel->delete($id);
-        return $this->response->setJSON(['status' => 'success']);
+        $modelGambar = new ImageModel();
+        $modelGambar->delete($id);
+        return $this->response->setJSON(['status' => 'sukses']);
     }
 
     public function updateSite($id)
     {
-        $siteModel = new SiteModel();
-        $data = [];
-        if ($this->request->getPost('title') !== null) $data['title'] = $this->request->getPost('title');
-        if ($this->request->getPost('url') !== null) $data['url'] = $this->request->getPost('url');
-        if ($this->request->getPost('description') !== null) $data['description'] = $this->request->getPost('description');
-        if ($this->request->getPost('keywords') !== null) $data['keywords'] = $this->request->getPost('keywords');
-        if ($this->request->getPost('clicks') !== null) $data['clicks'] = $this->request->getPost('clicks');
+        $modelSitus = new SiteModel();
+        $dataPembaruan = [];
         
-        if (!empty($data)) {
-            $siteModel->update($id, $data);
-            return $this->response->setJSON(['status' => 'success']);
+        // Sanitasi input (Perlindungan XSS)
+        if ($this->request->getPost('title') !== null) $dataPembaruan['title'] = esc($this->request->getPost('title'));
+        if ($this->request->getPost('url') !== null) $dataPembaruan['url'] = esc($this->request->getPost('url'));
+        if ($this->request->getPost('description') !== null) $dataPembaruan['description'] = esc($this->request->getPost('description'));
+        if ($this->request->getPost('keywords') !== null) $dataPembaruan['keywords'] = esc($this->request->getPost('keywords'));
+        if ($this->request->getPost('clicks') !== null) $dataPembaruan['clicks'] = (int)$this->request->getPost('clicks');
+        
+        if (!empty($dataPembaruan)) {
+            if ($modelSitus->update($id, $dataPembaruan)) {
+                return $this->response->setJSON(['status' => 'sukses']);
+            } else {
+                // Tangkap dan lempar pesan error dari validasi Model
+                return $this->response->setJSON(['status' => 'gagal', 'pesan' => $modelSitus->errors()]);
+            }
         }
-        return $this->response->setJSON(['status' => 'error']);
+        return $this->response->setJSON(['status' => 'gagal']);
     }
 
     public function updateImage($id)
     {
-        $imageModel = new ImageModel();
-        $data = [];
-        if ($this->request->getPost('title') !== null) $data['title'] = $this->request->getPost('title');
-        if ($this->request->getPost('alt') !== null) $data['alt'] = $this->request->getPost('alt');
-        if ($this->request->getPost('imageUrl') !== null) $data['imageUrl'] = $this->request->getPost('imageUrl');
-        if ($this->request->getPost('siteUrl') !== null) $data['siteUrl'] = $this->request->getPost('siteUrl');
-        if ($this->request->getPost('clicks') !== null) $data['clicks'] = $this->request->getPost('clicks');
-        if ($this->request->getPost('broken') !== null) $data['broken'] = $this->request->getPost('broken');
+        $modelGambar = new ImageModel();
+        $dataPembaruan = [];
         
-        if (!empty($data)) {
-            $imageModel->update($id, $data);
-            return $this->response->setJSON(['status' => 'success']);
+        // Sanitasi input (Perlindungan XSS)
+        if ($this->request->getPost('title') !== null) $dataPembaruan['title'] = esc($this->request->getPost('title'));
+        if ($this->request->getPost('alt') !== null) $dataPembaruan['alt'] = esc($this->request->getPost('alt'));
+        if ($this->request->getPost('imageUrl') !== null) $dataPembaruan['imageUrl'] = esc($this->request->getPost('imageUrl'));
+        if ($this->request->getPost('siteUrl') !== null) $dataPembaruan['siteUrl'] = esc($this->request->getPost('siteUrl'));
+        if ($this->request->getPost('clicks') !== null) $dataPembaruan['clicks'] = (int)$this->request->getPost('clicks');
+        if ($this->request->getPost('broken') !== null) $dataPembaruan['broken'] = (int)$this->request->getPost('broken');
+        
+        if (!empty($dataPembaruan)) {
+            if ($modelGambar->update($id, $dataPembaruan)) {
+                return $this->response->setJSON(['status' => 'sukses']);
+            } else {
+                // Tangkap dan lempar pesan error dari validasi Model
+                return $this->response->setJSON(['status' => 'gagal', 'pesan' => $modelGambar->errors()]);
+            }
         }
-        return $this->response->setJSON(['status' => 'error']);
+        return $this->response->setJSON(['status' => 'gagal']);
     }
 }
