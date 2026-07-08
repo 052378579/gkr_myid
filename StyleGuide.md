@@ -8,6 +8,8 @@
   ```php
   return $this->response->setJSON(['status' => 'success', 'data' => $data]);
   ```
+* **Template Layout:**
+  * Struktur template *layout* utama CodeIgniter harus menggunakan `app/Views/layout/main.php`.
 * **Error Handling:** Gunakan mekanisme Exception bawaan CodeIgniter 4.
 
 ## 2. Panduan UI/UX (CSS & Desain)
@@ -18,7 +20,8 @@
   * Gunakan **Bootstrap 5.3** secara penuh. Manfaatkan utility classes (seperti `mb-3`, `text-secondary`, `d-flex`, `gap-2`) daripada membuat class CSS kustom.
 * **Pendekatan Desain UI Modern:**
   * Implementasikan *Glassmorphism* (misal `backdrop-filter: blur()`, `bg-white bg-opacity-75`) untuk komponen *fixed-top* (navbar/header).
-  * Gunakan desain membulat (*rounded corners*) dengan class `rounded-3` atau `rounded-pill` pada tombol dan kartu untuk memberi kesan modern dan ramah (*friendly UI*).
+  * Gunakan desain membulat (*rounded corners*) dengan class `rounded-3`, `rounded-4`, atau `rounded-pill` pada tombol dan kartu untuk memberi kesan modern dan ramah (*friendly UI*).
+  * **Card-based Layout & Accordion:** Untuk data log berjenjang atau panjang (seperti riwayat versi pembaruan), gunakan tata letak kartu dengan komponen *Accordion* (Dropdown) bawaan Bootstrap yang dikustomisasi dengan murni CSS agar tampil tanpa garis luar kasar (*borderless design*).
 
 ## 3. Standar Penulisan JavaScript (Vue 3 CDN & Bootstrap 5.3)
 * **.mount('#gkr');** adalah wajib untuk inisialisasi Vue di setiap file View.
@@ -29,7 +32,7 @@
 * **Komponen Bootstrap JS:** Inisialisasi komponen interaktif Bootstrap 5.3 (seperti Modal, Toast, Tooltip) melalui *Vanilla JavaScript* sesuai dokumentasi, bukan via jQuery.
 
 ## 4. Penamaan Database dan Models (CI4)
-* **Tabel MySQL:** Pertahankan format aslinya yang menggunakan huruf kecil jamak (`cari_sites`, `cari_images`).
+* **Tabel MySQL:** Pertahankan format aslinya yang menggunakan huruf kecil jamak (`cari_sites`, `cari_images`, `gkr_doodle`).
 * **CI4 Models:** 
-  * Class Model dinamai menggunakan gaya PascalCase dengan akhiran `Model` (misal: `SiteModel`, `ImageModel`).
-  * Selalu tetapkan `$primaryKey = 'id'`, `$useSoftDeletes = true`, dan `$deletedField = 'deleted_at'` pada properti model terkait untuk menjaga konsistensi arsitektur lama.
+  * Class Model dinamai menggunakan gaya PascalCase dengan akhiran `Model` (misal: `SiteModel`, `ImageModel`, `DoodleModel`).
+  * Selalu tetapkan `$primaryKey`, `$useSoftDeletes` (jika ada), dan parameter pelacak lainnya secara konsisten pada properti model.

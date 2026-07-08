@@ -12,7 +12,7 @@ class AuthFilter implements FilterInterface
     {
         // Jika belum login, paksa ke halaman login
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login')->with('error', 'Akses ditolak. Silakan masuk terlebih dahulu.');
+            return redirect()->to('/login')->with('error', 'Akses ditolak.<br>Silahkan masuk terlebih dahulu');
         }
     }
 

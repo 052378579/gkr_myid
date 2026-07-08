@@ -61,4 +61,19 @@ class DoodleModel extends Model
             'valid_date' => 'Format tanggal selesai salah.'
         ]
     ];
+
+    /**
+     * Mengambil doodle yang sedang aktif (berdasarkan range tanggal hari ini).
+     *
+     * @return array|null Mengembalikan 1 record doodle aktif (array) atau null jika tidak ada.
+     */
+    public function getActiveDoodle()
+    {
+        $today = date('Y-m-d');
+        return $this->where('status', 'aktif')
+                    ->where('tgl_mulai <=', $today)
+                    ->where('tgl_selesai >=', $today)
+                    ->orderBy('created_at', 'DESC') // Prioritaskan doodle yang paling baru dibuat jika ada tumpang tindih
+                    ->first();
+    }
 }

@@ -12,7 +12,7 @@ class Profile extends BaseController
         $id_user = session()->get('id_user');
         
         $data = [
-            'title' => 'Profil Saya - Mesin Pencari Gracia',
+            'title' => 'Profil Saya',
             'user'  => $userModel->find($id_user)
         ];
         

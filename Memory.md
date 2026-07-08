@@ -19,31 +19,42 @@ Sistem beroperasi dalam dua environment utama:
 * **Penyajian Gambar Statis:** Gambar dan foto dari direktori lokal server (`/var/www/FOTO`) dilayani secara statis melalui subdomain `https://foto.gkr.my.id`.
 
 ## 3. Arsitektur Database
-Sistem menggunakan dua tabel utama yang kini direpresentasikan penuh oleh CI4 Models:
+Sistem menggunakan tabel utama yang kini direpresentasikan penuh oleh CI4 Models:
 1. **`cari_sites` (Model: `SiteModel`)**:
    * Kolom: `id`, `url`, `title`, `description`, `keywords`, `clicks`, `deleted_at`.
    * Data situs dan tautan halaman.
 2. **`cari_images` (Model: `ImageModel`)**:
    * Kolom: `id`, `siteUrl`, `imageUrl`, `alt`, `title`, `clicks`, `broken`, `deleted_at`.
    * Data direktori dan galeri gambar.
+3. **Model Pengguna (`UserModel`)**:
+   * Mengatur data autentikasi dan profil pengguna.
+4. **Tabel `gkr_doodle` (Model: `DoodleModel`)**:
+   * Mengatur data logo tematik harian pada antarmuka pencarian.
+5. **Tabel `gkr_versi` (Model: `VersiModel`)**:
+   * Menampung rekam jejak (*Changelog*) pembaruan rilis. Menyimpan fitur, perbaikan bug, dan *patch* dalam format array JSON (`improvements`, `fixes`, `patches`).
 *Catatan:* Konsep *Soft Delete* otomatis ditangani framework CI4 melalui konfigurasi parameter model.
 
 ## 4. Struktur Direktori CI4 Utama
 Migrasi dari *flat PHP files* ke arsitektur *MVC*:
 * `app/Controllers/`: 
-  * `Home.php`: Menangani halaman muka.
-  * `Search.php`: Menangani logika pencarian dan paginasi.
-  * `Admin.php`: Menangani layout panel dasbor backend.
+  * `Home.php`, `Search.php`: Menangani halaman muka dan pencarian.
+  * `Admin.php`, `Admin/DoodleController.php`: Menangani layout panel dasbor backend dan CRUD Doodle.
+  * `Versi.php`, `AdminVersi.php`: Menangani rute publik Changelog dan rute manajemen data versi rilis.
   * `Crawler.php`: Menangani antarmuka dan mesin scraper.
-  * `Api.php`: Endpoint terpusat untuk Vue.js `fetch()` (Update clicks, set broken, CRUD ajax).
+  * `Api.php`: Endpoint terpusat untuk Vue.js `fetch()`.
+  * `Auth.php`, `Profile.php`, `Dokumen.php`: Menangani proses autentikasi dan manajemen profil pengguna serta akses dokumen/gambar.
 * `app/Models/`: 
-  * `SiteModel.php`, `ImageModel.php` (Interaksi aktif database).
+  * `SiteModel.php`, `ImageModel.php`, `UserModel.php`, `DoodleModel.php`, `VersiModel.php` (Interaksi aktif database).
+* `app/Filters/`:
+  * `AuthFilter.php`: Middleware pelindung endpoint dan rute privat.
 * `app/Views/`: 
-  * Direktori tempat komponen antarmuka pengguna bersarang, di mana Vue.js 3 diinjeksi via CDN pada masing-masing layout CI4.
+  * Tempat komponen antarmuka pengguna bersarang (`login.php`, `profile.php`, `admin.php`, `admin_versi.php`, dll).
+  * Area spesifik rute publik (contoh: `versi/index.php`).
+  * Struktur Layout Template mengikuti *User Rule*: `app/Views/layout`.
 * `app/Libraries/`: 
-  * Lokasi baru untuk logika kelas `CrawlerLib.php`, `DomDocumentParser.php`, dan `UrlRewriter.php`.
+  * `CrawlerLib.php`, `DomDocumentParser.php`, dan `UrlRewriter.php`.
 * `public/`:
-  * Dokumen root web server (`index.php`). File *stylesheet* (CSS) ditempatkan di `public/css/` dan *script* (JS) di `public/js/`.
+  * Dokumen root web server (`index.php`).
 
 ## 5. Pola Implementasi Saat Ini
 * **Frontend:** Tampilan visual UI sepenuhnya ditenagai oleh **Bootstrap 5.3**. Sedangkan state, interaktivitas, dan reaktivitas diurus oleh **Vue.js 3** melalui CDN, yang dimuat di dalam layout view CodeIgniter.
@@ -53,5 +64,5 @@ Migrasi dari *flat PHP files* ke arsitektur *MVC*:
   * Menggunakan *flush streaming mechanism* di dalam Controller khusus yang melepas buffer (bypass view renderer CI4) untuk melayani *Fetch API ReadableStream* pada front-end crawler secara real-time.
 
 ## 6. Resolusi Utang Teknis (Technical Debt)
-* **Keamanan Endpoint:** Akses halaman administratif (`/admin`, `/crawl`, `/crawler/resetDb`) dapat dilindungi secara elegan dengan memanfaatkan fitur **CI4 Filters** (Middleware) tanpa mengotori logika bisnis.
+* **Keamanan Endpoint:** Akses halaman administratif (`/admin`, `/crawl`, `/crawler/resetDb`) dilindungi secara elegan dengan memanfaatkan fitur **CI4 Filters** (`AuthFilter`) tanpa mengotori logika bisnis.
 * **Isolasi Logika:** Pemisahan fungsional sangat kentara di mana endpoint pengambilan/perubahan data dipusatkan di `Api` Controller terpisah, sedangkan presentasi dikunci di dalam Views.

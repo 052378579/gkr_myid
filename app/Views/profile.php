@@ -1,84 +1,9 @@
-<?= $this->extend('layouts/main') ?>
+<?= $this->extend('layout/main') ?>
 
 <?= $this->section('title') ?><?= esc($title) ?><?= $this->endSection() ?>
 
 <?= $this->section('styles') ?>
-<style>
-    body {
-        background-color: #f4f6f9;
-        background-image: radial-gradient(circle at top right, #e3e6f5, transparent),
-                          radial-gradient(circle at bottom left, #e3e6f5, transparent);
-        min-height: 100vh;
-    }
-    
-    .profile-glass {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        box-shadow: 0 8px 32px 0 rgba(43, 51, 133, 0.1);
-        border-radius: 20px;
-    }
-    
-    .brand-color {
-        color: #2B3385 !important;
-    }
-    
-    .btn-brand {
-        background-color: #2B3385;
-        border-color: #2B3385;
-        color: white;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-brand:hover {
-        background-color: #1a205a;
-        border-color: #1a205a;
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(43, 51, 133, 0.2);
-    }
-    
-    .form-control-custom {
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #e0e4e8;
-        border-radius: 12px;
-        padding: 12px 16px;
-        transition: all 0.2s;
-    }
-    
-    .form-control-custom:focus {
-        border-color: #2B3385;
-        box-shadow: 0 0 0 4px rgba(43, 51, 133, 0.1);
-        background: #ffffff;
-    }
-
-    .avatar-preview {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 4px solid #ffffff;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .upload-btn-wrapper {
-        position: relative;
-        overflow: hidden;
-        display: inline-block;
-        margin-top: -30px;
-        z-index: 2;
-    }
-
-    .upload-btn-wrapper input[type=file] {
-        font-size: 100px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-        cursor: pointer;
-    }
-</style>
+<link rel="stylesheet" href="<?= base_url('css/profile.css') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -94,19 +19,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
-                    <i class="fas fa-check-circle me-2"></i> <?= session()->getFlashdata('success') ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
-
-            <?php if (session()->getFlashdata('error')): ?>
-                <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
-                    <i class="fas fa-exclamation-triangle me-2"></i> <?= session()->getFlashdata('error') ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
 
             <div class="profile-glass p-4 p-md-5">
                 <h3 class="fw-bold brand-color mb-4 text-center">Profil Karyawan</h3>
@@ -182,15 +94,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    function previewImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('avatar-img').src = e.target.result;
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
+<script src="<?= base_url('js/profile.js') ?>"></script>
 <?= $this->endSection() ?>

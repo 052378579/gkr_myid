@@ -10,6 +10,9 @@ Memory.md
 Skills.md
 StyleGuide.md
 Tasks.md
+Tautan.md
+struktur_folder.md
+
 
 # Abaikan konfigurasi aplikasi utama yang spesifik per server (Dev vs Prod)
 app/Config/App.php

@@ -1,0 +1,80 @@
+/* Mengadopsi signin.css murni dari Bootstrap */
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f8f9fa;
+}
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+}
+
+/* Penyesuaian tinggi input dan icon agar sejajar */
+.form-signin .form-control,
+.form-signin .input-group-text {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+/* Kustomisasi Ikon Brand */
+.brand-icon {
+    font-size: 4.5rem;
+    color: #0d6efd;
+    margin-bottom: 1rem;
+}
+
+/* Warna Tombol Gracia */
+.btn-gracia {
+    background-color: #2B3385;
+    border-color: #2B3385;
+    color: white;
+    transition: all 0.3s ease;
+}
+.btn-gracia:hover, .btn-gracia:focus {
+    background-color: #1a205a;
+    border-color: #1a205a;
+    color: white;
+}
+.btn-gracia:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #ffffff !important;
+    opacity: 0.65;
+}
+
+/* Penyesuaian jarak Toast dari atas */
+.custom-toast-container {
+    margin-top: 20px;
+    z-index: 1080;
+}
+
+/* PERBAIKAN: CSS Footer Versi Aplikasi untuk diposisikan absolut di bawah */
+.footer-version { 
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center; 
+    font-size: 0.85rem; 
+    color: #6c757d; 
+    user-select: none; 
+}
+.footer-version a {
+    color: #6c757d;
+    transition: color 0.2s ease;
+}
+.footer-version a:hover {
+    color: #212529;
+}

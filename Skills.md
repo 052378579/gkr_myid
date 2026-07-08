@@ -26,6 +26,8 @@ Dokumen ini berisi panduan teknis bagi AI Assistant atau developer yang akan men
   Andalkan sepenuhnya class utilitas dan sistem grid **Bootstrap 5.3**. Hindari penciptaan properti styling manual untuk tata letak umum, cukup gunakan class bawaan Bootstrap.
 * **Interaksi API Murni (Tanpa jQuery):**
   Untuk komunikasi asinkron, gunakan bawaan *Fetch API* browser. Jangan gunakan sintaks `$.ajax()`.
+* **Konfirmasi Interaktif (SweetAlert2):**
+  Untuk aksi kritikal (seperti menghapus versi atau mereset data), panggil pustaka `Swal.fire()` alih-alih fungsi konfirmasi `confirm()` bawaan browser yang kaku, untuk mempertahankan standar estetika aplikasi.
 
 ## 4. Crawler, Environment, dan Live Streaming
 * **Manajemen URL Gambar & Environment:**
@@ -35,8 +37,10 @@ Dokumen ini berisi panduan teknis bagi AI Assistant atau developer yang akan men
 * **Posisi Library Kustom:**
   Skrip yang tidak berkaitan langsung dengan HTTP Request (seperti `UrlRewriter` dan `DomDocumentParser`) wajib diposisikan ke dalam struktur `app/Libraries/`.
 
-## 5. Aturan Routing
+## 5. Aturan Routing dan Keamanan
 * **Pendefinisian URL di Routes.php:**
   Matikan fitur *auto-routing* bawaan CodeIgniter demi keamanan dan kejelasan kode. Daftarkan secara eksplisit semua route dalam file `app/Config/Routes.php`.
+* **Sistem Autentikasi:**
+  Gunakan `AuthFilter` (diatur di `app/Config/Filters.php` atau `Routes.php`) untuk melindungi endpoint sensitif (misalnya rute ke `/admin`, `/crawl`, `/profile`).
 * **Endpoint API RESTful:**
   Format response untuk semua fungsi CRUD panel kontrol harus konsisten menggunakan `return $this->response->setJSON(...)`.

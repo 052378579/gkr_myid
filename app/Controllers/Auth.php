@@ -12,9 +12,13 @@ class Auth extends BaseController
         if (session()->get('isLoggedIn')) {
             return redirect()->to('/');
         }
-        
+        $versiModel = new \App\Models\VersiModel();
+        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
+        $version = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
+
         $data = [
-            'title' => 'Login - Mesin Pencari Gracia'
+            'title' => 'Login',
+            'version' => $version
         ];
         
         return view('login', $data);
@@ -59,9 +63,9 @@ class Auth extends BaseController
                 'user_agent' => $this->request->getUserAgent()->getAgentString()
             ]);
 
-            return redirect()->to('/')->with('success', 'Selamat datang kembali, ' . $user['nama_lengkap'] . '!');
+            return redirect()->to('/')->with('success', 'Selamat datang ' . $user['nama_lengkap'] . '');
         } else {
-            return redirect()->to('/login')->with('error', 'Nomor HP tidak terdaftar atau tidak memiliki akses.');
+            return redirect()->to('/login')->with('error', 'Nomor HP tidak terdaftar');
         }
     }
 

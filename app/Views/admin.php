@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/main') ?>
+<?= $this->extend('layout/main') ?>
 
 <?= $this->section('title') ?>Admin<?= $this->endSection() ?>
 
@@ -23,6 +23,9 @@
             </li>
             <li class="nav-item">
                 <button class="nav-link px-0" style="border-bottom-width: 3px; color: #2B3385 !important;" :class="{active: currentTab === 'images'}" @click="currentTab = 'images'">Daftar Gambar</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link px-0" style="border-bottom-width: 3px; color: #2B3385 !important;" :class="{active: currentTab === 'doodle'}" @click="currentTab = 'doodle'">Doodle</button>
             </li>
         </ul>
         <div class="d-flex align-items-center">
@@ -123,178 +126,127 @@
             </div>
         </div>
     </div>
+
+    <!-- Tabel Doodle -->
+    <div v-if="currentTab === 'doodle'" class="card shadow-sm rounded-4 border-0">
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2">
+            <h5 class="mb-0 fw-bold">Manajemen Doodle</h5>
+            <button class="btn btn-primary shadow-sm rounded-pill px-3" @click="bukaModalDoodle"><i class="fas fa-plus me-1"></i> Doodle Baru</button>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Event</th>
+                            <th>Gambar</th>
+                            <th>Tgl Mulai</th>
+                            <th>Tgl Selesai</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in doodles" :key="item.id_doodle">
+                            <td class="ps-4 fw-bold">{{ item.event }}</td>
+                            <td>
+                                <img :src="'<?= base_url('dokumen/doodle/') ?>' + item.gambar" class="rounded-3 shadow-sm" style="height: 50px; object-fit: cover;" alt="Doodle">
+                            </td>
+                            <td>{{ formatTanggal(item.tgl_mulai) }}</td>
+                            <td>{{ formatTanggal(item.tgl_selesai) }}</td>
+                            <td>
+                                <span v-if="item.status === 'aktif'" class="badge bg-success rounded-pill">Aktif</span>
+                                <span v-else class="badge bg-secondary rounded-pill">Tidak Aktif</span>
+                            </td>
+                            <td class="pe-4 text-end text-nowrap">
+                                <button class="btn btn-sm btn-primary rounded-pill px-3 me-1" @click="editDoodle(item)">Edit</button>
+                                <button class="btn btn-sm btn-danger rounded-pill px-3" @click="deleteDoodle(item.id_doodle)">Hapus</button>
+                            </td>
+                        </tr>
+                        <tr v-if="doodles.length === 0">
+                            <td colspan="6" class="text-center py-4 text-muted">Belum ada data Doodle.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Doodle -->
+    <div class="modal fade" id="doodleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0 shadow rounded-4">
+                <form @submit.prevent="simpanDoodle">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold">{{ isEditDoodle ? 'Edit Doodle' : 'Tambah Doodle' }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nama Event <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" v-model="doodleForm.event" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Tgl Mulai <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" v-model="doodleForm.tgl_mulai" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Tgl Selesai <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" v-model="doodleForm.tgl_selesai" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                            <select class="form-select" v-model="doodleForm.status" required>
+                                <option value="aktif">Aktif</option>
+                                <option value="tidak_aktif">Tidak Aktif</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Gambar {{ !isEditDoodle ? '<span class="text-danger">*</span>' : '' }}</label>
+                            <input type="file" class="form-control" ref="doodleFileInput" accept=".jpg,.jpeg,.png,.webp,.gif" @change="onDoodleFileChange" :required="!isEditDoodle">
+                        </div>
+                        <div class="text-center mt-3" v-if="doodlePreview">
+                            <img :src="doodlePreview" style="max-height: 120px; object-fit: contain;" class="rounded shadow-sm">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4" :disabled="isSubmittingDoodle">
+                            <i v-if="isSubmittingDoodle" class="fas fa-spinner fa-spin me-1"></i> Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Footer -->
+<footer class="mt-5 py-4 border-top w-100" style="background-color: #f8f9fa;">
+    <div class="container text-center text-muted small">
+        Dikembangkan oleh <span style="color: #2B3385;" class="fw-bold">RND</span> &copy; <?= date('Y') ?> &bull; <a href="<?= base_url('admin/versi') ?>" class="text-decoration-none text-muted" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>
+    </div>
+</footer>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
-    const escapeHtml = (unsafe) => {
-        if (unsafe == null) return '';
-        return (unsafe + '').replace(/[&<"'>]/g, function (m) {
-            switch (m) {
-                case '&': return '&amp;';
-                case '<': return '&lt;';
-                case '>': return '&gt;';
-                case '"': return '&quot;';
-                case "'": return '&#039;';
-            }
-        });
+    window.AppConfig = {
+        apiGetSites: '<?= base_url('api/getSites') ?>',
+        apiGetImages: '<?= base_url('api/getImages') ?>',
+        apiDeleteSite: '<?= base_url('api/deleteSite/') ?>',
+        apiDeleteImage: '<?= base_url('api/deleteImage/') ?>',
+        apiUpdateSite: '<?= base_url('api/updateSite/') ?>',
+        apiUpdateImage: '<?= base_url('api/updateImage/') ?>',
+        urlDokumenDoodle: '<?= base_url('dokumen/doodle/') ?>',
+        apiStoreDoodle: '<?= base_url('doodle/store') ?>',
+        apiUpdateDoodle: '<?= base_url('doodle/update') ?>',
+        apiDeleteDoodle: '<?= base_url('doodle/delete') ?>',
+        apiGetAllDoodle: '<?= base_url('doodle/getAll') ?>'
     };
-
-    const { createApp, ref, computed, onMounted } = Vue;
-
-    createApp({
-        setup() {
-            const currentTab = ref('sites');
-            const sites = ref([]);
-            const images = ref([]);
-            const perPage = ref(10);
-            const currentPageSites = ref(1);
-            const currentPageImages = ref(1);
-
-            const paginatedSites = computed(() => {
-                const start = (currentPageSites.value - 1) * perPage.value;
-                return sites.value.slice(start, start + perPage.value);
-            });
-            const totalSitePages = computed(() => Math.ceil(sites.value.length / perPage.value) || 1);
-
-            const paginatedImages = computed(() => {
-                const start = (currentPageImages.value - 1) * perPage.value;
-                return images.value.slice(start, start + perPage.value);
-            });
-            const totalImagePages = computed(() => Math.ceil(images.value.length / perPage.value) || 1);
-
-            const loadSites = async () => {
-                const res = await fetch('<?= base_url('api/getSites') ?>');
-                const json = await res.json();
-                sites.value = json.data;
-            };
-
-            const loadImages = async () => {
-                const res = await fetch('<?= base_url('api/getImages') ?>');
-                const json = await res.json();
-                images.value = json.data;
-            };
-
-            const deleteSite = async (id) => {
-                if(confirm('Yakin hapus situs ini?')) {
-                    await fetch('<?= base_url('api/deleteSite/') ?>' + id, {method: 'POST'});
-                    loadSites();
-                }
-            };
-
-            const deleteImage = async (id) => {
-                if(confirm('Yakin hapus gambar ini?')) {
-                    await fetch('<?= base_url('api/deleteImage/') ?>' + id, {method: 'POST'});
-                    loadImages();
-                }
-            };
-
-            const editSite = async (site) => {
-                const { value: formValues } = await Swal.fire({
-                    title: 'Edit Situs',
-                    html:
-                        '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-s1" class="form-control" value="' + escapeHtml(site.title) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">URL</label><input id="swal-s2" class="form-control" value="' + escapeHtml(site.url) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Deskripsi</label><textarea id="swal-s3" class="form-control">' + escapeHtml(site.description) + '</textarea></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Kata Kunci</label><input id="swal-s4" class="form-control" value="' + escapeHtml(site.keywords) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Klik</label><input type="number" id="swal-s5" class="form-control" value="' + (site.clicks || '0') + '"></div>',
-                    focusConfirm: false,
-                    showCancelButton: true,
-                    width: '600px',
-                    preConfirm: () => {
-                        return {
-                            title: document.getElementById('swal-s1').value,
-                            url: document.getElementById('swal-s2').value,
-                            description: document.getElementById('swal-s3').value,
-                            keywords: document.getElementById('swal-s4').value,
-                            clicks: document.getElementById('swal-s5').value
-                        }
-                    }
-                });
-                
-                if (formValues) {
-                    const formData = new FormData();
-                    formData.append('title', formValues.title);
-                    formData.append('url', formValues.url);
-                    formData.append('description', formValues.description);
-                    formData.append('keywords', formValues.keywords);
-                    formData.append('clicks', formValues.clicks);
-                    
-                    await fetch('<?= base_url('api/updateSite/') ?>' + site.id, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    loadSites();
-                    Swal.fire('Berhasil!', 'Data situs telah diubah.', 'success');
-                }
-            };
-
-            const editImage = async (img) => {
-                const { value: formValues } = await Swal.fire({
-                    title: 'Edit Gambar',
-                    html:
-                        '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-i1" class="form-control" value="' + escapeHtml(img.title) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Alt (Alternatif)</label><input id="swal-i2" class="form-control" value="' + escapeHtml(img.alt) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">URL Gambar (Source)</label><input id="swal-i3" class="form-control" value="' + escapeHtml(img.imageUrl) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">URL Situs Induk</label><input id="swal-i4" class="form-control" value="' + escapeHtml(img.siteUrl) + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Klik</label><input type="number" id="swal-i5" class="form-control" value="' + (img.clicks || '0') + '"></div>' +
-                        '<div class="mb-3 text-start"><label class="form-label">Status (0=Aktif, 1=Rusak)</label><input type="number" id="swal-i6" class="form-control" value="' + (img.broken || '0') + '" min="0" max="1"></div>',
-                    focusConfirm: false,
-                    showCancelButton: true,
-                    width: '600px',
-                    preConfirm: () => {
-                        return {
-                            title: document.getElementById('swal-i1').value,
-                            alt: document.getElementById('swal-i2').value,
-                            imageUrl: document.getElementById('swal-i3').value,
-                            siteUrl: document.getElementById('swal-i4').value,
-                            clicks: document.getElementById('swal-i5').value,
-                            broken: document.getElementById('swal-i6').value
-                        }
-                    }
-                });
-                
-                if (formValues) {
-                    const formData = new FormData();
-                    formData.append('title', formValues.title);
-                    formData.append('alt', formValues.alt);
-                    formData.append('imageUrl', formValues.imageUrl);
-                    formData.append('siteUrl', formValues.siteUrl);
-                    formData.append('clicks', formValues.clicks);
-                    formData.append('broken', formValues.broken);
-                    
-                    await fetch('<?= base_url('api/updateImage/') ?>' + img.id, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    loadImages();
-                    Swal.fire('Berhasil!', 'Data gambar telah diubah.', 'success');
-                }
-            };
-
-            onMounted(() => {
-                loadSites();
-                loadImages();
-            });
-
-            return {
-                currentTab,
-                sites,
-                images,
-                perPage,
-                currentPageSites,
-                currentPageImages,
-                paginatedSites,
-                totalSitePages,
-                paginatedImages,
-                totalImagePages,
-                deleteSite,
-                deleteImage,
-                editSite,
-                editImage
-            }
-        }
-    }).mount('#gkr');
 </script>
+<script src="<?= base_url('js/admin.js') ?>"></script>
 <?= $this->endSection() ?>

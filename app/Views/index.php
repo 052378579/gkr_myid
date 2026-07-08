@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/main') ?>
+<?= $this->extend('layout/main') ?>
 
 <?= $this->section('title') ?>Beranda<?= $this->endSection() ?>
 
@@ -10,13 +10,40 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 ?>
 
 <div class="position-absolute top-0 end-0 p-3 d-flex align-items-center gap-3 z-3">
-    <span class="text-dark small fw-medium"><?= $dateStr ?></span>
+    <div class="dropdown" id="calendarDropdownWrap">
+        <a href="#" id="calendarDropdownToggle" class="text-dark small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='#212529'">
+            <?= $dateStr ?>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.5) !important;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2"><i class="fas fa-chevron-left"></i></button>
+                <div class="text-center fw-bold" style="color: #2B3385; font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
+                <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <table class="table table-sm table-borderless text-center mb-0" style="font-size: 0.85rem;">
+                <thead>
+                    <tr>
+                        <th class="text-muted fw-bold" style="font-size: 0.8rem;">W</th>
+                        <th class="fw-medium">S</th>
+                        <th class="fw-medium">S</th>
+                        <th class="fw-medium">R</th>
+                        <th class="fw-medium">K</th>
+                        <th class="fw-medium">J</th>
+                        <th class="text-danger fw-medium">S</th>
+                        <th class="text-danger fw-medium">M</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
     
     <div class="dropdown">
-        <a href="#" class="text-dark text-decoration-none d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; background-color: #f1f3f4; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#e8eaed'" onmouseout="this.style.backgroundColor='#f1f3f4'">
+        <a href="#" id="appsDropdownToggle" class="text-dark text-decoration-none d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; background-color: #f1f3f4; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#e8eaed'" onmouseout="this.style.backgroundColor='#f1f3f4'">
             <i class="fas fa-th fs-5" style="color: #5f6368;"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg border-0 rounded-4" style="width: 320px; background-color: #f0f4f9;">
+        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.5) !important;">
             <div class="row g-3 text-center">
                 <div class="col-4">
                     <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
@@ -71,68 +98,20 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
     </a>
 
-    <a href="<?= base_url('logout') ?>" class="text-danger text-decoration-none fw-medium d-flex align-items-center">
-        <i class="fas fa-sign-out-alt me-1" style="font-size: 32px;"></i>
+    <a href="<?= base_url('logout') ?>" class="text-decoration-none d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%; color: #2B3385; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f1f3f4'" onmouseout="this.style.backgroundColor='transparent'" title="Keluar">
+        <i class="fas fa-sign-out-alt fs-5" style="color: #2B3385;"></i>
     </a>
 </div>
 
-<style>
-    .hover-bg:hover {
-        background-color: #e4e7eb;
-    }
-
-    /* --- Rainbow Animation for Cari Button --- */
-    .google-ai-container {
-        position: relative;
-        display: inline-block;
-    }
-
-    .google-ai-container::before {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: -2px;
-        right: 2px;
-        bottom: -4px;
-        z-index: 1;
-        background: linear-gradient(
-            90deg, 
-            #4285F4 0%, 
-            #34A853 30%, 
-            #FBBC05 60%, 
-            #EA4335 100%
-        );
-        background-size: 200% auto;
-        border-radius: 100px;
-        filter: blur(5px);
-        opacity: 0;
-        transition: opacity 0.4s ease, background-position 0.4s ease;
-    }
-
-    .google-ai-container:hover::before {
-        opacity: 0.85;
-        animation: geserPelangi 2s linear infinite;
-    }
-
-    .google-ai-container:hover .btn-mode-ai {
-        background-color: #ffffff !important;
-    }
-
-    @keyframes geserPelangi {
-        0% { background-position: 0% center; }
-        100% { background-position: 200% center; }
-    }
-
-    .btn-mode-ai {
-        position: relative;
-        z-index: 2;
-        transition: background-color 0.3s ease;
-    }
-</style>
+<link rel="stylesheet" href="<?= base_url('css/index.css') ?>">
 
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app">
     <div class="text-center mb-4">
-        <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Gracia Logo" style="max-width: 250px; height: auto;" class="mb-3">
+        <?php 
+            $finalUrlLogo = $urlLogo ?? base_url('assets/images/Gracia_logo.png');
+            $finalAltLogo = $altLogo ?? 'Gracia Logo';
+        ?>
+        <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" class="mb-3 doodle-img" onerror="this.onerror=null; this.src='<?= base_url('assets/images/Gracia_logo.png') ?>';">
         <div class="d-flex justify-content-center align-items-center gap-2" style="font-size: 0.95rem;">
             <a href="https://foto.gkr.my.id/?BUYER" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO BUYER</a>
             <span style="color: #2B3385;">|</span>
@@ -157,30 +136,22 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
 </div>
 
-<footer class="fixed-bottom py-3 text-center w-100" style="background-color: #f2f2f2; border-top: 1px solid #e4e4e4; color: #70757a; font-size: 0.9rem;">
-    Dikembangkan oleh <a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; 2026 &bull; v1.0.0
+<footer class="fixed-bottom py-3 w-100" style="background-color: #f2f2f2; border-top: 1px solid #e4e4e4; color: #70757a; font-size: 0.9rem;">
+    <div class="text-center w-100">
+        Dikembangkan oleh <a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
+    </div>
+    <div class="position-absolute" style="right: 20px; top: 50%; transform: translateY(-50%);">
+        <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>
+    </div>
 </footer>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
-    const { createApp, ref } = Vue;
-
-    createApp({
-        setup() {
-            const query = ref('');
-
-            const search = () => {
-                if(query.value.trim() !== '') {
-                    window.location.href = '<?= url_to('Search::index') ?>?q=' + encodeURIComponent(query.value);
-                }
-            };
-
-            return {
-                query,
-                search
-            }
-        }
-    }).mount('#app');
+    window.AppConfig = {
+        searchUrl: '<?= url_to('Search::index') ?>'
+    };
 </script>
+<script src="<?= base_url('js/calendar.js') ?>"></script>
+<script src="<?= base_url('js/index.js') ?>"></script>
 <?= $this->endSection() ?>

@@ -7,12 +7,19 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
   - Buat pengaturan base URL yang dinamis pada file `.env` CodeIgniter 4 agar otomatis menyesuaikan dengan environment Dev (`192.168.1.4` / `10.147.17.40`) dan Prod (`192.168.1.17` / `10.147.17.60`).
 - [ ] **Konfigurasi CORS di API:**
   - Konfigurasikan header CORS agar backend dapat merespons request yang datang dari berbagai alamat IP topologi (LAN lokal maupun ZeroTier).
-- [ ] **Sistem Autentikasi (Login):**
+- [x] **Sistem Autentikasi (Login):**
   - Buat halaman `/login`.
   - Proteksi akses ke `/admin`, `/crawl`, dan `/crawler/resetDb` menggunakan CI4 Filters (`AuthFilter`).
   - Redirect pengguna tidak terotentikasi kembali ke `/` atau halaman login.
+- [x] **Manajemen Doodle (Logo Tematik):**
+  - Implementasikan CRUD Doodle dengan rentang tanggal tayang (Model `DoodleModel`).
+  - Buat endpoint API dan integrasikan dengan beranda pencarian.
 - [ ] **Keamanan API Backend:**
   - Tambahkan validasi dan sanitasi input pada endpoint API di `Api.php` (mencegah XSS pada judul dan deskripsi).
+- [x] **Sistem Manajemen Rilis (Changelog):**
+  - Implementasikan halaman publik `/versi` dengan tampilan berbasis kartu (*card-based*) yang responsif.
+  - Sediakan panel khusus `/admin/versi` dengan operasi CRUD penuh tanpa perlu koding JSON murni di *frontend*.
+  - Sinkronisasikan pengambilan nomor versi secara otomatis di *footer* halaman beranda (`/`) dan halaman masuk (`/login`).
 - [ ] **Optimasi & Pemetaan URL Crawler:**
   - Pastikan Crawler memetakan *path* dari direktori lokal `/var/www/FOTO/...` menjadi URL statis `https://foto.gkr.my.id/...` sebelum menyimpan ke database.
   - Tambahkan fitur *depth limit* (batas kedalaman klik tautan) pada script rekursif di `Crawler.php` untuk mencegah *infinity loop* pada situs yang besar.

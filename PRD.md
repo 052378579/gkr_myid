@@ -21,7 +21,7 @@ Sistem ini dide-deploy pada dua lingkungan terpisah untuk memastikan kestabilan 
 ## 3. Spesifikasi UI/UX (Tampilan Visual)
 * **Halaman Beranda (Home - `/`):** 
   * Tampilan minimalis dan terpusat (mirip Google).
-  * Menampilkan logo kustom ("Gracia").
+  * Menampilkan logo kustom ("Gracia") atau logo tematik harian (Doodle) yang aktif.
   * Terdapat kotak input pencarian dan tombol "Cari".
 * **Halaman Hasil Pencarian (`/cari`):**
   * **Header:** Menampilkan logo dan bilah pencarian persisten.
@@ -34,12 +34,21 @@ Sistem ini dide-deploy pada dua lingkungan terpisah untuk memastikan kestabilan 
   * Tema modern dengan elemen *Glassmorphism* dan navigasi *fixed top*.
   * Fitur pencarian instan (real-time filtering) dan paginasi *client-side*.
   * Modul Edit menggunakan *Modal Box* (menampilkan pratinjau thumbnail untuk gambar).
+  * Modul Manajemen Doodle untuk mengatur logo tematik/event yang muncul di beranda.
 * **Halaman Crawler (`/crawl`):**
   * Antarmuka split-screen (form input di kiri, terminal *live streaming* di kanan) menggunakan **Vue.js 3 (CDN)** dan **Bootstrap 5.3**.
   * Terminal interaktif yang menampilkan log proses crawling secara real-time.
+* **Halaman Autentikasi & Profil (`/login`, `/profile`):**
+  * Halaman login aman berbasis nomor HP.
+  * Halaman profil untuk memperbarui data diri, divisi, dan foto profil karyawan.
+* **Halaman Changelog Publik (`/versi`):**
+  * Tampilan *Card-based layout* yang bersih dan modern bergaya Google Antigravity.
+  * Menggunakan sistem *Accordion* (Dropdown) bawaan Bootstrap untuk membungkus rincian pembaruan (*Improvements*, *Fixes*, *Patches*) secara rapi.
+  * Menampilkan informasi terpusat terkait versi sistem.
 * **Elemen Desain Khusus:**
   * **Warna Aksen (*Accent Color*):** Menggunakan kode hex **`#2B3385`** untuk elemen interaktif (tombol, indikator tab, pagination).
-  * **Inisialisasi Vue:** Diwajibkan selalu menggunakan container ID `<div id="gkr">` dan dipanggil via `.mount('#gkr');` di setiap file view/halaman.
+  * **Versi Dinamis (Footer):** Sistem menyisipkan nomor rilis (misal: `v1.0.0`) secara otomatis dan dinamis di bagian bawah halaman utama dan *login* dengan melakuan kueri ke `gkr_versi`.
+  * **Inisialisasi Vue:** Diwajibkan selalu menggunakan container ID `<div id="gkr">` (atau `#rnd`, dll) dan dipanggil via `.mount();` di setiap file view/halaman.
 
 ## 4. Daftar Fitur Inti (Core Features)
 * **Mesin Penjelajah Web / Crawler Bot:**
@@ -51,7 +60,10 @@ Sistem ini dide-deploy pada dua lingkungan terpisah untuk memastikan kestabilan 
   * Pencarian berbasis kata kunci (kueri) yang memilah data menggunakan CodeIgniter 4 Models (`SiteModel` dan `ImageModel`).
   * Pelacakan statistik (jumlah klik) via endpoint API CI4 (`/api/updateLinkCount`, `/api/updateImageCount`).
 * **Manajemen Data (Admin Panel):**
-  * Operasi CRUD penuh menggunakan CI4 Models dengan fitur *Soft Delete* (`$useSoftDeletes = true`).
+  * Operasi CRUD penuh menggunakan CI4 Models dengan fitur *Soft Delete* (`$useSoftDeletes = true`) pada situs dan gambar.
+  * Manajemen CRUD untuk fitur **Doodle** (logo tematik) dengan pengaturan rentang tanggal tayang.
+  * **Manajemen Rilis (Changelog):** Pengelolaan riwayat rilis (Tabel `gkr_versi`) via rute `/admin/versi` yang dibangun murni tanpa koding JSON manual di *front-end* karena semua manipulasi array JSON diurus secara cerdas lewat *modal box*.
+  * Akses dan pengunggahan foto/dokumen karyawan dan doodle via endpoint `Dokumen.php`.
   * Integrasi *UrlRewriter* sebagai Service/Library untuk menormalkan URL.
 
 ## 5. Batasan Teknis & Standar Kode (Code Convention)
@@ -68,6 +80,6 @@ Sistem ini dide-deploy pada dua lingkungan terpisah untuk memastikan kestabilan 
   * *Hotlinking Gambar:* Dikelola lewat sistem pelaporan broken link endpoint (`/api/setBroken`).
 
 ## 6. Keamanan & Edge Cases
-* **Sistem Autentikasi:** Akan diimplementasikan menggunakan CI4 Filters untuk melindungi `/admin`, `/crawl`, dan `/crawler/resetDb`.
-* **Jebakan Crawling (Spider Traps):** Halaman dengan URL dinamis tanpa batas bisa memicu *infinity loop*.
+* **Sistem Autentikasi:** Telah diimplementasikan menggunakan CI4 Filters (`AuthFilter`) untuk melindungi `/admin`, `/crawl`, `/profile`, dan `/crawler/resetDb`.
+* **Jebakan Crawling (Spider Traps):** Halaman dengan URL dinamis tanpa batas bisa memicu *infinity loop* (dikelola oleh pembatas kedalaman di `CrawlerLib`).
 * **Pencarian Kosong:** Dicegah di level frontend dan divalidasi oleh CI4 Controllers.

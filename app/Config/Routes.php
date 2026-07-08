@@ -11,8 +11,15 @@ $routes->get('/logout', 'Auth::logout');
 $routes->get('/profile', 'Profile::index');
 $routes->post('/profile/update', 'Profile::update');
 $routes->get('/dokumen/karyawan/(:segment)', 'Dokumen::karyawan/$1');
+$routes->get('/dokumen/doodle/(:segment)', 'Dokumen::doodle/$1');
 
 $routes->get('/cari', 'Search::index');
+$routes->get('/versi', 'Versi::index');
+$routes->get('/admin/versi', 'AdminVersi::index');
+$routes->get('/admin/versi/getAll', 'AdminVersi::getAll');
+$routes->post('/admin/versi/store', 'AdminVersi::store');
+$routes->post('/admin/versi/update', 'AdminVersi::update');
+$routes->post('/admin/versi/delete', 'AdminVersi::delete');
 $routes->get('/admin', 'Admin::index');
 $routes->get('/crawl', 'Crawler::index');
 $routes->post('/crawler/doCrawl', 'Crawler::doCrawl');
@@ -27,3 +34,8 @@ $routes->post('/api/deleteSite/(:num)', 'Api::deleteSite/$1');
 $routes->post('/api/deleteImage/(:num)', 'Api::deleteImage/$1');
 $routes->post('/api/updateSite/(:num)', 'Api::updateSite/$1');
 $routes->post('/api/updateImage/(:num)', 'Api::updateImage/$1');
+
+$routes->get('/doodle/getAll', 'Admin\DoodleController::getAll');
+$routes->post('/doodle/store', 'Admin\DoodleController::store');
+$routes->post('/doodle/update', 'Admin\DoodleController::update');
+$routes->post('/doodle/delete', 'Admin\DoodleController::delete');

@@ -9,17 +9,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Base Styles -->
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('css/main.css') ?>">
     <?= $this->renderSection('styles') ?>
 </head>
 <body class="bg-light">
@@ -36,5 +26,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <?= $this->renderSection('scripts') ?>
+    
+    <!-- Global Toast Notification -->
+    <?= $this->include('components/toast') ?>
 </body>
 </html>
