@@ -1,10 +1,29 @@
-# Abaikan seluruh isi folder writable (termasuk cache, logs, session, dll)
+# -------------------------------------------------------------------
+# 1. CORE CODEIGNITER 4
+# -------------------------------------------------------------------
+# Abaikan seluruh isi folder writable (termasuk cache, logs, session, upload)
 writable/*
-# Kecualikan file index.html di dalam writable agar folder strukturnya tetap ada
 !writable/index.html
 
-# Abaikan konfigurasi env lokal dan Konfigurasi AI Vibe Coding 
+# (Opsional) Penegasan folder upload yang diabaikan 
+writable/FOTO/
+writable/KARYAWAN/
+
+# -------------------------------------------------------------------
+# 2. DEPENDENCIES & ENVIRONMENT (SANGAT PENTING)
+# -------------------------------------------------------------------
+vendor/
 .env
+
+# -------------------------------------------------------------------
+# 3. DATABASE DUMPS
+# -------------------------------------------------------------------
+gkr_myid.sql
+*.sql
+
+# -------------------------------------------------------------------
+# 4. DOKUMENTASI AI VIBE CODING & PROJECT MANAGEMENT
+# -------------------------------------------------------------------
 PRD.md
 Memory.md
 Skills.md
@@ -13,18 +32,10 @@ Tasks.md
 Tautan.md
 struktur_folder.md
 
-
-# Abaikan konfigurasi aplikasi utama yang spesifik per server (Dev vs Prod)
-app/Config/App.php
-public/index.php
-
-# Abaikan file Database
-gkr_myid.sql
-writable/FOTO/
-writable/KARYAWAN/
-writable/FOTO/
-writable/KARYAWAN/writable/
-writable/FOTO/
-.env
-PRD.md
-/writable/FOTO/
+# -------------------------------------------------------------------
+# 5. OS & IDE CONFIG FILES (Pembersihan Ekstra)
+# -------------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
