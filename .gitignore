@@ -25,3 +25,6 @@ writable/KARYAWAN/
 writable/FOTO/
 writable/KARYAWAN/writable/
 writable/FOTO/
+.env
+PRD.md
+/writable/FOTO/
