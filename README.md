@@ -1,61 +1,42 @@
-# CodeIgniter 4 Framework
+# Mesin Pencari Gracia
+**Mesin Pencari Gracia** adalah Search Engine yang dikembangkan dengan **CodeIgniter 4**,**Vue.js 3** dan **Bootstrap 5.3**. Fokus untuk mengindeks, menemukan, dan menampilkan tautan serta gambar dan **Katalog Furniture**. Aplikasi ini memiliki crawler yang mampu memindai direktori maupun menelusuri tautan referensi untuk menyajikan hasil pencarian secara cepat dan intuitif.
 
-## What is CodeIgniter?
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 📁 Struktur Proyek & Panduan Repositori
+Proyek ini mengimplementasikan pola arsitektur MVC (Model-View-Controller) khas CodeIgniter 4:
+- **`app/Controllers/`**: Mengatur alur dan logika endpoint utama, termasuk API, Autentikasi, Profil pengguna, Manajeman Rilis, dan Crawler.
+- **`app/Models/`**: Menangani interaksi database menggunakan Query Builder CI4 (mendukung fitur Soft Delete otomatis).
+- **`app/Views/`**: Berisi antarmuka pengguna yang dirender dengan Bootstrap 5.3 dan diaktifkan dengan inisialisasi Vue.js.
+- **`app/Libraries/`**: Memuat modul fungsional independen seperti `CrawlerLib`, `DomDocumentParser`, dan `UrlRewriter`.
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## 🚀 Fitur Utama
+- **Mesin Pencari & Crawler:** Crawler bot yang dapat membaca dari direktori gambar lokal (`/var/www/FOTO`) serta mengekstrak metadata dari situs eksternal secara rekursif. Menampilkan output proses log *real-time* ke browser web dengan mekanisme streaming data.
+- **Antarmuka Pencarian & Galeri:** Antarmuka pencarian sentral minimalis yang mirip dengan Google dengan navigasi Tab (Semua / Gambar). Penampil hasil gambar didukung oleh tata letak dinamis *Masonry grid layout* dan pratinjau mode *lightbox* dari *Fancybox*.
+- **Panel Admin:** Operasi CRUD penuh berbasis tabel yang modern dengan efek *Glassmorphism*, mendukung *soft delete* untuk tautaan dan gambar, dan pengunggahan gambar dengan *modal box*.
+- **Doodle Tematik:** Memungkinkan penjadwalan tayangan logo kustom pencarian secara dinamis berdasarkan periode waktu tanggal tertentu.
+- **Sistem Rilis / Changelog:** Halaman pembaruan Changelog ke publik, serta manajemen kelola datanya dapat diakses melalui antarmuka Admin dengan elegan tanpa harus mengubah file JSON manual.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
 
-## Important Change with index.php
+## 🛠️ Stack Teknologi & Panduan Developer
+- **Backend:** CodeIgniter 4 (PHP 8.2+) dengan arsitektur MVC.
+- **Frontend:** Vue.js 3 (via CDN) & Bootstrap 5.3. Interaksi data asinkron antar komponen web memprioritaskan fungsi native Vanilla Javascript (*Fetch API* murni).
+- **Database:** MySQL/MariaDB.
+- **Baris Kode IDN**: Baris Kode menggunakan Bahasa Indonesia untuk seluruh penulisan kode internal (nama variabel, fungsi, dan komentar), dengan mematuhi konvensi PSR-12. Mengutamakan pemanfaatan standar bawaan framework CI4 seperti *Models*, *Filters*, *Responses*, dll.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## 🔗 Daftar Tautan & Endpoint
+Aplikasi melayani beberapa _routing_ HTTP yang tersebar ke beberapa halaman dan API:
+- `/` - Halaman Muka Beranda.
+- `/cari` - Halaman Hasil Pencarian.
+- `/admin` - Dasbor Utama Panel Admin.
+- `/crawl` - Antarmuka Streaming Crawler interaktif.
+- `/versi` - Halaman Publik Rilis (Changelog).
+- Berbagai *API endpoints* RESTful
 
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Contributing
-
-We welcome contributions from the community.
-
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
-
-## Server Requirements
-
-PHP version 8.2 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## 🚫 Direktori & Berkas yang Tidak Disertakan
+Demi keamanan dan pengelolaan repositori, beberapa direktori dan berkas sengaja diabaikan (sesuai aturan `.gitignore`):
+- `/vendor` - Dependensi dan pustaka pihak ketiga dari Composer.
+- `/writable` - Berkas cache, log, session, dan data *upload*.
+- `.env` - Konfigurasi variabel *environment* dan kredensial akses.
+- **Dokumentasi Internal Developer:** `Memory.md`, `PRD.md`, `Skills.md`, `struktur_folder.md`, `StyleGuide.md`, `Tasks.md`, `Tautan.md`.
