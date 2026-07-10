@@ -29,18 +29,16 @@ class ImageModel extends Model
 
     // Validasi Integritas Gambar
     protected $validationRules = [
-        'siteUrl'  => 'required|valid_url',
-        'imageUrl' => 'required|valid_url'
+        'siteUrl'  => 'required',
+        'imageUrl' => 'required'
     ];
     
     protected $validationMessages = [
         'siteUrl' => [
-            'required'  => 'URL sumber situs wajib disertakan.',
-            'valid_url' => 'Format URL situs tidak valid.'
+            'required'  => 'URL sumber situs wajib disertakan.'
         ],
         'imageUrl' => [
-            'required'  => 'URL gambar wajib disertakan.',
-            'valid_url' => 'Format URL gambar tidak valid.'
+            'required'  => 'URL gambar wajib disertakan.'
         ]
     ];
 }

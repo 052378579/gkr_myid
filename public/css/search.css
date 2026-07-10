@@ -194,7 +194,12 @@ body { background-color: #fff; }
     text-transform: capitalize;
 }
 
-.masonry-grid { width: 100%; }
+.masonry-grid { 
+    width: 100%; 
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 15px;
+}
 .grid-item { width: 200px; margin-bottom: 15px; position: relative; }
 .grid-item img { width: 100%; height: auto; cursor: pointer; display: block; }
 .grid-item .details {
@@ -224,6 +229,13 @@ body { background-color: #fff; }
 }
 .grid-item:hover .details {
     visibility: visible;
+}
+.grid-item a,
+.grid-item a:visited,
+.grid-item a:hover,
+.grid-item a:active {
+    color: #ffffff;
+    text-decoration: none;
 }
 
 @media (max-width: 767px) {

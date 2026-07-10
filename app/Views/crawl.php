@@ -59,5 +59,5 @@
         apiResetDb: '<?= base_url('crawler/resetDb') ?>'
     };
 </script>
-<script src="<?= base_url('js/crawl.js') ?>"></script>
+<script src="<?= base_url('js/crawl.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

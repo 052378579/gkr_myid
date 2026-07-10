@@ -97,7 +97,7 @@
                     <tbody>
                         <tr v-for="img in paginatedImages" :key="img.id">
                             <td class="ps-4">
-                                <img :src="img.imageUrl.replace('https://foto.gkr.my.id/', '<?= base_url('dokumen/foto/') ?>')" style="width:50px;height:50px;object-fit:cover;" class="rounded-3 shadow-sm">
+                                <img :src="img.imageUrl" style="width:50px;height:50px;object-fit:cover;" class="rounded-3 shadow-sm">
                             </td>
                             <td>{{ img.title || img.alt }}</td>
                             <td><a :href="img.siteUrl" target="_blank" class="text-truncate d-inline-block" style="max-width:150px;">{{ img.siteUrl }}</a></td>

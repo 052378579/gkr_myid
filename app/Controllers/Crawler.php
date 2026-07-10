@@ -43,12 +43,25 @@ class Crawler extends BaseController
 
     public function resetDb()
     {
-        $basisData = \Config\Database::connect();
-        
-        // Mengosongkan tabel data
-        $basisData->table('cari_sites')->truncate();
-        $basisData->table('cari_images')->truncate();
-        
-        return $this->response->setJSON(['status' => 'sukses']);
+        try {
+            $basisData = \Config\Database::connect();
+            
+            // Mengosongkan tabel data
+            if (!$basisData->table('cari_sites')->emptyTable()) {
+                $error = $basisData->error();
+                throw new \Exception("Gagal mengosongkan cari_sites: " . ($error['message'] ?? 'Silent Database Error'));
+            }
+            if (!$basisData->table('cari_images')->emptyTable()) {
+                $error = $basisData->error();
+                throw new \Exception("Gagal mengosongkan cari_images: " . ($error['message'] ?? 'Silent Database Error'));
+            }
+            
+            return $this->response->setJSON(['status' => 'sukses']);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'status' => 'gagal',
+                'pesan'  => $e->getMessage()
+            ]);
+        }
     }
 }

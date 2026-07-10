@@ -29,14 +29,14 @@ class SiteModel extends Model
 
     // Validasi Keamanan API (Mencegah input kotor)
     protected $validationRules = [
-        'url'   => 'required|valid_url|is_unique[cari_sites.url,id,{id}]',
+        'url'   => 'required|is_unique[cari_sites.url,id,{id}]',
         'title' => 'required|min_length[3]'
     ];
     
     protected $validationMessages = [
         'url' => [
             'required'  => 'URL situs wajib diisi.',
-            'valid_url' => 'Format URL tidak valid.',
+
             'is_unique' => 'URL situs sudah terdaftar di pangkalan data.'
         ],
         'title' => [

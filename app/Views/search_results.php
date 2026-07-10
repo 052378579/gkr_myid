@@ -148,15 +148,22 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <div class="image-results-container">
             <div class="masonry-grid">
                 <?php foreach ($results as $image): ?>
+                    <?php 
+                        $rawTitle = $image['title'] ?: $image['alt'];
+                        $titleCase = ucwords(strtolower($rawTitle));
+                        
+                        $siteUrlAttr = esc($image['siteUrl'], 'attr');
+                        $captionHtml = esc($titleCase) . " <br><a href='{$siteUrlAttr}' target='_blank' style='color:#a9a9a9; text-decoration:underline;'>Lihat Gambar</a>";
+                    ?>
                     <div class="grid-item">
                         <a href="<?= esc($image['imageUrl']) ?>" data-fancybox="gallery" 
-                           data-caption="<?= esc($image['title'] ?: $image['alt']) ?>"
+                           data-caption="<?= esc($captionHtml, 'html') ?>"
                            data-siteurl="<?= esc($image['siteUrl']) ?>"
                            onclick="updateImageCount(<?= $image['id'] ?>)">
-                            <img src="<?= esc($image['imageUrl']) ?>" alt="<?= esc($image['alt']) ?>" 
+                            <img src="<?= esc($image['imageUrl']) ?>" alt="<?= esc($titleCase) ?>" 
                                  onerror="setBroken(this, '<?= esc($image['imageUrl']) ?>')">
                             <div class="details">
-                                <div class="image-title"><?= esc($image['title'] ?: $image['alt']) ?></div>
+                                <div class="image-title"><?= esc($titleCase) ?></div>
                                 <?php 
                                     $parsed = parse_url($image['siteUrl']);
                                     $domain = isset($parsed['host']) ? $parsed['host'] : $image['siteUrl'];

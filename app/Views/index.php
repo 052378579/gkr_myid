@@ -112,10 +112,11 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             $finalAltLogo = $altLogo ?? 'PT. Gracia Kreasi Rotan';
         ?>
         <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="mb-3 doodle-img" onerror="this.onerror=null; this.src='<?= base_url('assets/images/Gracia_logo.png') ?>';">
+        <?php $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/'; ?>
         <div class="d-flex justify-content-center align-items-center gap-2" style="font-size: 0.95rem;">
-            <a href="https://foto.gkr.my.id/?BUYER" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO BUYER</a>
+            <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO BUYER</a>
             <span style="color: #2B3385;">|</span>
-            <a href="https://foto.gkr.my.id/?GRACIA" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
+            <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
         </div>
     </div>
 

@@ -237,16 +237,16 @@ class CrawlerLib
                         
                         $alt = $title;
                         
-                        // imageUrl format: https://foto.gkr.my.id/SWATCHES/FABRIC/SUNBRELLA/Play-Adobe 40616-0011.webp
-                        $imageUrl = $baseDomain . $relativePath;
+                        // imageUrl format: SWATCHES/FABRIC/SUNBRELLA/Play-Adobe 40616-0011.webp
+                        $imageUrl = $relativePath;
                         
-                        // siteUrl format: https://foto.gkr.my.id/?SWATCHES/FABRIC/SUNBRELLA#pid=Play-Adobe 40616-0011.webp
+                        // siteUrl format: ?SWATCHES/FABRIC/SUNBRELLA#pid=Play-Adobe 40616-0011.webp
                         $parentRelativeDir = dirname($relativePath);
                         if ($parentRelativeDir === '.') {
                             $parentRelativeDir = '';
                         }
                         
-                        $siteUrl = rtrim($baseDomain, '/') . '/?' . $parentRelativeDir . '#pid=' . $filename;
+                        $siteUrl = '?' . $parentRelativeDir . '#pid=' . $filename;
                         
                         if ($this->imageExists($imageUrl)) {
                              echo "<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #4a9c8f;'>Skip: $title sudah ada</span><br>\n";
@@ -255,6 +255,9 @@ class CrawlerLib
                             if (!$this->linkExists($siteUrl)) {
                                 if ($this->insertLink($siteUrl, $title, $description, $keywords)) {
                                     $sitesAdded++;
+                                } else {
+                                    $errors = implode(", ", $this->siteModel->errors());
+                                    echo "<span style='color: #dc3545;'>[ERROR] Gagal menambah situs: $errors</span><br>\n";
                                 }
                             }
                             
@@ -262,6 +265,9 @@ class CrawlerLib
                             if ($this->insertImage($siteUrl, $imageUrl, $alt, $title)) {
                                 $imagesAdded++;
                                 echo "<span style='color: #28a745;'>[SUCCESS]</span> <span style='color: #d4d4d4;'>Menambahkan: $title</span><br>\n";
+                            } else {
+                                $errors = implode(", ", $this->imageModel->errors());
+                                echo "<span style='color: #dc3545;'>[ERROR] Gagal menambah gambar: $errors</span><br>\n";
                             }
                         }
                     }

@@ -57,13 +57,42 @@ class Api extends BaseController
     public function getSites()
     {
         $modelSitus = new SiteModel();
-        return $this->response->setJSON(['data' => $modelSitus->findAll()]);
+        $data = $modelSitus->findAll();
+        $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/';
+        
+        foreach ($data as &$item) {
+            if (!empty($item['url']) && !preg_match('/^https?:\/\//i', $item['url'])) {
+                if (str_starts_with($item['url'], '?')) {
+                    $item['url'] = rtrim($imgBaseUrl, '/') . '/' . $item['url'];
+                } else {
+                    $item['url'] = rtrim($imgBaseUrl, '/') . '/' . ltrim($item['url'], '/');
+                }
+            }
+        }
+        
+        return $this->response->setJSON(['data' => $data]);
     }
 
     public function getImages()
     {
         $modelGambar = new ImageModel();
-        return $this->response->setJSON(['data' => $modelGambar->findAll()]);
+        $data = $modelGambar->findAll();
+        $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/';
+        
+        foreach ($data as &$item) {
+            if (!empty($item['imageUrl']) && !preg_match('/^https?:\/\//i', $item['imageUrl'])) {
+                $item['imageUrl'] = rtrim($imgBaseUrl, '/') . '/' . ltrim($item['imageUrl'], '/');
+            }
+            if (!empty($item['siteUrl']) && !preg_match('/^https?:\/\//i', $item['siteUrl'])) {
+                if (str_starts_with($item['siteUrl'], '?')) {
+                    $item['siteUrl'] = rtrim($imgBaseUrl, '/') . '/' . $item['siteUrl'];
+                } else {
+                    $item['siteUrl'] = rtrim($imgBaseUrl, '/') . '/' . ltrim($item['siteUrl'], '/');
+                }
+            }
+        }
+        
+        return $this->response->setJSON(['data' => $data]);
     }
 
     public function deleteSite($id)

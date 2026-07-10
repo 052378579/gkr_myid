@@ -86,10 +86,10 @@ createApp({
                 try {
                     const res = await fetch(window.AppConfig.apiResetDb, { method: 'POST' });
                     const data = await res.json();
-                    if (data.status === 'success') {
+                    if (data.status === 'sukses') {
                         output.value += '<span class="text-success">Database berhasil direset.</span><br>doogleBot@server:~# Menunggu perintah...\n';
                     } else {
-                        output.value += '<span class="text-danger">Gagal mereset database.</span><br>doogleBot@server:~# Menunggu perintah...\n';
+                        output.value += '<span class="text-danger">Gagal mereset database: ' + (data.pesan || '') + '</span><br>doogleBot@server:~# Menunggu perintah...\n';
                     }
                 } catch (e) {
                     output.value += '<span class="text-danger">Error: ' + e.message + '</span><br>doogleBot@server:~# Menunggu perintah...\n';

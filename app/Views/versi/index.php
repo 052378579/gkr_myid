@@ -167,12 +167,12 @@
 <div class="changelog-container">
     <div class="header-area">
         
-        <h1 class="header-title">Changelog</h1>
+        <h1 class="header-title">Catatan perubahan</h1>
     </div>
 
     <div class="column-headers">
-        <div class="col-version">Version</div>
-        <div class="col-description">Description</div>
+        <div class="col-version">Versi</div>
+        <div class="col-description">Deskripsi</div>
     </div>
 
     <?php if (empty($changelog)): ?>
