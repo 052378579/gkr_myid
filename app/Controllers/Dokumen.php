@@ -68,4 +68,39 @@ class Dokumen extends BaseController
         // Jika tidak ditemukan, kembalikan 404
         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
     }
+
+    /**
+     * Penyalur berkas fisik dari direktori writable/FOTO
+     * 
+     * @param string ...$filepath Nama file/path yang diminta
+     */
+    public function foto(...$filepath)
+    {
+        if (empty($filepath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $relativePath = implode('/', $filepath);
+        
+        // Amankan dari direktori traversal
+        if (strpos($relativePath, '..') !== false || strpos($relativePath, "\0") !== false) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+        
+        $path = WRITEPATH . 'FOTO/' . $relativePath;
+
+        if (file_exists($path)) {
+            $file = new File($path);
+            $mime = $file->getMimeType();
+
+            // Atur header Content-Type sesuai dengan MIME type berkas
+            $this->response->setContentType($mime);
+            
+            // Baca dan pancarkan isi file
+            return $this->response->setBody(file_get_contents($path));
+        }
+
+        // Jika tidak ditemukan, kembalikan 404
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+    }
 }

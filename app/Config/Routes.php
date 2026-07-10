@@ -12,6 +12,7 @@ $routes->get('/profile', 'Profile::index');
 $routes->post('/profile/update', 'Profile::update');
 $routes->get('/dokumen/karyawan/(:segment)', 'Dokumen::karyawan/$1');
 $routes->get('/dokumen/doodle/(:segment)', 'Dokumen::doodle/$1');
+$routes->get('/dokumen/foto/(.*)', 'Dokumen::foto/$1');
 
 $routes->get('/cari', 'Search::index');
 $routes->get('/versi', 'Versi::index');
@@ -39,3 +40,10 @@ $routes->get('/doodle/getAll', 'Admin\DoodleController::getAll');
 $routes->post('/doodle/store', 'Admin\DoodleController::store');
 $routes->post('/doodle/update', 'Admin\DoodleController::update');
 $routes->post('/doodle/delete', 'Admin\DoodleController::delete');
+
+// Karyawan (Pengguna) CRUD
+$routes->get('/admin/karyawan', 'Admin\KaryawanController::index');
+$routes->get('/admin/karyawan/getAll', 'Admin\KaryawanController::getAll');
+$routes->post('/admin/karyawan/store', 'Admin\KaryawanController::store');
+$routes->post('/admin/karyawan/update', 'Admin\KaryawanController::update');
+$routes->post('/admin/karyawan/delete', 'Admin\KaryawanController::delete');
