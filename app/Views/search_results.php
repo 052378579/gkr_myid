@@ -16,7 +16,11 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 <div class="header-container" id="header-container">
         <div class="desktop-left-wrapper">
             <a href="<?= base_url() ?>" class="logo-container">
-                <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Gracia Logo">
+                <?php if(isset($urlLogo)): ?>
+                    <img src="<?= esc($urlLogo) ?>" alt="<?= esc($altLogo) ?>" title="<?= esc($altLogo) ?>">
+                <?php else: ?>
+                    <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Gracia Logo">
+                <?php endif; ?>
             </a>
             
             <form action="<?= url_to('Search::index') ?>" method="GET" class="search-box">
@@ -214,7 +218,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     
     <footer class="mt-auto py-3 position-relative w-100" style="background-color: #f2f2f2; border-top: 1px solid #e4e4e4; color: #70757a; font-size: 0.9rem; margin-top: 40px !important;">
         <div class="text-center w-100">
-            Dikembangkan oleh <a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
+            <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
         </div>
         <div class="position-absolute" style="right: 20px; top: 50%; transform: translateY(-50%);">
             <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>

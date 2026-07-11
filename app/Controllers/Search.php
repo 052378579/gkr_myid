@@ -21,12 +21,19 @@ class Search extends BaseController
 
         $modelSitus = new SiteModel();
         $modelGambar = new ImageModel();
+        $doodleModel = new \App\Models\DoodleModel();
 
         $dataPencarian = [
             'query' => $kataKunci, // Dipertahankan 'query' untuk kompatibilitas View
             'type'  => $tipe,      // Dipertahankan 'type' untuk kompatibilitas View
             'page'  => $halaman,
         ];
+
+        $doodle = $doodleModel->getActiveDoodle();
+        if ($doodle) {
+            $dataPencarian['urlLogo'] = base_url('dokumen/doodle/' . $doodle['gambar']);
+            $dataPencarian['altLogo'] = $doodle['event'];
+        }
 
         if ($tipe === 'sites') {
             $dataPencarian['totalResults'] = $modelSitus->like('title', $kataKunci)

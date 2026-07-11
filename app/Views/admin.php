@@ -186,30 +186,14 @@
                             <label class="form-label fw-semibold">Nama Event <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" v-model="doodleForm.event" required>
                         </div>
-                        <div class="row mb-3" v-if="!doodleForm.annual_friday && !doodleForm.annual_weekend && !doodleForm.annual_payday">
+                        <div class="row mb-3">
                             <div class="col-6">
                                 <label class="form-label fw-semibold">Tgl Mulai <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" v-model="doodleForm.tgl_mulai" :required="!doodleForm.annual_friday && !doodleForm.annual_weekend && !doodleForm.annual_payday">
+                                <input type="date" class="form-control" v-model="doodleForm.tgl_mulai" required>
                             </div>
                             <div class="col-6">
                                 <label class="form-label fw-semibold">Tgl Selesai <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" v-model="doodleForm.tgl_selesai" :required="!doodleForm.annual_friday && !doodleForm.annual_weekend && !doodleForm.annual_payday">
-                            </div>
-                        </div>
-
-                        <!-- Opsi Annual hanya muncul saat Tambah Doodle Baru -->
-                        <div class="mb-3 p-3 bg-light rounded border" v-if="!isEditDoodle">
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" id="annualFriday" v-model="doodleForm.annual_friday">
-                                <label class="form-check-label" for="annualFriday">Setiap Jumat</label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" id="annualWeekend" v-model="doodleForm.annual_weekend">
-                                <label class="form-check-label" for="annualWeekend">Setiap Sabtu & Minggu</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="annualPayday" v-model="doodleForm.annual_payday">
-                                <label class="form-check-label" for="annualPayday">Setiap Tanggal Gajian</label>
+                                <input type="date" class="form-control" v-model="doodleForm.tgl_selesai" required>
                             </div>
                         </div>
                         <div class="mb-3">

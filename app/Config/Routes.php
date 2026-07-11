@@ -40,7 +40,7 @@ $routes->get('/doodle/getAll', 'Admin\DoodleController::getAll');
 $routes->post('/doodle/store', 'Admin\DoodleController::store');
 $routes->post('/doodle/update', 'Admin\DoodleController::update');
 $routes->post('/doodle/delete', 'Admin\DoodleController::delete');
-
+$routes->post('/doodle/generateRecurring', 'Admin\DoodleController::generateRecurring');
 // Karyawan (Pengguna) CRUD
 $routes->get('/admin/karyawan', 'Admin\KaryawanController::index');
 $routes->get('/admin/karyawan/getAll', 'Admin\KaryawanController::getAll');

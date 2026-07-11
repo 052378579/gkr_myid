@@ -147,7 +147,7 @@ createApp({
         // --- DOODLE LOGIC ---
         const doodleModal = ref(null);
         const doodleFileInput = ref(null);
-        const doodleForm = ref({ id_doodle: '', event: '', tgl_mulai: '', tgl_selesai: '', status: 'aktif', annual_friday: false, annual_weekend: false, annual_payday: false });
+        const doodleForm = ref({ id_doodle: '', event: '', tgl_mulai: '', tgl_selesai: '', status: 'aktif' });
         const doodleGambarFile = ref(null);
         const doodlePreview = ref('');
         const isEditDoodle = ref(false);
@@ -182,7 +182,7 @@ createApp({
 
         const bukaModalDoodle = () => {
             isEditDoodle.value = false;
-            doodleForm.value = { id_doodle: '', event: '', tgl_mulai: '', tgl_selesai: '', status: 'aktif', annual_friday: false, annual_weekend: false, annual_payday: false };
+            doodleForm.value = { id_doodle: '', event: '', tgl_mulai: '', tgl_selesai: '', status: 'aktif' };
             doodleGambarFile.value = null;
             doodlePreview.value = '';
             if(doodleFileInput.value) doodleFileInput.value.value = '';
@@ -203,16 +203,9 @@ createApp({
             isSubmittingDoodle.value = true;
             const formData = new FormData();
             formData.append('event', doodleForm.value.event);
+            formData.append('tgl_mulai', doodleForm.value.tgl_mulai);
+            formData.append('tgl_selesai', doodleForm.value.tgl_selesai);
             formData.append('status', doodleForm.value.status);
-            
-            formData.append('annual_friday', doodleForm.value.annual_friday ? 1 : 0);
-            formData.append('annual_weekend', doodleForm.value.annual_weekend ? 1 : 0);
-            formData.append('annual_payday', doodleForm.value.annual_payday ? 1 : 0);
-            
-            if (!doodleForm.value.annual_friday && !doodleForm.value.annual_weekend && !doodleForm.value.annual_payday) {
-                formData.append('tgl_mulai', doodleForm.value.tgl_mulai);
-                formData.append('tgl_selesai', doodleForm.value.tgl_selesai);
-            }
             
             if (doodleGambarFile.value) {
                 formData.append('gambar', doodleGambarFile.value);
