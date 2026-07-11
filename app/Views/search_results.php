@@ -212,8 +212,13 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         </div>
     <?php endif; ?>
     
-    <footer class="mt-auto py-3 text-center" style="background-color: #f2f2f2; border-top: 1px solid #e4e4e4; color: #70757a; font-size: 0.9rem; margin-top: 40px !important;">
-        Dikembangkan oleh <a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; 2026 &bull; v1.0.0
+    <footer class="mt-auto py-3 position-relative w-100" style="background-color: #f2f2f2; border-top: 1px solid #e4e4e4; color: #70757a; font-size: 0.9rem; margin-top: 40px !important;">
+        <div class="text-center w-100">
+            Dikembangkan oleh <a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
+        </div>
+        <div class="position-absolute" style="right: 20px; top: 50%; transform: translateY(-50%);">
+            <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>
+        </div>
     </footer>
 </div>
 

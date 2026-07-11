@@ -33,10 +33,10 @@ class DoodleController extends BaseController
      */
     public function store()
     {
+        $isAnnual = $this->request->getPost('annual_friday') == 1 || $this->request->getPost('annual_weekend') == 1 || $this->request->getPost('annual_payday') == 1;
+
         $rules = [
             'event'       => 'required',
-            'tgl_mulai'   => 'required|valid_date',
-            'tgl_selesai' => 'required|valid_date',
             'status'      => 'required|in_list[aktif,tidak_aktif]',
             'gambar'      => [
                 'rules'  => 'uploaded[gambar]|max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png,image/webp,image/gif]',
@@ -47,6 +47,11 @@ class DoodleController extends BaseController
             ]
         ];
 
+        if (!$isAnnual) {
+            $rules['tgl_mulai'] = 'required|valid_date';
+            $rules['tgl_selesai'] = 'required|valid_date';
+        }
+
         if (!$this->validate($rules)) {
             return $this->response->setStatusCode(400)->setJSON([
                 'status'  => 'error',
@@ -56,30 +61,102 @@ class DoodleController extends BaseController
 
         // Tangkap data inputan
         $event     = $this->request->getPost('event');
-        $tgl_mulai = $this->request->getPost('tgl_mulai');
+        $status    = $this->request->getPost('status');
         $foto      = $this->request->getFile('gambar');
         $ext       = $foto->getClientExtension();
-        
-        // --- FORMAT NAMING BARU ---
-        // 1. Bersihkan nama event (hanya huruf, angka, dan underscore)
         $cleanEvent = strtolower(preg_replace('/[^a-zA-Z0-9]/', '_', $event));
         
-        // 2. Ambil YYYY-MM-DD dari inputan 'tgl_mulai'
-        $tanggal_mulai_format = date('Y-m-d', strtotime($tgl_mulai)); 
-        
-        // 3. Gabungkan menjadi format final: 2026-07-08_hari_jumat.png
-        $namaFoto = $tanggal_mulai_format . '_' . $cleanEvent . '.' . $ext;
-        
-        // Simpan ke direktori app/writable/GKR_DOODLE
-        $foto->move(WRITEPATH . 'GKR_DOODLE', $namaFoto, true);
+        $tahunSekarang = date('Y');
 
-        $this->doodleModel->insert([
-            'event'       => $event,
-            'tgl_mulai'   => $tgl_mulai,
-            'tgl_selesai' => $this->request->getPost('tgl_selesai'),
-            'status'      => $this->request->getPost('status'),
-            'gambar'      => $namaFoto
-        ]);
+        if ($isAnnual) {
+            $namaFoto = $tahunSekarang . '_annual_' . $cleanEvent . '.' . $ext;
+            $foto->move(WRITEPATH . 'GKR_DOODLE', $namaFoto, true);
+
+            $insertData = [];
+            $annualFriday = $this->request->getPost('annual_friday') == 1;
+            $annualWeekend = $this->request->getPost('annual_weekend') == 1;
+            $annualPayday = $this->request->getPost('annual_payday') == 1;
+
+            if ($annualFriday || $annualWeekend) {
+                // Loop 1 tahun
+                $startDate = new \DateTime("$tahunSekarang-01-01");
+                $endDate = new \DateTime("$tahunSekarang-12-31");
+                $interval = new \DateInterval('P1D');
+                $period = new \DatePeriod($startDate, $interval, $endDate->modify('+1 day'));
+
+                foreach ($period as $dt) {
+                    $dayOfWeek = (int)$dt->format('w'); // 0=Sun, 5=Fri, 6=Sat
+                    
+                    if ($annualFriday && $dayOfWeek === 5) {
+                        $tgl = $dt->format('Y-m-d');
+                        $insertData[] = [
+                            'event' => $event,
+                            'tgl_mulai' => $tgl,
+                            'tgl_selesai' => $tgl,
+                            'status' => $status,
+                            'gambar' => $namaFoto,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                    }
+                    if ($annualWeekend && ($dayOfWeek === 6 || $dayOfWeek === 0)) {
+                        $tgl = $dt->format('Y-m-d');
+                        $insertData[] = [
+                            'event' => $event,
+                            'tgl_mulai' => $tgl,
+                            'tgl_selesai' => $tgl,
+                            'status' => $status,
+                            'gambar' => $namaFoto,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                    }
+                }
+            }
+
+            if ($annualPayday) {
+                for ($m = 1; $m <= 12; $m++) {
+                    $gajianDate = new \DateTime(sprintf("%04d-%02d-25", $tahunSekarang, $m));
+                    $dayOfWeek = (int)$gajianDate->format('w');
+                    if ($dayOfWeek === 6) { // Sabtu -> 24
+                        $gajianDate->modify('-1 day');
+                    } elseif ($dayOfWeek === 0) { // Minggu -> 23
+                        $gajianDate->modify('-2 days');
+                    }
+
+                    $insertData[] = [
+                        'event' => $event,
+                        'tgl_mulai' => $gajianDate->format('Y-m-d'),
+                        'tgl_selesai' => $gajianDate->format('Y-m-d'),
+                        'status' => $status,
+                        'gambar' => $namaFoto,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                }
+            }
+
+            // Hindari duplikasi jika memungkinkan, atau insert batch langsung
+            if (!empty($insertData)) {
+                $this->doodleModel->insertBatch($insertData);
+            }
+
+        } else {
+            // Logika Normal
+            $tgl_mulai = $this->request->getPost('tgl_mulai');
+            $tgl_selesai = $this->request->getPost('tgl_selesai');
+            $tanggal_mulai_format = date('Y-m-d', strtotime($tgl_mulai)); 
+            $namaFoto = $tanggal_mulai_format . '_' . $cleanEvent . '.' . $ext;
+            $foto->move(WRITEPATH . 'GKR_DOODLE', $namaFoto, true);
+
+            $this->doodleModel->insert([
+                'event'       => $event,
+                'tgl_mulai'   => $tgl_mulai,
+                'tgl_selesai' => $tgl_selesai,
+                'status'      => $status,
+                'gambar'      => $namaFoto
+            ]);
+        }
 
         return $this->response->setJSON([
             'status'  => 'success',

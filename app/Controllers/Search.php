@@ -80,6 +80,10 @@ class Search extends BaseController
             }
         }
 
+        $versiModel = new \App\Models\VersiModel();
+        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
+        $dataPencarian['version'] = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
+
         return view('search_results', $dataPencarian);
     }
 }
