@@ -38,7 +38,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <div class="dropdown" id="calendarDropdownWrap">
                 <a href="#" id="calendarDropdownToggle" class="text-dark small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='#212529'">
                     <span class="d-none d-md-inline"><?= $dateStr ?></span>
-                    <i class="fas fa-calendar-alt fs-5 d-inline d-md-none" style="color: #5f6368;"></i>
+                    <span class="d-inline d-md-none"><?= date('d/m/y') ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.5) !important;">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -102,13 +102,22 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     $avatarUrl = "https://ui-avatars.com/api/?name=" . urlencode($namaLengkap) . "&background=2B3385&color=fff";
                 }
             ?>
-            <a href="<?= base_url('profile') ?>" class="rounded-circle overflow-hidden text-decoration-none shadow-sm" style="width: 38px; height: 38px; cursor: pointer; display: inline-block; border: 2px solid #ffffff;" title="Profil Karyawan">
-                <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
-            </a>
-
-            <a href="<?= base_url('logout') ?>" class="text-decoration-none d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%; color: #2B3385; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f1f3f4'" onmouseout="this.style.backgroundColor='transparent'" title="Keluar">
-                <i class="fas fa-sign-out-alt fs-5" style="color: #2B3385;"></i>
-            </a>
+            <div class="dropdown">
+                <a href="#" class="rounded-circle overflow-hidden text-decoration-none shadow-sm d-inline-block" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; cursor: pointer; border: 2px solid #ffffff;" title="Menu Profil">
+                    <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end p-2 shadow-sm rounded-3" style="min-width: 150px; border: 1px solid #e4e4e4; margin-top: 10px;">
+                    <a class="dropdown-item d-flex align-items-center rounded-2 py-2 mb-1" href="<?= base_url('profile') ?>" style="color: #333; gap: 10px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='transparent'">
+                        <i class="fas fa-user text-secondary" style="font-size: 1rem; width: 20px; text-align: center;"></i> 
+                        <span style="font-size: 0.95rem;">Profil</span>
+                    </a>
+                    <div class="dropdown-divider my-1" style="border-color: #eee;"></div>
+                    <a class="dropdown-item d-flex align-items-center rounded-2 py-2 mt-1" href="<?= base_url('logout') ?>" style="color: #2B3385; gap: 10px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='transparent'">
+                        <i class="fas fa-sign-out-alt" style="font-size: 1rem; width: 20px; text-align: center;"></i> 
+                        <span style="font-size: 0.95rem;">Keluar</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     
