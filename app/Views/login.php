@@ -2,17 +2,21 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#ff0000" media="(prefers-color-scheme: dark)">
-
     <title><?= esc($title) ?></title>
-    
-    <link rel="shortcut icon" href="<?= base_url('favicon.ico') ?>" type="image/x-icon" />
-    <link rel="icon" href="<?= base_url('favicon.ico') ?>" type="image/x-icon" />
 
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="icon" type="image/svg+xml" href="<?= base_url('favicon.svg') ?>" />
+    <link rel="icon" type="image/png" sizes="96x96" href="<?= base_url('favicon-96x96.png') ?>" />
+    <link rel="alternate icon" href="<?= base_url('favicon.ico') ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('apple-touch-icon.png') ?>" />
+    <meta name="apple-mobile-web-app-title" content="GRACIA" />
+    <link rel="manifest" href="<?= base_url('site.webmanifest') ?>" />
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -69,7 +73,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-
+    
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('<?= base_url('sw.js') ?>')
+            .then((reg) => {
+              console.log('PWA Service Worker berhasil didaftarkan scope-nya pada: ', reg.scope);
+            })
+            .catch((err) => {
+              console.error('PWA Service Worker gagal didaftarkan: ', err);
+            });
+        });
+      }
+    </script>
     <script>
         window.AppConfig = {
             versiUrl: '<?= base_url('versi.json') ?>'

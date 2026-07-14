@@ -6,7 +6,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white glassmorphism fixed-top shadow-sm" style="background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
     <div class="container">
         <a class="navbar-brand" href="<?= base_url('admin') ?>">
-            <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Gracia" style="height: 30px; width: auto;">
+            <img src="<?= base_url('Gracia_logo.png') ?>" alt="Gracia" style="height: 30px; width: auto;">
         </a>
         <div class="navbar-nav ms-auto fw-medium">
             <a class="nav-link" href="<?= base_url('admin') ?>" style="color: #2B3385 !important;"><i class="fas fa-arrow-left me-1"></i> Panel Admin</a>

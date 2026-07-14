@@ -11,7 +11,7 @@ const escapeHtml = (unsafe) => {
     });
 };
 
-const { createApp, ref, computed, onMounted } = Vue;
+const { createApp, ref, computed, watch, onMounted } = Vue;
 
 createApp({
     setup() {
@@ -22,18 +22,80 @@ createApp({
         const perPage = ref(10);
         const currentPageSites = ref(1);
         const currentPageImages = ref(1);
+        const searchSite = ref('');
+        const searchImage = ref('');
+
+        // Modal Edit Site
+        const materials = ref([]);
+        const formEditSite = ref({ id: '', title: '', url: '', description: '', keywords: '', clicks: '' });
+        const modalEditSiteInstance = ref(null);
+        const selectedMaterial = ref('');
+        const selectedWarna = ref('');
+
+        watch(selectedMaterial, (val) => {
+            if (val) {
+                const kw = formEditSite.value.keywords || '';
+                // Append only if it doesn't already exist to avoid duplicates if they re-click
+                if (!kw.includes(val)) {
+                    formEditSite.value.keywords = kw ? kw + ', ' + val : val;
+                }
+                // Do not reset selectedMaterial here so that uniqueWarna can be filtered based on it
+            }
+        });
+        watch(selectedWarna, (val) => {
+            if (val) {
+                const kw = formEditSite.value.keywords || '';
+                if (!kw.includes(val)) {
+                    formEditSite.value.keywords = kw ? kw + ', ' + val : val;
+                }
+                selectedWarna.value = ''; // reset after appending
+            }
+        });
+
+        const uniqueMaterials = computed(() => {
+            const mats = materials.value.map(m => m.material);
+            return [...new Set(mats)];
+        });
+        const uniqueWarna = computed(() => {
+            let source = materials.value;
+            // Jika material dipilih, saring daftar warna sesuai material tersebut
+            if (selectedMaterial.value) {
+                source = materials.value.filter(m => m.material === selectedMaterial.value);
+            }
+            const warns = source.map(m => m.warna);
+            return [...new Set(warns)];
+        });
+
+        watch(searchSite, () => currentPageSites.value = 1);
+        watch(searchImage, () => currentPageImages.value = 1);
+
+        const filteredSites = computed(() => {
+            if (!searchSite.value) return sites.value;
+            const term = searchSite.value.toLowerCase();
+            return sites.value.filter(site => site.title && site.title.toLowerCase().includes(term));
+        });
 
         const paginatedSites = computed(() => {
             const start = (currentPageSites.value - 1) * perPage.value;
-            return sites.value.slice(start, start + perPage.value);
+            return filteredSites.value.slice(start, start + perPage.value);
         });
-        const totalSitePages = computed(() => Math.ceil(sites.value.length / perPage.value) || 1);
+        const totalSitePages = computed(() => Math.ceil(filteredSites.value.length / perPage.value) || 1);
+
+        const filteredImages = computed(() => {
+            if (!searchImage.value) return images.value;
+            const term = searchImage.value.toLowerCase();
+            return images.value.filter(img => {
+                const titleMatch = img.title && img.title.toLowerCase().includes(term);
+                const altMatch = img.alt && img.alt.toLowerCase().includes(term);
+                return titleMatch || altMatch;
+            });
+        });
 
         const paginatedImages = computed(() => {
             const start = (currentPageImages.value - 1) * perPage.value;
-            return images.value.slice(start, start + perPage.value);
+            return filteredImages.value.slice(start, start + perPage.value);
         });
-        const totalImagePages = computed(() => Math.ceil(images.value.length / perPage.value) || 1);
+        const totalImagePages = computed(() => Math.ceil(filteredImages.value.length / perPage.value) || 1);
 
         const loadSites = async () => {
             const res = await fetch(window.AppConfig.apiGetSites);
@@ -45,6 +107,18 @@ createApp({
             const res = await fetch(window.AppConfig.apiGetImages);
             const json = await res.json();
             images.value = json.data;
+        };
+
+        const loadMaterials = async () => {
+            try {
+                const res = await fetch(window.AppConfig.apiGetMaterials);
+                const json = await res.json();
+                if (json.status === 'success') {
+                    materials.value = json.data;
+                }
+            } catch (e) {
+                console.error('Failed to load materials', e);
+            }
         };
 
         const deleteSite = async (id) => {
@@ -61,25 +135,29 @@ createApp({
             }
         };
 
-        const editSite = async (site) => {
+        const tambahSite = async () => {
             const { value: formValues } = await Swal.fire({
-                title: 'Edit Situs',
+                title: 'Tambah Situs',
                 html:
-                    '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-s1" class="form-control" value="' + escapeHtml(site.title) + '"></div>' +
-                    '<div class="mb-3 text-start"><label class="form-label">URL</label><input id="swal-s2" class="form-control" value="' + escapeHtml(site.url) + '"></div>' +
-                    '<div class="mb-3 text-start"><label class="form-label">Deskripsi</label><textarea id="swal-s3" class="form-control">' + escapeHtml(site.description) + '</textarea></div>' +
-                    '<div class="mb-3 text-start"><label class="form-label">Kata Kunci</label><input id="swal-s4" class="form-control" value="' + escapeHtml(site.keywords) + '"></div>' +
-                    '<div class="mb-3 text-start"><label class="form-label">Klik</label><input type="number" id="swal-s5" class="form-control" value="' + (site.clicks || '0') + '"></div>',
+                    '<div class="mb-3 text-start"><label class="form-label">Judul</label><input id="swal-s1" class="form-control" placeholder="Masukkan judul situs"></div>' +
+                    '<div class="mb-3 text-start"><label class="form-label">URL</label><input id="swal-s2" class="form-control" placeholder="https://example.com"></div>' +
+                    '<div class="mb-3 text-start"><label class="form-label">Deskripsi</label><textarea id="swal-s3" class="form-control" placeholder="Deskripsi singkat"></textarea></div>' +
+                    '<div class="mb-3 text-start"><label class="form-label">Kata Kunci</label><input id="swal-s4" class="form-control" placeholder="kata1, kata2"></div>',
                 focusConfirm: false,
                 showCancelButton: true,
                 width: '600px',
                 preConfirm: () => {
+                    const title = document.getElementById('swal-s1').value;
+                    const url = document.getElementById('swal-s2').value;
+                    if (!title || !url) {
+                        Swal.showValidationMessage('Judul dan URL wajib diisi!');
+                        return false;
+                    }
                     return {
-                        title: document.getElementById('swal-s1').value,
-                        url: document.getElementById('swal-s2').value,
+                        title: title,
+                        url: url,
                         description: document.getElementById('swal-s3').value,
-                        keywords: document.getElementById('swal-s4').value,
-                        clicks: document.getElementById('swal-s5').value
+                        keywords: document.getElementById('swal-s4').value
                     }
                 }
             });
@@ -90,15 +168,101 @@ createApp({
                 formData.append('url', formValues.url);
                 formData.append('description', formValues.description);
                 formData.append('keywords', formValues.keywords);
-                formData.append('clicks', formValues.clicks);
                 
-                await fetch(window.AppConfig.apiUpdateSite + site.id, {
-                    method: 'POST',
-                    body: formData
-                });
-                loadSites();
-                Swal.fire('Berhasil!', 'Data situs telah diubah.', 'success');
+                try {
+                    const res = await fetch(window.AppConfig.apiStoreSite, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const json = await res.json();
+                    if (json.status === 'sukses') {
+                        loadSites();
+                        Swal.fire('Berhasil!', 'Situs baru berhasil ditambahkan.', 'success');
+                    } else {
+                        Swal.fire('Gagal!', 'Terjadi kesalahan atau URL sudah ada.', 'error');
+                    }
+                } catch (e) {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan sistem.', 'error');
+                }
             }
+        };
+
+        const tambahImage = async () => {
+            const { value: formValues } = await Swal.fire({
+                title: 'Tambah Gambar',
+                html:
+                    '<div class="mb-3 text-start"><label class="form-label">Judul/Nama Gambar</label><input id="swal-i1" class="form-control" placeholder="Judul gambar"></div>' +
+                    '<div class="mb-3 text-start"><label class="form-label">Alt (Alternatif)</label><input id="swal-i2" class="form-control" placeholder="Teks alternatif"></div>' +
+                    '<div class="mb-3 text-start"><label class="form-label">URL Gambar (Source)</label><input id="swal-i3" class="form-control" placeholder="https://example.com/image.jpg"></div>' +
+                    '<div class="mb-3 text-start"><label class="form-label">URL Situs Induk</label><input id="swal-i4" class="form-control" placeholder="https://example.com"></div>',
+                focusConfirm: false,
+                showCancelButton: true,
+                width: '600px',
+                preConfirm: () => {
+                    const imageUrl = document.getElementById('swal-i3').value;
+                    const siteUrl = document.getElementById('swal-i4').value;
+                    if (!imageUrl || !siteUrl) {
+                        Swal.showValidationMessage('URL Gambar dan URL Situs Induk wajib diisi!');
+                        return false;
+                    }
+                    return {
+                        title: document.getElementById('swal-i1').value,
+                        alt: document.getElementById('swal-i2').value,
+                        imageUrl: imageUrl,
+                        siteUrl: siteUrl
+                    }
+                }
+            });
+            
+            if (formValues) {
+                const formData = new FormData();
+                formData.append('title', formValues.title);
+                formData.append('alt', formValues.alt);
+                formData.append('imageUrl', formValues.imageUrl);
+                formData.append('siteUrl', formValues.siteUrl);
+                
+                try {
+                    const res = await fetch(window.AppConfig.apiStoreImage, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const json = await res.json();
+                    if (json.status === 'sukses') {
+                        loadImages();
+                        Swal.fire('Berhasil!', 'Gambar baru berhasil ditambahkan.', 'success');
+                    } else {
+                        Swal.fire('Gagal!', 'Terjadi kesalahan saat menambahkan gambar.', 'error');
+                    }
+                } catch (e) {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan sistem.', 'error');
+                }
+            }
+        };
+
+        const editSite = (site) => {
+            formEditSite.value = { ...site };
+            const el = document.getElementById('modalEditSite');
+            if(el) {
+                modalEditSiteInstance.value = new bootstrap.Modal(el);
+                modalEditSiteInstance.value.show();
+            }
+        };
+
+        const simpanEditSite = async () => {
+            const formData = new FormData();
+            formData.append('title', formEditSite.value.title);
+            formData.append('url', formEditSite.value.url);
+            formData.append('description', formEditSite.value.description || '');
+            formData.append('keywords', formEditSite.value.keywords || '');
+            formData.append('clicks', formEditSite.value.clicks || 0);
+            
+            await fetch(window.AppConfig.apiUpdateSite + formEditSite.value.id, {
+                method: 'POST',
+                body: formData
+            });
+            if(modalEditSiteInstance.value) modalEditSiteInstance.value.hide();
+            loadSites();
+            Swal.fire('Berhasil!', 'Data situs telah diubah.', 'success');
         };
 
         const editImage = async (img) => {
@@ -246,9 +410,13 @@ createApp({
         };
 
         onMounted(() => {
-            doodleModal.value = new bootstrap.Modal(document.getElementById('doodleModal'));
+            const modalEl = document.getElementById('doodleModal');
+            if (modalEl) {
+                doodleModal.value = new bootstrap.Modal(modalEl);
+            }
             loadSites();
             loadImages();
+            loadMaterials();
             loadDoodles();
         });
 
@@ -259,13 +427,24 @@ createApp({
             perPage,
             currentPageSites,
             currentPageImages,
+            searchSite,
+            searchImage,
             paginatedSites,
             totalSitePages,
             paginatedImages,
             totalImagePages,
             deleteSite,
             deleteImage,
+            tambahSite,
+            tambahImage,
             editSite,
+            simpanEditSite,
+            formEditSite,
+            materials,
+            uniqueMaterials,
+            uniqueWarna,
+            selectedMaterial,
+            selectedWarna,
             editImage,
             // Doodle
             doodles,

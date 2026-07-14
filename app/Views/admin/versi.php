@@ -6,18 +6,18 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white glassmorphism fixed-top shadow-sm" style="background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
     <div class="container">
         <a class="navbar-brand" href="<?= base_url('admin') ?>">
-            <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Gracia" style="height: 30px; width: auto;">
+            <img src="<?= base_url('Gracia_logo.png') ?>" alt="Gracia" style="height: 30px; width: auto;">
         </a>
         <div class="navbar-nav ms-auto fw-medium">
-            <a class="nav-link" href="<?= base_url('admin') ?>" style="color: #2B3385 !important;"><i class="fas fa-arrow-left me-1"></i> Panel Admin</a>
-            <a class="nav-link" href="<?= base_url('versi') ?>" target="_blank" style="color: #2B3385 !important;">Lihat Changelog Publik</a>
+            <a class="nav-link" href="<?= base_url('admin') ?>" style="color: #2B3385 !important;"><i class="fas fa-arrow-left me-1"></i> Admin</a>
+            <a class="nav-link" href="<?= base_url('versi') ?>" target="_blank" style="color: #2B3385 !important;">Changelog</a>
         </div>
     </div>
 </nav>
 
 <div class="container mt-5 pt-5 pb-5" id="adminVersiApp">   
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0 fw-bold" style="color: #2B3385;">Manajemen Versi (Changelog)</h4>
+        <h4 class="mb-0 fw-bold" style="color: #2B3385;">Manajemen Versi</h4>
         <button class="btn btn-primary rounded-pill px-4" @click="tambahVersi">
             <i class="fas fa-plus me-1"></i> Versi Baru
         </button>

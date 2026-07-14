@@ -29,6 +29,6 @@ class Versi extends BaseController
             }
         }
         
-        return view('versi/index', ['changelog' => $versiData]);
+        return view('versi', ['changelog' => $versiData]);
     }
 }

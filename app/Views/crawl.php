@@ -12,12 +12,12 @@
         <!-- Left Side: Controls -->
         <div class="col-md-5 bg-white d-flex flex-column align-items-center justify-content-center p-5">
             <!-- Logo -->
-            <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Doogle Logo" class="mb-3" style="max-height: 80px;">
+            <img src="<?= base_url('Gracia_logo.png') ?>" alt="Doogle Logo" class="mb-3" style="max-height: 80px;">
             
             <h4 class="fw-bold mb-1">Crawler Engine</h4>
             <p class="text-muted small mb-4">Mesin crawling situs dan direktori lokal</p>
             
-            <a href="<?= base_url('/') ?>" class="btn btn-outline-secondary rounded-pill px-4 mb-4" style="font-size: 0.9rem;">Kembali ke Beranda</a>
+            <a href="<?= base_url('/admin') ?>" class="btn btn-outline-secondary rounded-pill px-4 mb-4" style="font-size: 0.9rem;">Kembali ke Admin</a>
             
             <!-- Form Container -->
             <div class="w-100" style="max-width: 400px;">

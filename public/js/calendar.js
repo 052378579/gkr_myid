@@ -87,7 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     let isToday = (date === todayDate && month === todayMonth && year === todayYear);
                     if (isToday) {
                         isCurrentWeek = true;
-                        cellsHtml += `<td><span style="background-color: #2B3385; color: white; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; box-shadow: 0 2px 4px rgba(43,51,133,0.3);">${date}</span></td>`;
+                        let bgColor = isWeekend ? '#dc3545' : '#2B3385';
+                        let shadowColor = isWeekend ? 'rgba(220,53,69,0.3)' : 'rgba(43,51,133,0.3)';
+                        cellsHtml += `<td><span style="background-color: ${bgColor}; color: white; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; box-shadow: 0 2px 4px ${shadowColor};">${date}</span></td>`;
                     } else {
                         cellsHtml += `<td><span style="color: ${textColor};">${date}</span></td>`;
                     }
@@ -99,7 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let weekDateFallback = (i === 0 && date > 1) ? 1 : (date <= daysInMonth ? date - 1 : daysInMonth);
             let currentWeekNumber = getWeekNumber(new Date(year, month, weekDateFallback));
             
-            let weekStyle = isCurrentWeek ? "background-color: #2B3385; color: white; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; font-weight: bold;" : "color: #6c757d; font-weight: bold;";
+            let isCurrentWeekWeekend = isCurrentWeek && (new Date().getDay() === 0 || new Date().getDay() === 6);
+            let weekBgColor = isCurrentWeekWeekend ? '#dc3545' : '#2B3385';
+            
+            let weekStyle = isCurrentWeek ? `background-color: ${weekBgColor}; color: white; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; font-weight: bold;` : "color: #6c757d; font-weight: bold;";
             
             rowHtml += `<td><span style="${weekStyle}">${currentWeekNumber}</span></td>`;
             rowHtml += cellsHtml;

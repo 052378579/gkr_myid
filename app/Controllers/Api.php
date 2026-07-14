@@ -54,6 +54,35 @@ class Api extends BaseController
     }
 
     // Untuk antarmuka Vue.js di Panel Admin
+    public function setupDb()
+    {
+        $db = \Config\Database::connect();
+        $db->query("CREATE TABLE IF NOT EXISTS `gkr_material` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `material` varchar(100) NOT NULL,
+            `warna` varchar(100) NOT NULL,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+        // Truncate and Insert dummy data
+        $db->query("TRUNCATE TABLE `gkr_material`");
+        $db->query("INSERT INTO `gkr_material` (`material`, `warna`) VALUES 
+            ('teak', 'natual 002'),
+            ('alumunium', 'antrachite bronze'),
+            ('alumunium', 'taupe texture'),
+            ('fiber', 'terrazzo'),
+            ('fiber', 'concreate')
+        ");
+        
+        return $this->response->setJSON(['status' => 'success']);
+    }
+
+    public function getMaterials()
+    {
+        $modelMaterial = new \App\Models\MaterialModel();
+        return $this->response->setJSON(['status' => 'success', 'data' => $modelMaterial->findAll()]);
+    }
+
     public function getSites()
     {
         $modelSitus = new SiteModel();
@@ -109,6 +138,60 @@ class Api extends BaseController
         return $this->response->setJSON(['status' => 'sukses']);
     }
 
+    public function storeSite()
+    {
+        $modelSitus = new SiteModel();
+        $dataBaru = [];
+        
+        // Sanitasi input
+        if ($this->request->getPost('title')) $dataBaru['title'] = esc($this->request->getPost('title'));
+        if ($this->request->getPost('url')) $dataBaru['url'] = esc($this->request->getPost('url'));
+        if ($this->request->getPost('description')) $dataBaru['description'] = esc($this->request->getPost('description'));
+        if ($this->request->getPost('keywords')) $dataBaru['keywords'] = esc($this->request->getPost('keywords'));
+        
+        // Pastikan url ada "http"
+        if (!empty($dataBaru['url']) && !preg_match('/^https?:\/\//i', $dataBaru['url'])) {
+            $dataBaru['url'] = 'http://' . $dataBaru['url'];
+        }
+
+        if (!empty($dataBaru)) {
+            if ($modelSitus->insert($dataBaru)) {
+                return $this->response->setJSON(['status' => 'sukses']);
+            } else {
+                return $this->response->setJSON(['status' => 'gagal', 'pesan' => $modelSitus->errors()]);
+            }
+        }
+        return $this->response->setJSON(['status' => 'gagal']);
+    }
+
+    public function storeImage()
+    {
+        $modelGambar = new ImageModel();
+        $dataBaru = [];
+        
+        // Sanitasi input
+        if ($this->request->getPost('title')) $dataBaru['title'] = esc($this->request->getPost('title'));
+        if ($this->request->getPost('alt')) $dataBaru['alt'] = esc($this->request->getPost('alt'));
+        if ($this->request->getPost('imageUrl')) $dataBaru['imageUrl'] = esc($this->request->getPost('imageUrl'));
+        if ($this->request->getPost('siteUrl')) $dataBaru['siteUrl'] = esc($this->request->getPost('siteUrl'));
+        
+        if (!empty($dataBaru['imageUrl']) && !preg_match('/^https?:\/\//i', $dataBaru['imageUrl'])) {
+            $dataBaru['imageUrl'] = 'http://' . $dataBaru['imageUrl'];
+        }
+        if (!empty($dataBaru['siteUrl']) && !preg_match('/^https?:\/\//i', $dataBaru['siteUrl'])) {
+            $dataBaru['siteUrl'] = 'http://' . $dataBaru['siteUrl'];
+        }
+
+        if (!empty($dataBaru)) {
+            if ($modelGambar->insert($dataBaru)) {
+                return $this->response->setJSON(['status' => 'sukses']);
+            } else {
+                return $this->response->setJSON(['status' => 'gagal', 'pesan' => $modelGambar->errors()]);
+            }
+        }
+        return $this->response->setJSON(['status' => 'gagal']);
+    }
+
     public function updateSite($id)
     {
         $modelSitus = new SiteModel();
@@ -154,5 +237,48 @@ class Api extends BaseController
             }
         }
         return $this->response->setJSON(['status' => 'gagal']);
+    }
+
+    public function getTrendData()
+    {
+        // Gunakan cache bawaan CI4
+        $cache = \Config\Services::cache();
+        $cacheKey = 'trend_data_api';
+        $data = $cache->get($cacheKey);
+
+        if ($data === null) {
+            $modelSitus = new SiteModel();
+            $modelGambar = new ImageModel();
+
+            $topSites = $modelSitus->getTopClickedSites(10);
+            $topImages = $modelGambar->getTopClickedImages(10);
+            $combined = $modelGambar->getTopCombinedClicks(10);
+
+            $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/';
+
+            // Perbaiki imageUrl untuk topImages dan combined
+            foreach ($topImages as &$img) {
+                if (!empty($img['imageUrl']) && !preg_match('/^https?:\/\//i', $img['imageUrl'])) {
+                    $img['imageUrl'] = rtrim($imgBaseUrl, '/') . '/' . ltrim($img['imageUrl'], '/');
+                }
+            }
+
+            foreach ($combined as &$item) {
+                if (!empty($item['imageUrl']) && !preg_match('/^https?:\/\//i', $item['imageUrl'])) {
+                    $item['imageUrl'] = rtrim($imgBaseUrl, '/') . '/' . ltrim($item['imageUrl'], '/');
+                }
+            }
+
+            $data = [
+                'topSites'  => $topSites,
+                'topImages' => $topImages,
+                'combined'  => $combined
+            ];
+
+            // Cache selama 15 menit (900 detik)
+            $cache->save($cacheKey, $data, 900);
+        }
+
+        return $this->response->setJSON($data);
     }
 }

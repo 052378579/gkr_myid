@@ -19,7 +19,7 @@ class KaryawanController extends BaseController
         $data = [
             'title' => 'Pengaturan Karyawan (Pengguna)'
         ];
-        return view('admin_karyawan', $data);
+        return view('admin/karyawan', $data);
     }
 
     public function getAll()

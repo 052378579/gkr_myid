@@ -8,18 +8,23 @@ Sistem ini difokuskan untuk mengindeks, menelusuri, dan merepresentasikan tautan
 - **Mesin Pencari & Crawler Real-Time:** 
   Crawler cerdas yang beroperasi secara asinkron. Mampu memindai data lokal dan internet, dengan progres penelusuran (*live stream log*) yang dialirkan seketika ke penjelajah web melalui *Fetch API ReadableStream*.
 - **Desain UI/UX Modern & Reaktif:** 
-  Tampilan pencarian bersih bergaya minimalis. Hasil gambar disuguhkan melalui struktur *Masonry Grid* dinamis dan *lightbox* (*Fancybox*). Elemen interaktif pada dasbor dipoles menggunakan pendekatan *Glassmorphism* dan sudut-sudut antarmuka yang lembut (*rounded*).
+  Tampilan pencarian bersih bergaya minimalis. Hasil gambar disuguhkan melalui struktur *Masonry Grid* dinamis dan *lightbox* (*Fancybox*). Elemen interaktif pada dasbor dipoles menggunakan pendekatan *Glassmorphism* dan komponen **Native Modal Bootstrap 5.3** terintegrasi Vue (Bukan SweetAlert statis) untuk entri data yang panjang (seperti Formulir Edit Situs 2-kolom).
 - **Arsitektur RESTful API & Soft Delete:** 
-  Seluruh manipulasi data (CRUD) antara *frontend* (Vue.js) dan *backend* (CodeIgniter) dioperasikan penuh melalui metode RESTful API yang konsisten (GET, POST, PUT, DELETE), serta diproteksi secara aman. Penghapusan data dijaga menggunakan mekanisme *Soft Delete* otomatis dari CodeIgniter 4.
-- **Konsistensi Layout Tunggal:** 
-  Sistem dipastikan konsisten dalam merender setiap halamannya melalui satu kerangka pusat (*Template Layout*) di direktori `app/Views/layout`.
-- **Ekosistem Penamaan Berbahasa Indonesia:** 
-  Basis kode yang sangat terstruktur karena seluruh penamaan kelas, fungsi, variabel, model, kontroler, hingga komentar diatur 100% menggunakan Bahasa Indonesia.
+  Seluruh manipulasi data (CRUD) antara *frontend* (Vue.js) dan *backend* (CodeIgniter) dioperasikan penuh melalui metode RESTful API yang konsisten (GET, POST, PUT, DELETE). Penghapusan data dijaga menggunakan mekanisme *Soft Delete* otomatis dari CodeIgniter 4.
+- **Sistem Keamanan & Otorisasi RBAC:** 
+  Sistem diproteksi dengan otentikasi login serta filter keamanan presisi tinggi (*SuperAdminFilter*) di mana rute-rute sakral seperti `/admin/*` hanya dapat diterobos oleh sesi administrator tingkat puncak (`id_user = 1`).
+- **Dropdown Bertingkat & Integrasi Warna Dinamis:**
+  Sistem mampu membangun kata kunci pencarian secara asinkron melalui dropdown bertingkat (Cascading Dropdown) yang mereferensikan tabel master material. Tampilan antarmukanya (termasuk kalender beranda) juga beradaptasi otomatis membedakan warna *Gracia Theme* (Biru) untuk hari kerja dan warna *Danger* (Merah) di akhir pekan.
+- **Mekanisme Cache Busting:** 
+  Aplikasi ini menggunakan teknik *Cache Busting* otomatis (`?v=time()`) untuk seluruh aset skrip kritikal, menjamin peramban pengguna tidak pernah terjebak menahan memori berkas lawas.
+- **Konsistensi Layout Tunggal & Berbahasa Indonesia:** 
+  Sistem dirender secara terpusat lewat *Template Layout*, dengan fondasi arsitektur 100% menggunakan Bahasa Indonesia.
 
 ## 📁 Struktur Inti Arsitektur MVC
 - **`app/Controllers/`**: Menangani seluruh routing HTTP, pengalihan otentikasi, dan memfasilitasi titik panggil (*endpoint*) RESTful API berformat JSON.
-- **`app/Models/`**: Berinteraksi dengan pangkalan data MySQL/MariaDB menggunakan Query Builder CI4 (dilengkapi manajemen *Soft Delete* dan proteksi bawaan).
-- **`app/Views/`**: Menampung komponen visual (*frontend*). Diinjeksi ke dalam master layout `app/Views/layout` dan direaktivasi melalui tag `<script>` Vue.js.
+- **`app/Models/`**: Berinteraksi dengan pangkalan data MySQL/MariaDB menggunakan Query Builder CI4 (dilengkapi manajemen *Soft Delete*, proteksi bawaan, serta sanggup mengeksekusi inisialisasi tabel mandiri/ *seed schema* seperti `MaterialModel`).
+- **`app/Views/`**: Menampung komponen visual (*frontend*). Diinjeksi ke dalam master layout `app/Views/layout/admin_layout.php` atau `main.php` dan direaktivasi melalui tag `<script>` Vue.js.
+- **`app/Filters/`**: Tempat bernaungnya perisai lalu lintas web, seperti `AuthFilter.php` dan `SuperAdminFilter.php`.
 - **`app/Libraries/`**: Memuat modul utilitas di luar domain MVC/HTTP (seperti `CrawlerLib`, `DomDocumentParser`, dan pemoles URL).
 
 ## 🛠️ Stack Teknologi
@@ -33,8 +38,8 @@ Sistem ini difokuskan untuk mengindeks, menelusuri, dan merepresentasikan tautan
 Pengelolaan halaman dan rute dipetakan ketat, beberapa yang paling krusial meliputi:
 - `/` - Halaman Muka Beranda.
 - `/cari` - Penampil Hasil Pencarian.
-- `/admin` - Dasbor Manajemen Data Situs dan Gambar.
-- `/crawl` - Monitor Eksekusi Mesin Penjelajah.
+- `/admin` - Dasbor Manajemen Data Situs dan Gambar (Diproteksi Super Admin).
+- `/admin/crawl` - Monitor Eksekusi Mesin Penjelajah.
 - `/versi` - Penampil Riwayat Pembaruan Rilis Publik.
 - *API RESTful* tersebar untuk menjembatani asinkronisasi (Lihat [Tautan.md](Tautan.md) untuk struktur penuh).
 

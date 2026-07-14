@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class Home extends BaseController
+class Beranda extends BaseController
 {
     public function index(): string
     {
@@ -16,8 +16,8 @@ class Home extends BaseController
         }
         $versiModel = new \App\Models\VersiModel();
         $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $data['version'] = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
+        $data['version'] = $latest ? 'v' . $latest['versi'] : 'v0.0.1';
 
-        return view('index', $data);
+        return view('beranda', $data);
     }
 }

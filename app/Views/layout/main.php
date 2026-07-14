@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Base Styles -->
     <link rel="stylesheet" href="<?= base_url('css/main.css') ?>">
+    <?php if (strpos(uri_string(), 'admin') === 0): ?>
+        <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
+    <?php else: ?>
+        <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
+    <?php endif; ?>
     <?= $this->renderSection('styles') ?>
 </head>
 <body class="bg-light">

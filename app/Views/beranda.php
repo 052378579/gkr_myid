@@ -94,13 +94,16 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             $avatarUrl = "https://ui-avatars.com/api/?name=" . urlencode($namaLengkap) . "&background=2B3385&color=fff";
         }
     ?>
-    <a href="<?= base_url('profile') ?>" class="rounded-circle overflow-hidden text-decoration-none shadow-sm" style="width: 38px; height: 38px; cursor: pointer; display: inline-block; border: 2px solid #ffffff;" title="Profil Karyawan">
-        <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
-    </a>
-
-    <a href="<?= base_url('logout') ?>" class="text-decoration-none d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%; color: #2B3385; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f1f3f4'" onmouseout="this.style.backgroundColor='transparent'" title="Keluar">
-        <i class="fas fa-sign-out-alt fs-5" style="color: #2B3385;"></i>
-    </a>
+    <div class="dropdown ms-2">
+        <a href="#" class="rounded-circle overflow-hidden text-decoration-none shadow-sm d-inline-block" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; cursor: pointer; border: 2px solid #ffffff;" title="Menu Akun">
+            <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+            <li><a class="dropdown-item py-2" href="<?= base_url('profile') ?>"><i class="fas fa-user text-secondary me-2"></i>Profil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item py-2" href="<?= base_url('logout') ?>" style="color: #2B3385;"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
+        </ul>
+    </div>
 </div>
 
 <link rel="stylesheet" href="<?= base_url('css/index.css') ?>">
@@ -108,15 +111,17 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app">
     <div class="text-center mb-4">
         <?php 
-            $finalUrlLogo = $urlLogo ?? base_url('assets/images/Gracia_logo.png');
+            $finalUrlLogo = $urlLogo ?? base_url('Gracia_logo.png');
             $finalAltLogo = $altLogo ?? 'PT. Gracia Kreasi Rotan';
         ?>
-        <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="mb-3 doodle-img" onerror="this.onerror=null; this.src='<?= base_url('assets/images/Gracia_logo.png') ?>';">
+        <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="mb-3 doodle-img" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';">
         <?php $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/'; ?>
         <div class="d-flex justify-content-center align-items-center gap-2" style="font-size: 0.95rem;">
             <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO BUYER</a>
             <span style="color: #2B3385;">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
+            <span style="color: #2B3385;">|</span>
+            <a href="https://gamtek.gkr.my.id" style="color: #2B3385; text-decoration: none;" class="fw-medium">GAMTEK</a><sup class="text-danger">New</sup>
         </div>
     </div>
 
@@ -153,6 +158,6 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         searchUrl: '<?= url_to('Search::index') ?>'
     };
 </script>
-<script src="<?= base_url('js/calendar.js') ?>"></script>
+<script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/index.js') ?>"></script>
 <?= $this->endSection() ?>

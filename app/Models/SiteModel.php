@@ -44,4 +44,16 @@ class SiteModel extends Model
             'min_length' => 'Judul situs terlalu pendek (minimal 3 karakter).'
         ]
     ];
+
+    /**
+     * Mendapatkan daftar situs yang paling banyak diklik.
+     * Mengembalikan 10 data teratas secara default.
+     */
+    public function getTopClickedSites($limit = 10)
+    {
+        return $this->select('id, title, url, clicks')
+                    ->orderBy('clicks', 'DESC')
+                    ->limit($limit)
+                    ->findAll();
+    }
 }

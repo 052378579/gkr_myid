@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Models\VersiModel;
+use App\Controllers\BaseController;
 
-class AdminVersi extends BaseController
+class VersiController extends BaseController
 {
     public function index()
     {
-        return view('admin_versi');
+        return view('admin/versi');
     }
 
     public function getAll()

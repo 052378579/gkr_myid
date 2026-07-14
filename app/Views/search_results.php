@@ -19,7 +19,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 <?php if(isset($urlLogo)): ?>
                     <img src="<?= esc($urlLogo) ?>" alt="<?= esc($altLogo) ?>" title="<?= esc($altLogo) ?>">
                 <?php else: ?>
-                    <img src="<?= base_url('assets/images/Gracia_logo.png') ?>" alt="Gracia Logo">
+                    <img src="<?= base_url('Gracia_logo.png') ?>" alt="Gracia Logo">
                 <?php endif; ?>
             </a>
             
