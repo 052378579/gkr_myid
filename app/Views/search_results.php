@@ -29,7 +29,10 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 <div class="search-actions">
                     <button type="button" class="clear-btn" onclick="document.getElementById('search-input').value = ''; document.getElementById('search-input').focus();"><i class="fas fa-times"></i></button>
                     <span class="divider"></span>
-                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                    <button type="button" class="btn text-secondary border-0 p-0" style="background: transparent; margin: 0 6px;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
+                        <i class="fa-solid fa-camera fs-6 hover-primary" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"></i>
+                    </button>
+                    <button type="submit" class="search-button" style="margin-left: 6px;"><i class="fas fa-search"></i></button>
                 </div>
             </form>
         </div>
@@ -129,6 +132,9 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <li class="nav-item">
                 <a class="nav-link <?= $type === 'images' ? 'active' : '' ?>" href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=images">Gambar</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $type === 'image_results' ? 'active' : '' ?>" href="<?= url_to('Search::index') ?>?type=image_results"><i class="fa-solid fa-camera"></i> AI <sup class="text-danger fw-bold">New</sup></a>
+            </li>
         </ul>
     </div>
 
@@ -155,7 +161,47 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         </div>
     <?php else: ?>
         <div class="results-container">
-            <p class="result-count">Ditemukan <?= $totalResults ?> hasil</p>
+            <?php if ($type === 'image_results'): ?>
+                <?php 
+                    $kodeBom = session()->get('search_kode_bom');
+                    $aiResults = session()->get('search_ai_results');
+                    $confidence = session()->get('search_confidence');
+                    $confText = $confidence ? round($confidence * 100, 1) . '%' : '';
+                    
+                    $isSwatch = false;
+                    $isMulti = (!empty($aiResults) && count($aiResults) > 1);
+                    $displayName = $kodeBom;
+                    
+                    if (strpos($kodeBom, 'SWATCH:') === 0) {
+                        $isSwatch = true;
+                        // Hapus prefix SWATCH: dan ganti strip (-) dengan spasi agar lebih cantik
+                        $displayName = str_replace('-', ' ', substr($kodeBom, 7));
+                    } elseif (!empty($results)) {
+                        $rawTitle = $results[0]['title'] ?: $results[0]['alt'];
+                        $displayName = ucwords(strtolower($rawTitle));
+                        // Pastikan 'fg-' menjadi 'FG-'
+                        $displayName = str_ireplace('(fg-', '(FG-', $displayName);
+                        $displayName = str_ireplace(' fg-', ' FG-', $displayName);
+                        
+                        // Jaga-jaga jika fg- ada di awal string tanpa spasi/kurung
+                        if (stripos($displayName, 'fg-') === 0) {
+                            $displayName = 'FG-' . substr($displayName, 3);
+                        }
+                    }
+                ?>
+                <p class="result-count text-primary fw-medium" style="color: #2B3385 !important; font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    <?php if ($isSwatch): ?>
+                        <i class="fa-solid fa-wand-magic-sparkles me-1 text-warning"></i> 
+                        AI mengenali corak/material ini sebagai:
+                        <strong class="text-dark fs-6 ms-1" style="letter-spacing: 0.3px;"><?= esc($displayName) ?></strong> 
+                        <span class="text-muted ms-1" style="font-size: 0.85rem;"><?= $confText ? "(Akurasi: $confText)" : '' ?></span>
+                    <?php else: ?>
+                        Kecocokan visual
+                    <?php endif; ?>
+                </p>
+            <?php else: ?>
+                <p class="result-count">Ditemukan <?= $totalResults ?> hasil</p>
+            <?php endif; ?>
         </div>
         
         <div class="image-results-container">
@@ -234,6 +280,38 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         </div>
     </footer>
 </div>
+    <!-- Modal Upload Gambar -->
+    <div class="modal fade" id="uploadImageModal" tabindex="-1" aria-labelledby="uploadImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="uploadImageModalLabel" style="color: #2B3385;">Pencarian Gambar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <div id="uploadArea" class="upload-area p-5 border rounded-4 bg-light mb-3" style="border: 2px dashed #ccc !important; cursor: pointer;">
+                        <i class="fa-solid fa-cloud-arrow-up fs-1 text-secondary mb-3"></i>
+                        <p class="mb-0 text-muted">Tarik file gambar ke sini atau klik untuk memilih file</p>
+                        <input type="file" id="fileInput" class="d-none" accept="image/jpeg, image/png, image/webp">
+                    </div>
+                    
+                    <div id="previewArea" class="preview-area mb-3 position-relative d-none">
+                        <img id="uploadPreview" src="" alt="Preview" class="img-fluid rounded-3 shadow-sm" style="max-height: 250px; object-fit: contain;">
+                        <button type="button" id="clearImageBtn" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle" title="Hapus">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="uploadError" class="alert alert-danger py-2 small d-none"></div>
+                    
+                    <button id="uploadSubmitBtn" type="button" class="btn rounded-pill w-100 d-none" style="background-color: #2B3385; color: #ffffff !important;">
+                        <span id="uploadSubmitText"><i class="fa-solid fa-search me-2"></i>Cari Berdasarkan Gambar</span>
+                        <span id="uploadSubmitLoading" class="d-none"><i class="fa-solid fa-spinner fa-spin me-2"></i>Mencari...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <?= $this->endSection() ?>
 
@@ -251,4 +329,107 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 </script>
 <script src="<?= base_url('js/calendar.js') ?>"></script>
 <script src="<?= base_url('js/search.js') ?>"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewArea = document.getElementById('previewArea');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const clearImageBtn = document.getElementById('clearImageBtn');
+    const uploadError = document.getElementById('uploadError');
+    const uploadSubmitBtn = document.getElementById('uploadSubmitBtn');
+    const uploadSubmitText = document.getElementById('uploadSubmitText');
+    const uploadSubmitLoading = document.getElementById('uploadSubmitLoading');
+    let currentFile = null;
+
+    if (!uploadArea) return;
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.backgroundColor = '#e9ecef';
+    });
+    uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        uploadArea.style.backgroundColor = '';
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.backgroundColor = '';
+        if (e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) processFile(e.target.files[0]);
+    });
+
+    function processFile(file) {
+        uploadError.classList.add('d-none');
+        if (!file) return;
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            showError('Hanya format JPG, PNG, atau WEBP yang didukung.');
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            showError('Ukuran gambar maksimal 5MB.');
+            return;
+        }
+        currentFile = file;
+        uploadPreview.src = URL.createObjectURL(file);
+        uploadArea.classList.add('d-none');
+        previewArea.classList.remove('d-none');
+        uploadSubmitBtn.classList.remove('d-none');
+    }
+
+    clearImageBtn.addEventListener('click', () => {
+        currentFile = null;
+        fileInput.value = '';
+        uploadPreview.src = '';
+        uploadArea.classList.remove('d-none');
+        previewArea.classList.add('d-none');
+        uploadSubmitBtn.classList.add('d-none');
+        uploadError.classList.add('d-none');
+    });
+
+    function showError(msg) {
+        uploadError.textContent = msg;
+        uploadError.classList.remove('d-none');
+    }
+
+    uploadSubmitBtn.addEventListener('click', async () => {
+        if (!currentFile) return;
+        uploadSubmitBtn.disabled = true;
+        uploadSubmitText.classList.add('d-none');
+        uploadSubmitLoading.classList.remove('d-none');
+        uploadError.classList.add('d-none');
+
+        const formData = new FormData();
+        formData.append('image', currentFile);
+
+        try {
+            const res = await fetch('/api/search/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (!res.ok) {
+                const errorMsg = (data.messages && data.messages.error) || data.message || data.error || 'Terjadi kesalahan.';
+                throw new Error(errorMsg);
+            }
+            if (data.status === 'success') {
+                // Redirect ke hasil pencarian gambar
+                let baseUrl = window.AppConfig && window.AppConfig.searchUrl ? window.AppConfig.searchUrl : '/cari';
+                window.location.href = baseUrl + '?type=image_results';
+            } else {
+                showError('Terjadi kesalahan saat memproses gambar.');
+            }
+        } catch (err) {
+            showError(err.message);
+        } finally {
+            uploadSubmitBtn.disabled = false;
+            uploadSubmitText.classList.remove('d-none');
+            uploadSubmitLoading.classList.add('d-none');
+        }
+    });
+});
+</script>
 <?= $this->endSection() ?>

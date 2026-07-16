@@ -28,6 +28,9 @@ $routes->get('/admin/crawl', 'Crawler::index');
 $routes->post('/crawler/doCrawl', 'Crawler::doCrawl');
 $routes->post('/crawler/resetDb', 'Crawler::resetDb');
 
+$routes->get('/crawl/ai', 'AiCrawler::index');
+$routes->post('/crawl/ai/doCrawl', 'AiCrawler::doCrawl');
+
 $routes->post('/api/updateLinkCount', 'Api::updateLinkCount');
 $routes->post('/api/updateImageCount', 'Api::updateImageCount');
 $routes->post('/api/setBroken', 'Api::setBroken');
@@ -43,6 +46,7 @@ $routes->post('/api/deleteImage/(:num)', 'Api::deleteImage/$1');
 $routes->post('/api/updateSite/(:num)', 'Api::updateSite/$1');
 $routes->post('/api/updateImage/(:num)', 'Api::updateImage/$1');
 $routes->get('/api/insertVersion', 'InsertVersion::index');
+$routes->post('/api/search/upload', 'ImageSearchApi::upload');
 
 $routes->get('/doodle/getAll', 'Admin\DoodleController::getAll');
 $routes->post('/doodle/store', 'Admin\DoodleController::store');

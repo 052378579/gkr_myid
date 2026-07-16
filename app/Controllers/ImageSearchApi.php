@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\ImageModel;
+use App\Models\SiteModel;
+use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
+
+class ImageSearchApi extends ResourceController
+{
+    use ResponseTrait;
+
+    public function upload()
+    {
+        $file = $this->request->getFile('image');
+        
+        if (!$file || !$file->isValid()) {
+            return $this->fail('Tidak ada gambar yang diunggah atau file tidak valid', 400);
+        }
+
+        // Validasi mime type
+        $mime = $file->getMimeType();
+        if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'])) {
+            return $this->fail('Hanya menerima format JPG, PNG, atau WEBP', 400);
+        }
+
+        // Pindahkan ke folder writable/uploads sementara
+        $newName = $file->getRandomName();
+        $uploadPath = WRITEPATH . 'uploads/';
+        $file->move($uploadPath, $newName);
+        
+        $fullPath = $uploadPath . $newName;
+
+        try {
+            // Panggil AI Scanner FastAPI (Microservice)
+            $client = \Config\Services::curlrequest();
+            $response = $client->post('http://127.0.0.1:5000/scan', [
+                'multipart' => [
+                    'file' => new \CURLFile($fullPath)
+                ]
+            ]);
+
+            $body = json_decode($response->getBody());
+            
+            if (!isset($body->status) || $body->status !== 'success') {
+                $errorMsg = $body->message ?? 'Produk tidak dikenali oleh AI.';
+                unlink($fullPath);
+                return $this->fail($errorMsg, 500);
+            }
+            
+            $kodeBom = $body->kode_bom;
+            $confidence = $body->confidence;
+            
+            $aiResults = [];
+            if (isset($body->results)) {
+                $aiResults = json_decode(json_encode($body->results), true);
+            }
+
+            // Simpan hasil ke dalam PHP Session untuk digunakan oleh Search.php
+            session()->set('search_kode_bom', $kodeBom);
+            session()->set('search_confidence', $confidence);
+            session()->set('search_ai_results', $aiResults);
+
+            // Hapus file sementara setelah diproses
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+
+            return $this->respond([
+                'status' => 'success'
+            ]);
+
+        } catch (\Exception $e) {
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+            return $this->fail('Terjadi kesalahan internal: ' . $e->getMessage(), 500);
+        }
+    }
+}

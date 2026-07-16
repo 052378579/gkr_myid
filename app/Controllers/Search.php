@@ -15,7 +15,7 @@ class Search extends BaseController
         $halaman = (int)($this->request->getGet('page') ?? 1);
         $batasHalaman = 20;
 
-        if (empty(trim($kataKunci))) {
+        if (empty(trim($kataKunci)) && $tipe !== 'image_results') {
             return redirect()->to('/');
         }
 
@@ -52,6 +52,62 @@ class Search extends BaseController
             if (!empty($dataPencarian['results'])) {
                 foreach ($dataPencarian['results'] as &$row) {
                     $row['url'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['url']);
+                }
+            }
+        } elseif ($tipe === 'image_results') {
+            $kodeBom = session()->get('search_kode_bom');
+            $aiResults = session()->get('search_ai_results');
+            
+            if (empty($kodeBom)) {
+                return redirect()->to('/');
+            }
+
+            if (strpos($kodeBom, 'SWATCH:') === 0) {
+                // Jangan cari ke DB jika hasil utamanya adalah corak/swatch
+                $dataPencarian['totalResults'] = 0;
+                $dataPencarian['results'] = [];
+                $dataPencarian['pager'] = null;
+            } else {
+                // Ambil semua kode_bom dari array AI (maksimal 5)
+                $kodeBomList = [$kodeBom];
+                if (!empty($aiResults) && is_array($aiResults)) {
+                    $kodeBomList = array_unique(array_column($aiResults, 'kode_bom'));
+                }
+
+                // Hitung total hasil
+                $modelGambar->select('cari_images.*')->groupStart();
+                foreach ($kodeBomList as $kb) {
+                    // Abaikan swatch di pencarian sekunder jika ada
+                    if (strpos($kb, 'SWATCH:') !== 0) {
+                        $modelGambar->orLike('title', $kb)->orLike('imageUrl', $kb);
+                    }
+                }
+                $modelGambar->groupEnd()->where('broken', 0);
+                $dataPencarian['totalResults'] = $modelGambar->countAllResults(false);
+                
+                // Ambil data halaman
+                $modelGambar->select('cari_images.*')->groupStart();
+                foreach ($kodeBomList as $kb) {
+                    if (strpos($kb, 'SWATCH:') !== 0) {
+                        $modelGambar->orLike('title', $kb)->orLike('imageUrl', $kb);
+                    }
+                }
+                $modelGambar->groupEnd()->where('broken', 0);
+                $dataPencarian['results'] = $modelGambar->paginate($batasHalaman, 'default', $halaman);
+                $dataPencarian['pager'] = $modelGambar->pager;
+            }
+
+            $host = $_SERVER['HTTP_HOST'] ?? '';
+            if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id/', $host)) {
+                $urlPrefix = 'https://foto.budi.biz.id/';
+            } else {
+                $urlPrefix = 'https://foto.gkr.my.id/';
+            }
+
+            if (!empty($dataPencarian['results'])) {
+                foreach ($dataPencarian['results'] as &$row) {
+                    $row['siteUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['siteUrl']);
+                    $row['imageUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(.*)/', $urlPrefix . '$1', ltrim($row['imageUrl'], '/'));
                 }
             }
         } else {
