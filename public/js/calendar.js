@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             for (let j = 0; j < 7; j++) {
                 let isWeekend = (j === 5 || j === 6);
-                let textColor = isWeekend ? '#dc3545' : '#212529';
+                let textColor = isWeekend ? '#dc3545' : 'var(--bs-body-color)';
 
                 if (i === 0 && j < adjustedFirstDay) {
                     let prevDate = daysInPrevMonth - (adjustedFirstDay - 1 - j);
@@ -87,9 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let isToday = (date === todayDate && month === todayMonth && year === todayYear);
                     if (isToday) {
                         isCurrentWeek = true;
-                        let bgColor = isWeekend ? '#dc3545' : '#2B3385';
+                        let bgColor = isWeekend ? '#dc3545' : 'var(--gkr-primary)';
                         let shadowColor = isWeekend ? 'rgba(220,53,69,0.3)' : 'rgba(43,51,133,0.3)';
-                        cellsHtml += `<td><span style="background-color: ${bgColor}; color: white; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; box-shadow: 0 2px 4px ${shadowColor};">${date}</span></td>`;
+                        let circleText = isWeekend ? 'white' : 'var(--gkr-primary-text)';
+                        cellsHtml += `<td><span style="background-color: ${bgColor}; color: ${circleText}; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; box-shadow: 0 2px 4px ${shadowColor};">${date}</span></td>`;
                     } else {
                         cellsHtml += `<td><span style="color: ${textColor};">${date}</span></td>`;
                     }
@@ -102,9 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentWeekNumber = getWeekNumber(new Date(year, month, weekDateFallback));
             
             let isCurrentWeekWeekend = isCurrentWeek && (new Date().getDay() === 0 || new Date().getDay() === 6);
-            let weekBgColor = isCurrentWeekWeekend ? '#dc3545' : '#2B3385';
+            let weekBgColor = isCurrentWeekWeekend ? '#dc3545' : 'var(--gkr-primary)';
+            let weekCircleText = isCurrentWeekWeekend ? 'white' : 'var(--gkr-primary-text)';
             
-            let weekStyle = isCurrentWeek ? `background-color: ${weekBgColor}; color: white; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; font-weight: bold;` : "color: #6c757d; font-weight: bold;";
+            let weekStyle = isCurrentWeek ? `background-color: ${weekBgColor}; color: ${weekCircleText}; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; font-weight: bold;` : "color: #6c757d; font-weight: bold;";
             
             rowHtml += `<td><span style="${weekStyle}">${currentWeekNumber}</span></td>`;
             rowHtml += cellsHtml;

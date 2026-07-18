@@ -39,7 +39,7 @@ class DoodleController extends BaseController
             'tgl_selesai' => 'required|valid_date',
             'status'      => 'required|in_list[aktif,tidak_aktif]',
             'gambar'      => [
-                'rules'  => 'uploaded[gambar]|max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png,image/webp,image/gif]',
+                'rules'  => 'uploaded[gambar]|max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/png,image/webp,image/gif]',
                 'errors' => [
                     'uploaded' => 'Harap pilih gambar doodle.',
                     'max_size' => 'Ukuran gambar maksimal 2MB.'
@@ -169,7 +169,7 @@ class DoodleController extends BaseController
 
         if ($foto && $foto->isValid() && !$foto->hasMoved()) {
             $rules['gambar'] = [
-                'rules'  => 'max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png,image/webp,image/gif]'
+                'rules'  => 'max_size[gambar,2048]|is_image[gambar]|mime_in[gambar,image/png,image/webp,image/gif]'
             ];
         }
 

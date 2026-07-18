@@ -81,7 +81,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Gambar {{ !isEditDoodle ? '<span class="text-danger">*</span>' : '' }}</label>
-                            <input type="file" class="form-control" ref="doodleFileInput" accept=".jpg,.jpeg,.png,.webp,.gif" @change="onDoodleFileChange" :required="!isEditDoodle">
+                            <input type="file" class="form-control" ref="doodleFileInput" accept=".png,.webp,.gif" @change="onDoodleFileChange" :required="!isEditDoodle">
+                            <small class="text-muted d-block mt-1"><i class="fas fa-info-circle me-1"></i>Gunakan gambar transparan (PNG/WEBP) agar menyatu dengan Mode Gelap.</small>
                         </div>
                         <div class="text-center mt-3" v-if="doodlePreview">
                             <img :src="doodlePreview" style="max-height: 120px; object-fit: contain;" class="rounded shadow-sm">
@@ -105,10 +106,13 @@
     window.AppConfig = {
         apiGetSites: '<?= base_url('api/getSites') ?>',
         apiGetImages: '<?= base_url('api/getImages') ?>',
+        apiGetMaterials: '<?= base_url('api/getMaterials') ?>',
         apiDeleteSite: '<?= base_url('api/deleteSite/') ?>',
         apiDeleteImage: '<?= base_url('api/deleteImage/') ?>',
         apiUpdateSite: '<?= base_url('api/updateSite/') ?>',
         apiUpdateImage: '<?= base_url('api/updateImage/') ?>',
+        apiStoreSite: '<?= base_url('api/storeSite') ?>',
+        apiStoreImage: '<?= base_url('api/storeImage') ?>',
         urlDokumenDoodle: '<?= base_url('dokumen/doodle/') ?>',
         apiStoreDoodle: '<?= base_url('doodle/store') ?>',
         apiUpdateDoodle: '<?= base_url('doodle/update') ?>',

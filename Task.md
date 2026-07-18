@@ -16,6 +16,7 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Layanan Mikro AI (Python Backend):** Menulis infrastruktur FastAPI, mengimpor model *MobileNetV3-Small*, meramu skrip pelatih indeks matriks dimensi *FAISS* `build_index_new.py`, serta merekayasa REST API pencarian gambar kemiripan (`/scan`).
 - `[x]` **CodeIgniter 4 API Proxy:** Mengintegrasikan `app/Controllers/Search.php` agar dapat memparsing hasil vektor ke dalam format galeri yang dikenali UI.
 - `[x]` **UI Galeri Pencarian Visual:** Menyematkan ikon unggah kamera interaktif, membuat menu tab **New** (Pencarian Gambar AI), dan mendesain ubin bata presentasi visual (*Masonry Grid*) yang membuang teks analitis panjang menjadi teks elegan ("Kecocokan visual").
+- `[x]` **Zero-Footprint Image Search:** Mengimplementasikan penghapusan otomatis (*auto-cleanup*) gambar unggahan pengguna segera setelah dikirim ke FastAPI, memastikan penyimpanan *server* selalu bersih dan efisien.
 
 **Tahap III: Otomatisasi Jaringan Neural**
 - `[x]` **AI Trainer Engine (Web UI):** Merombak total skema sinkronisasi memori pelatih AI. Mengubah terminal primitif SSH (*root@budi*) menjadi panel web ber-UI layar terminal hitam (`/crawl/ai`) yang modern dan interaktif.
@@ -23,6 +24,8 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **No-FG Indexing (AI Indexing Bebas Hambatan):** Mengubah *regular expression* pada pelatih AI agar sanggup mengindeks semua gambar tak peduli apakah failnya memiliki nama berformat khusus (`FG-XXXX`) atau format mentah biasa (`IMG_1234`). Total sinkronisasi melonjak 20x lipat (Rasio 100%).
 
 ## 🎯 Prioritas Tinggi (High Priority)
+- `[ ]` **Keamanan Server (Pendesak):**
+  - Pindahkan atau hapus file *dump* database yatim (`gkr_myid.sql`, `cari.sql`) dari *root* direktori web `/var/www/gkr_myid` ke direktori *backup* yang aman untuk mencegah risiko akses publik.
 - `[ ]` **Penyempurnaan Arsitektur RESTful API (Web):**
   - Pastikan semua *Controller* API merespons dengan JSON standar yang memuat status, pesan, dan data.
 - `[ ]` **Standardisasi Template Layout:**

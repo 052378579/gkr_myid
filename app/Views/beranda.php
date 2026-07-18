@@ -11,14 +11,14 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
 <div class="position-absolute top-0 end-0 p-3 d-flex align-items-center gap-3 z-3">
     <div class="dropdown" id="calendarDropdownWrap">
-        <a href="#" id="calendarDropdownToggle" class="text-dark small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='#212529'">
+        <a href="#" id="calendarDropdownToggle" class="text-body small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color=''">
             <?= $dateStr ?>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.5) !important;">
+        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2"><i class="fas fa-chevron-left"></i></button>
-                <div class="text-center fw-bold" style="color: #2B3385; font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
-                <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2"><i class="fas fa-chevron-right"></i></button>
+                <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
+                <div class="text-center fw-bold" style="color: var(--gkr-primary); font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
+                <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-right"></i></button>
             </div>
             <table class="table table-sm table-borderless text-center mb-0" style="font-size: 0.85rem;">
                 <thead>
@@ -40,25 +40,25 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
     
     <div class="dropdown">
-        <a href="#" id="appsDropdownToggle" class="text-dark text-decoration-none d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; background-color: #f1f3f4; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#e8eaed'" onmouseout="this.style.backgroundColor='#f1f3f4'">
-            <i class="fas fa-th fs-5" style="color: #5f6368;"></i>
+        <a href="#" id="appsDropdownToggle" class="text-body text-decoration-none d-flex align-items-center justify-content-center bg-body-tertiary" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; transition: background-color 0.2s;" onmouseover="this.classList.add('bg-body-secondary')" onmouseout="this.classList.remove('bg-body-secondary')">
+            <i class="fas fa-th fs-5" style="color: var(--bs-secondary-color);"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.5) !important;">
+        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
             <div class="row g-3 text-center">
                 <div class="col-4">
-                    <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                    <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                         <img src="assets/icon/erp.png" style="width:45px; height:45px;" class="mb-1">
                         <div class="small text-truncate">ERP</div>
                     </a>
                 </div>
                 <div class="col-4">
-                    <a href="https://wickerkane.com/" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                    <a href="https://wickerkane.com/" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                         <img src="assets/icon/wickerkane.png" style="width:45px; height:45px;" class="mb-1">
                         <div class="small">WIckerKAne</div>
                     </a>
                 </div>
                 <div class="col-4">
-                    <a href="https://srv180.niagahoster.com:2096/" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                    <a href="https://srv180.niagahoster.com:2096/" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                         <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
                         <div class="small">WebMail</div>
                     </a>
@@ -101,7 +101,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
             <li><a class="dropdown-item py-2" href="<?= base_url('profile') ?>"><i class="fas fa-user text-secondary me-2"></i>Profil</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item py-2" href="<?= base_url('logout') ?>" style="color: #2B3385;"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
+            <li><a class="dropdown-item py-2" href="<?= base_url('logout') ?>" style="color: var(--gkr-primary);"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
         </ul>
     </div>
 </div>
@@ -117,11 +117,11 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="mb-3 doodle-img" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';">
         <?php $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/'; ?>
         <div class="d-flex justify-content-center align-items-center gap-2" style="font-size: 0.95rem;">
-            <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO BUYER</a>
-            <span style="color: #2B3385;">|</span>
-            <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: #2B3385; text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
-            <span style="color: #2B3385;">|</span>
-            <a href="https://gamtek.gkr.my.id" style="color: #2B3385; text-decoration: none;" class="fw-medium">GAMTEK</a><sup class="text-danger">New</sup>
+            <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO BUYER</a>
+            <span style="color: var(--gkr-primary);">|</span>
+            <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
+            <span style="color: var(--gkr-primary);">|</span>
+            <a href="https://gamtek.gkr.my.id" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">GAMTEK</a>
         </div>
     </div>
 
@@ -130,20 +130,20 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <div class="position-relative w-100">
                 <input type="text" v-model="query" class="form-control form-control-lg rounded-pill px-4 border" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 60px !important;" autofocus required>
                 <button type="button" class="btn text-secondary position-absolute top-50 end-0 translate-middle-y border-0" style="margin-right: 12px; background: transparent;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
-                    <i class="fa-solid fa-camera fs-5 hover-primary" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"></i>
+                    <i class="fa-solid fa-camera fs-5 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
                 </button>
             </div>
             <div class="google-ai-container">
-                <button type="submit" class="btn btn-light rounded-pill text-secondary shadow-sm btn-mode-ai" style="background-color: #f8f9fa; min-width: 120px; font-size: 0.95rem;">
+                <button type="submit" class="btn bg-body-tertiary rounded-pill text-body shadow-sm btn-mode-ai border" style="min-width: 120px; font-size: 0.95rem;">
                     Cari
                 </button>
             </div>
             <div class="mt-3 d-flex justify-content-center align-items-center">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#uploadImageModal" class="text-decoration-none fw-medium" style="color: #2B3385; font-size: 0.95rem;">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#uploadImageModal" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
                     <i class="fa-solid fa-camera"></i> Pencarian Gambar <sup class="text-danger">New</sup>
                 </a>
                 <span class="text-muted mx-3">|</span>
-                <a href="https://docs.google.com/viewer?url=https://wickerkane.com/WIckerKAne-IFEX-2026.pdf" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: #2B3385; font-size: 0.95rem;">
+                <a href="https://docs.google.com/viewer?url=https://wickerkane.com/WIckerKAne-IFEX-2026.pdf" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
                     <i class="fa-solid fa-book-open"></i> Katalog 2026
                 </a>
             </div>
@@ -155,7 +155,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 border-0 shadow">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" id="uploadImageModalLabel" style="color: #2B3385;">Pencarian Gambar</h5>
+                    <h5 class="modal-title fw-bold" id="uploadImageModalLabel" style="color: var(--gkr-primary);">Pencarian Gambar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-4">
@@ -174,7 +174,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     
                     <div v-if="uploadError" class="alert alert-danger py-2 small">{{ uploadError }}</div>
                     
-                    <button v-if="uploadFile" type="button" class="btn rounded-pill w-100 text-white" style="background-color: #2B3385;" @click="uploadAndSearch" :disabled="isUploading">
+                    <button v-if="uploadFile" type="button" class="btn rounded-pill w-100" style="background-color: var(--gkr-primary); color: var(--gkr-primary-text);" @click="uploadAndSearch" :disabled="isUploading">
                         <span v-if="isUploading"><i class="fa-solid fa-spinner fa-spin me-2"></i>Mencari...</span>
                         <span v-else><i class="fa-solid fa-search me-2"></i>Cari Berdasarkan Gambar</span>
                     </button>
@@ -184,14 +184,27 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
 </div>
 
-<footer class="fixed-bottom py-3 w-100" style="background-color: #f2f2f2; border-top: 1px solid #e4e4e4; color: #70757a; font-size: 0.9rem;">
-    <div class="text-center w-100">
-        <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: #2B3385; font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
-    </div>
-    <div class="position-absolute" style="right: 20px; top: 50%; transform: translateY(-50%);">
-        <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>
-    </div>
+<footer class="fixed-bottom py-3 w-100 bg-body-tertiary border-top" style="font-size: 0.9rem;">
+    <div class="d-flex justify-content-between align-items-center px-4">
+        
+        <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
+        <div class="flex-grow-1 text-start">
+            <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 text-muted hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">
+                <span id="themeIcon">🌓 Tema</span>
+            </button>
+        </div>
 
+        <!-- BAGIAN TENGAH: Copyright -->
+        <div class="text-center">
+            <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
+        </div>
+
+        <!-- BAGIAN KANAN: Versi -->
+        <div class="flex-grow-1 text-end">
+            <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>
+        </div>
+        
+    </div>
 </footer>
 <?= $this->endSection() ?>
 
