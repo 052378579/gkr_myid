@@ -461,3 +461,68 @@ body {
 .page-number-box:hover span {
     text-decoration: underline;
 }
+
+/* OVERRIDE KHUSUS MODE GELAP */
+[data-bs-theme="dark"] body {
+    background-color: var(--bs-body-bg);
+}
+[data-bs-theme="dark"] .header-container {
+    background-color: var(--bs-body-bg);
+    border-bottom-color: var(--bs-border-color) !important;
+}
+[data-bs-theme="dark"] .search-box {
+    background: var(--bs-body-bg);
+    border-color: #5f6368;
+}
+[data-bs-theme="dark"] .search-input {
+    color: #e8eaed;
+}
+[data-bs-theme="dark"] .site-result .title a {
+    color: #8ab4f8;
+}
+[data-bs-theme="dark"] .site-result .url {
+    color: #81c995;
+}
+[data-bs-theme="dark"] .site-result .description {
+    color: #bdc1c6;
+}
+[data-bs-theme="dark"] .result-count {
+    color: #bdc1c6;
+}
+[data-bs-theme="dark"] .nav-tabs .nav-link {
+    color: #9aa0a6;
+}
+[data-bs-theme="dark"] .nav-tabs .nav-link.active {
+    color: #e8eaed;
+    border-bottom-color: #8ab4f8;
+}
+[data-bs-theme="dark"] .page-number-box span {
+    color: #8ab4f8;
+}
+[data-bs-theme="dark"] .page-number-box.active span {
+    color: #e8eaed;
+}
+[data-bs-theme="dark"] .clear-btn {
+    color: #bdc1c6;
+}
+[data-bs-theme="dark"] .header-right-icons .text-dark {
+    color: var(--bs-body-color) !important;
+}
+[data-bs-theme="dark"] .grid-item img {
+    background: #303134;
+}
+[data-bs-theme="dark"] .grid-item .image-title {
+    color: #e8eaed !important;
+}
+[data-bs-theme="dark"] #calendarDropdownToggle,
+[data-bs-theme="dark"] #calendarDropdownToggle span,
+[data-bs-theme="dark"] .camera-btn,
+[data-bs-theme="dark"] .camera-btn i,
+[data-bs-theme="dark"] footer,
+[data-bs-theme="dark"] footer span,
+[data-bs-theme="dark"] footer a {
+    color: #e8eaed !important;
+}
+[data-bs-theme="dark"] footer a[href*="rnd.gkr.my.id"] {
+    color: var(--gkr-primary) !important;
+}
