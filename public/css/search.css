@@ -89,6 +89,7 @@ body {
     font-size: 16px;
     background: transparent;
     color: #202124;
+    min-width: 0;
 }
 
 .search-actions {
@@ -349,7 +350,15 @@ body {
         margin: 0;
         box-shadow: 0 1px 6px rgba(32, 33, 36, .28);
         border-radius: 24px;
-        padding: 0 14px;
+        padding: 0 10px 0 14px;
+    }
+
+    .search-button, .clear-btn {
+        padding: 0 8px;
+    }
+    
+    .divider {
+        margin: 0 2px;
     }
 
     .grid-icon {

@@ -106,20 +106,14 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 }
             ?>
             <div class="dropdown">
-                <a href="#" class="rounded-circle overflow-hidden text-decoration-none shadow-sm d-inline-block" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; cursor: pointer; border: 2px solid #ffffff;" title="Menu Profil">
+                <a href="#" class="rounded-circle overflow-hidden text-decoration-none shadow-sm d-inline-block" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; cursor: pointer; border: 2px solid #ffffff;" title="Menu Akun">
                     <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
                 </a>
-                <div class="dropdown-menu dropdown-menu-end p-2 shadow-sm rounded-3" style="min-width: 150px; border: 1px solid #e4e4e4; margin-top: 10px;">
-                    <a class="dropdown-item d-flex align-items-center rounded-2 py-2 mb-1" href="<?= base_url('profile') ?>" style="color: #333; gap: 10px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='transparent'">
-                        <i class="fas fa-user text-secondary" style="font-size: 1rem; width: 20px; text-align: center;"></i> 
-                        <span style="font-size: 0.95rem;">Profil</span>
-                    </a>
-                    <div class="dropdown-divider my-1" style="border-color: #eee;"></div>
-                    <a class="dropdown-item d-flex align-items-center rounded-2 py-2 mt-1" href="<?= base_url('logout') ?>" style="color: var(--gkr-primary); gap: 10px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='transparent'">
-                        <i class="fas fa-sign-out-alt" style="font-size: 1rem; width: 20px; text-align: center;"></i> 
-                        <span style="font-size: 0.95rem;">Keluar</span>
-                    </a>
-                </div>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                    <li><a class="dropdown-item py-2" href="<?= base_url('profile') ?>"><i class="fas fa-user text-secondary me-2"></i>Profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item py-2" href="<?= base_url('logout') ?>" style="color: var(--gkr-primary);"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
+                </ul>
             </div>
         </div>
     </div>

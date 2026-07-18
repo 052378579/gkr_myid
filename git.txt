@@ -1,0 +1,13 @@
+cd /var/www/gkr_myid
+git add .
+git commit -m "Update: 18.07.2026"
+git push origin dev
+
+
+
+cd /var/www/gkr_myid
+git stash
+git pull origin dev
+chown -R www-data:www-data /var/www/gkr_myid
+find /var/www/gkr_myid -type d -exec chmod 755 {} \;
+find /var/www/gkr_myid -type f -exec chmod 644 {} \;
