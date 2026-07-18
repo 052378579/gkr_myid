@@ -16,6 +16,7 @@ $routes->get('/dokumen/foto/(.*)', 'Dokumen::foto/$1');
 
 $routes->get('/cari', 'Search::index');
 $routes->get('/versi', 'Versi::index');
+
 $routes->get('/admin/versi', '\App\Controllers\Admin\VersiController::index');
 $routes->get('/admin/versi/getAll', '\App\Controllers\Admin\VersiController::getAll');
 $routes->post('/admin/versi/store', '\App\Controllers\Admin\VersiController::store');

@@ -2,19 +2,25 @@
     background-color: #e4e7eb;
 }
 
-/* --- Rainbow Animation for Cari Button --- */
-.google-ai-container {
+/* --- Rainbow Animation for Cari Button & Input --- */
+.google-ai-container,
+.google-ai-container-spotlight {
     position: relative;
     display: inline-block;
 }
 
-.google-ai-container::before {
+.google-ai-container.d-block {
+    display: block;
+}
+
+.google-ai-container::before,
+.google-ai-container-spotlight::before {
     content: '';
     position: absolute;
-    top: 2px;
+    top: -2px;
     left: -2px;
-    right: 2px;
-    bottom: -4px;
+    right: -2px;
+    bottom: -2px;
     z-index: 1;
     background: linear-gradient(
         90deg, 
@@ -30,13 +36,34 @@
     transition: opacity 0.4s ease, background-position 0.4s ease;
 }
 
-.google-ai-container:hover::before {
+/* Full Glow Animation (Input Area) */
+.google-ai-container:hover::before,
+.google-ai-container:focus-within::before {
     opacity: 0.85;
     animation: geserPelangi 2s linear infinite;
 }
 
-.google-ai-container:hover .btn-mode-ai {
-    background-color: #ffffff !important;
+/* Spotlight Glow Animation (Tombol Cari) */
+.google-ai-container-spotlight::before {
+    transition: opacity 0.4s ease, background-position 0.4s ease, -webkit-mask-image 0.4s ease, mask-image 0.4s ease;
+    -webkit-mask-image: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 100%);
+    mask-image: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 100%);
+}
+
+.google-ai-container-spotlight:hover::before,
+.google-ai-container-spotlight:focus-within::before {
+    opacity: 0.85;
+    animation: geserPelangi 3s linear infinite;
+}
+
+/* Background Overrides */
+.google-ai-container:hover .btn-mode-ai,
+.google-ai-container:focus-within .btn-mode-ai,
+.google-ai-container:hover .input-mode-ai,
+.google-ai-container:focus-within .input-mode-ai,
+.google-ai-container-spotlight:hover .btn-mode-ai,
+.google-ai-container-spotlight:focus-within .btn-mode-ai {
+    background-color: var(--bs-body-bg) !important;
 }
 
 @keyframes geserPelangi {
@@ -50,6 +77,12 @@
     transition: background-color 0.3s ease;
 }
 
+.input-mode-ai {
+    position: relative;
+    z-index: 2;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
 .doodle-img { 
     max-height: 150px; 
     width: auto; 
@@ -59,4 +92,68 @@
 }
 .doodle-img:hover {
     transform: scale(1.02);
+}
+
+/* --- Typewriter Animation for "Pencarian Gambar" --- */
+.typewriter-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.typewriter-text {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--gkr-primary, #2B3385);
+    /* "Pencarian Gambar" = 16 characters */
+    animation: typing 1.5s steps(16, end) forwards, blink-caret 0.75s step-end infinite;
+    max-width: 0;
+}
+
+@keyframes typing {
+    from { max-width: 0; }
+    to { max-width: 140px; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--gkr-primary, #2B3385); }
+}
+
+.fade-in-new {
+    opacity: 0;
+    animation: fadeInNew 0.5s ease forwards;
+    animation-delay: 1.6s; /* Wait for typing to finish */
+}
+
+@keyframes fadeInNew {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* KHUSUS TAMPILAN DESKTOP (Lebar Layar >= 992px) */
+@media (min-width: 992px) {
+    .typewriter-text {
+        /* Durasi siklus total 8 detik (1.5s ngetik + 5s jeda + 1.5s hapus) */
+        animation: typing-loop 8s steps(16, end) infinite, blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing-loop {
+        /* 0 - 1.5s: Mengetik (0% -> 18.75%) */
+        0% { max-width: 0; }
+        18.75%, 81.25% { max-width: 145px; } /* 1.5s - 6.5s: Diam 5 detik */
+        /* 6.5s - 8.0s: Menghapus (81.25% -> 100%) */
+        100% { max-width: 0; }
+    }
+
+    .fade-in-new {
+        animation: fade-in-loop 8s infinite;
+        animation-delay: 0s;
+    }
+
+    @keyframes fade-in-loop {
+        0%, 18.75% { opacity: 0; transform: scale(0.5); } /* Tersembunyi saat mengetik */
+        22.5%, 77.5% { opacity: 1; transform: scale(1); } /* Muncul jelas di jeda 5 detik */
+        81.25%, 100% { opacity: 0; transform: scale(0.5); } /* Menghilang saat dihapus */
+    }
 }

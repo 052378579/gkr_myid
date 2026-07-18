@@ -5,10 +5,12 @@
 Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasikan tautan situs serta mendeduksi kemiripan galeri visual dengan spesialisasi **Katalog Furniture**. Aplikasi dilengkapi dengan *bot crawler* komprehensif serta **Pelatih AI** yang memindai ribuan gambar lokal, merender hasilnya dengan sangat cepat dan intuitif berkat pendekatan *Continuous HTTP Streaming* dan **RESTful API**.
 
 ## 🚀 Fitur Unggulan
+- **Agregasi Identitas Visual Multi-Sudut (AI Harmonization):**
+  Sistem kebal terhadap variasi nama file gambar dari berbagai sudut kamera (seperti varian `-B`, `-C`, `-D`, `-E`, `_depan`, `_samping`, dan `_perspektif`). PHP dan Python berbagi Otak *Regex* yang harmonis untuk memotong kode teknis tersebut, menyatukan seluruh sudut menjadi satu identitas produk tunggal secara otomatis.
 - **Mesin Pencari Visual (Image-to-Image Search):** 
   Kemampuan mengunggah gambar kursi atau tekstur kain (*swatches*) untuk dicocokkan secara otomatis dengan ribuan katalog perusahaan menggunakan ekstrasi dimensi vektor 576 (*MobileNetV3*) dan mesin kedekatan algoritme (*Cosine Similarity* FAISS).
 - **Dasbor Pelatih AI & Crawler Real-Time:** 
-  Mesin sinkronisasi cerdas yang beroperasi secara asinkron. Mampu memindai data gambar lokal di atas server Linux dan memproses *Machine Learning*, dengan progres penelusuran (log terminal hitam) yang dialirkan seketika ke penjelajah web melalui antarmuka *Fetch API ReadableStream* tanpa risiko *Timeout*.
+  Mesin sinkronisasi cerdas yang beroperasi secara asinkron. Mampu memindai susunan direktori raksasa lokal (termasuk folder katalog `/WEB` terbaru) dan memproses *Machine Learning*, dengan progres penelusuran (log terminal hitam) yang dialirkan seketika ke penjelajah web melalui antarmuka *Fetch API ReadableStream* tanpa risiko *Timeout*.
 - **Desain UI/UX Modern & Reaktif:** 
   Tampilan pencarian bersih bergaya minimalis. Hasil gambar disuguhkan melalui struktur *Masonry Grid* dinamis dan galeri "Kecocokan visual". Elemen interaktif pada dasbor dipoles menggunakan pendekatan *Glassmorphism* dan komponen **Native Modal Bootstrap 5.3** terintegrasi Vue (Bukan SweetAlert statis) untuk entri data formulir.
 - **Arsitektur RESTful API & Layanan Mikro Python:** 

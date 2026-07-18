@@ -11,6 +11,7 @@ import faiss
 # Base direktori
 BASE_DIR = "/var/www/gkr_myid/writable/FOTO"
 TARGET_DIRS = ["BUYER", "GRACIA", "SAMPLE GRACIA", "SWATCHES"]
+EXTRA_DIRS = ["/var/www/FOTO/WEB"]
 
 # 1. Muat Engine AI
 print("[1/3] Memuat engine AI MobileNetV3...")
@@ -39,7 +40,7 @@ def extract_vector(img_path):
 vectors = []
 mapping = {}
 
-print(f"[2/3] Memproses direktori utama di: {BASE_DIR}")
+print(f"[2/3] Memproses direktori utama di: {BASE_DIR} dan direktori tambahan")
 all_files = []
 
 for target in TARGET_DIRS:
@@ -47,6 +48,15 @@ for target in TARGET_DIRS:
     target_path = os.path.join(BASE_DIR, target)
     if os.path.exists(target_path):
         for root, dirs, files in os.walk(target_path):
+            for file in files:
+                if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
+                    all_files.append((target, os.path.join(root, file), file))
+
+for extra_path in EXTRA_DIRS:
+    print(f"  -> Memindai direktori ekstra: {extra_path}")
+    if os.path.exists(extra_path):
+        target = os.path.basename(extra_path)
+        for root, dirs, files in os.walk(extra_path):
             for file in files:
                 if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
                     all_files.append((target, os.path.join(root, file), file))
@@ -61,17 +71,15 @@ for target_folder, full_path, file_name in all_files:
         base_name = os.path.splitext(file_name)[0]
         identifier = f"SWATCH:{base_name}"
     else:
-        # Untuk Produk (BUYER, GRACIA, SAMPLE GRACIA), ekstrak FG-XXXX
-        match = re.search(r'fg-?\d+', file_name, re.IGNORECASE)
-        if match:
-            bom_code = match.group(0).upper()
-            if "-" not in bom_code and bom_code.startswith("FG"):
-                bom_code = bom_code.replace("FG", "FG-")
-            identifier = bom_code
-        else:
-            # Jika tidak ada pola kode FG, gunakan nama file asli (tanpa ekstensi)
-            # agar gambar tetap masuk ke dalam indeks otak AI.
-            identifier = os.path.splitext(file_name)[0]
+        # Gunakan nama file asli (tanpa ekstensi) secara universal
+        base_name = os.path.splitext(file_name)[0]
+        
+        # Gunakan Regex untuk memotong kata/kode sudut di akhir string
+        # Mendukung pemisah ganda (spasi+strip) dan variasi sudut B, C, D, E
+        # Contoh: "_depan", " -D", "-E", " -B", " -C", "samping"
+        base_name = re.sub(r'[ _-]*(depan|belakang|samping|perspektif|detail|b|c|d|e)$', '', base_name, flags=re.IGNORECASE)
+        
+        identifier = base_name.strip()
 
     if not identifier:
         continue

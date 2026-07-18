@@ -11,111 +11,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
     
-    <style>
-        /* Flexbox Layout Custom CSS */
-        body {
-            background-color: #f8f9fa;
-        }
-        .admin-wrapper {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .admin-sidebar {
-            width: 250px;
-            background-color: #fff;
-            border-right: 1px solid #e9ecef;
-            transition: margin-left 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            z-index: 1040;
-        }
-        .admin-sidebar.collapsed {
-            margin-left: -250px;
-        }
-        .admin-sidebar .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-        .admin-sidebar .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: #495057;
-            text-decoration: none;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .admin-sidebar .sidebar-menu li a:hover,
-        .admin-sidebar .sidebar-menu li a.active {
-            background-color: #eef1f6;
-            color: #2B3385;
-            font-weight: 500;
-            border-left: 4px solid #2B3385;
-        }
-        .admin-sidebar .sidebar-menu li a i {
-            width: 24px;
-            margin-right: 10px;
-            text-align: center;
-        }
-        .admin-sidebar .sidebar-header {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #adb5bd;
-            font-weight: bold;
-            padding: 20px 20px 10px;
-        }
-        .admin-main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .admin-topbar {
-            height: 60px;
-            background-color: #fff;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            flex-shrink: 0;
-            z-index: 1030;
-        }
-        .admin-topbar .navbar-brand img {
-            height: 30px;
-            width: auto;
-        }
-        .admin-content-scroll {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        /* Mobile Overlay */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1035;
-        }
-        @media (max-width: 767.98px) {
-            .admin-sidebar {
-                position: absolute;
-                height: 100%;
-                margin-left: -250px;
-            }
-            .admin-sidebar.show {
-                margin-left: 0;
-            }
-            .sidebar-overlay.show {
-                display: block;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('css/admin.css') ?>?v=<?= time() ?>">
     
     <?= $this->renderSection('styles') ?>
 </head>
@@ -217,19 +113,7 @@
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('adminSidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        
-        if (window.innerWidth < 768) {
-            sidebar.classList.toggle('show');
-            overlay.classList.toggle('show');
-        } else {
-            sidebar.classList.toggle('collapsed');
-        }
-    }
-</script>
+<script src="<?= base_url('js/admin_layout.js') ?>?v=<?= time() ?>"></script>
 
 <?= $this->renderSection('scripts') ?>
 

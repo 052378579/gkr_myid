@@ -15,24 +15,22 @@ class InsertVersion extends Controller
         $builder = $db->table('gkr_versi');
         
         $data = [
-            'versi' => '0.6.15',
-            'tanggal_rilis' => '2026-07-15',
-            'judul' => 'Penyempurnaan Keamanan Admin & Kualitas Antarmuka UI',
-            'deskripsi' => 'Rilis ini memboyong arsitektur keamanan tingkat Super Admin, rombakan sistem modal dinamis pada dasbor, perbaikan anomali pemuatan file skrip karena agresivitas tembolok peramban, serta pemolesan berbagai elemen visual (seperti Dropdown Kaskade dan marker Kalender).',
+            'versi' => '0.7.18',
+            'tanggal_rilis' => '2026-07-18',
+            'judul' => 'Evolusi Kecerdasan Agregasi Multi-Sudut & Standarisasi Dokumentasi Arsitektur',
+            'deskripsi' => 'Rilis ini memboyong perombakan algoritma fundamental (Harmonisasi Regex AI) yang memungkinkan sistem secara cerdas mengenali dan menyatukan foto produk dari ragam sudut kamera (depan, samping, perspektif, dan kode variasi B/C/D/E) menjadi satu identitas visual yang utuh. Cakupan radar mesin perayap (Crawler) juga sukses diekspansi hingga ranah direktori /WEB, dibarengi dengan penyusunan ulang 8 pilar dokumentasi proyek guna menjamin kemudahan pemeliharaan oleh tim pengembang di masa depan.',
             'improvements' => json_encode([
-                "Sistem keamanan Role-Based Access Control (RBAC) melalui SuperAdminFilter untuk area panel admin",
-                "Evolusi Formulir Edit Situs dari kotak statis SweetAlert menjadi Bootstrap Native Modal berlajur dua",
-                "Logika Dropdown Kaskade dinamis untuk mengambil material dan warna langsung dari tabel gkr_material",
-                "Integrasi profil pengguna bergaya Dropdown Menu di pojok kanan beranda",
-                "Otomatisasi pewarnaan merah (danger) untuk akhir pekan pada penanda kalender beranda"
+                "Injeksi Kecerdasan Agregasi Identitas Visual Multi-Sudut (Varian B/C/D/E) menggunakan mesin Regex tangguh yang selaras antara sistem Python AI dan PHP Web Crawler (The Harmonization Principle).",
+                "Ekspansi jangkauan penyisiran mesin perayap otomatis dan Pelatih AI untuk memindai seluruh direktori katalog /WEB.",
+                "Standarisasi 8 dokumen arsitektur inti (PRD, Skills, Memory, Task, StyleGuide, README, Tautan, dan struktur_folder) secara komprehensif agar mencapai tingkat Enterprise."
             ]),
             'fixes' => json_encode([
-                "Implementasi metode Cache Busting secara meluas dengan menanamkan parameter waktu pada tag script, sukses memberantas isu Browser Caching yang menahan skrip lama"
+                "Penyempurnaan logika pemotongan karakter (Regex) untuk meredam dan mentoleransi error akibat anomali salah ketik (typo) seperti spasi ganda atau tanda hubung beruntun pada nama file."
             ]),
             'patches' => json_encode([])
         ];
 
         $builder->insert($data);
-        return $this->respondCreated(['status' => 'sukses', 'pesan' => 'Versi 0.6.15 berhasil diinput!']);
+        return $this->respondCreated(['status' => 'sukses', 'pesan' => 'Versi 0.7.18 berhasil diinput!']);
     }
 }

@@ -1,0 +1,10 @@
+[v-cloak] { display: none; }
+/* Padding left for the custom Y axis thumbnails */
+#gambarChart .apexcharts-yaxis {
+    transform: translateX(50px);
+}
+#gambarChart .apexcharts-grid,
+#gambarChart .apexcharts-series,
+#gambarChart .apexcharts-xaxis {
+    transform: translateX(40px);
+}

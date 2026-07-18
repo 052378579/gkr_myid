@@ -75,23 +75,11 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('<?= base_url('sw.js') ?>')
-            .then((reg) => {
-              console.log('PWA Service Worker berhasil didaftarkan scope-nya pada: ', reg.scope);
-            })
-            .catch((err) => {
-              console.error('PWA Service Worker gagal didaftarkan: ', err);
-            });
-        });
-      }
-    </script>
-    <script>
         window.AppConfig = {
-            versiUrl: '<?= base_url('versi.json') ?>'
+            versiUrl: '<?= base_url('versi.json') ?>',
+            swUrl: '<?= base_url('sw.js') ?>'
         };
     </script>
-    <script src="<?= base_url('js/login.js') ?>"></script>
+    <script src="<?= base_url('js/login.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>

@@ -23,6 +23,10 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Bypass Timeout & Asynchronous Streaming:** Menghancurkan batas *PHP Timeout 30s* dan batasan *Cloudflare/Nginx*, menyetel `set_time_limit(0)`, mengeksekusi parameter Python *unbuffered* (`-u`), dan menangkap HTTP *ReadableStream* untuk menampilkan proses log ke layar secara *real-time*.
 - `[x]` **No-FG Indexing (AI Indexing Bebas Hambatan):** Mengubah *regular expression* pada pelatih AI agar sanggup mengindeks semua gambar tak peduli apakah failnya memiliki nama berformat khusus (`FG-XXXX`) atau format mentah biasa (`IMG_1234`). Total sinkronisasi melonjak 20x lipat (Rasio 100%).
 
+**Tahap IV: Harmonisasi AI & Web Crawler**
+- `[x]` **Multi-Angle Regex Harmonization:** Menyinkronkan algoritma Python (`build_index_new.py`) dan PHP (`CrawlerLib.php`) untuk mendeteksi dan merangkum seluruh varian sudut foto (seperti `-B`, `-C`, `-D`, `-E`, `_depan`, `_samping`) menjadi sebuah entitas produk identitas tunggal yang bersih.
+- `[x]` **Global Folder Sensus & Integrasi /WEB:** Menganalisis puluhan ribu nama file secara rekursif menggunakan *PowerShell Automation*, menemukan pola *typo* spasi ekstra, serta secara resmi menyuntikkan dukungan direktori `/WEB` ke dalam daftar pantauan otomatis Web Crawler.
+
 ## 🎯 Prioritas Tinggi (High Priority)
 - `[ ]` **Keamanan Server (Pendesak):**
   - Pindahkan atau hapus file *dump* database yatim (`gkr_myid.sql`, `cari.sql`) dari *root* direktori web `/var/www/gkr_myid` ke direktori *backup* yang aman untuk mencegah risiko akses publik.
@@ -35,7 +39,13 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[ ]` **Konsistensi Bahasa Indonesia:**
   - Lakukan *code review* menyeluruh pada Models, Views, dan Controllers untuk memastikan semua variabel, metode, dan komentar murni menggunakan Bahasa Indonesia.
 
-## 🚀 Prioritas Menengah (Medium Priority)
+## 🚀 Prioritas Menengah / Peta Jalan Masa Depan (Medium Priority & Future Roadmap)
+- `[ ]` **Visual Recommendation (Produk Serupa):**
+  - Mengembangkan fitur yang menampilkan 5 produk terdekat berdasarkan jarak Cosine Similarity (FAISS) di setiap halaman detail produk, memungkinkan *upselling* secara otomatis tanpa melabeli kategori secara manual.
+- `[ ]` **Smart Auto-Crop (YOLOv8 Nano):**
+  - Menyuntikkan model pelacak objek ringan sebelum `MobileNetV3` bekerja untuk memotong gambar ruangan pelanggan, guna mencegah latar belakang (seperti TV atau tembok) mengacaukan hasil pencarian.
+- `[ ]` **Swatch Matcher (Pencocok Dekorasi):**
+  - Fitur bagi pengguna untuk mengunggah lantai kayu atau gorden mereka agar dicarikan furnitur/kain bantalan (swatch) dengan warna dan tekstur visual paling serasi.
 - `[ ]` **Manajemen Kata Kunci (Tabel Material):**
   - Buat halaman CRUD tersendiri di panel Admin untuk mengatur ketersediaan opsi warna dan material pada tabel `gkr_material`. Saat ini tabel tersebut dimigrasi namun belum bisa di-edit dari panel Admin.
 - `[ ]` **Manajemen Error Gambar (Broken Links):**

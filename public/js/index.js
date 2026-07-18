@@ -105,3 +105,15 @@ createApp({
         }
     }
 }).mount('#app');
+
+// Melacak pergerakan mouse KHUSUS untuk efek Spotlight Aura pada tombol Cari
+document.addEventListener('mousemove', (e) => {
+    document.querySelectorAll('.google-ai-container-spotlight').forEach(container => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        container.style.setProperty('--mouse-x', `${x}px`);
+        container.style.setProperty('--mouse-y', `${y}px`);
+    });
+});
+

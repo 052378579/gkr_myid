@@ -1,7 +1,7 @@
 /**
  * theme.js
- * Skrip untuk mengelola Mode Gelap & Terang secara otomatis berdasarkan waktu
- * dan menyimpan preferensi manual pengguna menggunakan localStorage.
+ * Skrip untuk mengelola Mode Gelap & Terang secara otomatis berdasarkan preferensi OS,
+ * waktu (fallback), dan menyimpan preferensi manual pengguna menggunakan localStorage.
  */
 
 (function () {
@@ -16,10 +16,29 @@
         const themeIcon = document.getElementById('themeIcon');
         if (themeIcon) {
             if (theme === 'dark') {
-                themeIcon.innerHTML = '🌙 Mode Gelap'; // Ikon bulan untuk gelap
+                themeIcon.innerHTML = '🌙<span class="d-none d-sm-inline ms-2">Mode Gelap</span>';
             } else {
-                themeIcon.innerHTML = '☀️ Mode Terang'; // Ikon matahari untuk terang
+                themeIcon.innerHTML = '☀️<span class="d-none d-sm-inline ms-2">Mode Terang</span>';
             }
+        }
+    }
+
+    // Fungsi untuk mendapatkan tema otomatis berdasarkan Sistem OS atau Waktu
+    function getAutomaticTheme() {
+        // Prioritas 2: Cek Preferensi OS (System Dark Mode)
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            return 'light';
+        }
+
+        // Prioritas 3 (Fallback): Waktu Otomatis (06:00 - 17:59 Terang)
+        const currentHour = new Date().getHours();
+        if (currentHour >= 6 && currentHour < 18) {
+            return 'light';
+        } else {
+            return 'dark';
         }
     }
 
@@ -28,27 +47,30 @@
         const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
         
         if (storedTheme) {
-            // Jika pengguna sudah pernah memilih secara manual, prioritaskan
+            // Prioritas 1: Jika pengguna sudah pernah memilih secara manual
             setTheme(storedTheme);
         } else {
-            // Jika belum ada, gunakan logika waktu otomatis
-            const currentHour = new Date().getHours();
-            
-            // 06:00 - 17:59 (Terang), 18:00 - 05:59 (Gelap)
-            if (currentHour >= 6 && currentHour < 18) {
-                setTheme('light');
-            } else {
-                setTheme('dark');
-            }
+            // Prioritas 2 & 3: Gunakan OS System Preference / Fallback Waktu
+            setTheme(getAutomaticTheme());
         }
     }
 
-    // Eksekusi inisialisasi segera (mencegah kedipan gaya CSS)
+    // Eksekusi inisialisasi segera (mencegah kedipan gaya CSS / FOUC)
     initializeTheme();
+
+    // Pantau perubahan dari OS secara Real-time
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            // Hanya ganti secara realtime jika user BELUM pernah mengatur manual di localStorage
+            if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+                setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    }
 
     // Pasang Event Listener setelah DOM sepenuhnya dimuat
     document.addEventListener('DOMContentLoaded', () => {
-        // Panggil lagi untuk memperbarui teks ikon karena saat initializeTheme berjalan, DOM mungkin belum siap
+        // Panggil lagi untuk memperbarui ikon yang baru selesai dirender
         initializeTheme();
 
         const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -60,7 +82,7 @@
                 // Terapkan perubahan
                 setTheme(newTheme);
                 
-                // Simpan ke localStorage agar tidak ter-reset
+                // Simpan ke localStorage (Mengaktifkan Prioritas 1)
                 localStorage.setItem(THEME_STORAGE_KEY, newTheme);
             });
         }

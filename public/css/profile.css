@@ -72,3 +72,43 @@ body {
     opacity: 0;
     cursor: pointer;
 }
+
+/* ==============================================================
+   DARK MODE OVERRIDES (Menjaga Desain Kaca di Mode Gelap)
+   ============================================================== */
+[data-bs-theme="dark"] body {
+    background-color: #212529;
+    background-image: radial-gradient(circle at top right, rgba(43, 51, 133, 0.1), transparent),
+                      radial-gradient(circle at bottom left, rgba(43, 51, 133, 0.1), transparent);
+}
+
+[data-bs-theme="dark"] .profile-glass {
+    background: rgba(33, 37, 41, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+[data-bs-theme="dark"] .brand-color {
+    color: #e3e6f5 !important;
+}
+
+[data-bs-theme="dark"] .form-control-custom {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .form-control-custom:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #4a55b3;
+    color: #ffffff;
+}
+
+[data-bs-theme="dark"] .form-control-custom:disabled {
+    background: rgba(255, 255, 255, 0.02);
+    color: #adb5bd;
+}
+
+[data-bs-theme="dark"] .avatar-preview {
+    border: 4px solid #343a40;
+}

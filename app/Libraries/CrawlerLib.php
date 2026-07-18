@@ -189,7 +189,7 @@ class CrawlerLib
         
         // Determine folders to scan
         if ($targetPath === $rootPath) {
-            $foldersToScan = [$rootPath . '/BUYER', $rootPath . '/GRACIA', $rootPath . '/SWATCHES'];
+            $foldersToScan = [$rootPath . '/BUYER', $rootPath . '/GRACIA', $rootPath . '/SWATCHES', $rootPath . '/WEB'];
         } else {
             $foldersToScan = [$targetPath];
         }
@@ -223,8 +223,15 @@ class CrawlerLib
                         if (str_starts_with(strtoupper($filename), 'IMG_') || str_starts_with(strtoupper($filename), 'DCIM_')) {
                             $title = $parentFolder;
                         } else {
+                            // [AI HARMONIZATION] Hapus kata/kode sudut pandang (Termasuk B, C, D, E) sebelum diformat
+                            $baseName = preg_replace('/[ _-]*(depan|belakang|samping|perspektif|detail|b|c|d|e)$/i', '', $filenameWithoutExt);
+                            
                             // Extract from filename: Play-Adobe 40616-0011 -> Play Adobe 40616 0011
-                            $title = str_replace(['-', '_'], ' ', $filenameWithoutExt);
+                            $title = str_replace(['-', '_'], ' ', $baseName);
+                            
+                            // Bersihkan spasi berlebih
+                            $title = trim($title);
+                            
                             // Format FG codes, e.g. (fg 42918) -> (FG-42918)
                             $title = preg_replace('/\(?\bfg\s*([0-9]+)\)?/i', '(FG-$1)', $title);
                         }

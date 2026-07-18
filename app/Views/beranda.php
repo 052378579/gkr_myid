@@ -106,7 +106,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
 </div>
 
-<link rel="stylesheet" href="<?= base_url('css/index.css') ?>">
+<link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
 
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app">
     <div class="text-center mb-4">
@@ -127,20 +127,22 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
     <div class="w-100" style="max-width: 580px;">
         <form @submit.prevent="search" class="d-flex flex-column align-items-center gap-4 w-100">
-            <div class="position-relative w-100">
-                <input type="text" v-model="query" class="form-control form-control-lg rounded-pill px-4 border" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 60px !important;" autofocus required>
-                <button type="button" class="btn text-secondary position-absolute top-50 end-0 translate-middle-y border-0" style="margin-right: 12px; background: transparent;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
+            <div class="position-relative w-100 d-block google-ai-container">
+                <input type="text" v-model="query" class="form-control form-control-lg rounded-pill px-4 border input-mode-ai" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 60px !important;" autofocus required>
+                <button type="button" class="btn text-secondary position-absolute top-50 end-0 translate-middle-y border-0" style="margin-right: 12px; background: transparent; z-index: 3;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
                     <i class="fa-solid fa-camera fs-5 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
                 </button>
             </div>
-            <div class="google-ai-container">
+            <div class="google-ai-container-spotlight">
                 <button type="submit" class="btn bg-body-tertiary rounded-pill text-body shadow-sm btn-mode-ai border" style="min-width: 120px; font-size: 0.95rem;">
                     Cari
                 </button>
             </div>
             <div class="mt-3 d-flex justify-content-center align-items-center">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#uploadImageModal" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
-                    <i class="fa-solid fa-camera"></i> Pencarian Gambar <sup class="text-danger">New</sup>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#uploadImageModal" class="text-decoration-none fw-medium d-inline-flex align-items-center" style="color: var(--gkr-primary); font-size: 0.95rem;">
+                    <i class="fa-solid fa-camera me-1"></i>
+                    <span class="typewriter-text">Pencarian Gambar</span>
+                    <sup class="text-danger fade-in-new ms-1">New</sup>
                 </a>
                 <span class="text-muted mx-3">|</span>
                 <a href="https://docs.google.com/viewer?url=https://wickerkane.com/WIckerKAne-IFEX-2026.pdf" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
@@ -159,24 +161,26 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-4">
-                    <div v-if="!uploadPreviewUrl" class="upload-area p-5 border rounded-4 bg-light mb-3" style="border: 2px dashed #ccc !important; cursor: pointer;" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop">
+                    <div v-if="!uploadPreviewUrl" class="upload-area p-5 border rounded-4 bg-body-tertiary mb-3" style="border: 2px dashed var(--bs-border-color) !important; cursor: pointer;" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop">
                         <i class="fa-solid fa-cloud-arrow-up fs-1 text-secondary mb-3"></i>
                         <p class="mb-0 text-muted">Tarik file gambar ke sini atau klik untuk memilih file</p>
                         <input type="file" class="d-none" ref="fileInput" accept="image/jpeg, image/png, image/webp" @change="handleFileSelect">
                     </div>
                     
-                    <div v-else class="preview-area mb-3 position-relative">
-                        <img :src="uploadPreviewUrl" alt="Preview" class="img-fluid rounded-3 shadow-sm" style="max-height: 250px; object-fit: contain;">
-                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle" @click="clearImage" title="Hapus">
+                    <div v-else class="preview-area mb-4 position-relative d-inline-block">
+                        <div class="border rounded-4 d-flex justify-content-center align-items-center p-2" style="width: 250px; height: 250px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                            <img :src="uploadPreviewUrl" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+                        <button type="button" class="btn btn-danger rounded-circle position-absolute d-flex justify-content-center align-items-center shadow" style="top: 40px; right: -15px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 0.85rem;" @click="clearImage" title="Hapus">
                             <i class="fa-solid fa-times"></i>
                         </button>
                     </div>
                     
                     <div v-if="uploadError" class="alert alert-danger py-2 small">{{ uploadError }}</div>
                     
-                    <button v-if="uploadFile" type="button" class="btn rounded-pill w-100" style="background-color: var(--gkr-primary); color: var(--gkr-primary-text);" @click="uploadAndSearch" :disabled="isUploading">
-                        <span v-if="isUploading"><i class="fa-solid fa-spinner fa-spin me-2"></i>Mencari...</span>
-                        <span v-else><i class="fa-solid fa-search me-2"></i>Cari Berdasarkan Gambar</span>
+                    <button v-if="uploadFile" type="button" class="btn rounded-pill w-100" style="background-color: #2B3385; color: #ffffff !important;" @click="uploadAndSearch" :disabled="isUploading">
+                        <span v-if="isUploading" style="color: #ffffff !important;"><i class="fa-solid fa-spinner fa-spin me-2" style="color: #ffffff !important;"></i>Mencari...</span>
+                        <span v-else style="color: #ffffff !important;"><i class="fa-solid fa-search me-2" style="color: #ffffff !important;"></i>Cari Berdasarkan Gambar</span>
                     </button>
                 </div>
             </div>
