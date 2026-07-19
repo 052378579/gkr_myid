@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const uploadSubmitText = document.getElementById('uploadSubmitText');
     const uploadSubmitLoading = document.getElementById('uploadSubmitLoading');
     let currentFile = null;
+    let cropperInstance = null;
 
     if (!uploadArea) return;
 
@@ -49,6 +50,16 @@ document.addEventListener("DOMContentLoaded", function() {
         uploadArea.classList.add('d-none');
         previewArea.classList.remove('d-none');
         uploadSubmitBtn.classList.remove('d-none');
+        
+        // Inisialisasi Cropper setelah gambar tampil
+        setTimeout(() => {
+            if (cropperInstance) cropperInstance.destroy();
+            cropperInstance = new Cropper(uploadPreview, {
+                viewMode: 1,
+                autoCropArea: 0.8,
+                responsive: true,
+            });
+        }, 100);
     }
 
     clearImageBtn.addEventListener('click', () => {
@@ -58,6 +69,10 @@ document.addEventListener("DOMContentLoaded", function() {
         uploadArea.classList.remove('d-none');
         previewArea.classList.add('d-none');
         uploadSubmitBtn.classList.add('d-none');
+        if (cropperInstance) {
+            cropperInstance.destroy();
+            cropperInstance = null;
+        }
         uploadError.classList.add('d-none');
     });
 
@@ -67,36 +82,48 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     uploadSubmitBtn.addEventListener('click', async () => {
-        if (!currentFile) return;
+        if (!currentFile || !cropperInstance) return;
         uploadSubmitBtn.disabled = true;
         uploadSubmitText.classList.add('d-none');
         uploadSubmitLoading.classList.remove('d-none');
         uploadError.classList.add('d-none');
 
-        const formData = new FormData();
-        formData.append('image', currentFile);
+        cropperInstance.getCroppedCanvas({
+            maxWidth: 1024,
+            maxHeight: 1024
+        }).toBlob(async (blob) => {
+            if (!blob) {
+                showError('Gagal memotong gambar.');
+                uploadSubmitBtn.disabled = false;
+                uploadSubmitText.classList.remove('d-none');
+                uploadSubmitLoading.classList.add('d-none');
+                return;
+            }
 
-        try {
-            const uploadUrl = (window.SearchConfig && window.SearchConfig.apiSearchUpload) ? window.SearchConfig.apiSearchUpload : '/api/search/upload';
-            const res = await fetch(uploadUrl, { method: 'POST', body: formData });
-            const data = await res.json();
-            if (!res.ok) {
-                const errorMsg = (data.messages && data.messages.error) || data.message || data.error || 'Terjadi kesalahan.';
-                throw new Error(errorMsg);
+            const formData = new FormData();
+            formData.append('image', blob, currentFile.name);
+
+            try {
+                const uploadUrl = (window.SearchConfig && window.SearchConfig.apiSearchUpload) ? window.SearchConfig.apiSearchUpload : '/api/search/upload';
+                const res = await fetch(uploadUrl, { method: 'POST', body: formData });
+                const data = await res.json();
+                if (!res.ok) {
+                    const errorMsg = (data.messages && data.messages.error) || data.message || data.error || 'Terjadi kesalahan.';
+                    throw new Error(errorMsg);
+                }
+                if (data.status === 'success') {
+                    let baseUrl = (window.SearchConfig && window.SearchConfig.searchUrl) ? window.SearchConfig.searchUrl : '/cari';
+                    window.location.href = baseUrl + '?type=image_results';
+                } else {
+                    showError('Terjadi kesalahan saat memproses gambar.');
+                }
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                uploadSubmitBtn.disabled = false;
+                uploadSubmitText.classList.remove('d-none');
+                uploadSubmitLoading.classList.add('d-none');
             }
-            if (data.status === 'success') {
-                // Redirect ke hasil pencarian gambar
-                let baseUrl = (window.SearchConfig && window.SearchConfig.searchUrl) ? window.SearchConfig.searchUrl : '/cari';
-                window.location.href = baseUrl + '?type=image_results';
-            } else {
-                showError('Terjadi kesalahan saat memproses gambar.');
-            }
-        } catch (err) {
-            showError(err.message);
-        } finally {
-            uploadSubmitBtn.disabled = false;
-            uploadSubmitText.classList.remove('d-none');
-            uploadSubmitLoading.classList.add('d-none');
-        }
+        }, 'image/jpeg', 0.9);
     });
 });

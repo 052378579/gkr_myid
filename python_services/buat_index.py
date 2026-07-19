@@ -1,4 +1,11 @@
 import os
+# Batasi thread pustaka C tingkat rendah (BLAS, OMP) untuk mencegah Segfault di ARM
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+
 import json
 import re
 import numpy as np
@@ -7,14 +14,25 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 from PIL import Image
 import faiss
+import gc
 
-# Base direktori
-BASE_DIR = "/var/www/gkr_myid/writable/FOTO"
-TARGET_DIRS = ["BUYER", "GRACIA", "SAMPLE GRACIA", "SWATCHES"]
-EXTRA_DIRS = ["/var/www/FOTO/WEB"]
+# Konstanta Warna ANSI
+C_RESET = "\033[0m"
+C_GREEN = "\033[92m"
+C_YELLOW = "\033[93m"
+C_CYAN = "\033[96m"
+C_RED = "\033[91m"
+C_BOLD = "\033[1m"
+
+# Base direktori (Real Path)
+BASE_DIR = "/var/www/FOTO"
+TARGET_DIRS = ["BUYER", "GRACIA", "SAMPLE GRACIA", "SWATCHES", "WEB"]
+
+# Batasi PyTorch agar tidak menghabiskan RAM & CPU
+torch.set_num_threads(1)
 
 # 1. Muat Engine AI
-print("[1/3] Memuat engine AI MobileNetV3...")
+print(f"{C_CYAN}[1/3] Memuat engine AI MobileNetV3...{C_RESET}")
 weights = models.MobileNet_V3_Small_Weights.DEFAULT
 model = models.mobilenet_v3_small(weights=weights)
 model.eval()
@@ -30,6 +48,8 @@ def extract_vector(img_path):
     if not os.path.exists(img_path): return None
     try:
         image = Image.open(img_path).convert('RGB')
+        image.load() # Paksa baca ke RAM untuk menangkap error korup (menghindari Bus Error)
+        
         tensor = transform(image).unsqueeze(0)
         with torch.no_grad():
             embedding = feature_extractor(tensor).flatten().numpy()
@@ -40,28 +60,20 @@ def extract_vector(img_path):
 vectors = []
 mapping = {}
 
-print(f"[2/3] Memproses direktori utama di: {BASE_DIR} dan direktori tambahan")
+print(f"{C_CYAN}[2/3] Memproses direktori utama di: {C_YELLOW}{BASE_DIR}{C_RESET}")
 all_files = []
 
 for target in TARGET_DIRS:
-    print(f"  -> Memindai folder: {target}")
+    print(f"  {C_BOLD}->{C_RESET} Memindai folder: {C_YELLOW}{target}{C_RESET}")
     target_path = os.path.join(BASE_DIR, target)
     if os.path.exists(target_path):
-        for root, dirs, files in os.walk(target_path):
+        # Gunakan followlinks=True sebagai pelapis keamanan ganda
+        for root, dirs, files in os.walk(target_path, followlinks=True):
             for file in files:
                 if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
                     all_files.append((target, os.path.join(root, file), file))
 
-for extra_path in EXTRA_DIRS:
-    print(f"  -> Memindai direktori ekstra: {extra_path}")
-    if os.path.exists(extra_path):
-        target = os.path.basename(extra_path)
-        for root, dirs, files in os.walk(extra_path):
-            for file in files:
-                if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
-                    all_files.append((target, os.path.join(root, file), file))
-
-print(f"Menemukan {len(all_files)} file gambar. Mulai ekstraksi fitur AI...")
+print(f"{C_GREEN}Menemukan {len(all_files)} file gambar.{C_RESET} Mulai ekstraksi fitur AI...")
 
 for target_folder, full_path, file_name in all_files:
     identifier = None
@@ -84,17 +96,19 @@ for target_folder, full_path, file_name in all_files:
     if not identifier:
         continue
         
+    print(f"{C_GREEN}[{len(vectors)+1}/{len(all_files)}]{C_RESET} {C_BOLD}->{C_RESET} Ekstrak fitur: {C_YELLOW}{file_name}{C_RESET}")
+        
     vector = extract_vector(full_path)
     if vector is not None:
         vectors.append(vector)
         mapping[str(len(vectors) - 1)] = identifier
         
-    if len(vectors) % 20 == 0 and len(vectors) > 0:
-        print(f"  Berhasil mengekstrak {len(vectors)} vektor...")
+    # Bersihkan memori secara manual
+    gc.collect()
 
 # 2. Bangun dan Ekspor Berkas Database Vektor
 if vectors:
-    print("[3/3] Membangun berkas database vektor FAISS...")
+    print(f"\n{C_CYAN}[3/3] Membangun berkas database vektor FAISS...{C_RESET}")
     vectors_np = np.array(vectors).astype('float32')
     dimension = int(vectors_np.shape[1]) 
     
@@ -105,6 +119,6 @@ if vectors:
     with open("mapping.json", "w") as f:
         json.dump(mapping, f)
         
-    print(f"\n=== SINKRONISASI BERHASIL: {len(vectors)} dari {len(all_files)} gambar masuk ke indeks vektor! ===")
+    print(f"\n{C_BOLD}{C_GREEN}=== SINKRONISASI BERHASIL: {len(vectors)} dari {len(all_files)} gambar masuk ke indeks vektor! ==={C_RESET}")
 else:
-    print("\nGagal: Tidak ada gambar valid yang diekstrak.")
+    print(f"\n{C_BOLD}{C_RED}Gagal: Tidak ada gambar valid yang diekstrak.{C_RESET}")

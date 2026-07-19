@@ -24,7 +24,7 @@
                 <form @submit.prevent="startCrawl">
                     <div class="mb-3">
                         <label class="form-label fw-bold" style="font-size: 0.85rem; color: #555;">Target Sinkronisasi</label>
-                        <input type="text" class="form-control" value="BUYER, GRACIA, SAMPLE GRACIA, SWATCHES" disabled style="background-color: #f8f9fa;">
+                        <input type="text" class="form-control" value="BUYER, GRACIA, SAMPLE GRACIA, SWATCHES, WEB" disabled style="background-color: #f8f9fa;">
                         <div class="form-text mt-1" style="font-size: 0.75rem;">Mengekstrak ciri visual dan memuat ulang otak AI.</div>
                     </div>
                     

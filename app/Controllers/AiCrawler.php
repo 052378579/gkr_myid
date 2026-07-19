@@ -24,29 +24,25 @@ class AiCrawler extends BaseController
         set_time_limit(0);
         ini_set('max_execution_time', '0');
 
-        echo "Menghubungi AI Scanner Engine di port 5000...\n";
+        echo "Menjalankan AI Scanner Engine (CLI Mode)...\n";
         @ob_flush(); @flush();
 
-        // Gunakan cURL untuk menembak endpoint FastAPI secara live
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://127.0.0.1:5000/build_index");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 0); // Mencegah cURL terputus karena proses ML memakan waktu lama
+        // Eksekusi skrip python secara langsung dan tangkap outputnya (termasuk error)
+        $cmd = '/mnt/sdcard/ai-scanner/env-ai/bin/python /var/www/gkr_myid/python_services/buat_index.py 2>&1';
+        $handle = popen($cmd, 'r');
         
-        // PENTING: Tangkap output secara bertahap dan langsung cetak ke layar
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, function($ch, $data) {
-            echo $data;
-            @ob_flush(); @flush();
-            return strlen($data);
-        });
-
-        curl_exec($ch);
-        
-        if (curl_errno($ch)) {
-            echo "\n[ERROR] Koneksi ke AI Engine gagal: " . curl_error($ch) . "\n";
+        if (is_resource($handle)) {
+            while (!feof($handle)) {
+                $buffer = fread($handle, 4096);
+                if ($buffer !== false && $buffer !== '') {
+                    echo $buffer;
+                    @ob_flush(); @flush();
+                }
+            }
+            pclose($handle);
+        } else {
+            echo "\n[ERROR] Gagal mengeksekusi skrip Python.\n";
             @ob_flush(); @flush();
         }
-        
-        curl_close($ch);
     }
 }

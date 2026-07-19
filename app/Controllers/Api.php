@@ -54,6 +54,17 @@ class Api extends BaseController
     }
 
     // Untuk antarmuka Vue.js di Panel Admin
+    public function dropCol()
+    {
+        $db = \Config\Database::connect();
+        try {
+            $db->query("ALTER TABLE cari_images DROP COLUMN image_hash");
+            echo "BERHASIL: Kolom image_hash berhasil dihapus dari tabel cari_images.";
+        } catch (\Exception $e) {
+            echo "ERROR: " . $e->getMessage();
+        }
+    }
+
     public function setupDb()
     {
         $db = \Config\Database::connect();

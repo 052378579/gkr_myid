@@ -7,6 +7,7 @@ createApp({
         const uploadPreviewUrl = ref(null);
         const uploadError = ref(null);
         const isUploading = ref(false);
+        let cropperInstance = null;
 
         const search = () => {
             if(query.value.trim() !== '') {
@@ -41,6 +42,19 @@ createApp({
 
             uploadFile.value = file;
             uploadPreviewUrl.value = URL.createObjectURL(file);
+            
+            // Inisialisasi Cropper setelah gambar di-render oleh Vue
+            setTimeout(() => {
+                const imgElement = document.getElementById('vueUploadPreview');
+                if (imgElement) {
+                    if (cropperInstance) cropperInstance.destroy();
+                    cropperInstance = new Cropper(imgElement, {
+                        viewMode: 1,
+                        autoCropArea: 0.8,
+                        responsive: true,
+                    });
+                }
+            }, 100);
         };
 
         const clearImage = () => {
@@ -49,46 +63,59 @@ createApp({
                 URL.revokeObjectURL(uploadPreviewUrl.value);
                 uploadPreviewUrl.value = null;
             }
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
             uploadError.value = null;
         };
 
         const uploadAndSearch = async () => {
-            if (!uploadFile.value) return;
+            if (!uploadFile.value || !cropperInstance) return;
             
             isUploading.value = true;
             uploadError.value = null;
             
-            const formData = new FormData();
-            formData.append('image', uploadFile.value);
-            
-            try {
-                // Asumsi base_url('/api/search/upload') digunakan jika tidak ada config khusus.
-                // Mengambil root domain (atau subfolder jika ada) dari window.location.origin
-                // Sebaiknya sediakan uploadUrl di AppConfig jika mungkin, tapi kita bisa pakai fetch API relatif.
-                const response = await fetch('/api/search/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    const errorMsg = (data.messages && data.messages.error) || data.message || data.error || 'Terjadi kesalahan internal pada server.';
-                    throw new Error(errorMsg);
+            // Ambil gambar yang sudah di-crop dari browser (Canvas)
+            cropperInstance.getCroppedCanvas({
+                maxWidth: 1024,
+                maxHeight: 1024
+            }).toBlob(async (blob) => {
+                if (!blob) {
+                    uploadError.value = "Gagal memotong gambar.";
+                    isUploading.value = false;
+                    return;
                 }
                 
-                if (data.status === 'success') {
-                    // Redirect ke hasil pencarian gambar, hash sudah disimpan di session backend
-                    window.location.href = window.AppConfig.searchUrl + '?type=image_results';
-                } else {
-                    uploadError.value = 'Terjadi kesalahan saat memproses gambar.';
-                }
+                const formData = new FormData();
+                // Kirim blob dengan nama file aslinya
+                formData.append('image', blob, uploadFile.value.name);
                 
-            } catch (err) {
-                uploadError.value = err.message;
-            } finally {
-                isUploading.value = false;
-            }
+                try {
+                    const response = await fetch('/api/search/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        const errorMsg = (data.messages && data.messages.error) || data.message || data.error || 'Terjadi kesalahan internal pada server.';
+                        throw new Error(errorMsg);
+                    }
+                    
+                    if (data.status === 'success') {
+                        window.location.href = window.AppConfig.searchUrl + '?type=image_results';
+                    } else {
+                        uploadError.value = 'Terjadi kesalahan saat memproses gambar.';
+                    }
+                    
+                } catch (err) {
+                    uploadError.value = err.message;
+                } finally {
+                    isUploading.value = false;
+                }
+            }, 'image/jpeg', 0.9);
         };
 
         return {

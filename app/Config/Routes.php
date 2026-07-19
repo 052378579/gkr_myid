@@ -36,6 +36,7 @@ $routes->post('/api/updateLinkCount', 'Api::updateLinkCount');
 $routes->post('/api/updateImageCount', 'Api::updateImageCount');
 $routes->post('/api/setBroken', 'Api::setBroken');
 $routes->get('/api/setupDb', 'Api::setupDb');
+$routes->get('/api/dropCol', 'Api::dropCol');
 $routes->post('/api/storeSite', 'Api::storeSite');
 $routes->post('/api/storeImage', 'Api::storeImage');
 $routes->get('/api/getMaterials', 'Api::getMaterials');

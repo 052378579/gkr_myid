@@ -106,6 +106,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
 
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app">
@@ -167,13 +168,14 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <input type="file" class="d-none" ref="fileInput" accept="image/jpeg, image/png, image/webp" @change="handleFileSelect">
                     </div>
                     
-                    <div v-else class="preview-area mb-4 position-relative d-inline-block">
-                        <div class="border rounded-4 d-flex justify-content-center align-items-center p-2" style="width: 250px; height: 250px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
-                            <img :src="uploadPreviewUrl" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <div v-else class="preview-area mb-4 position-relative w-100">
+                        <div class="border rounded-4 overflow-hidden w-100 bg-dark" style="height: 350px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                            <img :src="uploadPreviewUrl" id="vueUploadPreview" alt="Preview" style="display: block; max-width: 100%;">
                         </div>
-                        <button type="button" class="btn btn-danger rounded-circle position-absolute d-flex justify-content-center align-items-center shadow" style="top: 40px; right: -15px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 0.85rem;" @click="clearImage" title="Hapus">
+                        <button type="button" class="btn btn-danger rounded-circle position-absolute d-flex justify-content-center align-items-center shadow" style="top: -15px; right: -15px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 0.85rem;" @click="clearImage" title="Hapus">
                             <i class="fa-solid fa-times"></i>
                         </button>
+                        <small class="text-muted d-block mt-2"><i class="fa-solid fa-crop-simple me-1"></i> Geser kotak untuk memfokuskan objek pencarian (Opsional)</small>
                     </div>
                     
                     <div v-if="uploadError" class="alert alert-danger py-2 small">{{ uploadError }}</div>
@@ -213,6 +215,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script>
     window.AppConfig = {
         searchUrl: '<?= url_to('Search::index') ?>'

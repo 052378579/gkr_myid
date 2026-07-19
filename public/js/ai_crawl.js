@@ -49,15 +49,14 @@ createApp({
                     
                     lines.forEach(line => {
                         if (line.trim() !== '') {
-                            // Mewarnai teks khusus
-                            let formattedLine = line;
-                            if (line.includes('BERHASIL') || line.includes('SUCCESS') || line.includes('OTOMATISASI')) {
-                                formattedLine = `<span style="color: #28a745;">${line}</span>`;
-                            } else if (line.includes('ERROR') || line.includes('Gagal')) {
-                                formattedLine = `<span style="color: #dc3545;">${line}</span>`;
-                            } else if (line.includes('[1/3]') || line.includes('[2/3]') || line.includes('[3/3]')) {
-                                formattedLine = `<span style="color: #ffc107;">${line}</span>`;
-                            }
+                            // Parse ANSI Escape Codes to HTML
+                            let formattedLine = line
+                                .replace(/\x1b\[0m/g, '</span>')
+                                .replace(/\x1b\[91m/g, '<span style="color: #ff6b6b;">')
+                                .replace(/\x1b\[92m/g, '<span style="color: #51cf66;">')
+                                .replace(/\x1b\[93m/g, '<span style="color: #fcc419;">')
+                                .replace(/\x1b\[96m/g, '<span style="color: #3bc9db;">')
+                                .replace(/\x1b\[1m/g, '<span style="font-weight: bold;">');
                             
                             output.value += `${formattedLine}<br>`;
                         }

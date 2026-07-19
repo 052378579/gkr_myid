@@ -5,6 +5,7 @@
 <?= $this->section('styles') ?>
 <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
 <link rel="stylesheet" href="<?= base_url('assets/css/fancybox/3.3.5/jquery.fancybox.min.css') ?>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <link rel="stylesheet" href="<?= base_url('css/search.css') ?>?v=<?= time() ?>">
 <?= $this->endSection() ?>
 
@@ -299,13 +300,14 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <input type="file" id="fileInput" class="d-none" accept="image/jpeg, image/png, image/webp">
                     </div>
                     
-                    <div id="previewArea" class="preview-area mb-4 position-relative d-none d-inline-block">
-                        <div class="border rounded-4 d-flex justify-content-center align-items-center p-2" style="width: 250px; height: 250px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
-                            <img id="uploadPreview" src="" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <div id="previewArea" class="preview-area mb-4 position-relative d-none w-100">
+                        <div class="border rounded-4 overflow-hidden w-100 bg-dark" style="height: 350px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+                            <img id="uploadPreview" src="" alt="Preview" style="display: block; max-width: 100%;">
                         </div>
-                        <button type="button" id="clearImageBtn" class="btn btn-danger rounded-circle position-absolute d-flex justify-content-center align-items-center shadow" style="top: 40px; right: -15px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 0.85rem;" title="Hapus">
+                        <button type="button" id="clearImageBtn" class="btn btn-danger rounded-circle position-absolute d-flex justify-content-center align-items-center shadow" style="top: -15px; right: -15px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 0.85rem;" title="Hapus">
                             <i class="fa-solid fa-times"></i>
                         </button>
+                        <small class="text-muted d-block mt-2"><i class="fa-solid fa-crop-simple me-1"></i> Geser kotak untuk memfokuskan objek pencarian (Opsional)</small>
                     </div>
                     
                     <div id="uploadError" class="alert alert-danger py-2 small d-none"></div>
@@ -322,6 +324,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script src="<?= base_url('assets/js/jquery-3.3.1.min.js') ?>"></script>
 <script src="<?= base_url('assets/js/fancybox/3.3.5/jquery.fancybox.min.js') ?>"></script>
 <script src="<?= base_url('assets/js/masonry/4.2.2/masonry.pkgd.min.js') ?>"></script>
