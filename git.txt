@@ -1,13 +1,27 @@
+===============
+DEV
+---------------
 cd /var/www/gkr_myid
 git add .
-git commit -m "Update: 18.07.2026"
+git commit -m "Update: 19.07.2026"
 git push origin dev
 
 
-
+===============
+PROD
+---------------
 cd /var/www/gkr_myid
-git stash
-git pull origin dev
+
+# 1. Ambil data terbaru dari remote tanpa menggabungkannya
+git fetch origin
+
+# 2. Paksa branch lokal menjadi sama persis dengan origin/dev (membuang semua perubahan lokal yang belum di-commit)
+git reset --hard origin/dev
+
+# (Opsional) 3. Hapus file/folder yang tidak dilacak (untracked files) agar benar-benar identik
+git clean -fd
+
+# 4. Terapkan kembali hak akses yang benar
 chown -R www-data:www-data /var/www/gkr_myid
 find /var/www/gkr_myid -type d -exec chmod 755 {} \;
 find /var/www/gkr_myid -type f -exec chmod 644 {} \;

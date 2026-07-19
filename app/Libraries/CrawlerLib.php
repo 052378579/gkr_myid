@@ -13,6 +13,24 @@ class CrawlerLib
     public $crawling = [];
     public $alreadyFoundImages = [];
 
+    /**
+     * Cerdas mendeteksi output untuk Web (dengan HTML) atau CLI (Plain text/CLI colors)
+     */
+    private function out($htmlMsg, $cliColor = null)
+    {
+        if (is_cli()) {
+            $cleanMsg = strip_tags(str_replace(['<br>', '<br/>', '<br />', "\n"], '', $htmlMsg));
+            if ($cliColor && class_exists('CodeIgniter\CLI\CLI')) {
+                \CodeIgniter\CLI\CLI::write($cleanMsg, $cliColor);
+            } else {
+                echo $cleanMsg . PHP_EOL;
+            }
+        } else {
+            echo $htmlMsg . "<br>\n";
+        }
+        @ob_flush(); @flush();
+    }
+
     public function __construct() 
     {
         $this->siteModel = new SiteModel();
@@ -105,11 +123,11 @@ class CrawlerLib
         $keywords = str_replace("\n", "", $keywords);
     
         if($this->linkExists($url)) {
-            echo "$url already exists<br>";
+            $this->out("$url already exists", 'yellow');
         } else if($this->insertLink($url, $title, $description, $keywords)) {
-            echo "SUCCESS: $url<br>";
+            $this->out("SUCCESS: $url", 'green');
         } else {
-            echo "ERROR: Failed to insert $url<br>";
+            $this->out("ERROR: Failed to insert $url", 'red');
         }
     
         $imageArray = $parser->getImages();
@@ -126,17 +144,16 @@ class CrawlerLib
                 $this->alreadyFoundImages[] = $src;
     
                 if($this->imageExists($src)) {
-                    echo "$src already exists<br>";
+                    $this->out("$src already exists", 'yellow');
                 } else if($this->insertImage($url, $src, $alt, $imgTitle)) {
-                    echo "SUCCESS: $src<br>";
+                    $this->out("SUCCESS: $src", 'green');
                 } else {
-                    echo "ERROR: Failed to insert $src<br>";
+                    $this->out("ERROR: Failed to insert $src", 'red');
                 }
             }
         }
         
-        echo "<b>URL:</b> $url, <b>Title:</b> $title, <b>Description:</b> $description, <b>keywords:</b> $keywords<br>";
-        @ob_flush(); @flush();
+        $this->out("<b>URL:</b> $url, <b>Title:</b> $title, <b>Description:</b> $description, <b>keywords:</b> $keywords");
     }
     
     public function followLinks($url, $depth = 1, $maxDepth = 3)
@@ -158,7 +175,6 @@ class CrawlerLib
                 $this->alreadyCrawled[] = $href;
                 $this->crawling[] = $href;
                 $this->getDetails($href);
-                @ob_flush(); @flush();
             }
         }
     
@@ -180,12 +196,11 @@ class CrawlerLib
         $targetPath = rtrim($targetPath, '/');
         
         if (!str_starts_with($targetPath, $rootPath)) {
-            echo "<span style='color: #dc3545;'>[ERROR] Path harus berawalan $rootPath</span><br>\n";
+            $this->out("<span style='color: #dc3545;'>[ERROR] Path harus berawalan $rootPath</span>", 'red');
             return;
         }
 
-        echo "<span style='color: #a9a9a9;'>Memulai scan direktori lokal:</span> $targetPath<br>\n";
-        @ob_flush(); @flush();
+        $this->out("<span style='color: #a9a9a9;'>Memulai scan direktori lokal:</span> $targetPath", 'white');
         
         // Determine folders to scan
         if ($targetPath === $rootPath) {
@@ -196,8 +211,7 @@ class CrawlerLib
 
         foreach ($foldersToScan as $folderPath) {
             if (!is_dir($folderPath)) {
-                echo "<span style='color: #dc3545;'>[ERROR] Folder tidak ditemukan:</span> $folderPath<br>\n";
-                @ob_flush(); @flush();
+                $this->out("<span style='color: #dc3545;'>[ERROR] Folder tidak ditemukan:</span> $folderPath", 'red');
                 continue;
             }
 
@@ -256,7 +270,7 @@ class CrawlerLib
                         $siteUrl = '?' . $parentRelativeDir . '#pid=' . $filename;
                         
                         if ($this->imageExists($imageUrl)) {
-                             echo "<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #4a9c8f;'>Skip: $title sudah ada</span><br>\n";
+                             $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #4a9c8f;'>Skip: $title sudah ada</span>", 'cyan');
                         } else {
                             // Insert into cari_sites
                             if (!$this->linkExists($siteUrl)) {
@@ -264,25 +278,24 @@ class CrawlerLib
                                     $sitesAdded++;
                                 } else {
                                     $errors = implode(", ", $this->siteModel->errors());
-                                    echo "<span style='color: #dc3545;'>[ERROR] Gagal menambah situs: $errors</span><br>\n";
+                                    $this->out("<span style='color: #dc3545;'>[ERROR] Gagal menambah situs: $errors</span>", 'red');
                                 }
                             }
                             
                             // Insert into cari_images
                             if ($this->insertImage($siteUrl, $imageUrl, $alt, $title)) {
                                 $imagesAdded++;
-                                echo "<span style='color: #28a745;'>[SUCCESS]</span> <span style='color: #d4d4d4;'>Menambahkan: $title</span><br>\n";
+                                $this->out("<span style='color: #28a745;'>[SUCCESS]</span> <span style='color: #d4d4d4;'>Menambahkan: $title</span>", 'green');
                             } else {
                                 $errors = implode(", ", $this->imageModel->errors());
-                                echo "<span style='color: #dc3545;'>[ERROR] Gagal menambah gambar: $errors</span><br>\n";
+                                $this->out("<span style='color: #dc3545;'>[ERROR] Gagal menambah gambar: $errors</span>", 'red');
                             }
                         }
                     }
                 }
-                @ob_flush(); @flush();
             }
         }
         
-        echo "<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>SELESAI: Berhasil menambahkan $sitesAdded tautan ke cari_sites dan $imagesAdded gambar ke cari_images.</span><br>\n";
+        $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>SELESAI: Berhasil menambahkan $sitesAdded tautan ke cari_sites dan $imagesAdded gambar ke cari_images.</span>", 'yellow');
     }
 }

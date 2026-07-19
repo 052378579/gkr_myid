@@ -63,6 +63,9 @@ class Auth extends BaseController
                 'user_agent' => $this->request->getUserAgent()->getAgentString()
             ]);
 
+            // Kirim notifikasi Telegram
+            $this->sendTelegramNotification($user, $this->request->getIPAddress());
+
             return redirect()->to('/')->with('success', 'Selamat datang ' . $user['nama_lengkap'] . '');
         } else {
             return redirect()->to('/login')->with('error', 'Nomor HP tidak terdaftar');
@@ -71,7 +74,57 @@ class Auth extends BaseController
 
     public function logout()
     {
+        // Tangkap data pengguna sebelum session dihancurkan
+        if (session()->get('isLoggedIn')) {
+            $user_temp = [
+                'nama_lengkap' => session()->get('nama_lengkap'),
+                'divisi'       => session()->get('divisi'),
+                'no_hp'        => '-'
+            ];
+            $ipAddress = $this->request->getIPAddress();
+            
+            // Kirim notifikasi Logout
+            $this->sendTelegramNotification($user_temp, $ipAddress, 'Logout');
+        }
+
         session()->destroy();
         return redirect()->to('/login')->with('success', 'Anda telah berhasil keluar.');
+    }
+
+    private function sendTelegramNotification($user, $ipAddress, $jenisAksi = 'Login')
+    {
+        $botToken = "8784963582:AAG90wLXKxfKEXa3aLy0sxURZbbyrZnqP9Q";
+        $chatId   = "8784856529";
+        
+        // Atur timezone sesuai lokasi server/user
+        date_default_timezone_set('Asia/Jakarta');
+        $waktu = date('d-m-Y H:i');
+        
+        // Membedakan ikon dan judul pesan
+        $icon = ($jenisAksi === 'Login') ? '🔓' : '🔒';
+        
+        $pesan = "{$icon} <b>Notifikasi {$jenisAksi}</b>\n\n";
+        $pesan .= "<b>Nama:</b> " . $user['nama_lengkap'] . "\n";
+        $pesan .= "<b>Divisi:</b> " . $user['divisi'] . "\n";
+        $pesan .= "<b>No. HP:</b> " . $user['no_hp'] . "\n";
+        $pesan .= "<b>Waktu:</b> " . $waktu . " WIB\n";
+        
+        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+        
+        try {
+            $client = \Config\Services::curlrequest();
+            $client->post($url, [
+                'form_params' => [
+                    'chat_id'    => $chatId,
+                    'text'       => $pesan,
+                    'parse_mode' => 'HTML'
+                ],
+                'timeout' => 5,
+                'verify'  => false
+            ]);
+        } catch (\Exception $e) {
+            // Catat error ke log agar bisa di-debug tanpa merusak proses login
+            log_message('error', 'Telegram API Error: ' . $e->getMessage());
+        }
     }
 }
