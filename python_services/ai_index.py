@@ -6,6 +6,9 @@ os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
 os.environ["NUMEXPR_NUM_THREADS"] = "1"
 
+# Arahkan Cache PyTorch ke direktori Writable CodeIgniter 4 agar www-data memiliki hak tulis!
+os.environ["TORCH_HOME"] = "/var/www/gkr_myid/writable/torch_cache"
+
 import json
 import re
 import numpy as np
