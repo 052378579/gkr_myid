@@ -15,6 +15,9 @@ import torchvision.transforms as transforms
 from PIL import Image
 import faiss
 import gc
+import requests
+from dotenv import load_dotenv
+from datetime import datetime
 
 # Konstanta Warna ANSI
 C_RESET = "\033[0m"
@@ -23,6 +26,29 @@ C_YELLOW = "\033[93m"
 C_CYAN = "\033[96m"
 C_RED = "\033[91m"
 C_BOLD = "\033[1m"
+
+# Load environment variables
+load_dotenv('/var/www/gkr_myid/.env')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+CHAT_ID = os.getenv('CHAT_ID')
+
+def send_telegram_notification(kesimpulan):
+    if not BOT_TOKEN or not CHAT_ID:
+        print(f"{C_RED}Peringatan: Kredensial Telegram (BOT_TOKEN/CHAT_ID) tidak ditemukan di .env{C_RESET}")
+        return
+    try:
+        waktu = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+        pesan = f"<b>AI Trainer Selesai!</b>\n\n<b>Target:</b> /var/www/FOTO\n<b>Waktu:</b> {waktu} WIB\n\n<b>Hasil Eksekusi:</b>\n{kesimpulan}"
+        
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+        payload = {
+            'chat_id': CHAT_ID,
+            'parse_mode': 'HTML',
+            'text': pesan
+        }
+        requests.post(url, data=payload, timeout=10)
+    except Exception as e:
+        print(f"{C_RED}Gagal mengirim notifikasi Telegram: {e}{C_RESET}")
 
 # Base direktori (Real Path)
 BASE_DIR = "/var/www/FOTO"
@@ -119,6 +145,10 @@ if vectors:
     with open("mapping.json", "w") as f:
         json.dump(mapping, f)
         
-    print(f"\n{C_BOLD}{C_GREEN}=== SINKRONISASI BERHASIL: {len(vectors)} dari {len(all_files)} gambar masuk ke indeks vektor! ==={C_RESET}")
+    kesimpulan_msg = f"BERHASIL: {len(vectors)} dari {len(all_files)} gambar masuk ke indeks vektor!"
+    print(f"\n{C_BOLD}{C_GREEN}=== SINKRONISASI {kesimpulan_msg} ==={C_RESET}")
+    send_telegram_notification(kesimpulan_msg)
 else:
-    print(f"\n{C_BOLD}{C_RED}Gagal: Tidak ada gambar valid yang diekstrak.{C_RESET}")
+    kesimpulan_msg = "ERROR: Tidak ada gambar valid yang diekstrak."
+    print(f"\n{C_BOLD}{C_RED}{kesimpulan_msg}{C_RESET}")
+    send_telegram_notification(kesimpulan_msg)

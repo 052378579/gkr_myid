@@ -296,6 +296,9 @@ class CrawlerLib
             }
         }
         
-        $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>SELESAI: Berhasil menambahkan $sitesAdded tautan ke cari_sites dan $imagesAdded gambar ke cari_images.</span>", 'yellow');
+        $kesimpulan = "SELESAI: Berhasil menambahkan $sitesAdded tautan ke cari_sites dan $imagesAdded gambar ke cari_images.";
+        $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>" . $kesimpulan . "</span>", 'yellow');
+        
+        return $kesimpulan;
     }
 }

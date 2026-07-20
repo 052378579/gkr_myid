@@ -72,15 +72,48 @@ class CrawlCommand extends BaseCommand
 
         $mesinPencari = new CrawlerLib();
 
+        $kesimpulan = "Proses selesai.";
         if (str_starts_with($target, '/var/www/FOTO')) {
             // URL Statis / Direktori Lokal
-            $mesinPencari->crawlLocalDirectory($target);
+            $kesimpulan = $mesinPencari->crawlLocalDirectory($target);
         } else {
             // Tautan Eksternal/URL
             $mesinPencari->followLinks($target, 1, 3);
+            $kesimpulan = "SELESAI: Crawling eksternal selesai dilakukan.";
         }
 
         CLI::newLine();
         CLI::write('Proses crawling telah selesai dilakukan.', 'green');
+        
+        $this->sendTelegramNotification($target, $kesimpulan);
+    }
+    private function sendTelegramNotification($target, $kesimpulan)
+    {
+        $botToken = env('BOT_TOKEN');
+        $chatId = env('CHAT_ID');
+
+        if (empty($botToken) || empty($chatId)) {
+            CLI::write('Peringatan: Kredensial Telegram (BOT_TOKEN/CHAT_ID) tidak ditemukan di .env', 'yellow');
+            return;
+        }
+
+        date_default_timezone_set('Asia/Jakarta');
+        $waktu = date('d-m-Y H:i:s');
+        $pesan = "<b>Auto Crawler Selesai!</b>\n\n<b>Target:</b> " . htmlspecialchars($target) . "\n<b>Waktu:</b> " . $waktu . " WIB\n\n<b>Hasil:</b>\n" . htmlspecialchars($kesimpulan);
+
+        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            'chat_id' => $chatId,
+            'parse_mode' => 'HTML',
+            'text' => $pesan
+        ]));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_exec($ch);
+        curl_close($ch);
     }
 }

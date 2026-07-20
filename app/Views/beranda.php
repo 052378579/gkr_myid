@@ -162,10 +162,32 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-4">
-                    <div v-if="!uploadPreviewUrl" class="upload-area p-5 border rounded-4 bg-body-tertiary mb-3" style="border: 2px dashed var(--bs-border-color) !important; cursor: pointer;" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop">
-                        <i class="fa-solid fa-cloud-arrow-up fs-1 text-secondary mb-3"></i>
-                        <p class="mb-0 text-muted">Tarik file gambar ke sini atau klik untuk memilih file</p>
+                    <div v-if="!uploadPreviewUrl">
+                        <!-- Tampilan Desktop: Drag & Drop -->
+                        <div class="upload-area p-5 border rounded-4 bg-body-tertiary mb-3 d-none d-md-block" style="border: 2px dashed var(--bs-border-color) !important; cursor: pointer;" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop">
+                            <i class="fa-solid fa-cloud-arrow-up fs-1 text-secondary mb-3"></i>
+                            <p class="mb-0 text-muted">Tarik file gambar ke sini atau klik untuk memilih file</p>
+                        </div>
+                        
+                        <!-- Tampilan Mobile: 2 Tombol -->
+                        <div class="row g-2 mb-3 d-flex d-md-none">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-secondary border-0 bg-body-tertiary w-100 h-100 py-4 rounded-4" style="border: 2px dashed var(--bs-border-color) !important;" @click="$refs.cameraInput.click()">
+                                    <i class="fa-solid fa-camera fs-1 mb-2" style="color: var(--gkr-primary);"></i>
+                                    <span class="d-block text-muted small fw-medium">Ambil Foto</span>
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-secondary border-0 bg-body-tertiary w-100 h-100 py-4 rounded-4" style="border: 2px dashed var(--bs-border-color) !important;" @click="$refs.fileInput.click()">
+                                    <i class="fa-solid fa-images fs-1 mb-2" style="color: var(--gkr-primary);"></i>
+                                    <span class="d-block text-muted small fw-medium">Pilih Galeri</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Input Files -->
                         <input type="file" class="d-none" ref="fileInput" accept="image/jpeg, image/png, image/webp" @change="handleFileSelect">
+                        <input type="file" class="d-none" ref="cameraInput" accept="image/jpeg, image/png, image/webp" capture="environment" @change="handleFileSelect">
                     </div>
                     
                     <div v-else class="preview-area mb-4 position-relative w-100">

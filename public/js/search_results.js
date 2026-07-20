@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
+    const uploadAreaContainer = document.getElementById('uploadAreaContainer');
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
+    const cameraInput = document.getElementById('cameraInput');
+    const btnCamera = document.getElementById('btnCamera');
+    const btnGallery = document.getElementById('btnGallery');
     const previewArea = document.getElementById('previewArea');
     const uploadPreview = document.getElementById('uploadPreview');
     const clearImageBtn = document.getElementById('clearImageBtn');
@@ -11,9 +15,11 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentFile = null;
     let cropperInstance = null;
 
-    if (!uploadArea) return;
+    if (!uploadAreaContainer) return;
 
-    uploadArea.addEventListener('click', () => fileInput.click());
+    if (uploadArea) uploadArea.addEventListener('click', () => fileInput.click());
+    if (btnCamera) btnCamera.addEventListener('click', () => cameraInput.click());
+    if (btnGallery) btnGallery.addEventListener('click', () => fileInput.click());
     
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
@@ -32,6 +38,12 @@ document.addEventListener("DOMContentLoaded", function() {
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length) processFile(e.target.files[0]);
     });
+    
+    if (cameraInput) {
+        cameraInput.addEventListener('change', (e) => {
+            if (e.target.files.length) processFile(e.target.files[0]);
+        });
+    }
 
     function processFile(file) {
         uploadError.classList.add('d-none');
@@ -47,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         currentFile = file;
         uploadPreview.src = URL.createObjectURL(file);
-        uploadArea.classList.add('d-none');
+        uploadAreaContainer.classList.add('d-none');
         previewArea.classList.remove('d-none');
         uploadSubmitBtn.classList.remove('d-none');
         
@@ -66,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
         currentFile = null;
         fileInput.value = '';
         uploadPreview.src = '';
-        uploadArea.classList.remove('d-none');
+        uploadAreaContainer.classList.remove('d-none');
         previewArea.classList.add('d-none');
         uploadSubmitBtn.classList.add('d-none');
         if (cropperInstance) {
