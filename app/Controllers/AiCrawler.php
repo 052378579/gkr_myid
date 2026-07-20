@@ -28,7 +28,7 @@ class AiCrawler extends BaseController
         @ob_flush(); @flush();
 
         // Eksekusi skrip python secara langsung dan tangkap outputnya (termasuk error)
-        $cmd = '/mnt/sdcard/ai-scanner/env-ai/bin/python /var/www/gkr_myid/python_services/buat_index.py 2>&1';
+        $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_index.py 2>&1';
         $handle = popen($cmd, 'r');
         
         if (is_resource($handle)) {

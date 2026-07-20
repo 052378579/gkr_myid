@@ -52,7 +52,7 @@
 <?= $this->section('scripts') ?>
 <script>
     window.AppConfig = {
-        apiDoCrawl: '<?= base_url('crawl/ai/doCrawl') ?>'
+        apiDoCrawl: '<?= base_url('admin/ai/doCrawl') ?>'
     };
 </script>
 <script src="<?= base_url('js/ai_crawl.js') ?>?v=<?= time() ?>"></script>
