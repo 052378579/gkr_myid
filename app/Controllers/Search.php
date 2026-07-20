@@ -147,6 +147,28 @@ class Search extends BaseController
         $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
         $dataPencarian['version'] = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
 
+        // Trigger Event Pencarian
+        $id_user = session()->get('id_user') ?? null;
+        if (!empty(trim($kataKunci)) || $tipe === 'image_results') {
+            $logTipe = 'teks'; // Default tipe teks (images/all)
+            $logKataKunci = $kataKunci;
+            if ($tipe === 'sites') {
+                $logTipe = 'situs';
+            } elseif ($tipe === 'image_results') {
+                $logTipe = 'gambar';
+                $logKataKunci = $kodeBom ?? 'UPLOADED_IMAGE';
+            }
+            
+            $dataLog = [
+                'id_user'        => $id_user,
+                'tipe_pencarian' => $logTipe,
+                'kata_kunci'     => $logKataKunci,
+                'jumlah_hasil'   => $dataPencarian['totalResults'] ?? 0,
+                'alamat_ip'      => $this->request->getIPAddress()
+            ];
+            \CodeIgniter\Events\Events::trigger('log_pencarian', $dataLog);
+        }
+
         return view('search_results', $dataPencarian);
     }
 }

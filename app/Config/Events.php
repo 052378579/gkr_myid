@@ -55,3 +55,19 @@ Events::on('pre_system', static function (): void {
         }
     }
 });
+
+/*
+ * --------------------------------------------------------------------
+ * Custom Application Events
+ * --------------------------------------------------------------------
+ */
+Events::on('log_pencarian', static function (array $dataLog) {
+    $logCariModel = new \App\Models\LogCariModel();
+    $logCariModel->catatPencarian(
+        $dataLog['id_user'],
+        $dataLog['tipe_pencarian'],
+        $dataLog['kata_kunci'],
+        $dataLog['jumlah_hasil'],
+        $dataLog['alamat_ip']
+    );
+});

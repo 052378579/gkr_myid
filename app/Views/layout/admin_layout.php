@@ -53,7 +53,7 @@
     <!-- Main Flex Container -->
     <div class="admin-main-content">
         <!-- Topbar -->
-        <header class="admin-topbar shadow-sm">
+        <header class="admin-topbar shadow-sm position-relative">
             <div class="d-flex align-items-center">
                 <button class="btn btn-light border-0 me-3" id="sidebarToggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
@@ -92,6 +92,8 @@
                     </ul>
                 </div>
             </div>
+            <!-- Progress Bar for Reload -->
+            <div id="reloadProgressBar" style="position: absolute; bottom: 0; left: 0; height: 3px; background-color: #2B3385; width: 0%; display: none; transition: width 1s linear;"></div>
         </header>
 
         <!-- Content Scroll Area -->

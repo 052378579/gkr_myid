@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\LogUserModel;
 
 class Auth extends BaseController
 {
@@ -66,8 +67,16 @@ class Auth extends BaseController
             // Kirim notifikasi Telegram
             $this->sendTelegramNotification($user, $this->request->getIPAddress());
 
+            // Catat Log Aktivitas
+            $logUserModel = new LogUserModel();
+            $logUserModel->catatAktivitas($user['id_user'], 'masuk', $this->request->getIPAddress(), (string) $this->request->getUserAgent());
+
             return redirect()->to('/')->with('success', 'Selamat datang ' . $user['nama_lengkap'] . '');
         } else {
+            // Catat Log Percobaan Gagal
+            $logUserModel = new LogUserModel();
+            $logUserModel->catatAktivitas(null, 'gagal_masuk', $this->request->getIPAddress(), (string) $this->request->getUserAgent());
+
             return redirect()->to('/login')->with('error', 'Nomor HP tidak terdaftar');
         }
     }
@@ -85,6 +94,10 @@ class Auth extends BaseController
             
             // Kirim notifikasi Logout
             $this->sendTelegramNotification($user_temp, $ipAddress, 'Logout');
+
+            // Catat Log Aktivitas
+            $logUserModel = new LogUserModel();
+            $logUserModel->catatAktivitas(session()->get('id_user'), 'keluar', $ipAddress, (string) $this->request->getUserAgent());
         }
 
         session()->destroy();

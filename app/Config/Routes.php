@@ -4,6 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Beranda::index');
+$routes->get('/force-migrate', 'MigrateController::index');
 $routes->get('/login', 'Auth::index');
 $routes->post('/login/process', 'Auth::process');
 $routes->get('/logout', 'Auth::logout');
@@ -24,6 +25,7 @@ $routes->post('/admin/versi/update', '\App\Controllers\Admin\VersiController::up
 $routes->post('/admin/versi/delete', '\App\Controllers\Admin\VersiController::delete');
 $routes->get('/admin', '\App\Controllers\Admin\AdminController::index');
 $routes->get('/admin/doodle', '\App\Controllers\Admin\AdminController::doodle');
+$routes->get('/admin/log', '\App\Controllers\Admin\AdminController::log');
 $routes->get('/trend', 'TrendController::index');
 $routes->get('/admin/crawl', 'Crawler::index');
 $routes->post('/crawler/doCrawl', 'Crawler::doCrawl');
