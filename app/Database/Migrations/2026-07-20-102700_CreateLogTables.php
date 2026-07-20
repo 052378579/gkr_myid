@@ -8,7 +8,7 @@ class CreateLogTables extends Migration
 {
     public function up()
     {
-        // 1. Tabel Log Otentikasi
+        // 1. Tabel Log User (Login & Logout)
         $this->forge->addField([
             'id_log' => [
                 'type'           => 'BIGINT',
@@ -84,8 +84,9 @@ class CreateLogTables extends Migration
         $this->forge->createTable('gkr_logcari', true);
         
         // Setup raw query for default CURRENT_TIMESTAMP because CI4 Forge doesn't cleanly support it across all DB drivers
-        $this->db->query('ALTER TABLE gkr_loguser MODIFY waktu DATETIME DEFAULT CURRENT_TIMESTAMP');
-        $this->db->query('ALTER TABLE gkr_logcari MODIFY waktu DATETIME DEFAULT CURRENT_TIMESTAMP');
+        $db = \Config\Database::connect();
+        $db->query('ALTER TABLE gkr_loguser MODIFY waktu DATETIME DEFAULT CURRENT_TIMESTAMP');
+        $db->query('ALTER TABLE gkr_logcari MODIFY waktu DATETIME DEFAULT CURRENT_TIMESTAMP');
     }
 
     public function down()
