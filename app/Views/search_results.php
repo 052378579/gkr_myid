@@ -112,6 +112,9 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                     <li><a class="dropdown-item py-2" href="<?= base_url('profile') ?>"><i class="fas fa-user text-secondary me-2"></i>Profil</a></li>
+                    <?php if (session()->get('id_user') == 1): ?>
+                        <li><a class="dropdown-item py-2" href="<?= base_url('admin') ?>"><i class="fas fa-user-shield text-secondary me-2"></i>Admin</a></li>
+                    <?php endif; ?>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item py-2" href="<?= base_url('logout') ?>" style="color: var(--gkr-primary);"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
                 </ul>

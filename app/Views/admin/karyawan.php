@@ -1,22 +1,11 @@
-<?= $this->extend('layout/main') ?>
+<?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('title') ?>Pengaturan Karyawan<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-white glassmorphism fixed-top shadow-sm" style="background: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px);">
-    <div class="container">
-        <a class="navbar-brand" href="<?= base_url('admin') ?>">
-            <img src="<?= base_url('Gracia_logo.png') ?>" alt="Gracia" style="height: 30px; width: auto;">
-        </a>
-        <div class="navbar-nav ms-auto fw-medium">
-            <a class="nav-link" href="<?= base_url('admin') ?>" style="color: #2B3385 !important;"><i class="fas fa-arrow-left me-1"></i> Panel Admin</a>
-        </div>
-    </div>
-</nav>
-
-<div class="container mt-5 pt-5 pb-5" id="adminKaryawanApp">   
+<div class="container-fluid px-0" id="adminKaryawanApp">   
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0 fw-bold" style="color: #2B3385;">Manajemen Karyawan (Pengguna)</h4>
+        <h4 class="mb-0 fw-bold" style="color: #2B3385;">Manajemen Karyawan</h4>
         <div class="d-flex align-items-center gap-3">
             <div class="d-flex align-items-center">
                 <label class="me-2 text-muted small">Tampilkan:</label>
@@ -27,7 +16,7 @@
                 </select>
             </div>
             <button class="btn btn-primary rounded-pill px-4" @click="tambahKaryawan">
-                <i class="fas fa-plus me-1"></i> Tambah Karyawan
+                <i class="fas fa-plus me-1"></i> Tambah
             </button>
         </div>
     </div>
@@ -100,7 +89,14 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Divisi <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" v-model="form.divisi" placeholder="Cth: IT, Marketing, dll" required>
+                            <select class="form-select" v-model="form.divisi" required>
+                                <option value="" disabled>-- Divisi --</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Produksi 1">Produksi 1</option>
+                                <option value="Produksi 2">Produksi 2</option>
+                                <option value="Produksi 4">Produksi 4</option>
+                                <option value="RND">RND</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0 pb-4 px-4 d-flex justify-content-between">

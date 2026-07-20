@@ -27,6 +27,13 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Multi-Angle Regex Harmonization:** Menyinkronkan algoritma Python (`build_index_new.py`) dan PHP (`CrawlerLib.php`) untuk mendeteksi dan merangkum seluruh varian sudut foto (seperti `-B`, `-C`, `-D`, `-E`, `_depan`, `_samping`) menjadi sebuah entitas produk identitas tunggal yang bersih.
 - `[x]` **Global Folder Sensus & Integrasi /WEB:** Menganalisis puluhan ribu nama file secara rekursif menggunakan *PowerShell Automation*, menemukan pola *typo* spasi ekstra, serta secara resmi menyuntikkan dukungan direktori `/WEB` ke dalam daftar pantauan otomatis Web Crawler.
 
+**Tahap V: Pemolesan & Manajemen Dasbor Admin**
+- `[x]` **Manajemen Karyawan:** Menyelaraskan layout `admin/karyawan` ke Dasbor Admin, membuang navbar statis lama, menambahkannya ke *Sidebar*, serta merombak input Divisi menjadi *dropdown* kaku (Marketing, Produksi 1, Produksi 2, Produksi 4, RND) untuk meminimalisasi *typo*.
+- `[x]` **Sistem Audit Log:** Memperbaiki sistem pencatatan alamat IP agar tidak terpaku pada `127.0.0.1` dengan mengonfigurasi struktur *array asosiatif* `$proxyIPs` pada CI4 v4.3+ sehingga sistem bisa membaca *header X-Forwarded-For* dari peladen proksi.
+- `[x]` **Log UI/UX:** Mempercantik antarmuka tabel 'Log Cari' dan 'Log User' dengan penyelarasan urutan kolom, konversi format waktu (dd/mm/YYYY HH:MM:ss), penyisipan fitur *Auto-Reload* 5 Menit dengan bilah progresi (*Progress Bar*) bertema Gracia, serta menyederhanakan tampilan *User Agent*.
+- `[x]` **Integrasi Navigasi & Akses Super Admin:** Menyisipkan berbagai menu admin secara dinamis (Log, Karyawan, AI Trainer) ke *Sidebar*, dan merombak *Dropdown* profil agar menampilkan tautan Rahasia 'Admin' secara eksklusif bagi pemegang kunci *Super Admin* (`id_user == 1`).
+- `[x]` **Refaktor Rute AI:** Memindahkan rute mesin pelatih AI dari `/crawl/ai` menjadi `/admin/ai` untuk keseragaman arsitektur di ruang administratif.
+
 ## 🎯 Prioritas Tinggi (High Priority)
 - `[ ]` **Keamanan Server (Pendesak):**
   - Pindahkan atau hapus file *dump* database yatim (`gkr_myid.sql`, `cari.sql`) dari *root* direktori web `/var/www/gkr_myid` ke direktori *backup* yang aman untuk mencegah risiko akses publik.

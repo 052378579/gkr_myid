@@ -20,15 +20,18 @@ Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasika
 - **Mekanisme Cache Busting & Dropdown Bertingkat:** 
   Aplikasi ini menggunakan teknik *Cache Busting* otomatis (`?v=time()`) untuk seluruh aset skrip kritikal, dan Dropdown Kaskade pintar untuk pengisian basis data.
 
+- **Modul Audit Log & Manajemen Akses:**
+  Sistem perlindungan ganda terintegrasi. Menampilkan jejak aktivitas pengguna (Log User) dan pencarian (Log Cari) yang dilengkapi detektor IP asli (menembus *Reverse Proxy*) dan *Progress Bar Auto-Reload*. Sistem manajemen karyawan juga diperkuat antarmuka modal tervalidasi *dropdown*.
+
 ## 📁 Struktur Inti Arsitektur MVC & Microservice
-- **`app/Controllers/`**: Menangani seluruh routing HTTP UI, dan memfasilitasi titik panggil (*endpoint*) RESTful API. Terdapat pengontrol baru seperti `AiCrawler.php` untuk menengahi terminal AI.
-- **`app/Models/`**: Berinteraksi dengan pangkalan data MySQL/MariaDB menggunakan Query Builder CI4 (dilengkapi manajemen *Soft Delete*).
-- **`app/Views/`**: Menampung komponen visual (*frontend*) terpusat pada `layout/main.php` dengan reaktivasi DOM oleh Vue 3.
+- **`app/Controllers/`**: Menangani seluruh routing HTTP UI, dan memfasilitasi titik panggil (*endpoint*) RESTful API. `Admin.php` bertindak sebagai sentral untuk seluruh kendali administratif.
+- **`app/Models/`**: Berinteraksi dengan pangkalan data MySQL/MariaDB menggunakan Query Builder CI4 (dilengkapi manajemen *Soft Delete* dan Tabel Audit).
+- **`app/Views/`**: Menampung komponen visual (*frontend*). Khusus area admin, seluruhnya wajib mewarisi kerangka utama di `layout/admin_layout.php`.
 - **`app/Filters/`**: Tempat bernaungnya perisai lalu lintas web (`AuthFilter.php` & `SuperAdminFilter.php`).
 - **`python_services/`**: Markas besar kecerdasan buatan. Berisi model infrastruktur *PyTorch* dan *FastAPI* (`main_new.py`, `build_index_new.py`).
 
 ## 🛠️ Stack Teknologi
-*   **Web Backend:** PHP 8.2+ dengan framework CodeIgniter 4.
+*   **Web Backend:** PHP 8.2+ dengan framework CodeIgniter 4 (termasuk deteksi Proxy `X-Forwarded-For`).
 *   **AI Backend:** Python 3, FastAPI, PyTorch (MobileNetV3-Small), FAISS (Facebook AI Similarity Search).
 *   **Web Frontend:** Vue.js 3 (CDN), tata ruang utilitas Bootstrap 5.3, interaksi *Continuous Streaming* via ReadableStream API.
 *   **Database:** MySQL/MariaDB.
@@ -37,9 +40,9 @@ Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasika
 ## 🔗 Rute Utama & Endpoint Ekosistem
 *   `/` - Halaman Muka Beranda.
 *   `/cari` - Penampil Hasil Pencarian (Terintegrasi Ikon Kamera AI).
-*   `/admin` - Dasbor Manajemen Data Situs dan Gambar.
+*   `/admin` - Dasbor Manajemen Data Situs, Gambar, Karyawan, dan Log.
 *   `/admin/crawl` - Monitor Eksekusi Mesin Penjelajah Tautan.
-*   `/crawl/ai` - Terminal Dasbor Pelatih AI (Live Streaming).
+*   `/admin/ai` - Terminal Dasbor Pelatih AI (Live Streaming).
 *   *Layanan Mikro Internal (FastAPI)* - Beroperasi eksklusif di `http://127.0.0.1:5000`. Membypass semua otorisasi Linux untuk memanipulasi direktori `/mnt/sdcard`. (Rincian teknis lengkap di `Tautan.md`).
 
 ## 🚫 Konvensi Berkas yang Diabaikan (Gitignore)

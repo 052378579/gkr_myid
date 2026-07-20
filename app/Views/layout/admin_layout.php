@@ -37,11 +37,26 @@
                 </a>
             </li>
             <li>
+                <a href="<?= base_url('admin/ai') ?>" class="<?= (uri_string() == 'admin/ai') ? 'active' : '' ?>">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Trainer
+                </a>
+            </li>
+            <li>
                 <a href="<?= base_url('admin/doodle') ?>" class="<?= (uri_string() == 'admin/doodle') ? 'active' : '' ?>">
                     <i class="fas fa-palette"></i> Doodle
                 </a>
             </li>
-            <li><hr class="dropdown-divider my-2"></li>
+            <li>
+                <a href="<?= base_url('admin/karyawan') ?>" class="<?= (uri_string() == 'admin/karyawan') ? 'active' : '' ?>">
+                    <i class="fas fa-users"></i> Karyawan
+                </a>
+            </li>
+            <li>
+                <a href="<?= base_url('admin/log') ?>" class="<?= (uri_string() == 'admin/log') ? 'active' : '' ?>">
+                    <i class="fas fa-clipboard-list"></i> Log
+                </a>
+            </li>
+            <li><hr class="my-2" style="border-top: 2px solid #2B3385; opacity: 0.3;"></li>
             <li>
                 <a href="<?= base_url('/') ?>">
                     <i class="fas fa-sign-out-alt fa-flip-horizontal"></i> Ke Beranda
@@ -58,7 +73,7 @@
                 <button class="btn btn-light border-0 me-3" id="sidebarToggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
-                <a href="<?= base_url('admin') ?>" class="text-decoration-none d-flex align-items-center gap-2">
+                <a href="<?= base_url('/') ?>" class="text-decoration-none d-flex align-items-center gap-2">
                     <img src="<?= base_url('Gracia_logo.png') ?>" alt="GRACIA Logo" style="height: 24px; width: auto;">
                 </a>
             </div>
@@ -87,6 +102,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                         <li><a class="dropdown-item" href="<?= base_url('profile') ?>"><i class="fas fa-user me-2 text-muted"></i>Profil</a></li>
+                        <?php if (session()->get('id_user') == 1): ?>
+                            <li><a class="dropdown-item" href="<?= base_url('admin') ?>"><i class="fas fa-user-shield text-muted me-2"></i>Admin</a></li>
+                        <?php endif; ?>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
                     </ul>

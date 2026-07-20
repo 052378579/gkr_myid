@@ -31,8 +31,8 @@ $routes->get('/admin/crawl', 'Crawler::index');
 $routes->post('/crawler/doCrawl', 'Crawler::doCrawl');
 $routes->post('/crawler/resetDb', 'Crawler::resetDb');
 
-$routes->get('/crawl/ai', 'AiCrawler::index');
-$routes->post('/crawl/ai/doCrawl', 'AiCrawler::doCrawl');
+$routes->get('/admin/ai', 'AiCrawler::index');
+$routes->post('/admin/ai/doCrawl', 'AiCrawler::doCrawl');
 
 $routes->post('/api/updateLinkCount', 'Api::updateLinkCount');
 $routes->post('/api/updateImageCount', 'Api::updateImageCount');
