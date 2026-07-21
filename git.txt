@@ -15,7 +15,8 @@ cd /var/www/gkr_myid
 # 1. Ambil data terbaru dari remote tanpa menggabungkannya
 git fetch origin
 
-# 2. Paksa branch lokal menjadi sama persis dengan origin/dev (membuang semua perubahan lokal yang belum di-commit)
+# 2. Paksa branch lokal menjadi sama persis dengan origin/dev
+(membuang semua perubahan lokal yang belum di-commit)
 git reset --hard origin/dev
 
 # (Opsional) 3. Hapus file/folder yang tidak dilacak (untracked files) agar benar-benar identik

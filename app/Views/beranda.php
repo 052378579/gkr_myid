@@ -62,13 +62,13 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
                         <div class="small">WebMail</div>
                     </a>
-                </div><!--
-                <div class="col-4">
-                    <a href="#" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/512px-Google_Calendar_icon_%282020%29.svg.png" style="width:45px; height:45px;" class="mb-1">
-                        <div class="small">Kalender</div>
-                    </a>
                 </div>
+                <div class="col-4">
+                    <a href="https://3d.gkr.my.id" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                        <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
+                        <div class="small">3D</div>
+                    </a>
+                </div><!--
                 <div class="col-4">
                     <a href="#" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Google_News_icon.svg/512px-Google_News_icon.svg.png" style="width:45px; height:45px;" class="mb-1">
