@@ -42,16 +42,29 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
  * AUTO-DETECT ENVIRONMENT (DEV / PROD)
  *---------------------------------------------------------------
  */
-if (isset($_SERVER['HTTP_HOST'])) {
-    $host = $_SERVER['HTTP_HOST'];
-    // Jika diakses via IP LAN (192.168.*), VPN ZeroTier (10.147.*), atau localhost
-    if (strpos($host, '192.168.') === 0 || strpos($host, '10.147.') === 0 || strpos($host, 'localhost') === 0) {
-        $_SERVER['CI_ENVIRONMENT'] = 'development';
-    } 
-    // Jika diakses via Domain Publik (gkr.budi.biz.id, gkr.my.id, dll)
-    else {
-        $_SERVER['CI_ENVIRONMENT'] = 'production';
-    }
+$host = $_SERVER['HTTP_HOST'] ?? 'cli';
+$port = $_SERVER['SERVER_PORT'] ?? '';
+
+// 1. DEV ZONE (Hak Akses Tertutup: ZeroTier, LAN, Spark, CLI)
+if (
+    strpos($host, '10.147.17.40') !== false || 
+    strpos($host, '192.168.1.4') !== false || 
+    $port === '8000' || 
+    $port === '8080' ||
+    $host === 'cli'
+) {
+    $_SERVER['CI_ENVIRONMENT'] = 'development';
+} 
+// 2. PROD ZONE (Hak Akses Publik via Domain)
+elseif (
+    strpos($host, 'budi.biz.id') !== false || 
+    strpos($host, 'gkr.my.id') !== false
+) {
+    $_SERVER['CI_ENVIRONMENT'] = 'production';
+} 
+// 3. SECURE FALLBACK (Sapu Jagat Perlindungan dari Bot/Scanner IP Publik)
+else {
+    $_SERVER['CI_ENVIRONMENT'] = 'production';
 }
 
 /*

@@ -6,29 +6,32 @@ use App\Controllers\BaseController;
 
 class AdminController extends BaseController
 {
+    private function getAppVersion()
+    {
+        $jsonPath = FCPATH . 'versi.json';
+        if (file_exists($jsonPath)) {
+            $json = json_decode(file_get_contents($jsonPath), true);
+            $versiData = $json['data'] ?? [];
+            if (!empty($versiData)) {
+                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
+                return 'v' . $versiData[0]['versi'];
+            }
+        }
+        return 'v1.0.0';
+    }
+
     public function index()
     {
-        $versiModel = new \App\Models\VersiModel();
-        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $version = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
-        
-        return view('admin/admin', ['version' => $version]);
+        return view('admin/admin', ['version' => $this->getAppVersion()]);
     }
 
     public function doodle()
     {
-        $versiModel = new \App\Models\VersiModel();
-        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $version = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
-        
-        return view('admin/doodle', ['version' => $version]);
+        return view('admin/doodle', ['version' => $this->getAppVersion()]);
     }
+    
     public function log()
     {
-        $versiModel = new \App\Models\VersiModel();
-        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $version = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
-
         $logUserModel = new \App\Models\LogUserModel();
         $logCariModel = new \App\Models\LogCariModel();
         
@@ -47,7 +50,7 @@ class AdminController extends BaseController
             ->get()->getResultArray();
 
         $data = [
-            'version' => $version,
+            'version' => $this->getAppVersion(),
             'logUser' => $logUser,
             'logCari' => $logCari
         ];

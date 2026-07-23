@@ -14,9 +14,16 @@ class Beranda extends BaseController
             $data['urlLogo'] = base_url('dokumen/doodle/' . $doodle['gambar']);
             $data['altLogo'] = $doodle['event'];
         }
-        $versiModel = new \App\Models\VersiModel();
-        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $data['version'] = $latest ? 'v' . $latest['versi'] : 'v0.0.1';
+        $jsonPath = FCPATH . 'versi.json';
+        $data['version'] = 'v0.0.1';
+        if (file_exists($jsonPath)) {
+            $json = json_decode(file_get_contents($jsonPath), true);
+            $versiData = $json['data'] ?? [];
+            if (!empty($versiData)) {
+                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
+                $data['version'] = 'v' . $versiData[0]['versi'];
+            }
+        }
 
         return view('beranda', $data);
     }

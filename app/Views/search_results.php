@@ -70,8 +70,8 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             </div>
             
             <div class="dropdown">
-                <a href="#" id="appsDropdownToggle" class="text-dark text-decoration-none d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; background-color: #f1f3f4; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#e8eaed'" onmouseout="this.style.backgroundColor='#f1f3f4'">
-                    <i class="fas fa-th fs-5" style="color: #5f6368;"></i>
+                <a href="#" id="appsDropdownToggle" class="text-body text-decoration-none d-flex align-items-center justify-content-center bg-body-tertiary" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; transition: background-color 0.2s;" onmouseover="this.classList.add('bg-body-secondary')" onmouseout="this.classList.remove('bg-body-secondary')">
+                    <i class="fas fa-th fs-5" style="color: var(--bs-secondary-color);"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
                     <div class="row g-3 text-center">
@@ -137,6 +137,15 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
 
 <div class="main-content-wrapper" style="min-height: calc(100vh - 140px); display: flex; flex-direction: column;">
+    <?php if (isset($correctedQuery)): ?>
+        <div class="results-container pt-2 pb-0 mb-0">
+            <div class="text-dark mb-0 py-1">
+                <span class="fs-6" style="color: var(--bs-body-color);">Ini adalah hasil untuk <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($correctedQuery) ?>" class="fw-bold fst-italic query-link"><?= esc($correctedQuery) ?></a></span><br>
+                <span class="small text-muted">Atau telusuri <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($originalQuery) ?>&exact=1" class="query-link"><?= esc($originalQuery) ?></a></span>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <?php if ($type === 'sites'): ?>
         <div class="results-container">
             <p class="result-count">Ditemukan <?= $totalResults ?> hasil</p>

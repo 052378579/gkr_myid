@@ -143,9 +143,79 @@ class Search extends BaseController
             }
         }
 
-        $versiModel = new \App\Models\VersiModel();
-        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $dataPencarian['version'] = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
+        $exact = $this->request->getGet('exact');
+        if ($dataPencarian['totalResults'] == 0 && empty($exact) && $tipe !== 'image_results' && !empty(trim($kataKunci))) {
+            $spellChecker = new \App\Libraries\SpellChecker();
+            $koreksi = $spellChecker->getCorrection($kataKunci);
+            
+            if ($koreksi) {
+                $dataPencarian['originalQuery'] = $kataKunci;
+                $dataPencarian['correctedQuery'] = $koreksi;
+                
+                $kataKunci = $koreksi;
+                $dataPencarian['query'] = $kataKunci;
+
+                if ($tipe === 'sites') {
+                    $dataPencarian['totalResults'] = $modelSitus->like('title', $kataKunci)
+                                                                ->orLike('description', $kataKunci)
+                                                                ->orLike('url', $kataKunci)
+                                                                ->countAllResults(false);
+                    $dataPencarian['results'] = $modelSitus->like('title', $kataKunci)
+                                                           ->orLike('description', $kataKunci)
+                                                           ->orLike('url', $kataKunci)
+                                                           ->paginate($batasHalaman, 'default', $halaman);
+                    $dataPencarian['pager'] = $modelSitus->pager;
+
+                    $urlPrefix = 'https://foto.gkr.my.id/';
+                    if (!empty($dataPencarian['results'])) {
+                        foreach ($dataPencarian['results'] as &$row) {
+                            $row['url'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['url']);
+                        }
+                    }
+                } else {
+                    $dataPencarian['totalResults'] = $modelGambar->groupStart()
+                                                                     ->like('title', $kataKunci)
+                                                                     ->orLike('alt', $kataKunci)
+                                                                     ->orLike('imageUrl', $kataKunci)
+                                                                 ->groupEnd()
+                                                                 ->where('broken', 0)
+                                                                 ->countAllResults(false);
+                    $dataPencarian['results'] = $modelGambar->groupStart()
+                                                                ->like('title', $kataKunci)
+                                                                ->orLike('alt', $kataKunci)
+                                                                ->orLike('imageUrl', $kataKunci)
+                                                            ->groupEnd()
+                                                            ->where('broken', 0)
+                                                            ->paginate($batasHalaman, 'default', $halaman);
+                    $dataPencarian['pager'] = $modelGambar->pager;
+
+                    $host = $_SERVER['HTTP_HOST'] ?? '';
+                    if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id/', $host)) {
+                        $urlPrefix = 'https://foto.budi.biz.id/';
+                    } else {
+                        $urlPrefix = 'https://foto.gkr.my.id/';
+                    }
+
+                    if (!empty($dataPencarian['results'])) {
+                        foreach ($dataPencarian['results'] as &$row) {
+                            $row['siteUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['siteUrl']);
+                            $row['imageUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(.*)/', $urlPrefix . '$1', ltrim($row['imageUrl'], '/'));
+                        }
+                    }
+                }
+            }
+        }
+
+        $jsonPath = FCPATH . 'versi.json';
+        $dataPencarian['version'] = 'v1.0.0';
+        if (file_exists($jsonPath)) {
+            $json = json_decode(file_get_contents($jsonPath), true);
+            $versiData = $json['data'] ?? [];
+            if (!empty($versiData)) {
+                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
+                $dataPencarian['version'] = 'v' . $versiData[0]['versi'];
+            }
+        }
 
         // Trigger Event Pencarian
         $id_user = session()->get('id_user') ?? null;

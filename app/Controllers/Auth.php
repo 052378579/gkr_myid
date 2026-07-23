@@ -13,9 +13,19 @@ class Auth extends BaseController
         if (session()->get('isLoggedIn')) {
             return redirect()->to('/');
         }
-        $versiModel = new \App\Models\VersiModel();
-        $latest = $versiModel->orderBy('tanggal_rilis', 'DESC')->first();
-        $version = $latest ? 'v' . $latest['versi'] : 'v1.0.0';
+        $jsonPath = FCPATH . 'versi.json';
+        $version = 'v1.0.0';
+        
+        if (file_exists($jsonPath)) {
+            $json = json_decode(file_get_contents($jsonPath), true);
+            $versiData = isset($json['data']) ? $json['data'] : [];
+            if (!empty($versiData)) {
+                usort($versiData, function($a, $b) {
+                    return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']);
+                });
+                $version = 'v' . $versiData[0]['versi'];
+            }
+        }
 
         $data = [
             'title' => 'Login',

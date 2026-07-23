@@ -2,83 +2,128 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\VersiModel;
 use App\Controllers\BaseController;
 
 class VersiController extends BaseController
 {
+    private $jsonFile = FCPATH . 'versi.json';
+
     public function index()
     {
         return view('admin/versi');
     }
 
+    private function getJsonData()
+    {
+        if (!file_exists($this->jsonFile)) {
+            return ['nama_file' => 'versi.json', 'nama_proyek' => 'gkr_myid', 'tanggal_diperbarui' => '', 'versi_diperbarui' => '', 'data' => []];
+        }
+        return json_decode(file_get_contents($this->jsonFile), true);
+    }
+
+    private function saveJsonData($data)
+    {
+        $data['tanggal_diperbarui'] = date('d-m-Y H:i:s') . ' WIB';
+        $data['versi_diperbarui'] = date('0.n.d');
+        file_put_contents($this->jsonFile, json_encode($data, JSON_PRETTY_PRINT));
+    }
+
     public function getAll()
     {
-        $versiModel = new VersiModel();
-        $data = $versiModel->orderBy('tanggal_rilis', 'DESC')->findAll();
+        $json = $this->getJsonData();
+        $data = isset($json['data']) ? $json['data'] : [];
         
-        // Ensure JSON fields are parsed correctly for the frontend
-        foreach ($data as &$row) {
-            $row['improvements'] = json_decode($row['improvements'] ?? '[]', true);
-            $row['fixes'] = json_decode($row['fixes'] ?? '[]', true);
-            $row['patches'] = json_decode($row['patches'] ?? '[]', true);
-        }
+        usort($data, function($a, $b) {
+            return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']);
+        });
         
+        // Return langsung ke frontend tanpa json_decode karena sudah berupa array
         return $this->response->setJSON($data);
     }
 
     public function store()
     {
-        $versiModel = new VersiModel();
+        $json = $this->getJsonData();
+        $dataArray = isset($json['data']) ? $json['data'] : [];
         
-        $data = [
+        // Find max ID
+        $maxId = 0;
+        foreach ($dataArray as $item) {
+            if ($item['id'] > $maxId) {
+                $maxId = $item['id'];
+            }
+        }
+        
+        $newData = [
+            'id' => $maxId + 1,
             'versi' => $this->request->getPost('versi'),
             'tanggal_rilis' => $this->request->getPost('tanggal_rilis'),
             'judul' => $this->request->getPost('judul'),
             'deskripsi' => $this->request->getPost('deskripsi'),
-            'improvements' => json_encode($this->request->getPost('improvements') ?? []),
-            'fixes' => json_encode($this->request->getPost('fixes') ?? []),
-            'patches' => json_encode($this->request->getPost('patches') ?? [])
+            'improvements' => $this->request->getPost('improvements') ?? [],
+            'fixes' => $this->request->getPost('fixes') ?? [],
+            'patches' => $this->request->getPost('patches') ?? [],
+            'created_at' => date('Y-m-d H:i:s')
         ];
         
-        if ($versiModel->insert($data)) {
-            return $this->response->setJSON(['status' => 'success', 'message' => 'Versi berhasil ditambahkan']);
-        }
+        $dataArray[] = $newData;
+        $json['data'] = $dataArray;
         
-        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menambahkan versi']);
+        $this->saveJsonData($json);
+        
+        return $this->response->setJSON(['status' => 'success', 'message' => 'Versi berhasil ditambahkan']);
     }
 
     public function update()
     {
-        $versiModel = new VersiModel();
-        $id = $this->request->getPost('id');
+        $json = $this->getJsonData();
+        $dataArray = isset($json['data']) ? $json['data'] : [];
+        $id = (int) $this->request->getPost('id');
         
-        $data = [
-            'versi' => $this->request->getPost('versi'),
-            'tanggal_rilis' => $this->request->getPost('tanggal_rilis'),
-            'judul' => $this->request->getPost('judul'),
-            'deskripsi' => $this->request->getPost('deskripsi'),
-            'improvements' => json_encode($this->request->getPost('improvements') ?? []),
-            'fixes' => json_encode($this->request->getPost('fixes') ?? []),
-            'patches' => json_encode($this->request->getPost('patches') ?? [])
-        ];
+        $updated = false;
+        foreach ($dataArray as &$item) {
+            if ($item['id'] === $id) {
+                $item['versi'] = $this->request->getPost('versi');
+                $item['tanggal_rilis'] = $this->request->getPost('tanggal_rilis');
+                $item['judul'] = $this->request->getPost('judul');
+                $item['deskripsi'] = $this->request->getPost('deskripsi');
+                $item['improvements'] = $this->request->getPost('improvements') ?? [];
+                $item['fixes'] = $this->request->getPost('fixes') ?? [];
+                $item['patches'] = $this->request->getPost('patches') ?? [];
+                $updated = true;
+                break;
+            }
+        }
         
-        if ($versiModel->update($id, $data)) {
+        if ($updated) {
+            $json['data'] = $dataArray;
+            $this->saveJsonData($json);
             return $this->response->setJSON(['status' => 'success', 'message' => 'Versi berhasil diperbarui']);
         }
         
-        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal memperbarui versi']);
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Data versi tidak ditemukan']);
     }
 
     public function delete()
     {
-        $versiModel = new VersiModel();
-        $id = $this->request->getPost('id');
+        $json = $this->getJsonData();
+        $dataArray = isset($json['data']) ? $json['data'] : [];
+        $id = (int) $this->request->getPost('id');
         
-        if ($versiModel->delete($id)) {
+        $initialCount = count($dataArray);
+        $dataArray = array_filter($dataArray, function($item) use ($id) {
+            return $item['id'] !== $id;
+        });
+        
+        // Re-index array after filter
+        $dataArray = array_values($dataArray);
+        
+        if (count($dataArray) < $initialCount) {
+            $json['data'] = $dataArray;
+            $this->saveJsonData($json);
             return $this->response->setJSON(['status' => 'success', 'message' => 'Versi berhasil dihapus']);
         }
         
-        return $this->response->setJSON(['status' => 'error', 'message' => 'Gagal menghapus versi']);
+        return $this->response->setJSON(['status' => 'error', 'message' => 'Data versi tidak ditemukan']);
     }
 }

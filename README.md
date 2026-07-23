@@ -1,8 +1,8 @@
 # Mesin Pencari Visual Gracia
 
-**Mesin Pencari Gracia** (gkr.my.id) adalah ekosistem pencarian cerdas mutakhir yang direkayasa memadukan dua arsitektur raksasa: **Models, Views, Controllers (MVC)** milik **CodeIgniter 4 (PHP)** untuk antarmuka web, dan **Python Microservice (FastAPI + PyTorch + FAISS)** sebagai inti kecerdasan buatan (*Artificial Intelligence*).
+**Mesin Pencari Gracia** (gkr.my.id) adalah pencarian cerdas yang direkayasa memadukan dua arsitektur **CodeIgniter 4 (PHP)** dan **Python Microservice (FastAPI + PyTorch + FAISS)** sebagai inti kecerdasan buatan (*Artificial Intelligence*).
 
-Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasikan tautan situs serta mendeduksi kemiripan galeri visual dengan spesialisasi **Katalog Furniture**. Aplikasi dilengkapi dengan *bot crawler* komprehensif serta **Pelatih AI** yang memindai ribuan gambar lokal, merender hasilnya dengan sangat cepat dan intuitif berkat pendekatan *Continuous HTTP Streaming* dan **RESTful API**.
+Sistem Hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasikan tautan situs serta mendeduksi kemiripan Galeri Visual dengan spesialisasi **Foto Furniture**. Aplikasi dilengkapi dengan *Bot Crawler* serta **Pelatih AI** untuk memindai ribuan gambar lokal, merender hasilnya dengan cepat dan intuitif dengan pendekatan *Continuous HTTP Streaming* dan **RESTful API**.
 
 ## 🚀 Fitur Unggulan
 - **Agregasi Identitas Visual Multi-Sudut (AI Harmonization):**
@@ -22,6 +22,10 @@ Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasika
 
 - **Modul Audit Log & Manajemen Akses:**
   Sistem perlindungan ganda terintegrasi. Menampilkan jejak aktivitas pengguna (Log User) dan pencarian (Log Cari) yang dilengkapi detektor IP asli (menembus *Reverse Proxy*) dan *Progress Bar Auto-Reload*. Sistem manajemen karyawan juga diperkuat antarmuka modal tervalidasi *dropdown*.
+- **Zero-DB Hit Changelog & Auto-Versioning:** 
+  Sistem riwayat rilis (Changelog) murni beroperasi di atas *flat-file* statis JSON (`/public/versi.json`) untuk mereduksi beban *query* MySQL secara mutlak. Versi rilis otomatis dicetak oleh sistem menggunakan skema kalender dinamis (`0.{Bulan}.{Tanggal}`).
+- **Auto-Detect Environment (Kunci Pengaman Mode):** 
+  Sistem perisai di `public/index.php`. Sistem akan melunak dan berubah menjadi mode *Development* ketika diakses melalui jaringan LAN/ZeroTier, namun akan mengunci mati dirinya di mode *Production* bila mendeteksi ketukan lalu lintas dari IP Publik maupun domain internet.
 
 ## 📁 Struktur Inti Arsitektur MVC & Microservice
 - **`app/Controllers/`**: Menangani seluruh routing HTTP UI, dan memfasilitasi titik panggil (*endpoint*) RESTful API. `Admin.php` bertindak sebagai sentral untuk seluruh kendali administratif.
@@ -31,7 +35,8 @@ Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasika
 - **`python_services/`**: Markas besar kecerdasan buatan. Berisi model infrastruktur *PyTorch* dan *FastAPI* (`main_new.py`, `build_index_new.py`).
 
 ## 🛠️ Stack Teknologi
-*   **Web Backend:** PHP 8.2+ dengan framework CodeIgniter 4 (termasuk deteksi Proxy `X-Forwarded-For`).
+*   **Infrastruktur Server:** Armbian OS (Debian bookworm) bertumpu pada perangkat keras Amlogic S905x (Aml.S905x).
+*   **Web Backend:** PHP 8.2+ dengan framework CodeIgniter 4.
 *   **AI Backend:** Python 3, FastAPI, PyTorch (MobileNetV3-Small), FAISS (Facebook AI Similarity Search).
 *   **Web Frontend:** Vue.js 3 (CDN), tata ruang utilitas Bootstrap 5.3, interaksi *Continuous Streaming* via ReadableStream API.
 *   **Database:** MySQL/MariaDB.
@@ -46,8 +51,10 @@ Sistem hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasika
 *   *Layanan Mikro Internal (FastAPI)* - Beroperasi eksklusif di `http://127.0.0.1:5000`. Membypass semua otorisasi Linux untuk memanipulasi direktori `/mnt/sdcard`. (Rincian teknis lengkap di `Tautan.md`).
 
 ## 🚫 Konvensi Berkas yang Diabaikan (Gitignore)
-Agar keamanan dan integritas proyek terjaga saat memproses rilis melalui repositori:
+Agar keamanan dan kerahasiaan dapur proyek terjaga saat publikasi ke repositori:
 *   `/vendor` - Diunduh otomatis melalui `composer install`.
 *   `/writable` - Bersifat dinamis dan unik per *server* (log, cache, sesi).
 *   `/python_services/__pycache__` - File binari temporer Python.
-*   `.env` - Menyimpan rahasia sistem dan profil lingkungan yang tidak boleh dibocorkan.
+*   `.env` - Menyimpan rahasia sistem dan profil lingkungan.
+*   `*.sql`, `*.psd` - Berkas cadangan mentah dan *dump* basis data berukuran gajah.
+*   `*.md`, `*.txt` - Dokumen pedoman arsitektur rahasia internal tim (kecuali `README.md` muka ini) sengaja dikecualikan (*ignored*) dari panggung repositori publik.

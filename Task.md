@@ -34,6 +34,13 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Integrasi Navigasi & Akses Super Admin:** Menyisipkan berbagai menu admin secara dinamis (Log, Karyawan, AI Trainer) ke *Sidebar*, dan merombak *Dropdown* profil agar menampilkan tautan Rahasia 'Admin' secara eksklusif bagi pemegang kunci *Super Admin* (`id_user == 1`).
 - `[x]` **Refaktor Rute AI:** Memindahkan rute mesin pelatih AI dari `/crawl/ai` menjadi `/admin/ai` untuk keseragaman arsitektur di ruang administratif.
 
+**Tahap VI: Optimalisasi Lingkungan & Penyimpanan Meta (Zero-DB)**
+- `[x]` **Migrasi Riwayat Rilis (Changelog):** Membongkar tabel `gkr_versi` dari MySQL dan memigrasikannya secara utuh ke sistem Flat-file JSON (`/public/versi.json`) demi mereduksi beban *database hit*.
+- `[x]` **Pemusnahan `VersiModel` & Relikui Kode:** Menghapus `VersiModel.php` selamanya dan membersihkan sisa pemanggilannya di seluruh *Controller* (`Beranda`, `Search`, `Auth`, `AdminController`).
+- `[x]` **Auto-Versioning Berbasis Kalender:** Merancang algoritma pintar yang otomatis mencetak versi dinamis (`0.{Bulan}.{Tanggal}`) ke dalam JSON setiap kali riwayat pembaruan disimpan oleh Administrator.
+- `[x]` **Auto-Detect Environment (Keamanan Dinamis):** Merombak `public/index.php` untuk menangkap variabel `HTTP_HOST`. Akses via IP Lokal/ZeroTier dialihkan ke *Development*, sedangkan *bot* IP Publik dan Akses Domain terlempar/terkunci pada *Production*.
+- `[x]` **Pembersihan Direktori Kosong:** Memusnahkan folder yatim piatu seperti `tests` dan `public/3d` untuk menjaga ruang kerja tetap efisien dan higienis.
+
 ## 🎯 Prioritas Tinggi (High Priority)
 - `[ ]` **Keamanan Server (Pendesak):**
   - Pindahkan atau hapus file *dump* database yatim (`gkr_myid.sql`, `cari.sql`) dari *root* direktori web `/var/www/gkr_myid` ke direktori *backup* yang aman untuk mencegah risiko akses publik.
@@ -41,8 +48,6 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
   - Pastikan semua *Controller* API merespons dengan JSON standar yang memuat status, pesan, dan data.
 - `[ ]` **Standardisasi Template Layout:**
   - Pastikan semua *View* mengimplementasikan kerangka dari `app/Views/layout`. Tidak boleh ada halaman yang menggunakan struktur HTML mandiri di luar *layout* utama.
-- `[ ]` **Konfigurasi Environment (Dev/Prod):**
-  - Buat pengaturan base URL yang dinamis pada file `.env` CodeIgniter 4 agar otomatis menyesuaikan dengan environment.
 - `[ ]` **Konsistensi Bahasa Indonesia:**
   - Lakukan *code review* menyeluruh pada Models, Views, dan Controllers untuk memastikan semua variabel, metode, dan komentar murni menggunakan Bahasa Indonesia.
 
