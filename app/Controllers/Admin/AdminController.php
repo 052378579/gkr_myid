@@ -6,20 +6,6 @@ use App\Controllers\BaseController;
 
 class AdminController extends BaseController
 {
-    private function getAppVersion()
-    {
-        $jsonPath = FCPATH . 'versi.json';
-        if (file_exists($jsonPath)) {
-            $json = json_decode(file_get_contents($jsonPath), true);
-            $versiData = $json['data'] ?? [];
-            if (!empty($versiData)) {
-                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
-                return 'v' . $versiData[0]['versi'];
-            }
-        }
-        return 'v1.0.0';
-    }
-
     public function index()
     {
         return view('admin/admin', ['version' => $this->getAppVersion()]);
@@ -35,24 +21,34 @@ class AdminController extends BaseController
         $logUserModel = new \App\Models\LogUserModel();
         $logCariModel = new \App\Models\LogCariModel();
         
-        $db = \Config\Database::connect();
-        
-        $logUser = $db->table('gkr_loguser')
+        $logUser = $logUserModel
             ->select('gkr_loguser.*, gkr_users.nama_lengkap')
             ->join('gkr_users', 'gkr_users.id_user = gkr_loguser.id_user', 'left')
             ->orderBy('gkr_loguser.waktu', 'DESC')
-            ->get()->getResultArray();
+            ->paginate(10, 'logUser');
             
-        $logCari = $db->table('gkr_logcari')
+        $logCari = $logCariModel
             ->select('gkr_logcari.*, gkr_users.nama_lengkap')
             ->join('gkr_users', 'gkr_users.id_user = gkr_logcari.id_user', 'left')
             ->orderBy('gkr_logcari.waktu', 'DESC')
-            ->get()->getResultArray();
+            ->paginate(10, 'logCari');
+
+        $serverIP = $_SERVER['SERVER_ADDR'] ?? '10.147.17.40';
+        if (in_array($serverIP, ['127.0.0.1', '::1', 'localhost'])) {
+            $serverIP = '10.147.17.40';
+        }
 
         $data = [
             'version' => $this->getAppVersion(),
+            'serverIP' => $serverIP,
             'logUser' => $logUser,
-            'logCari' => $logCari
+            'pagerUser' => $logUserModel->pager,
+            'pagerUserCount' => $logUserModel->pager->getPageCount('logUser'),
+            'pagerUserCurrent' => $logUserModel->pager->getCurrentPage('logUser'),
+            'logCari' => $logCari,
+            'pagerCari' => $logCariModel->pager,
+            'pagerCariCount' => $logCariModel->pager->getPageCount('logCari'),
+            'pagerCariCurrent' => $logCariModel->pager->getCurrentPage('logCari')
         ];
         
         return view('admin/log', $data);

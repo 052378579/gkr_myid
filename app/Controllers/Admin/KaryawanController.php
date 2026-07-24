@@ -17,7 +17,8 @@ class KaryawanController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Pengaturan Karyawan (Pengguna)'
+            'title' => 'Pengaturan Karyawan (Pengguna)',
+            'version' => $this->getAppVersion()
         ];
         return view('admin/karyawan', $data);
     }
@@ -34,6 +35,7 @@ class KaryawanController extends BaseController
             'nama_lengkap' => $this->request->getPost('nama_lengkap'),
             'no_hp'        => $this->request->getPost('no_hp'),
             'divisi'       => $this->request->getPost('divisi'),
+            'status'       => $this->request->getPost('status') ?? 'aktif',
         ];
 
         if ($this->userModel->save($data)) {
@@ -51,7 +53,11 @@ class KaryawanController extends BaseController
             'nama_lengkap' => $this->request->getPost('nama_lengkap'),
             'no_hp'        => $this->request->getPost('no_hp'),
             'divisi'       => $this->request->getPost('divisi'),
+            'status'       => $this->request->getPost('status'),
         ];
+
+        $rule_no_hp = 'required|numeric|is_unique[gkr_users.no_hp,id_user,' . $id . ']';
+        $this->userModel->setValidationRule('no_hp', $rule_no_hp);
 
         if ($this->userModel->update($id, $data)) {
             return $this->response->setJSON(['status' => 'success', 'message' => 'Data karyawan berhasil diperbarui.']);

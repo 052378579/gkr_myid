@@ -21,7 +21,8 @@ createApp({
             id_user: null,
             nama_lengkap: '',
             no_hp: '',
-            divisi: ''
+            divisi: '',
+            status: 'aktif'
         });
 
         let modalInstance = null;
@@ -43,7 +44,8 @@ createApp({
                 id_user: null,
                 nama_lengkap: '',
                 no_hp: '',
-                divisi: ''
+                divisi: '',
+                status: 'aktif'
             };
         };
 
@@ -70,6 +72,7 @@ createApp({
             formData.append('nama_lengkap', form.value.nama_lengkap);
             formData.append('no_hp', form.value.no_hp);
             formData.append('divisi', form.value.divisi);
+            formData.append('status', form.value.status);
 
             try {
                 const response = await fetch(url, {

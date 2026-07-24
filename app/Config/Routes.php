@@ -8,6 +8,8 @@ $routes->get('/force-migrate', 'MigrateController::index');
 $routes->get('/login', 'Auth::index');
 $routes->post('/login/process', 'Auth::process');
 $routes->get('/logout', 'Auth::logout');
+$routes->get('/daftar', 'Auth::daftar');
+$routes->post('/daftar/process', 'Auth::processDaftar');
 
 $routes->get('/profile', 'Profile::index');
 $routes->post('/profile/update', 'Profile::update');

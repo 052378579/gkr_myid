@@ -91,6 +91,66 @@ class Auth extends BaseController
         }
     }
 
+    public function daftar()
+    {
+        if (session()->get('isLoggedIn')) {
+            return redirect()->to('/');
+        }
+        $jsonPath = FCPATH . 'versi.json';
+        $version = 'v1.0.0';
+        
+        if (file_exists($jsonPath)) {
+            $json = json_decode(file_get_contents($jsonPath), true);
+            $versiData = isset($json['data']) ? $json['data'] : [];
+            if (!empty($versiData)) {
+                usort($versiData, function($a, $b) {
+                    return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']);
+                });
+                $version = 'v' . $versiData[0]['versi'];
+            }
+        }
+
+        $data = [
+            'title' => 'Pendaftaran Karyawan Baru',
+            'version' => $version
+        ];
+        
+        return view('daftar', $data);
+    }
+
+    public function processDaftar()
+    {
+        if (!$this->request->is('post')) {
+            return redirect()->to('/daftar');
+        }
+
+        $nama_lengkap = esc($this->request->getPost('nama_lengkap'));
+        $no_hp = esc($this->request->getPost('no_hp'));
+        $divisi = esc($this->request->getPost('divisi'));
+
+        if (empty($nama_lengkap) || empty($no_hp) || empty($divisi)) {
+            return redirect()->to('/daftar')->with('error', 'Semua kolom wajib diisi.');
+        }
+
+        $userModel = new \App\Models\UserModel();
+
+        if ($userModel->where('no_hp', $no_hp)->first()) {
+            return redirect()->to('/daftar')->with('error', 'Nomor HP sudah terdaftar. Silakan login.');
+        }
+
+        $userModel->insert([
+            'nama_lengkap' => $nama_lengkap,
+            'no_hp' => $no_hp,
+            'divisi' => $divisi,
+            'status' => 'pending',
+            'foto_profil' => 'default.png',
+            'last_ip' => $this->request->getIPAddress(),
+            'user_agent' => $this->request->getUserAgent()->getAgentString()
+        ]);
+
+        return redirect()->to('/login')->with('success', 'Pendaftaran berhasil! Silakan tunggu persetujuan Admin.');
+    }
+
     public function logout()
     {
         // Tangkap data pengguna sebelum session dihancurkan

@@ -31,6 +31,7 @@
                             <th class="ps-4">Nama Lengkap</th>
                             <th>No. HP</th>
                             <th>Divisi</th>
+                            <th>Status</th>
                             <th>Akses Terakhir</th>
                             <th class="pe-4 text-end">Aksi</th>
                         </tr>
@@ -40,6 +41,11 @@
                             <td class="ps-4 fw-bold">{{ item.nama_lengkap }}</td>
                             <td>{{ item.no_hp }}</td>
                             <td><span class="badge bg-secondary rounded-pill">{{ item.divisi }}</span></td>
+                            <td>
+                                <span :class="['badge rounded-pill', {'bg-success': item.status === 'aktif', 'bg-warning text-dark': item.status === 'pending', 'bg-danger': item.status === 'suspend'}]">
+                                    {{ item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : '' }}
+                                </span>
+                            </td>
                             <td>
                                 <small v-if="item.last_ip" class="text-muted d-block"><i class="fas fa-network-wired me-1"></i>{{ item.last_ip }}</small>
                                 <span v-else class="text-muted small">-</span>
@@ -96,6 +102,14 @@
                                 <option value="Produksi 2">Produksi 2</option>
                                 <option value="Produksi 4">Produksi 4</option>
                                 <option value="RND">RND</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                            <select class="form-select" v-model="form.status" required>
+                                <option value="pending">Pending</option>
+                                <option value="aktif">Aktif</option>
+                                <option value="suspend">Suspend</option>
                             </select>
                         </div>
                     </div>

@@ -18,25 +18,6 @@
     <link rel="stylesheet" href="<?= base_url('vendor/fontawesome/css/all.min.css') ?>">
 
     <link rel="stylesheet" href="<?= base_url('css/login.css') ?>">
-    <style>
-        .form-label {
-            text-align: left;
-            display: block;
-            font-weight: 600;
-            color: #4a4a4a;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .form-control, .form-select {
-            border-radius: 0.375rem;
-            padding: 0.6rem 0.75rem;
-            border: 1px solid #ced4da;
-        }
-        .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 0.25rem rgba(43, 51, 133, 0.25);
-            border-color: #2b3385;
-        }
-    </style>
 </head>
 <body class="text-center">
 
@@ -44,39 +25,38 @@
     <?= $this->include('components/toast') ?>
 
     <div id="rnd" class="w-100">
-        <main class="form-signin w-100 m-auto" style="max-width: 400px;">
+        <main class="form-signin w-100 m-auto">
             
-            <h1 class="h3 mb-3 fw-normal"><img src="<?= base_url('Gracia_logo.png') ?>" style="width:60%;"></h1>
-            <p class="text-muted mb-4">Silakan isi formulir untuk mendaftar</p>
+            <h1 class="h3 mb-3 fw-normal"><img src="<?= base_url('Gracia_logo.png') ?>" style="width:75%;"></h1>
+            <p class="text-muted mb-4">Pendaftaran Karyawan Baru</p>
 
             <form action="<?= base_url('daftar/process') ?>" method="POST">
                 <?= csrf_field() ?>
                 
-                <div class="mb-3 text-start">
-                    <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="<?= old('nama_lengkap') ?>" placeholder="" required autofocus>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-white"><i class="fas fa-user text-muted"></i></span>
+                    <input type="text" class="form-control" name="nama_lengkap" placeholder="Nama Lengkap" required autofocus>
                 </div>
                 
-                <div class="mb-3 text-start">
-                    <label class="form-label">Nomor HP <span class="text-danger">*</span></label>
-                    <input type="tel" class="form-control" id="no_hp" name="no_hp" value="<?= old('no_hp') ?>" placeholder="08xxxxxxxxxx" required>
-                </div>
-                
-                <div class="mb-4 text-start">
-                    <label class="form-label">Divisi <span class="text-danger">*</span></label>
-                    <select class="form-select" id="divisi" name="divisi" required>
-                        <option value="" disabled <?= old('divisi') == '' ? 'selected' : '' ?>></option>
-                        <option value="Marketing" <?= old('divisi') == 'Marketing' ? 'selected' : '' ?>>Marketing</option>
-                        <option value="Produksi 1" <?= old('divisi') == 'Produksi 1' ? 'selected' : '' ?>>Produksi 1</option>
-                        <option value="Produksi 2" <?= old('divisi') == 'Produksi 2' ? 'selected' : '' ?>>Produksi 2</option>
-                        <option value="Produksi 4" <?= old('divisi') == 'Produksi 4' ? 'selected' : '' ?>>Produksi 4</option>
-                        <option value="RND" <?= old('divisi') == 'RND' ? 'selected' : '' ?>>RND</option>
-                    </select>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-white"><i class="fas fa-phone text-muted"></i></span>
+                    <input type="tel" class="form-control" name="no_hp" placeholder="08xxxxxxxxxx (Nomor HP)" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                 </div>
 
+                <div class="input-group mb-4">
+                    <span class="input-group-text bg-white"><i class="fas fa-building text-muted"></i></span>
+                    <select class="form-select" name="divisi" required style="color: #6c757d;">
+                        <option value="" disabled selected>Pilih Divisi...</option>
+                        <option value="Marketing" style="color: #212529;">Marketing</option>
+                        <option value="Produksi 1" style="color: #212529;">Produksi 1</option>
+                        <option value="Produksi 2" style="color: #212529;">Produksi 2</option>
+                        <option value="Produksi 4" style="color: #212529;">Produksi 4</option>
+                    </select>
+                </div>
+                
                 <button class="btn btn-gracia w-100 py-2 fw-bold mb-3" type="submit">Daftar</button>
                 
-                <a href="<?= base_url('login') ?>" class="text-decoration-none small" style="color: #2b3385;">Ke <b>Halaman Login</b></a>
+                <a href="<?= base_url('login') ?>" class="text-decoration-none small text-muted">Sudah punya akun? Masuk di sini</a>
             </form>
         </main>
     </div>
@@ -91,5 +71,10 @@
     </footer>
 
     <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+    <script>
+        document.querySelector('select[name="divisi"]').addEventListener('change', function() {
+            this.style.color = '#212529';
+        });
+    </script>
 </body>
 </html>

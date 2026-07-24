@@ -49,7 +49,7 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-nowrap"><?= date('d/m/Y H:i:s', strtotime($log['waktu'])) ?></td>
-                                            <td><?= esc($log['alamat_ip'] === '::1' ? '127.0.0.1' : $log['alamat_ip']) ?></td>
+                                            <td><?= esc(in_array($log['alamat_ip'], ['127.0.0.1', '::1', 'localhost']) ? ($serverIP ?? '10.147.17.40') : $log['alamat_ip']) ?></td>
                                             <td class="pe-4" title="<?= esc($log['agen_pengguna']) ?>">
                                                 <?php 
                                                     $isMobile = preg_match('/Mobile|Android|BlackBerry|iPhone|Windows Phone/i', $log['agen_pengguna']);
@@ -66,6 +66,15 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center py-3">
+                    <?php if (isset($pagerUserCount) && $pagerUserCount > 1): ?>
+                        <span class="text-muted small">Halaman <?= $pagerUserCurrent ?> dari <?= $pagerUserCount ?></span>
+                        <div class="btn-group">
+                            <a href="<?= $pagerUserCurrent > 1 ? $pagerUser->getPageURI($pagerUserCurrent - 1, 'logUser') : '#' ?>" class="btn btn-sm btn-outline-secondary <?= $pagerUserCurrent > 1 ? '' : 'disabled' ?>">Sebelumnya</a>
+                            <a href="<?= $pagerUserCurrent < $pagerUserCount ? $pagerUser->getPageURI($pagerUserCurrent + 1, 'logUser') : '#' ?>" class="btn btn-sm btn-outline-secondary <?= $pagerUserCurrent < $pagerUserCount ? '' : 'disabled' ?>">Berikutnya</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -106,7 +115,7 @@
                                             </td>
                                             <td><span class="badge bg-light text-dark rounded-pill border"><?= esc($log['jumlah_hasil']) ?></span></td>
                                             <td class="text-nowrap"><?= date('d/m/Y H:i:s', strtotime($log['waktu'])) ?></td>
-                                            <td class="pe-4"><?= esc($log['alamat_ip'] === '::1' ? '127.0.0.1' : $log['alamat_ip']) ?></td>
+                                            <td class="pe-4"><?= esc(in_array($log['alamat_ip'], ['127.0.0.1', '::1', 'localhost']) ? ($serverIP ?? '10.147.17.40') : $log['alamat_ip']) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
@@ -117,6 +126,15 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center py-3">
+                    <?php if (isset($pagerCariCount) && $pagerCariCount > 1): ?>
+                        <span class="text-muted small">Halaman <?= $pagerCariCurrent ?> dari <?= $pagerCariCount ?></span>
+                        <div class="btn-group">
+                            <a href="<?= $pagerCariCurrent > 1 ? $pagerCari->getPageURI($pagerCariCurrent - 1, 'logCari') : '#' ?>" class="btn btn-sm btn-outline-secondary <?= $pagerCariCurrent > 1 ? '' : 'disabled' ?>">Sebelumnya</a>
+                            <a href="<?= $pagerCariCurrent < $pagerCariCount ? $pagerCari->getPageURI($pagerCariCurrent + 1, 'logCari') : '#' ?>" class="btn btn-sm btn-outline-secondary <?= $pagerCariCurrent < $pagerCariCount ? '' : 'disabled' ?>">Berikutnya</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
