@@ -1,5 +1,7 @@
 ===============
 DEV
+192.168.1.4
+10.147.17.40
 ---------------
 cd /var/www/gkr_myid
 git add .
@@ -9,6 +11,8 @@ git push origin dev
 
 ===============
 PROD
+192.168.1.17
+10.147.17.60
 ---------------
 cd /var/www/gkr_myid
 
@@ -26,3 +30,14 @@ git clean -fd
 chown -R www-data:www-data /var/www/gkr_myid
 find /var/www/gkr_myid -type d -exec chmod 755 {} \;
 find /var/www/gkr_myid -type f -exec chmod 644 {} \;
+
+
+=====
+PRD.md, Memory.md, Skills.md, StyleGuide.md, Task.md
+
+README.md, Tautan.md, struktur_folder.md, git.txt
+
+=====
+istilah baru
+-----
+Wireframe Preview

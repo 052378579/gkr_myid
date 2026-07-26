@@ -1,60 +1,64 @@
-# Mesin Pencari Visual Gracia
+# Mesin Pencari Visual Gracia (gkr.my.id)
 
-**Mesin Pencari Gracia** (gkr.my.id) adalah pencarian cerdas yang direkayasa memadukan dua arsitektur **CodeIgniter 4 (PHP)** dan **Python Microservice (FastAPI + PyTorch + FAISS)** sebagai inti kecerdasan buatan (*Artificial Intelligence*).
+**Mesin Pencari Gracia** adalah platform pencarian cerdas terpadu yang memadukan arsitektur **CodeIgniter 4 (PHP 8.2+)** dan **Layanan Mikro Python (FastAPI + PyTorch MobileNetV3 + FAISS)** sebagai inti pemrosesan Vektor Kecerdasan Buatan (*Artificial Intelligence*).
 
-Sistem Hibrida ini difokuskan untuk mengindeks, menelusuri, dan merepresentasikan tautan situs serta mendeduksi kemiripan Galeri Visual dengan spesialisasi **Foto Furniture**. Aplikasi dilengkapi dengan *Bot Crawler* serta **Pelatih AI** untuk memindai ribuan gambar lokal, merender hasilnya dengan cepat dan intuitif dengan pendekatan *Continuous HTTP Streaming* dan **RESTful API**.
+Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomendasikan katalog furniture serta swatch bahan. Sistem ini mengotomatiskan pengolahan korpus foto dari direktori lokal (`/var/www/FOTO` -> `https://foto.gkr.my.id`) menjadi data vektor 576-dimensi untuk pencarian gambar visual (*Image-to-Image Search*), disajikan dengan antarmuka yang reaktif, cepat, intuitif, dan responsif.
 
-## 🚀 Fitur Unggulan
-- **Agregasi Identitas Visual Multi-Sudut (AI Harmonization):**
-  Sistem kebal terhadap variasi nama file gambar dari berbagai sudut kamera (seperti varian `-B`, `-C`, `-D`, `-E`, `_depan`, `_samping`, dan `_perspektif`). PHP dan Python berbagi Otak *Regex* yang harmonis untuk memotong kode teknis tersebut, menyatukan seluruh sudut menjadi satu identitas produk tunggal secara otomatis.
-- **Mesin Pencari Visual (Image-to-Image Search):** 
-  Kemampuan mengunggah gambar kursi atau tekstur kain (*swatches*) untuk dicocokkan secara otomatis dengan ribuan katalog perusahaan menggunakan ekstrasi dimensi vektor 576 (*MobileNetV3*) dan mesin kedekatan algoritme (*Cosine Similarity* FAISS).
-- **Dasbor Pelatih AI & Crawler Real-Time:** 
-  Mesin sinkronisasi cerdas yang beroperasi secara asinkron. Mampu memindai susunan direktori raksasa lokal (termasuk folder katalog `/WEB` terbaru) dan memproses *Machine Learning*, dengan progres penelusuran (log terminal hitam) yang dialirkan seketika ke penjelajah web melalui antarmuka *Fetch API ReadableStream* tanpa risiko *Timeout*.
-- **Desain UI/UX Modern & Reaktif:** 
-  Tampilan pencarian bersih bergaya minimalis. Hasil gambar disuguhkan melalui struktur *Masonry Grid* dinamis dan galeri "Kecocokan visual". Elemen interaktif pada dasbor dipoles menggunakan pendekatan *Glassmorphism* dan komponen **Native Modal Bootstrap 5.3** terintegrasi Vue (Bukan SweetAlert statis) untuk entri data formulir.
-- **Arsitektur RESTful API & Layanan Mikro Python:** 
-  Seluruh manipulasi data (CRUD) dioperasikan penuh melalui metode RESTful API yang konsisten antara *frontend* (Vue.js) dan *backend* (CodeIgniter). Sementara untuk operasi komputasi berat, PHP mendelegasikan tugas ke layanan mikro rahasia **FastAPI (Python)** di *localhost:5000*.
-- **Sistem Keamanan & Otorisasi RBAC:** 
-  Sistem diproteksi dengan otentikasi login serta filter keamanan presisi tinggi (*SuperAdminFilter*) di mana rute-rute sakral seperti `/admin/*` hanya dapat diterobos oleh sesi administrator tingkat puncak (`id_user = 1`).
-- **Mekanisme Cache Busting & Dropdown Bertingkat:** 
-  Aplikasi ini menggunakan teknik *Cache Busting* otomatis (`?v=time()`) untuk seluruh aset skrip kritikal, dan Dropdown Kaskade pintar untuk pengisian basis data.
+---
 
-- **Modul Audit Log & Manajemen Akses:**
-  Sistem perlindungan ganda terintegrasi. Menampilkan jejak aktivitas pengguna (Log User) dan pencarian (Log Cari) yang dilengkapi detektor IP asli (menembus *Reverse Proxy*) dan *Progress Bar Auto-Reload*. Sistem manajemen karyawan juga diperkuat antarmuka modal tervalidasi *dropdown*.
-- **Zero-DB Hit Changelog & Auto-Versioning:** 
-  Sistem riwayat rilis (Changelog) murni beroperasi di atas *flat-file* statis JSON (`/public/versi.json`) untuk mereduksi beban *query* MySQL secara mutlak. Versi rilis otomatis dicetak oleh sistem menggunakan skema kalender dinamis (`0.{Bulan}.{Tanggal}`).
-- **Auto-Detect Environment (Kunci Pengaman Mode):** 
-  Sistem perisai di `public/index.php`. Sistem akan melunak dan berubah menjadi mode *Development* ketika diakses melalui jaringan LAN/ZeroTier, namun akan mengunci mati dirinya di mode *Production* bila mendeteksi ketukan lalu lintas dari IP Publik maupun domain internet.
+## 🚀 Fitur Unggulan Sistem
 
-## 📁 Struktur Inti Arsitektur MVC & Microservice
-- **`app/Controllers/`**: Menangani seluruh routing HTTP UI, dan memfasilitasi titik panggil (*endpoint*) RESTful API. `Admin.php` bertindak sebagai sentral untuk seluruh kendali administratif.
-- **`app/Models/`**: Berinteraksi dengan pangkalan data MySQL/MariaDB menggunakan Query Builder CI4 (dilengkapi manajemen *Soft Delete* dan Tabel Audit).
-- **`app/Views/`**: Menampung komponen visual (*frontend*). Khusus area admin, seluruhnya wajib mewarisi kerangka utama di `layout/admin_layout.php`.
-- **`app/Filters/`**: Tempat bernaungnya perisai lalu lintas web (`AuthFilter.php` & `SuperAdminFilter.php`).
-- **`python_services/`**: Markas besar kecerdasan buatan. Berisi model infrastruktur *PyTorch* dan *FastAPI* (`main_new.py`, `build_index_new.py`).
+* **Pencarian Visual AI (Image-to-Image Search):**
+  Mengunggah sampel foto produk/kain untuk mencocokkan kemiripan visual secara presisi menggunakan ekstraksi fitur PyTorch *MobileNetV3-Small* (576 dimensi) dan FAISS Vector Database (*Cosine Similarity* $\ge 0.68$, $k=15$).
+* **Klasifikasi Gambar Gabungan (Hybrid AI + Meta Keywords):**
+  Pencarian tingkat lanjut yang tidak hanya bertumpu pada kemiripan vektor visual murni (*Blackbox AI*), melainkan dipadukan dengan kontrol parameter klasifikasi tekstual (`keywords`) demi hasil penelusuran spesifik yang lebih akurat dan terarah.
+* **Zero-Footprint Storage (Auto-Cleanup):**
+  Gambar unggahan pengguna ditransfer via `multipart/form-data` ke layanan FastAPI dan **seketika dimusnahkan (`unlink()`)** dari storage web server begitu hasil didapatkan, menjaga penyimpanan server tetap bersih.
+* **Agregasi Identitas Visual Multi-Sudut (AI Harmonization):**
+  Sistem secara cerdas menyatukan berbagai variasi foto dari sudut berbeda (`_depan`, `-B`, `-C`, `-D`, `-E`, `samping`, `perspektif`) menjadi satu entitas produk tunggal yang bersih. Skrip Python (`build_index_new.py`) dan PHP (`CrawlerLib.php`) berbagi rumus *Regex* yang 100% harmonis.
+* **Dasbor Pelatih AI & Terminal Streaming HTTP (`/admin/ai`):**
+  Menyajikan dasbor operasi pelatih AI dengan tampilan konsol terminal peretas (*hacker style* `#1e1e1e`). Mengalirkan baris log komputasi Python secara *real-time* via *HTTP ReadableStream API* tanpa risiko *PHP Timeout*.
+* **Desain UI/UX Modern & Reaktif (Harmonisasi Modal):**
+  Antarmuka terpusat bergaya minimalis dengan dukungan **Dark Mode** native. Hasil pencarian visual disajikan dalam galeri ubin interaktif (*Masonry Grid*) bernuansa "Kecocokan visual". Antarmuka Admin memelopori standar Harmonisasi Modal 2-Kolom (Zonasi Edit Tekstual murni vs Zonasi Pratinjau Visual berskala 8:5) yang elegan dan mencegah kesalahan ketik (*typo*) berkat integrasi Dropdown Kaskade ketat.
+* **Arsitektur RESTful API Terstandarisasi:**
+  Seluruh *endpoint* API terisolasi di sub-direktori `app/Controllers/Api/` (termasuk `GraciaApi.php` dan `VersiApi.php`) dengan format balasan JSON baku: `{"status": "...", "pesan": "...", "data": [...]}`.
+* **Zero-DB Hit Changelog & Auto-Versioning:**
+  Riwayat rilis aplikasi disimpan murni pada *flat-file* statis `/public/versi.json` untuk meniadakan *query overhead* ke MySQL. Penomoran rilis dikelola otomatis menggunakan skema kalender dinamis (`0.{Bulan}.{Tanggal}`).
+* **Auto-Detect Environment (Kunci Pengaman Mode):**
+  Deteksi otomatis di `public/index.php`. Akses via LAN (`192.168.1.4`) atau ZeroTier (`10.147.17.40`) beralih ke mode *Development*, sementara akses dari IP Publik/Domain Publik mengunci ketat sistem ke mode *Production* untuk menyembunyikan *stack trace*.
+* **Sistem Otorisasi & Audit Log (RBAC):**
+  Diperkuat filter `SuperAdminFilter` yang mengunci akses ke seluruh turunan rute `/admin/*` khusus bagi sesi `id_user = 1`. Log Audit (Cari & User) mencatat IP asli pengunjung menembus *Reverse Proxy* dan dilengkapi *Auto-Reload 5 Menit*.
 
-## 🛠️ Stack Teknologi
-*   **Infrastruktur Server:** Armbian OS (Debian bookworm) bertumpu pada perangkat keras Amlogic S905x (Aml.S905x).
-*   **Web Backend:** PHP 8.2+ dengan framework CodeIgniter 4.
-*   **AI Backend:** Python 3, FastAPI, PyTorch (MobileNetV3-Small), FAISS (Facebook AI Similarity Search).
-*   **Web Frontend:** Vue.js 3 (CDN), tata ruang utilitas Bootstrap 5.3, interaksi *Continuous Streaming* via ReadableStream API.
-*   **Database:** MySQL/MariaDB.
-*   **Penyajian Aset Lokal:** Memetakan path logis sumber daya berat ke `https://foto.gkr.my.id`.
+---
 
-## 🔗 Rute Utama & Endpoint Ekosistem
-*   `/` - Halaman Muka Beranda.
-*   `/cari` - Penampil Hasil Pencarian (Terintegrasi Ikon Kamera AI).
-*   `/admin` - Dasbor Manajemen Data Situs, Gambar, Karyawan, dan Log.
-*   `/admin/crawl` - Monitor Eksekusi Mesin Penjelajah Tautan.
-*   `/admin/ai` - Terminal Dasbor Pelatih AI (Live Streaming).
-*   *Layanan Mikro Internal (FastAPI)* - Beroperasi eksklusif di `http://127.0.0.1:5000`. Membypass semua otorisasi Linux untuk memanipulasi direktori `/mnt/sdcard`. (Rincian teknis lengkap di `Tautan.md`).
+## 🛠️ Stack Teknologi & Topologi Infrastruktur
 
-## 🚫 Konvensi Berkas yang Diabaikan (Gitignore)
-Agar keamanan dan kerahasiaan dapur proyek terjaga saat publikasi ke repositori:
-*   `/vendor` - Diunduh otomatis melalui `composer install`.
-*   `/writable` - Bersifat dinamis dan unik per *server* (log, cache, sesi).
-*   `/python_services/__pycache__` - File binari temporer Python.
-*   `.env` - Menyimpan rahasia sistem dan profil lingkungan.
-*   `*.sql`, `*.psd` - Berkas cadangan mentah dan *dump* basis data berukuran gajah.
-*   `*.md`, `*.txt` - Dokumen pedoman arsitektur rahasia internal tim (kecuali `README.md` muka ini) sengaja dikecualikan (*ignored*) dari panggung repositori publik.
+* **Spesifikasi Server:** Armbian OS (Debian bookworm) Linux 6.12 pada peranti Amlogic S905x.
+* **Akses IP Server:** LAN `192.168.1.4` | VPN ZeroTier `10.147.17.40`.
+* **Web Backend:** CodeIgniter 4 (PHP 8.2+, MVC).
+* **AI Microservice:** Python 3, FastAPI, PyTorch, FAISS (`http://127.0.0.1:5000` via daemon `ai_scanner.service`).
+* **Web Frontend:** Vue.js 3 (CDN), Bootstrap 5.3 (Native Dark Mode), FontAwesome 6, ReadableStream API.
+* **Database:** MySQL / MariaDB.
+* **Katalog Foto Lokal:** Disajikan statis via `https://foto.gkr.my.id` dari direktori server `/var/www/FOTO`.
+
+---
+
+## 📁 Ikhtisar Arsitektur Direktori Utama
+
+* **`app/Controllers/`**: Mengelola alur kontrol antarmuka publik dan administratif (`Admin.php`, `AiCrawler.php`, `Search.php`).
+* **`app/Controllers/Api/`**: Sub-direktori steril layanan RESTful API murni (`GraciaApi.php`, `ImageSearchApi.php`, `VersiApi.php`, `CrawlerApi.php`).
+* **`app/Filters/`**: Perisai keamanan otentikasi (`AuthFilter.php` & `SuperAdminFilter.php`).
+* **`app/Libraries/`**: Library pendukung (`CrawlerLib.php` berotak Regex harmonis).
+* **`app/Models/`**: Representasi tabel SQL (`ImageModel.php`, `MaterialModel.php`, `SiteModel.php`, `LogCariModel.php`, `LogUserModel.php`).
+* **`app/Views/layout/`**: Kerangka utama UI terpusat (`main.php` & `admin_layout.php`). Seluruh view wajib mewarisi kerangka ini.
+* **`public/`**: Titik masuk web (`index.php`), aset statis, dan flat-file changelog (`versi.json`).
+* **`python_services/`**: Karantina kecerdasan buatan Python (`build_index_new.py` & `main_new.py`).
+
+---
+
+## 🔒 Konvensi Keamanan & Pengelolaan Berkas
+
+1. **Aturan Keamanan Database Backup:** File dump database (`.sql`) **dilarang keras** berada di direktori web (`/var/www/gkr_myid`). Semua berkas backup wajib dievakuasi ke direktori terisolasi (`/root/backups/`).
+2. **Kertas Kerja Internal vs Etalase Publik:**
+   * **Etalase Publik (Lacak Git):** `README.md`, `Tautan.md`, `struktur_folder.md`, `git.txt`.
+   * **Dokumen Internal (Gitignore):** `PRD.md`, `Memory.md`, `Skills.md`, `StyleGuide.md`, `Task.md`.

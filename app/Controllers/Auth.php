@@ -58,6 +58,15 @@ class Auth extends BaseController
         $user = $userModel->where('no_hp', $no_hp)->first();
 
         if ($user) {
+            // Cek Status Pengguna
+            if ($user['status'] === 'pending') {
+                return redirect()->to('/login')->with('error', 'Akun Anda masih dalam status Pending. Harap tunggu persetujuan Admin.');
+            }
+            if ($user['status'] === 'suspend') {
+                return redirect()->to('/login')->with('error', 'Akun Anda telah ditangguhkan. Silakan hubungi Administrator.');
+            }
+
+            // Izinkan login jika status 'aktif'
             // Set session data
             $sessionData = [
                 'isLoggedIn'   => true,

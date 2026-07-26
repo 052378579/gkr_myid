@@ -1,7 +1,7 @@
 /* Prevent scrolling on the body for a true split-screen feel */
 body {
     overflow: hidden;
-    background-color: #f4f6f9;
+    background-color: var(--bs-body-bg);
 }
 
 /* Custom Scrollbar for Terminal */

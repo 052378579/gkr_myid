@@ -1,19 +1,14 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
+use App\Controllers\BaseController;
 use App\Libraries\CrawlerLib;
 
-class Crawler extends BaseController
+class CrawlerApi extends BaseController
 {
-    public function index()
-    {
-        return view('crawl');
-    }
-
     public function doCrawl()
     {
-        // Nonaktifkan output buffering untuk mengirim aliran langsung (live stream) ke layar
         ini_set('output_buffering', 'off');
         ini_set('zlib.output_compression', false);
         while (@ob_end_flush());
@@ -34,10 +29,9 @@ class Crawler extends BaseController
         $mesinPencari = new CrawlerLib();
         
         if (str_starts_with($tautan, '/var/www/FOTO')) {
-            // URL Statis untuk pemetaan akan ditangani oleh CrawlerLib
             $mesinPencari->crawlLocalDirectory($tautan);
         } else {
-            $mesinPencari->followLinks($tautan, 1, 3); // Batas kedalaman rekursif (max depth 3)
+            $mesinPencari->followLinks($tautan, 1, 3);
         }
     }
 
@@ -46,7 +40,6 @@ class Crawler extends BaseController
         try {
             $basisData = \Config\Database::connect();
             
-            // Mengosongkan tabel data
             if (!$basisData->table('cari_sites')->emptyTable()) {
                 $error = $basisData->error();
                 throw new \Exception("Gagal mengosongkan cari_sites: " . ($error['message'] ?? 'Silent Database Error'));
@@ -56,11 +49,16 @@ class Crawler extends BaseController
                 throw new \Exception("Gagal mengosongkan cari_images: " . ($error['message'] ?? 'Silent Database Error'));
             }
             
-            return $this->response->setJSON(['status' => 'sukses']);
+            return $this->response->setJSON([
+                'status' => 'sukses',
+                'pesan'  => 'Basis data berhasil di-reset',
+                'data'   => null
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'status' => 'gagal',
-                'pesan'  => $e->getMessage()
+                'pesan'  => $e->getMessage(),
+                'data'   => null
             ]);
         }
     }

@@ -8,12 +8,12 @@ class AdminController extends BaseController
 {
     public function index()
     {
-        return view('admin/admin', ['version' => $this->getAppVersion()]);
+        return view('admin/beranda_admin', ['version' => $this->getAppVersion()]);
     }
 
     public function doodle()
     {
-        return view('admin/doodle', ['version' => $this->getAppVersion()]);
+        return view('admin/doodle_admin', ['version' => $this->getAppVersion()]);
     }
     
     public function log()
@@ -51,6 +51,6 @@ class AdminController extends BaseController
             'pagerCariCurrent' => $logCariModel->pager->getCurrentPage('logCari')
         ];
         
-        return view('admin/log', $data);
+        return view('admin/log_admin', $data);
     }
 }

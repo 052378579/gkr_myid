@@ -132,10 +132,16 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     <div class="w-100" style="max-width: 580px;">
         <form @submit.prevent="search" class="d-flex flex-column align-items-center gap-4 w-100">
             <div class="position-relative w-100 d-block google-ai-container">
-                <input type="text" v-model="query" class="form-control form-control-lg rounded-pill px-4 border input-mode-ai" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 60px !important;" autofocus required>
+                <input type="text" v-model="query" @input="fetchSuggestions" @keydown.down.prevent="navigateDown" @keydown.up.prevent="navigateUp" @keydown.enter.prevent="selectCurrentSuggestion" @focus="showSuggestions = true" @blur="handleBlur" class="form-control form-control-lg rounded-pill px-4 border input-mode-ai" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 60px !important;" autocomplete="off" autofocus required>
                 <button type="button" class="btn text-secondary position-absolute top-50 end-0 translate-middle-y border-0" style="margin-right: 12px; background: transparent; z-index: 3;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
                     <i class="fa-solid fa-camera fs-5 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
                 </button>
+                <ul v-if="showSuggestions && suggestions.length > 0" class="autocomplete-dropdown list-unstyled position-absolute w-100 bg-body shadow-sm rounded-4 mt-1 overflow-hidden" style="z-index: 1000; border: 1px solid var(--bs-border-color); text-align: left; transition: all 0.2s ease;">
+                    <li v-for="(item, index) in suggestions" :key="index" @mousedown.prevent="selectSuggestion(item)" class="px-4 py-2 d-flex align-items-center autocomplete-item" :class="{'bg-body-tertiary': index === activeIndex}" style="cursor: pointer; transition: background 0.1s ease;">
+                        <i class="fas fa-search me-3 text-muted" style="font-size: 0.9rem;"></i>
+                        <span class="fw-medium text-body" style="font-size: 0.95rem;">{{ item }}</span>
+                    </li>
+                </ul>
             </div>
             <div class="google-ai-container-spotlight">
                 <button type="submit" class="btn bg-body-tertiary rounded-pill text-body shadow-sm btn-mode-ai border" style="min-width: 120px; font-size: 0.95rem;">

@@ -39,10 +39,12 @@ class Search extends BaseController
             $dataPencarian['totalResults'] = $modelSitus->like('title', $kataKunci)
                                                         ->orLike('description', $kataKunci)
                                                         ->orLike('url', $kataKunci)
+                                                        ->orLike('keywords', $kataKunci)
                                                         ->countAllResults(false);
             $dataPencarian['results'] = $modelSitus->like('title', $kataKunci)
                                                    ->orLike('description', $kataKunci)
                                                    ->orLike('url', $kataKunci)
+                                                   ->orLike('keywords', $kataKunci)
                                                    ->paginate($batasHalaman, 'default', $halaman);
             $dataPencarian['pager'] = $modelSitus->pager;
 

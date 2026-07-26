@@ -41,32 +41,19 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Auto-Detect Environment (Keamanan Dinamis):** Merombak `public/index.php` untuk menangkap variabel `HTTP_HOST`. Akses via IP Lokal/ZeroTier dialihkan ke *Development*, sedangkan *bot* IP Publik dan Akses Domain terlempar/terkunci pada *Production*.
 - `[x]` **Pembersihan Direktori Kosong:** Memusnahkan folder yatim piatu seperti `tests` dan `public/3d` untuk menjaga ruang kerja tetap efisien dan higienis.
 
-## 🎯 Prioritas Tinggi (High Priority)
-- `[ ]` **Keamanan Server (Pendesak):**
-  - Pindahkan atau hapus file *dump* database yatim (`gkr_myid.sql`, `cari.sql`) dari *root* direktori web `/var/www/gkr_myid` ke direktori *backup* yang aman untuk mencegah risiko akses publik.
-- `[ ]` **Penyempurnaan Arsitektur RESTful API (Web):**
-  - Pastikan semua *Controller* API merespons dengan JSON standar yang memuat status, pesan, dan data.
-- `[ ]` **Standardisasi Template Layout:**
-  - Pastikan semua *View* mengimplementasikan kerangka dari `app/Views/layout`. Tidak boleh ada halaman yang menggunakan struktur HTML mandiri di luar *layout* utama.
-- `[ ]` **Konsistensi Bahasa Indonesia:**
-  - Lakukan *code review* menyeluruh pada Models, Views, dan Controllers untuk memastikan semua variabel, metode, dan komentar murni menggunakan Bahasa Indonesia.
+**Tahap VII: Penuntasan Prioritas Tinggi & Standardisasi Bahasa**
+- `[x]` **Keamanan Server (Pendesak):** Memindahkan atau menghapus file *dump* database yatim (`gkr_myid.sql`, `cari.sql`) dari *root* direktori web `/var/www/gkr_myid` ke direktori *backup* yang aman untuk mencegah risiko akses publik.
+- `[x]` **Penyempurnaan Arsitektur RESTful API (Web):** Mengisolasi seluruh *Controller* API ke dalam sub-folder `app/Controllers/Api/` (termasuk `GraciaApi.php`) dengan format balasan JSON baku yang seragam (`status`, `pesan`, `data`).
+- `[x]` **Standardisasi Template Layout:** Mengonversi semua halaman *View* (seperti `login` dan `daftar`) agar patuh dan mewarisi kerangka tunggal dari `app/Views/layout/main.php`.
+- `[x]` **Konsistensi Bahasa Indonesia:** Melakukan audit menyeluruh untuk memaksakan Naming Convention baru (*snake_case*, *kebab-case*, *PascalCase*) untuk pengembangan ke depan, dan menerjemahkan variabel internal di *backend* agar menggunakan Bahasa Indonesia murni secara absolut (Tanpa mematahkan kompatibilitas file statis).
 
-## 🚀 Prioritas Menengah / Peta Jalan Masa Depan (Medium Priority & Future Roadmap)
-- `[ ]` **Visual Recommendation (Produk Serupa):**
-  - Mengembangkan fitur yang menampilkan 5 produk terdekat berdasarkan jarak Cosine Similarity (FAISS) di setiap halaman detail produk, memungkinkan *upselling* secara otomatis tanpa melabeli kategori secara manual.
-- `[ ]` **Smart Auto-Crop (YOLOv8 Nano):**
-  - Menyuntikkan model pelacak objek ringan sebelum `MobileNetV3` bekerja untuk memotong gambar ruangan pelanggan, guna mencegah latar belakang (seperti TV atau tembok) mengacaukan hasil pencarian.
-- `[ ]` **Swatch Matcher (Pencocok Dekorasi):**
-  - Fitur bagi pengguna untuk mengunggah lantai kayu atau gorden mereka agar dicarikan furnitur/kain bantalan (swatch) dengan warna dan tekstur visual paling serasi.
-- `[ ]` **Manajemen Kata Kunci (Tabel Material):**
-  - Buat halaman CRUD tersendiri di panel Admin untuk mengatur ketersediaan opsi warna dan material pada tabel `gkr_material`. Saat ini tabel tersebut dimigrasi namun belum bisa di-edit dari panel Admin.
-- `[ ]` **Manajemen Error Gambar (Broken Links):**
-  - Implementasikan skrip otomatis untuk memverifikasi tautan gambar dan mengubah statusnya jika terdeteksi rusak (404/500).
-- `[ ]` **Fitur Recycle Bin (Trash) di Panel Admin:**
-  - Manfaatkan *Soft Delete* (Model CI4) untuk menampilkan daftar item terhapus dan fitur pemulihan (*Restore*).
+**Tahap VIII: Evolusi Database & UI Antarmuka**
+- `[x]` **Injeksi Meta Keywords Database:** Merekayasa struktur tabel `cari_images` secara *on-the-fly* (menggunakan skrip migrasi mandiri) dengan penambahan kolom `keywords` untuk mendukung pemetaan dan pencarian gambar yang lebih detail di luar klasifikasi dasar.
+- `[x]` **Harmonisasi UI Modal Box (Zonasi & Metrik):** Merombak sistem tata letak Modal Edit Gambar menjadi desain dual-kolom tingkat lanjut. Memindahkan metrik esensial (Klik & Status) ke Kolom Kiri sebagai *Data Center*, sementara membiarkan Kolom Kanan eksklusif untuk *Preview* visual dan Tautan statis (Terkunci/Disabled).
+- `[x]` **Harmonisasi UI Modal Edit Situs:** Menyempurnakan ukuran Modal Edit Situs dari `modal-xl` (kebesaran) menjadi `modal-lg` yang proporsional. Menyeragamkan rasio Pratinjau Situs menjadi bentuk klasik kotak **8:5** dengan implementasi *Anti-Terpotong* (`object-fit: contain`), menjadikannya saudara kembar identik secara visual dari Modal Edit Gambar.
 
 ## 🛠️ Prioritas Rendah / Kosmetik (Low Priority)
-- `[ ]` **Dark Mode (Tema Gelap):**
-  - Implementasikan tema gelap memanfaatkan variabel CSS dari Bootstrap 5.3.
+- `[x]` **Dark Mode (Tema Gelap):**
+  - Implementasikan tema gelap memanfaatkan variabel CSS dari Bootstrap 5.3 (Terbatas pada ruang Admin).
 - `[ ]` **Autocomplete Pencarian Teks:**
   - Integrasikan sistem saran pencarian *real-time* yang terhubung ke endpoint RESTful API.

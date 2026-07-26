@@ -20,7 +20,7 @@ class KaryawanController extends BaseController
             'title' => 'Pengaturan Karyawan (Pengguna)',
             'version' => $this->getAppVersion()
         ];
-        return view('admin/karyawan', $data);
+        return view('admin/karyawan_admin', $data);
     }
 
     public function getAll()

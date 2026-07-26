@@ -25,7 +25,7 @@ class ImageModel extends Model
     protected $dateFormat       = 'datetime';
     
     protected $protectFields    = true;
-    protected $allowedFields    = ['siteUrl', 'imageUrl', 'alt', 'title', 'clicks', 'broken'];
+    protected $allowedFields    = ['siteUrl', 'imageUrl', 'alt', 'title', 'clicks', 'broken', 'keywords'];
 
     // Validasi Integritas Gambar
     protected $validationRules = [

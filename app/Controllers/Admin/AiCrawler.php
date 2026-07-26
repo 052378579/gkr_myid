@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
+
+use App\Controllers\BaseController;
 
 class AiCrawler extends BaseController
 {
     public function index()
     {
-        return view('ai_crawl');
+        return view('admin/ai_admin');
     }
 
     public function doCrawl()

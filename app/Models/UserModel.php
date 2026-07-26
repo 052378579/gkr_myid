@@ -30,14 +30,16 @@ class UserModel extends Model
         'foto_profil', 
         'access_token', 
         'last_ip', 
-        'user_agent'
+        'user_agent',
+        'status'
     ];
 
     // Validasi Integritas Akun Admin
     protected $validationRules = [
         'nama_lengkap' => 'required|min_length[3]',
         'no_hp'        => 'required|numeric|is_unique[gkr_users.no_hp,id_user,{id_user}]',
-        'divisi'       => 'required'
+        'divisi'       => 'required',
+        'status'       => 'required|in_list[pending,aktif,suspend]'
     ];
     
     protected $validationMessages = [

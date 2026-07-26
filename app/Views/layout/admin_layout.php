@@ -11,11 +11,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
     
-    <link rel="stylesheet" href="<?= base_url('css/admin.css') ?>?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= base_url('css/admin_layout.css') ?>?v=<?= time() ?>">
     
     <?= $this->renderSection('styles') ?>
 </head>
-<body>
+<body class="bg-body text-body">
 
 <div class="admin-wrapper">
     <!-- Mobile Overlay -->
@@ -56,8 +56,8 @@
                     <i class="fas fa-clipboard-list"></i> Log
                 </a>
             </li>
-            <li><hr class="my-2" style="border-top: 2px solid #2B3385; opacity: 0.3;"></li>
-            <li>
+            <li class="mt-auto">
+                <hr class="my-2" style="border-top: 2px solid #2B3385; opacity: 0.3;">
                 <a href="<?= base_url('/') ?>">
                     <i class="fas fa-sign-out-alt fa-flip-horizontal"></i> Ke Beranda
                 </a>
@@ -70,7 +70,7 @@
         <!-- Topbar -->
         <header class="admin-topbar shadow-sm position-relative">
             <div class="d-flex align-items-center">
-                <button class="btn btn-light border-0 me-3" id="sidebarToggle" onclick="toggleSidebar()">
+                <button class="btn btn-link text-body text-decoration-none border-0 shadow-none p-2 fs-5 me-3" id="sidebarToggle" onclick="toggleSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
                 <a href="<?= base_url('/') ?>" class="text-decoration-none d-flex align-items-center gap-2">
@@ -115,12 +115,28 @@
         </header>
 
         <!-- Content Scroll Area -->
-        <main class="admin-content-scroll">
+        <main class="admin-content-scroll bg-body-tertiary text-body">
             <?= $this->renderSection('content') ?>
             
-            <footer class="mt-4 pt-3 border-top text-center text-muted small pb-2">
-                Dikembangkan oleh <span style="color: #2B3385;" class="fw-bold">RND</span> &copy; <?= date('Y') ?> &bull; 
-                <a href="<?= base_url('admin/versi') ?>" class="text-decoration-none text-muted" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= isset($version) ? esc($version) : '0.0.1' ?></a>
+            <footer class="mt-auto pt-3 border-top text-muted small pb-2 w-100 px-3">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <!-- Rata Kiri (Left): Ikon Tema -->
+                    <div class="text-start flex-shrink-0 d-flex align-items-center">
+                        <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary rounded-circle" title="Ubah Tema" style="width: 32px; height: 32px; padding: 0; line-height: 1;">
+                            <span id="themeIcon" style="font-size: 0.9rem;">☀️</span>
+                        </button>
+                    </div>
+
+                    <!-- Rata Tengah (Center): Kredit Pengembang (Utuh 1 Baris) -->
+                    <div class="text-center text-muted text-nowrap flex-shrink-0 px-2" style="min-width: 0;">
+                        <span class="d-none d-sm-inline">Dikembangkan oleh </span><span style="color: #2B3385;" class="fw-bold">RND</span> &copy; <?= date('Y') ?>
+                    </div>
+
+                    <!-- Rata Kanan (Right): Teks Versi -->
+                    <div class="text-end flex-shrink-0">
+                        <a href="<?= base_url('admin/versi') ?>" class="text-decoration-none text-muted fw-medium" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= isset($version) ? esc($version) : 'v0.7.23' ?></a>
+                    </div>
+                </div>
             </footer>
         </main>
     </div>
@@ -133,6 +149,7 @@
 <!-- SweetAlert2 -->
 <script src="<?= base_url('vendor/sweetalert2/sweetalert2.all.min.js') ?>"></script>
 
+<script src="<?= base_url('js/theme.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/admin_layout.js') ?>?v=<?= time() ?>"></script>
 
 <?= $this->renderSection('scripts') ?>

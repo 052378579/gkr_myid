@@ -1,28 +1,33 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use App\Models\ImageModel;
 use App\Models\SiteModel;
 use CodeIgniter\RESTful\ResourceController;
-use CodeIgniter\API\ResponseTrait;
 
 class ImageSearchApi extends ResourceController
 {
-    use ResponseTrait;
-
     public function upload()
     {
         $file = $this->request->getFile('image');
         
         if (!$file || !$file->isValid()) {
-            return $this->fail('Tidak ada gambar yang diunggah atau file tidak valid', 400);
+            return $this->response->setStatusCode(400)->setJSON([
+                'status' => 'gagal',
+                'pesan'  => 'Tidak ada gambar yang diunggah atau file tidak valid',
+                'data'   => null
+            ]);
         }
 
         // Validasi mime type
         $mime = $file->getMimeType();
         if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'])) {
-            return $this->fail('Hanya menerima format JPG, PNG, atau WEBP', 400);
+            return $this->response->setStatusCode(400)->setJSON([
+                'status' => 'gagal',
+                'pesan'  => 'Hanya menerima format JPG, PNG, atau WEBP',
+                'data'   => null
+            ]);
         }
 
         // Pindahkan ke folder writable/uploads sementara
@@ -46,7 +51,11 @@ class ImageSearchApi extends ResourceController
             if (!isset($body->status) || $body->status !== 'success') {
                 $errorMsg = $body->message ?? 'Produk tidak dikenali oleh AI.';
                 unlink($fullPath);
-                return $this->fail($errorMsg, 500);
+                return $this->response->setStatusCode(500)->setJSON([
+                    'status' => 'gagal',
+                    'pesan'  => $errorMsg,
+                    'data'   => null
+                ]);
             }
             
             $kodeBom = $body->kode_bom;
@@ -67,15 +76,21 @@ class ImageSearchApi extends ResourceController
                 unlink($fullPath);
             }
 
-            return $this->respond([
-                'status' => 'success'
+            return $this->response->setJSON([
+                'status' => 'sukses',
+                'pesan'  => 'Gambar berhasil diproses',
+                'data'   => null
             ]);
 
         } catch (\Exception $e) {
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }
-            return $this->fail('Terjadi kesalahan internal: ' . $e->getMessage(), 500);
+            return $this->response->setStatusCode(500)->setJSON([
+                'status' => 'gagal',
+                'pesan'  => 'Terjadi kesalahan internal: ' . $e->getMessage(),
+                'data'   => null
+            ]);
         }
     }
 }

@@ -25,6 +25,22 @@ createApp({
             status: 'aktif'
         });
 
+        const getDivisiBadgeStyle = (divisi) => {
+            switch (divisi) {
+                case 'Produksi 1': return { backgroundColor: '#FFA500', color: '#000000' };
+                case 'Produksi 2': return { backgroundColor: '#0000FF', color: '#ffffff' };
+                case 'Produksi 4': return { backgroundColor: '#ff0000', color: '#ffffff' };
+                default: return {}; 
+            }
+        };
+
+        const getDivisiBadgeClass = (divisi) => {
+            if (['Produksi 1', 'Produksi 2', 'Produksi 4'].includes(divisi)) {
+                return 'badge rounded-pill';
+            }
+            return 'badge bg-secondary rounded-pill';
+        };
+
         let modalInstance = null;
 
         const fetchKaryawan = async () => {
@@ -164,7 +180,9 @@ createApp({
             tambahKaryawan,
             editKaryawan,
             hapusKaryawan,
-            simpanKaryawan
+            simpanKaryawan,
+            getDivisiBadgeStyle,
+            getDivisiBadgeClass
         };
     }
 }).mount('#adminKaryawanApp');

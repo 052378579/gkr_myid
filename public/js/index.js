@@ -9,6 +9,69 @@ createApp({
         const isUploading = ref(false);
         let cropperInstance = null;
 
+        const suggestions = ref([]);
+        const showSuggestions = ref(false);
+        const activeIndex = ref(-1);
+        let debounceTimer = null;
+
+        const fetchSuggestions = () => {
+            clearTimeout(debounceTimer);
+            if (query.value.trim() === '') {
+                suggestions.value = [];
+                showSuggestions.value = false;
+                return;
+            }
+            debounceTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch('/api/autocomplete?q=' + encodeURIComponent(query.value));
+                    if(res.ok) {
+                        const data = await res.json();
+                        suggestions.value = data;
+                        showSuggestions.value = true;
+                        activeIndex.value = -1;
+                    }
+                } catch(e) {
+                    console.error("Autocomplete error:", e);
+                }
+            }, 300);
+        };
+
+        const navigateDown = () => {
+            if (showSuggestions.value && suggestions.value.length > 0) {
+                if (activeIndex.value < suggestions.value.length - 1) {
+                    activeIndex.value++;
+                }
+            }
+        };
+
+        const navigateUp = () => {
+            if (showSuggestions.value && suggestions.value.length > 0) {
+                if (activeIndex.value > 0) {
+                    activeIndex.value--;
+                }
+            }
+        };
+
+        const selectCurrentSuggestion = () => {
+            if (showSuggestions.value && activeIndex.value >= 0 && activeIndex.value < suggestions.value.length) {
+                selectSuggestion(suggestions.value[activeIndex.value]);
+            } else {
+                search();
+            }
+        };
+
+        const selectSuggestion = (item) => {
+            query.value = item;
+            showSuggestions.value = false;
+            search();
+        };
+
+        const handleBlur = () => {
+            setTimeout(() => {
+                showSuggestions.value = false;
+            }, 150);
+        };
+
         const search = () => {
             if(query.value.trim() !== '') {
                 window.location.href = window.AppConfig.searchUrl + '?q=' + encodeURIComponent(query.value);
@@ -120,6 +183,15 @@ createApp({
 
         return {
             query,
+            suggestions,
+            showSuggestions,
+            activeIndex,
+            fetchSuggestions,
+            navigateDown,
+            navigateUp,
+            selectCurrentSuggestion,
+            selectSuggestion,
+            handleBlur,
             search,
             uploadFile,
             uploadPreviewUrl,

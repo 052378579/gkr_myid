@@ -29,6 +29,7 @@ class SiteModel extends Model
 
     // Validasi Keamanan API (Mencegah input kotor)
     protected $validationRules = [
+        'id'    => 'permit_empty|is_natural_no_zero', // FIX: Diperlukan untuk menghindari LogicException pada placeholder {id}
         'url'   => 'required|is_unique[cari_sites.url,id,{id}]',
         'title' => 'required|min_length[3]'
     ];

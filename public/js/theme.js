@@ -16,9 +16,9 @@
         const themeIcon = document.getElementById('themeIcon');
         if (themeIcon) {
             if (theme === 'dark') {
-                themeIcon.innerHTML = '🌙<span class="d-none d-sm-inline ms-2">Mode Gelap</span>';
+                themeIcon.innerHTML = '🌙';
             } else {
-                themeIcon.innerHTML = '☀️<span class="d-none d-sm-inline ms-2">Mode Terang</span>';
+                themeIcon.innerHTML = '☀️';
             }
         }
     }
