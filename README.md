@@ -24,6 +24,8 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   Seluruh *endpoint* API terisolasi di sub-direktori `app/Controllers/Api/` (termasuk `GraciaApi.php` dan `VersiApi.php`) dengan format balasan JSON baku: `{"status": "...", "pesan": "...", "data": [...]}`.
 * **Zero-DB Hit Changelog & Auto-Versioning:**
   Riwayat rilis aplikasi disimpan murni pada *flat-file* statis `/public/versi.json` untuk meniadakan *query overhead* ke MySQL. Penomoran rilis dikelola otomatis menggunakan skema kalender dinamis (`0.{Bulan}.{Tanggal}`).
+* **Integrasi Telegram Chatbot Enterprise:**
+  Asisten virtual cerdas (`@Bot`) di ujung jari yang didukung fitur Asinkronisasi *Anti-Timeout* (lewat `fastcgi_finish_request`), pencarian hibrida yang kebal *typo* (*MySQL Full-Text* dipadu algoritma *AI Levenshtein Distance*), serta Keamanan Lapis Ganda (*Secret Token* + RBAC). Seluruh rekam pencarian dari lapangan disuntikkan secara senyap ke Dasbor Log Web.
 * **Auto-Detect Environment (Kunci Pengaman Mode):**
   Deteksi otomatis di `public/index.php`. Akses via LAN (`192.168.1.4`) atau ZeroTier (`10.147.17.40`) beralih ke mode *Development*, sementara akses dari IP Publik/Domain Publik mengunci ketat sistem ke mode *Production* untuk menyembunyikan *stack trace*.
 * **Sistem Otorisasi & Audit Log (RBAC):**

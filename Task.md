@@ -52,6 +52,12 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Harmonisasi UI Modal Box (Zonasi & Metrik):** Merombak sistem tata letak Modal Edit Gambar menjadi desain dual-kolom tingkat lanjut. Memindahkan metrik esensial (Klik & Status) ke Kolom Kiri sebagai *Data Center*, sementara membiarkan Kolom Kanan eksklusif untuk *Preview* visual dan Tautan statis (Terkunci/Disabled).
 - `[x]` **Harmonisasi UI Modal Edit Situs:** Menyempurnakan ukuran Modal Edit Situs dari `modal-xl` (kebesaran) menjadi `modal-lg` yang proporsional. Menyeragamkan rasio Pratinjau Situs menjadi bentuk klasik kotak **8:5** dengan implementasi *Anti-Terpotong* (`object-fit: contain`), menjadikannya saudara kembar identik secara visual dari Modal Edit Gambar.
 
+**Tahap IX: Ekosistem Chatbot Telegram**
+- `[x]` **Pilar 1: Optimalisasi Keamanan (Security)**: Menambahkan `BOT_SECRET_TOKEN` (Validasi Lapis 1) dan mengimplementasikan filter tabel karyawan `status === 'aktif'` (Verifikasi Lapis 2).
+- `[x]` **Pilar 2: Performa & Asinkronisasi**: Menambahkan fungsi pamungkas `fastcgi_finish_request()` untuk memutus *webhook* di awal demi mencegah *Retry Loop* dan mengeksekusi PHP di belakang layar.
+- `[x]` **Pilar 3: Log Audit (Data Telemetry)**: Menambahkan kolom `source` ke MySQL dan menyuntikkannya ke `LogCariModel` agar dasbor Web mengenali lalu lintas dari Telegram.
+- `[x]` **Pilar 4: Typo Tolerance (Penyelamat Typo)**: Membuat indeks *Full-Text* dan mengganti `LIKE` yang lambat dengan gabungan `MATCH AGAINST` (MySQL) serta `levenshtein()` (PHP AI) untuk akurasi tertinggi.
+
 ## 🛠️ Prioritas Rendah / Kosmetik (Low Priority)
 - `[x]` **Dark Mode (Tema Gelap):**
   - Implementasikan tema gelap memanfaatkan variabel CSS dari Bootstrap 5.3 (Terbatas pada ruang Admin).

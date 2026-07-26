@@ -67,3 +67,6 @@ $routes->get('/admin/karyawan/getAll', '\App\Controllers\Admin\KaryawanControlle
 $routes->post('/admin/karyawan/store', '\App\Controllers\Admin\KaryawanController::store');
 $routes->post('/admin/karyawan/update', '\App\Controllers\Admin\KaryawanController::update');
 $routes->post('/admin/karyawan/delete', '\App\Controllers\Admin\KaryawanController::delete');
+
+// Chatbot Webhook
+$routes->post('/api/chatbot/webhook', '\App\Controllers\Api\ChatBotApi::webhook');

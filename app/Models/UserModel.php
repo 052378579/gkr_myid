@@ -31,7 +31,8 @@ class UserModel extends Model
         'access_token', 
         'last_ip', 
         'user_agent',
-        'status'
+        'status',
+        'telegram_chat_id'
     ];
 
     // Validasi Integritas Akun Admin
