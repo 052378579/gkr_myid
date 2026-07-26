@@ -83,7 +83,7 @@ class ChatBotApi extends BaseController
                 } else {
                     // Balasan jika tidak menggunakan format 'Cari'
                     $pesanPanduan = "Halo " . $karyawan['nama_lengkap'] . "! Saya Asisten Gracia 🤖\n\n";
-                    $pesanPanduan .= "Ketik *Cari [Nama Barang]* untuk mencari katalog.\n";
+                    $pesanPanduan .= "Ketik *Cari <Nama Barang>* untuk mencari katalog.\n";
                     $pesanPanduan .= "Contoh: *Cari Alcova*";
                     
                     $this->kirimPesanTelegram($id_obrolan, $pesanPanduan);
@@ -245,6 +245,8 @@ class ChatBotApi extends BaseController
         
         if ($response->getStatusCode() !== 200) {
             log_message('error', 'Telegram SendPhoto Error: ' . $response->getBody());
+            // FALLBACK: Jika gambar rusak/hilang, Bot tetap mengirimkan teks balasan agar tidak terlihat "mogok"
+            $this->kirimPesanTelegram($id_obrolan, $keterangan . "\n\n*(Visual gambar gagal dimuat dari server, namun tautan di atas tetap dapat Anda akses)*");
         }
     }
 }
