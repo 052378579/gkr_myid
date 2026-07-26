@@ -35,7 +35,23 @@ class Versi extends BaseController
             // improvements, fixes, dan patches sudah berbentuk Array dari JSON murni
         }
 
-        return view('versi', ['changelog' => $versiData]);
+        // Paginasi Logika
+        $page = $this->request->getVar('page') ?? 1;
+        $page = (int)$page;
+        if ($page < 1) $page = 1;
+        
+        $perPage = 3;
+        $total = count($versiData);
+        $totalPages = ceil($total / $perPage);
+        $offset = ($page - 1) * $perPage;
+        
+        $pagedData = array_slice($versiData, $offset, $perPage);
+
+        return view('versi', [
+            'changelog' => $pagedData,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
+        ]);
     }
 
     private function seedInitialData()

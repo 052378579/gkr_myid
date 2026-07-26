@@ -3,7 +3,7 @@
 <?= $this->section('title') ?>Changelog - Gracia<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<link rel="stylesheet" href="<?= base_url('css/versi.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/admin_versi.css') ?>?v=<?= time() ?>">
 
 <nav class="navbar navbar-expand-lg sticky-top" style="background: rgba(43, 51, 133, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
     <div class="container">
@@ -111,6 +111,33 @@
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
+
+    <?php if (isset($totalPages) && $totalPages > 1): ?>
+    <div class="pagination-container d-flex justify-content-center mt-5">
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm shadow-sm">
+                <li class="page-item <?= ($currentPage <= 1) ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?page=<?= $currentPage - 1 ?>" tabindex="-1" aria-disabled="true">
+                        <i class="fas fa-chevron-left me-1"></i> Sebelumnya
+                    </a>
+                </li>
+                
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item <?= ($i == $currentPage) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                    </li>
+                <?php endfor; ?>
+                
+                <li class="page-item <?= ($currentPage >= $totalPages) ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?page=<?= $currentPage + 1 ?>">
+                        Selanjutnya <i class="fas fa-chevron-right ms-1"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <?php endif; ?>
+
 </div>
 
 <?= $this->endSection() ?>

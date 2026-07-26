@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "23-07-2026 22:35:00 WIB",
-    "versi_diperbarui": "0.7.23",
+    "tanggal_diperbarui": "26-07-2026 16:20:00 WIB",
+    "versi_diperbarui": "0.7.26",
     "data": [
         {
             "id": 1,
@@ -196,6 +196,27 @@
                 "Penonaktifan paksa konfigurasi proxyIPs di App.php agar CodeIgniter menangkap IP peramban klien secara murni"
             ],
             "created_at": "2026-07-23 22:35:00"
+        },
+        {
+            "id": 11,
+            "versi": "0.7.26",
+            "tanggal_rilis": "2026-07-26",
+            "judul": "Harmonisasi Antarmuka Modal & Klasifikasi Vektor Meta",
+            "deskripsi": "Rilis berfokus pada standarisasi antarmuka Modal Box menjadi 2-kolom berskala 8:5, injeksi meta klasifikasi keywords pada sistem vektor AI, perlindungan Git ekstensif, serta konsolidasi terhadap 8 dokumen inti proyek.",
+            "improvements": [
+                "Harmonisasi tata letak Modal Edit Gambar dan Edit Situs menjadi pola 2-Kolom (Zonasi Edit Metrik vs Zonasi Pratinjau Visual)",
+                "Penyeragaman rasio wadah pratinjau visual menjadi proporsi klasik 8:5 dengan perlindungan Anti-Cropping (object-fit: contain)",
+                "Injeksi parameter baru 'keywords' pada database cari_images untuk memperkuat pencarian Vektor AI dengan lapisan klasifikasi tekstual",
+                "Sinkronisasi komprehensif 8 pilar dokumen proyek (PRD, Memory, Skills, Task, StyleGuide, README, struktur_folder, Tautan)"
+            ],
+            "fixes": [
+                "Memperbaiki insiden Permission Denied dengan mengembalikan hak akses executable (755) pada file spark dan python_services melalui modifikasi index pelacakan Git secara presisi"
+            ],
+            "patches": [
+                "Perombakan pemblokiran di .gitignore agar secara eksklusif hanya mengizinkan sinkronisasi README.md ke GitHub",
+                "Penyempurnaan instruksi deployment Git di peladen PROD demi mencegah kembalinya perizinan 644 pada skrip esensial"
+            ],
+            "created_at": "2026-07-26 16:20:00"
         }
     ]
 }
