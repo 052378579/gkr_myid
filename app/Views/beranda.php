@@ -149,9 +149,9 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 </button>
             </div>
             <div class="mt-3 d-flex justify-content-center align-items-center">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#uploadImageModal" class="text-decoration-none fw-medium d-inline-flex align-items-center" style="color: var(--gkr-primary); font-size: 0.95rem;">
-                    <i class="fa-solid fa-camera me-1"></i>
-                    <span class="typewriter-text">Pencarian Gambar</span>
+                <a href="https://web.telegram.org/k/#@gracia_searchbot" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium d-inline-flex align-items-center" style="color: var(--gkr-primary); font-size: 0.95rem;">
+                    <i class="fa-brands fa-telegram me-1"></i>
+                    <span class="typewriter-text">Telegram Chatbot</span>
                     <sup class="text-danger fade-in-new ms-1">New</sup>
                 </a>
                 <span class="text-muted mx-3">|</span>
