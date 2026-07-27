@@ -3,8 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Models\SiteModel;
-use App\Models\ImageModel;
+use App\Models\CariModel;
 
 class GraciaApi extends BaseController
 {
@@ -18,8 +17,8 @@ class GraciaApi extends BaseController
     {
         $id = $this->request->getPost('id');
         if ($id) {
-            $modelSitus = new SiteModel();
-            $modelSitus->skipValidation(true)->where('id', $id)->set('clicks', 'clicks+1', false)->update();
+            $cariModel = new CariModel();
+            $cariModel->skipValidation(true)->where('id', $id)->set('klik', 'klik+1', false)->update();
             return $this->response->setJSON([
                 'status' => 'sukses',
                 'pesan'  => 'Berhasil memperbarui klik',
@@ -37,8 +36,8 @@ class GraciaApi extends BaseController
     {
         $id = $this->request->getPost('id');
         if ($id) {
-            $modelGambar = new ImageModel();
-            $modelGambar->skipValidation(true)->where('id', $id)->set('clicks', 'clicks+1', false)->update();
+            $cariModel = new CariModel();
+            $cariModel->skipValidation(true)->where('id', $id)->set('klik', 'klik+1', false)->update();
             return $this->response->setJSON([
                 'status' => 'sukses',
                 'pesan'  => 'Berhasil memperbarui klik gambar',
@@ -57,8 +56,8 @@ class GraciaApi extends BaseController
         $sumberGambar = $this->request->getPost('src');
         if ($sumberGambar) {
             $sumberGambar = esc($sumberGambar);
-            $modelGambar = new ImageModel();
-            $modelGambar->skipValidation(true)->where('imageUrl', $sumberGambar)->set(['broken' => 1])->update();
+            $cariModel = new CariModel();
+            $cariModel->skipValidation(true)->where('imageUrl', $sumberGambar)->set(['rusak' => 1])->update();
             return $this->response->setJSON([
                 'status' => 'sukses',
                 'pesan'  => 'Berhasil menandai gambar rusak',
@@ -72,14 +71,52 @@ class GraciaApi extends BaseController
         ]);
     }
 
-    public function dropCol()
+    public function setupDb()
     {
         $db = \Config\Database::connect();
+        
         try {
-            $db->query("ALTER TABLE cari_images DROP COLUMN image_hash");
+            // 1. Buat tabel fisik gkr_cari jika belum ada (Nama Kolom Bahasa Indonesia)
+            $db->query("CREATE TABLE IF NOT EXISTS `gkr_cari` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `judul` VARCHAR(255) NOT NULL,
+                `alt` VARCHAR(255) DEFAULT NULL,
+                `deskripsi` TEXT DEFAULT NULL,
+                `url` VARCHAR(512) DEFAULT NULL,
+                `imageUrl` VARCHAR(512) DEFAULT NULL,
+                `siteUrl` VARCHAR(512) DEFAULT NULL,
+                `kata_kunci` VARCHAR(512) DEFAULT NULL,
+                `klik` INT(11) NOT NULL DEFAULT 0,
+                `rusak` TINYINT(1) NOT NULL DEFAULT 0,
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                `deleted_at` DATETIME DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `idx_klik` (`klik`),
+                KEY `idx_rusak` (`rusak`),
+                FULLTEXT KEY `ft_pencarian` (`judul`, `kata_kunci`, `alt`, `deskripsi`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+            // 2. Inisialisasi gkr_material
+            $db->query("CREATE TABLE IF NOT EXISTS `gkr_material` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `material` varchar(100) NOT NULL,
+                `warna` varchar(100) NOT NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+            $db->query("TRUNCATE TABLE `gkr_material`");
+            $db->query("INSERT INTO `gkr_material` (`material`, `warna`) VALUES 
+                ('teak', 'natual 002'),
+                ('alumunium', 'antrachite bronze'),
+                ('alumunium', 'taupe texture'),
+                ('fiber', 'terrazzo'),
+                ('fiber', 'concreate')
+            ");
+
             return $this->response->setJSON([
                 'status' => 'sukses',
-                'pesan'  => 'Kolom image_hash berhasil dihapus',
+                'pesan'  => 'Basis data gkr_cari (Kolom Bahasa Indonesia) berhasil disiapkan.',
                 'data'   => null
             ]);
         } catch (\Exception $e) {
@@ -89,40 +126,6 @@ class GraciaApi extends BaseController
                 'data'   => null
             ]);
         }
-    }
-
-    public function setupDb()
-    {
-        $db = \Config\Database::connect();
-        
-        // Coba tambahkan kolom keywords ke cari_images
-        try {
-            $db->query("ALTER TABLE cari_images ADD COLUMN keywords VARCHAR(512) DEFAULT NULL");
-        } catch (\Exception $e) {
-            // Abaikan jika sudah ada
-        }
-        
-        $db->query("CREATE TABLE IF NOT EXISTS `gkr_material` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `material` varchar(100) NOT NULL,
-            `warna` varchar(100) NOT NULL,
-            PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-
-        $db->query("TRUNCATE TABLE `gkr_material`");
-        $db->query("INSERT INTO `gkr_material` (`material`, `warna`) VALUES 
-            ('teak', 'natual 002'),
-            ('alumunium', 'antrachite bronze'),
-            ('alumunium', 'taupe texture'),
-            ('fiber', 'terrazzo'),
-            ('fiber', 'concreate')
-        ");
-        
-        return $this->response->setJSON([
-            'status' => 'sukses',
-            'pesan'  => 'Basis data material berhasil disiapkan',
-            'data'   => null
-        ]);
     }
 
     public function getMaterials()
@@ -135,13 +138,31 @@ class GraciaApi extends BaseController
         ]);
     }
 
+    private function getFotoUrlPrefix(): string
+    {
+        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+        $serverIp = $_SERVER['SERVER_ADDR'] ?? '';
+        $combined = strtolower($host . ' ' . $serverIp);
+
+        if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id|localhost/', $combined)) {
+            return 'https://foto.budi.biz.id/';
+        }
+
+        return 'https://foto.gkr.my.id/';
+    }
+
     public function getSites()
     {
-        $modelSitus = new SiteModel();
-        $data = $modelSitus->findAll();
-        $urlDasarGambar = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/';
+        $cariModel = new CariModel();
+        $data = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()->findAll();
+        $urlDasarGambar = $this->getFotoUrlPrefix();
         
         foreach ($data as &$barisSitus) {
+            $barisSitus['title'] = $barisSitus['judul'];
+            $barisSitus['description'] = $barisSitus['deskripsi'];
+            $barisSitus['keywords'] = $barisSitus['kata_kunci'];
+            $barisSitus['clicks'] = $barisSitus['klik'];
+
             if (!empty($barisSitus['url']) && !preg_match('/^https?:\/\//i', $barisSitus['url'])) {
                 if (str_starts_with($barisSitus['url'], '?')) {
                     $barisSitus['url'] = rtrim($urlDasarGambar, '/') . '/' . $barisSitus['url'];
@@ -160,11 +181,16 @@ class GraciaApi extends BaseController
 
     public function getImages()
     {
-        $modelGambar = new ImageModel();
-        $data = $modelGambar->findAll();
-        $urlDasarGambar = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/';
+        $cariModel = new CariModel();
+        $data = $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->findAll();
+        $urlDasarGambar = $this->getFotoUrlPrefix();
         
         foreach ($data as &$barisGambar) {
+            $barisGambar['title'] = $barisGambar['judul'];
+            $barisGambar['keywords'] = $barisGambar['kata_kunci'];
+            $barisGambar['clicks'] = $barisGambar['klik'];
+            $barisGambar['broken'] = $barisGambar['rusak'];
+
             if (!empty($barisGambar['imageUrl']) && !preg_match('/^https?:\/\//i', $barisGambar['imageUrl'])) {
                 $barisGambar['imageUrl'] = rtrim($urlDasarGambar, '/') . '/' . ltrim($barisGambar['imageUrl'], '/');
             }
@@ -184,10 +210,49 @@ class GraciaApi extends BaseController
         ]);
     }
 
+    public function getTopSearched()
+    {
+        $cariModel = new CariModel();
+        
+        // Ambil Top 10 Barang berdasarkan kolom 'klik'
+        $topItems = $cariModel->select('id, judul, alt, deskripsi, url, imageUrl, siteUrl, kata_kunci, klik, rusak')
+                             ->orderBy('klik', 'DESC')
+                             ->limit(10)
+                             ->findAll();
+                             
+        $urlDasarGambar = $this->getFotoUrlPrefix();
+        foreach ($topItems as &$item) {
+            $item['title'] = $item['judul'];
+            $item['clicks'] = $item['klik'];
+            if (!empty($item['imageUrl']) && !preg_match('/^https?:\/\//i', $item['imageUrl'])) {
+                $item['imageUrl'] = rtrim($urlDasarGambar, '/') . '/' . ltrim($item['imageUrl'], '/');
+            }
+        }
+
+        $totalKlikResult = $cariModel->selectSum('klik')->first();
+        $totalKlik = (int)($totalKlikResult['klik'] ?? 0);
+        $totalItems = $cariModel->countAllResults();
+        $totalBroken = $cariModel->where('rusak', 1)->countAllResults();
+        
+        $topProduct = $topItems[0]['judul'] ?? '-';
+
+        return $this->response->setJSON([
+            'status' => 'sukses',
+            'pesan'  => 'Data KPI berhasil ditarik',
+            'data'   => [
+                'top10'       => $topItems,
+                'totalKlik'   => $totalKlik,
+                'totalItems'  => $totalItems,
+                'totalBroken' => $totalBroken,
+                'topProduct'  => $topProduct
+            ]
+        ]);
+    }
+
     public function deleteSite($id)
     {
-        $modelSitus = new SiteModel();
-        $modelSitus->delete($id);
+        $cariModel = new CariModel();
+        $cariModel->delete($id);
         return $this->response->setJSON([
             'status' => 'sukses',
             'pesan'  => 'Situs berhasil dihapus',
@@ -197,8 +262,8 @@ class GraciaApi extends BaseController
 
     public function deleteImage($id)
     {
-        $modelGambar = new ImageModel();
-        $modelGambar->delete($id);
+        $cariModel = new CariModel();
+        $cariModel->delete($id);
         return $this->response->setJSON([
             'status' => 'sukses',
             'pesan'  => 'Gambar berhasil dihapus',
@@ -208,20 +273,24 @@ class GraciaApi extends BaseController
 
     public function storeSite()
     {
-        $modelSitus = new SiteModel();
+        $cariModel = new CariModel();
         $dataBaru = [];
         
-        if ($this->request->getPost('title')) $dataBaru['title'] = esc($this->request->getPost('title'));
+        $title = $this->request->getPost('judul') ?? $this->request->getPost('title');
+        $desc = $this->request->getPost('deskripsi') ?? $this->request->getPost('description');
+        $kw = $this->request->getPost('kata_kunci') ?? $this->request->getPost('keywords');
+
+        if ($title) $dataBaru['judul'] = esc($title);
         if ($this->request->getPost('url')) $dataBaru['url'] = esc($this->request->getPost('url'));
-        if ($this->request->getPost('description')) $dataBaru['description'] = esc($this->request->getPost('description'));
-        if ($this->request->getPost('keywords')) $dataBaru['keywords'] = esc($this->request->getPost('keywords'));
+        if ($desc) $dataBaru['deskripsi'] = esc($desc);
+        if ($kw) $dataBaru['kata_kunci'] = esc($kw);
         
         if (!empty($dataBaru['url']) && !preg_match('/^https?:\/\//i', $dataBaru['url'])) {
             $dataBaru['url'] = 'http://' . $dataBaru['url'];
         }
 
-        if (!empty($dataBaru)) {
-            if ($modelSitus->insert($dataBaru)) {
+        if (!empty($dataBaru['judul'])) {
+            if ($cariModel->insert($dataBaru)) {
                 return $this->response->setJSON([
                     'status' => 'sukses',
                     'pesan'  => 'Situs berhasil ditambahkan',
@@ -230,7 +299,7 @@ class GraciaApi extends BaseController
             } else {
                 return $this->response->setJSON([
                     'status' => 'gagal',
-                    'pesan'  => implode(", ", $modelSitus->errors()),
+                    'pesan'  => implode(", ", $cariModel->errors()),
                     'data'   => null
                 ]);
             }
@@ -244,13 +313,17 @@ class GraciaApi extends BaseController
 
     public function storeImage()
     {
-        $modelGambar = new ImageModel();
+        $cariModel = new CariModel();
         $dataBaru = [];
         
-        if ($this->request->getPost('title')) $dataBaru['title'] = esc($this->request->getPost('title'));
+        $title = $this->request->getPost('judul') ?? $this->request->getPost('title');
+        $kw = $this->request->getPost('kata_kunci') ?? $this->request->getPost('keywords');
+
+        if ($title) $dataBaru['judul'] = esc($title);
         if ($this->request->getPost('alt')) $dataBaru['alt'] = esc($this->request->getPost('alt'));
         if ($this->request->getPost('imageUrl')) $dataBaru['imageUrl'] = esc($this->request->getPost('imageUrl'));
         if ($this->request->getPost('siteUrl')) $dataBaru['siteUrl'] = esc($this->request->getPost('siteUrl'));
+        if ($kw) $dataBaru['kata_kunci'] = esc($kw);
         
         if (!empty($dataBaru['imageUrl']) && !preg_match('/^https?:\/\//i', $dataBaru['imageUrl'])) {
             $dataBaru['imageUrl'] = 'http://' . $dataBaru['imageUrl'];
@@ -259,8 +332,8 @@ class GraciaApi extends BaseController
             $dataBaru['siteUrl'] = 'http://' . $dataBaru['siteUrl'];
         }
 
-        if (!empty($dataBaru)) {
-            if ($modelGambar->insert($dataBaru)) {
+        if (!empty($dataBaru['judul'])) {
+            if ($cariModel->insert($dataBaru)) {
                 return $this->response->setJSON([
                     'status' => 'sukses',
                     'pesan'  => 'Gambar berhasil ditambahkan',
@@ -269,7 +342,7 @@ class GraciaApi extends BaseController
             } else {
                 return $this->response->setJSON([
                     'status' => 'gagal',
-                    'pesan'  => implode(", ", $modelGambar->errors()),
+                    'pesan'  => implode(", ", $cariModel->errors()),
                     'data'   => null
                 ]);
             }
@@ -283,18 +356,23 @@ class GraciaApi extends BaseController
 
     public function updateSite($id)
     {
-        $modelSitus = new SiteModel();
+        $cariModel = new CariModel();
         $dataPembaruan = [];
         
-        if ($this->request->getPost('title') !== null) $dataPembaruan['title'] = esc($this->request->getPost('title'));
+        $title = $this->request->getPost('judul') ?? $this->request->getPost('title');
+        $desc = $this->request->getPost('deskripsi') ?? $this->request->getPost('description');
+        $kw = $this->request->getPost('kata_kunci') ?? $this->request->getPost('keywords');
+        $klik = $this->request->getPost('klik') ?? $this->request->getPost('clicks');
+
+        if ($title !== null) $dataPembaruan['judul'] = esc($title);
         if ($this->request->getPost('url') !== null) $dataPembaruan['url'] = esc($this->request->getPost('url'));
-        if ($this->request->getPost('description') !== null) $dataPembaruan['description'] = esc($this->request->getPost('description'));
-        if ($this->request->getPost('keywords') !== null) $dataPembaruan['keywords'] = esc($this->request->getPost('keywords'));
-        if ($this->request->getPost('clicks') !== null) $dataPembaruan['clicks'] = (int)$this->request->getPost('clicks');
+        if ($desc !== null) $dataPembaruan['deskripsi'] = esc($desc);
+        if ($kw !== null) $dataPembaruan['kata_kunci'] = esc($kw);
+        if ($klik !== null) $dataPembaruan['klik'] = (int)$klik;
         
         if (!empty($dataPembaruan)) {
-            $dataPembaruan['id'] = $id; // FIX: Wajib untuk CodeIgniter 4 is_unique validation {id} placeholder
-            if ($modelSitus->update($id, $dataPembaruan)) {
+            $dataPembaruan['id'] = $id;
+            if ($cariModel->update($id, $dataPembaruan)) {
                 return $this->response->setJSON([
                     'status' => 'sukses',
                     'pesan'  => 'Situs berhasil diperbarui',
@@ -303,7 +381,7 @@ class GraciaApi extends BaseController
             } else {
                 return $this->response->setJSON([
                     'status' => 'gagal',
-                    'pesan'  => implode(", ", $modelSitus->errors()),
+                    'pesan'  => implode(", ", $cariModel->errors()),
                     'data'   => null
                 ]);
             }
@@ -317,27 +395,24 @@ class GraciaApi extends BaseController
 
     public function updateImage($id)
     {
-        // Auto-migration: Pastikan kolom keywords ada
-        $db = \Config\Database::connect();
-        try {
-            $db->query("ALTER TABLE cari_images ADD COLUMN keywords VARCHAR(512) DEFAULT NULL");
-        } catch (\Exception $e) {
-            // Kolom sudah ada, lanjutkan
-        }
-
-        $modelGambar = new ImageModel();
+        $cariModel = new CariModel();
         $dataPembaruan = [];
         
-        if ($this->request->getPost('title') !== null) $dataPembaruan['title'] = esc($this->request->getPost('title'));
+        $title = $this->request->getPost('judul') ?? $this->request->getPost('title');
+        $kw = $this->request->getPost('kata_kunci') ?? $this->request->getPost('keywords');
+        $klik = $this->request->getPost('klik') ?? $this->request->getPost('clicks');
+        $rusak = $this->request->getPost('rusak') ?? $this->request->getPost('broken');
+
+        if ($title !== null) $dataPembaruan['judul'] = esc($title);
         if ($this->request->getPost('alt') !== null) $dataPembaruan['alt'] = esc($this->request->getPost('alt'));
         if ($this->request->getPost('imageUrl') !== null) $dataPembaruan['imageUrl'] = esc($this->request->getPost('imageUrl'));
         if ($this->request->getPost('siteUrl') !== null) $dataPembaruan['siteUrl'] = esc($this->request->getPost('siteUrl'));
-        if ($this->request->getPost('clicks') !== null) $dataPembaruan['clicks'] = (int)$this->request->getPost('clicks');
-        if ($this->request->getPost('broken') !== null) $dataPembaruan['broken'] = (int)$this->request->getPost('broken');
-        if ($this->request->getPost('keywords') !== null) $dataPembaruan['keywords'] = esc($this->request->getPost('keywords'));
+        if ($klik !== null) $dataPembaruan['klik'] = (int)$klik;
+        if ($rusak !== null) $dataPembaruan['rusak'] = (int)$rusak;
+        if ($kw !== null) $dataPembaruan['kata_kunci'] = esc($kw);
         
         if (!empty($dataPembaruan)) {
-            if ($modelGambar->update($id, $dataPembaruan)) {
+            if ($cariModel->update($id, $dataPembaruan)) {
                 return $this->response->setJSON([
                     'status' => 'sukses',
                     'pesan'  => 'Gambar berhasil diperbarui',
@@ -346,7 +421,7 @@ class GraciaApi extends BaseController
             } else {
                 return $this->response->setJSON([
                     'status' => 'gagal',
-                    'pesan'  => implode(", ", $modelGambar->errors()),
+                    'pesan'  => implode(", ", $cariModel->errors()),
                     'data'   => null
                 ]);
             }
@@ -365,22 +440,30 @@ class GraciaApi extends BaseController
         $data = $cache->get($kunciCache);
 
         if ($data === null) {
-            $modelSitus = new SiteModel();
-            $modelGambar = new ImageModel();
+            $cariModel = new CariModel();
 
-            $situsTeratas = $modelSitus->getTopClickedSites(10);
-            $gambarTeratas = $modelGambar->getTopClickedImages(10);
-            $dataGabungan = $modelGambar->getTopCombinedClicks(10);
+            $situsTeratas = $cariModel->getTopClickedEntities('situs', 10);
+            $gambarTeratas = $cariModel->getTopClickedEntities('gambar', 10);
+            $dataGabungan = $cariModel->getTopClickedEntities(null, 10);
 
             $urlDasarGambar = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/';
 
+            foreach ($situsTeratas as &$situs) {
+                $situs['title'] = $situs['judul'];
+                $situs['clicks'] = $situs['klik'];
+            }
+
             foreach ($gambarTeratas as &$gambar) {
+                $gambar['title'] = $gambar['judul'];
+                $gambar['clicks'] = $gambar['klik'];
                 if (!empty($gambar['imageUrl']) && !preg_match('/^https?:\/\//i', $gambar['imageUrl'])) {
                     $gambar['imageUrl'] = rtrim($urlDasarGambar, '/') . '/' . ltrim($gambar['imageUrl'], '/');
                 }
             }
 
             foreach ($dataGabungan as &$itemGabungan) {
+                $itemGabungan['title'] = $itemGabungan['judul'];
+                $itemGabungan['clicks'] = $itemGabungan['klik'];
                 if (!empty($itemGabungan['imageUrl']) && !preg_match('/^https?:\/\//i', $itemGabungan['imageUrl'])) {
                     $itemGabungan['imageUrl'] = rtrim($urlDasarGambar, '/') . '/' . ltrim($itemGabungan['imageUrl'], '/');
                 }
@@ -411,7 +494,7 @@ class GraciaApi extends BaseController
 
         $q = trim($q);
         $materialModel = new \App\Models\MaterialModel();
-        $imageModel = new ImageModel();
+        $cariModel = new CariModel();
 
         $results = [];
 
@@ -430,14 +513,14 @@ class GraciaApi extends BaseController
             }
         }
 
-        // 2. Cari dari tabel cari_images (title)
-        $images = $imageModel->like('title', $q)
-                             ->where('broken', 0)
-                             ->groupBy('title')
-                             ->findAll(8);
-        foreach ($images as $img) {
-            if (!empty(trim($img['title']))) {
-                $results[] = strtolower(trim($img['title']));
+        // 2. Cari dari tabel fisik gkr_cari (judul)
+        $items = $cariModel->like('judul', $q)
+                           ->where('rusak', 0)
+                           ->groupBy('judul')
+                           ->findAll(8);
+        foreach ($items as $item) {
+            if (!empty(trim($item['judul']))) {
+                $results[] = strtolower(trim($item['judul']));
             }
         }
 

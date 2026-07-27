@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Libraries\CrawlerLib;
+use App\Models\CariModel;
 
 class CrawlerApi extends BaseController
 {
@@ -38,26 +39,20 @@ class CrawlerApi extends BaseController
     public function resetDb()
     {
         try {
-            $basisData = \Config\Database::connect();
+            $cariModel = new CariModel();
             
-            if (!$basisData->table('cari_sites')->emptyTable()) {
-                $error = $basisData->error();
-                throw new \Exception("Gagal mengosongkan cari_sites: " . ($error['message'] ?? 'Silent Database Error'));
-            }
-            if (!$basisData->table('cari_images')->emptyTable()) {
-                $error = $basisData->error();
-                throw new \Exception("Gagal mengosongkan cari_images: " . ($error['message'] ?? 'Silent Database Error'));
-            }
+            // Mengosongkan tabel fisik gkr_cari secara aman
+            $cariModel->truncate();
             
             return $this->response->setJSON([
                 'status' => 'sukses',
-                'pesan'  => 'Basis data berhasil di-reset',
+                'pesan'  => 'Basis data gkr_cari berhasil di-reset',
                 'data'   => null
             ]);
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'status' => 'gagal',
-                'pesan'  => $e->getMessage(),
+                'pesan'  => 'Gagal mereset gkr_cari: ' . $e->getMessage(),
                 'data'   => null
             ]);
         }

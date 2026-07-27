@@ -3,8 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Models\ImageModel;
-use App\Models\SiteModel;
+use App\Models\CariModel;
 use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 
@@ -123,45 +122,53 @@ class ChatBotApi extends BaseController
     }
 
     /**
-     * Fungsi Logika Pencarian Visual di Database
+     * Fungsi Logika Pencarian Visual di Tabel Fisik gkr_cari (Nama Kolom Bahasa Indonesia)
      */
     private function prosesPencarian($id_obrolan, $kataKunci, $id_user = null)
     {
-        $modelGambar = new ImageModel();
-        $modelSitus  = new SiteModel();
+        $cariModel = new CariModel();
 
-        // TAHAP 1: FULL-TEXT SEARCH (Akurasi Relevansi)
+        // TAHAP 1: FULL-TEXT SEARCH di gkr_cari (Akurasi Relevansi)
         $db = \Config\Database::connect();
         $kataKunciAman = $db->escapeString($kataKunci);
 
-        $hasilGambar = $modelGambar->where("MATCH(title, alt, keywords) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)->first(); 
+        $hasilGambar = $cariModel->where('imageUrl IS NOT NULL')
+                                 ->where('imageUrl !=', '')
+                                 ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)
+                                 ->first(); 
 
-        $hasilSitus = $modelSitus->where("MATCH(title, description, keywords) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)->first();
+        $hasilSitus = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()
+                                ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)
+                                ->first();
 
         // TAHAP 2: LEVENSHTEIN DISTANCE (Penyelamat Typo)
         $isTypo = false;
         if (!$hasilGambar && !$hasilSitus) {
-            $semuaGambar = $modelGambar->select('id, title')->findAll();
+            $semuaEntitas = $cariModel->select('id, judul, imageUrl')->findAll();
             $jarakTerdekat = 100;
-            $idDitemukan = null;
+            $entitasDitemukan = null;
 
-            foreach ($semuaGambar as $img) {
-                $jarak = levenshtein(strtolower($kataKunci), strtolower($img['title']));
+            foreach ($semuaEntitas as $item) {
+                $jarak = levenshtein(strtolower($kataKunci), strtolower($item['judul']));
                 if ($jarak < $jarakTerdekat && $jarak <= 3) {
                     $jarakTerdekat = $jarak;
-                    $idDitemukan = $img['id'];
+                    $entitasDitemukan = $item;
                 }
             }
 
-            if ($idDitemukan) {
-                $hasilGambar = $modelGambar->find($idDitemukan);
+            if ($entitasDitemukan) {
+                if (!empty($entitasDitemukan['imageUrl'])) {
+                    $hasilGambar = $cariModel->find($entitasDitemukan['id']);
+                } else {
+                    $hasilSitus = $cariModel->find($entitasDitemukan['id']);
+                }
                 $isTypo = true;
             }
         }
 
         if ($hasilGambar || $hasilSitus) {
             // 1. Ambil Judul Utama (Prioritas: Gambar -> Situs)
-            $judulMentah = $hasilGambar ? $hasilGambar['title'] : $hasilSitus['title'];
+            $judulMentah = $hasilGambar ? $hasilGambar['judul'] : $hasilSitus['judul'];
             
             // 2. Format menjadi Title Case (Huruf Kapital di Setiap Kata)
             $judulRapih = ucwords(strtolower($judulMentah));
@@ -179,7 +186,7 @@ class ChatBotApi extends BaseController
             $keterangan .= "Klik: [Lihat Selengkapnya]({$urlPencarian})";
 
             // Jika ada gambar, kirim sebagai SendPhoto dengan Caption
-            if ($hasilGambar) {
+            if ($hasilGambar && !empty($hasilGambar['imageUrl'])) {
                 $urlGambar = (strpos($hasilGambar['imageUrl'], 'http') === 0) ? $hasilGambar['imageUrl'] : 'https://foto.gkr.my.id/' . ltrim($hasilGambar['imageUrl'], '/');
                 $this->kirimFotoTelegram($id_obrolan, $urlGambar, $keterangan);
             } else {
@@ -195,7 +202,7 @@ class ChatBotApi extends BaseController
             }
             
         } else {
-            // Jika data tidak ada di tabel cari_images dan cari_sites
+            // Jika data tidak ada di tabel gkr_cari
             $this->kirimPesanTelegram($id_obrolan, "Maaf, '*{$kataKunci}*' tidak ditemukan!");
 
             // --- LOG AUDIT (PILAR 3) ---

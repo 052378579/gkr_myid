@@ -2,13 +2,11 @@
 
 namespace App\Libraries;
 
-use App\Models\SiteModel;
-use App\Models\ImageModel;
+use App\Models\CariModel;
 
 class CrawlerLib 
 {
-    private $siteModel;
-    private $imageModel;
+    private $cariModel;
     public $alreadyCrawled = [];
     public $crawling = [];
     public $alreadyFoundImages = [];
@@ -33,31 +31,51 @@ class CrawlerLib
 
     public function __construct() 
     {
-        $this->siteModel = new SiteModel();
-        $this->imageModel = new ImageModel();
+        $this->cariModel = new CariModel();
     }
 
     public function linkExists($url) 
     {
         $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
-        return $this->siteModel->where('url', $url)->first() !== null;
+        return $this->cariModel->where('url', $url)->first() !== null;
     }
     
     public function imageExists($src) 
     {
         $src = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $src);
-        return $this->imageModel->where('imageUrl', $src)->first() !== null;
+        return $this->cariModel->where('imageUrl', $src)->first() !== null;
+    }
+
+    /**
+     * Menyimpan 1 Entitas Produk Tunggal Lengkap ke tabel gkr_cari
+     */
+    public function insertProductItem($siteUrl, $imageUrl, $title, $description, $keywords, $alt)
+    {
+        $siteUrl  = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $siteUrl);
+        $imageUrl = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $imageUrl);
+
+        return $this->cariModel->insert([
+            'judul'      => $title,
+            'alt'        => $alt,
+            'deskripsi'  => $description,
+            'url'        => $siteUrl,
+            'imageUrl'   => $imageUrl,
+            'siteUrl'    => $siteUrl,
+            'kata_kunci' => $keywords,
+            'klik'       => 0,
+            'rusak'      => 0
+        ]);
     }
     
     public function insertLink($url, $title, $description, $keywords)
     {
         $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
-        return $this->siteModel->insert([
-            'url' => $url,
-            'title' => $title,
-            'description' => $description,
-            'keywords' => $keywords,
-            'clicks' => 0
+        return $this->cariModel->insert([
+            'url'        => $url,
+            'judul'      => $title,
+            'deskripsi'  => $description,
+            'kata_kunci' => $keywords,
+            'klik'       => 0
         ]);
     }
     
@@ -65,13 +83,13 @@ class CrawlerLib
     {
         $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
         $src = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $src);
-        return $this->imageModel->insert([
-            'siteUrl' => $url,
+        return $this->cariModel->insert([
+            'siteUrl'  => $url,
             'imageUrl' => $src,
-            'alt' => $alt,
-            'title' => $title,
-            'clicks' => 0,
-            'broken' => 0
+            'alt'      => $alt,
+            'judul'    => $title,
+            'klik'     => 0,
+            'rusak'    => 0
         ]);
     }
     
@@ -184,15 +202,12 @@ class CrawlerLib
             $this->followLinks($site, $depth + 1, $maxDepth);
         }
     }
+
     public function crawlLocalDirectory($targetPath)
     {
         $rootPath = '/var/www/FOTO';
-        $baseDomain = 'https://foto.gkr.my.id/';
+        $itemsAdded = 0;
         
-        $sitesAdded = 0;
-        $imagesAdded = 0;
-        
-        // Remove trailing slash for consistency
         $targetPath = rtrim($targetPath, '/');
         
         if (!str_starts_with($targetPath, $rootPath)) {
@@ -200,9 +215,8 @@ class CrawlerLib
             return;
         }
 
-        $this->out("<span style='color: #a9a9a9;'>Memulai scan direktori lokal:</span> $targetPath", 'white');
+        $this->out("<span style='color: #a9a9a9;'>Memulai scan direktori lokal (1 Produk = 1 Baris):</span> $targetPath", 'white');
         
-        // Determine folders to scan
         if ($targetPath === $rootPath) {
             $foldersToScan = [$rootPath . '/BUYER', $rootPath . '/GRACIA', $rootPath . '/SWATCHES', $rootPath . '/WEB'];
         } else {
@@ -221,9 +235,8 @@ class CrawlerLib
             );
 
             foreach ($iterator as $item) {
-                // Get relative path without leading slash relative to rootPath '/var/www/FOTO'
                 $relativePath = substr($item->getPathname(), strlen(rtrim($rootPath, '/')) + 1);
-                $relativePath = str_replace('\\', '/', $relativePath); // for windows compatibility if any
+                $relativePath = str_replace('\\', '/', $relativePath);
 
                 if ($item->isFile()) {
                     $ext = strtolower($item->getExtension());
@@ -233,35 +246,21 @@ class CrawlerLib
                         
                         $parentFolder = basename($item->getPath());
                         
-                        // Check naming logic
                         if (str_starts_with(strtoupper($filename), 'IMG_') || str_starts_with(strtoupper($filename), 'DCIM_')) {
                             $title = $parentFolder;
                         } else {
-                            // [AI HARMONIZATION] Hapus kata/kode sudut pandang (Termasuk B, C, D, E) sebelum diformat
                             $baseName = preg_replace('/[ _-]*(depan|belakang|samping|perspektif|detail|b|c|d|e)$/i', '', $filenameWithoutExt);
-                            
-                            // Extract from filename: Play-Adobe 40616-0011 -> Play Adobe 40616 0011
                             $title = str_replace(['-', '_'], ' ', $baseName);
-                            
-                            // Bersihkan spasi berlebih
                             $title = trim($title);
-                            
-                            // Format FG codes, e.g. (fg 42918) -> (FG-42918)
                             $title = preg_replace('/\(?\bfg\s*([0-9]+)\)?/i', '(FG-$1)', $title);
                         }
                         
                         $description = $title;
-                        
-                        // Keywords: split title by space
                         $keywordsArray = explode(' ', strtolower($title));
                         $keywords = implode(', ', $keywordsArray);
-                        
                         $alt = $title;
                         
-                        // imageUrl format: SWATCHES/FABRIC/SUNBRELLA/Play-Adobe 40616-0011.webp
                         $imageUrl = $relativePath;
-                        
-                        // siteUrl format: ?SWATCHES/FABRIC/SUNBRELLA#pid=Play-Adobe 40616-0011.webp
                         $parentRelativeDir = dirname($relativePath);
                         if ($parentRelativeDir === '.') {
                             $parentRelativeDir = '';
@@ -269,26 +268,17 @@ class CrawlerLib
                         
                         $siteUrl = '?' . $parentRelativeDir . '#pid=' . $filename;
                         
-                        if ($this->imageExists($imageUrl)) {
+                        // Periksa apakah gambar atau situs sudah pernah terindeks
+                        if ($this->imageExists($imageUrl) || $this->linkExists($siteUrl)) {
                              $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #4a9c8f;'>Skip: $title sudah ada</span>", 'cyan');
                         } else {
-                            // Insert into cari_sites
-                            if (!$this->linkExists($siteUrl)) {
-                                if ($this->insertLink($siteUrl, $title, $description, $keywords)) {
-                                    $sitesAdded++;
-                                } else {
-                                    $errors = implode(", ", $this->siteModel->errors());
-                                    $this->out("<span style='color: #dc3545;'>[ERROR] Gagal menambah situs: $errors</span>", 'red');
-                                }
-                            }
-                            
-                            // Insert into cari_images
-                            if ($this->insertImage($siteUrl, $imageUrl, $alt, $title)) {
-                                $imagesAdded++;
-                                $this->out("<span style='color: #28a745;'>[SUCCESS]</span> <span style='color: #d4d4d4;'>Menambahkan: $title</span>", 'green');
+                            // Input 1 Baris Produk Tunggal Utuh
+                            if ($this->insertProductItem($siteUrl, $imageUrl, $title, $description, $keywords, $alt)) {
+                                $itemsAdded++;
+                                $this->out("<span style='color: #28a745;'>[SUCCESS]</span> <span style='color: #d4d4d4;'>Menambahkan produk: $title</span>", 'green');
                             } else {
-                                $errors = implode(", ", $this->imageModel->errors());
-                                $this->out("<span style='color: #dc3545;'>[ERROR] Gagal menambah gambar: $errors</span>", 'red');
+                                $errors = implode(", ", $this->cariModel->errors());
+                                $this->out("<span style='color: #dc3545;'>[ERROR] Gagal menambah produk: $errors</span>", 'red');
                             }
                         }
                     }
@@ -296,7 +286,7 @@ class CrawlerLib
             }
         }
         
-        $kesimpulan = "SELESAI: Berhasil menambahkan $sitesAdded tautan ke cari_sites dan $imagesAdded gambar ke cari_images.";
+        $kesimpulan = "SELESAI: Berhasil menambahkan $itemsAdded produk tunggal ke tabel gkr_cari.";
         $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>" . $kesimpulan . "</span>", 'yellow');
         
         return $kesimpulan;

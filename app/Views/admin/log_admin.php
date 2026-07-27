@@ -106,8 +106,8 @@
                                             <td class="ps-4"><?= esc($log['nama_lengkap'] ?? 'Tamu / Anonim') ?></td>
                                             <td><span class="fw-medium"><?= esc($log['kata_kunci']) ?></span></td>
                                             <td>
-                                                <?php if ($log['tipe_pencarian'] === 'gambar'): ?>
-                                                    <span class="badge bg-primary rounded-pill"><i class="fas fa-image me-1"></i> Gambar</span>
+                                                <?php if (strpos(strtolower($log['tipe_pencarian']), 'gambar') !== false): ?>
+                                                    <span class="badge bg-primary rounded-pill"><i class="fas fa-image me-1"></i> <?= esc(ucwords($log['tipe_pencarian'])) ?></span>
                                                 <?php elseif ($log['tipe_pencarian'] === 'situs'): ?>
                                                     <span class="badge bg-info rounded-pill"><i class="fas fa-globe me-1"></i> Situs</span>
                                                 <?php else: ?>

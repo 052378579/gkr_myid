@@ -167,7 +167,7 @@ createApp({
                         throw new Error(errorMsg);
                     }
                     
-                    if (data.status === 'success') {
+                    if (data.status === 'success' || data.status === 'sukses') {
                         window.location.href = window.AppConfig.searchUrl + '?type=image_results';
                     } else {
                         uploadError.value = 'Terjadi kesalahan saat memproses gambar.';

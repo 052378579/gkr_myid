@@ -20,7 +20,7 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 
 **Tahap III: Otomatisasi Jaringan Neural**
 - `[x]` **AI Trainer Engine (Web UI):** Merombak total skema sinkronisasi memori pelatih AI. Mengubah terminal primitif SSH (*root@budi*) menjadi panel web ber-UI layar terminal hitam (`/crawl/ai`) yang modern dan interaktif.
-- `[x]` **Bypass Timeout & Asynchronous Streaming:** Menghancurkan batas *PHP Timeout 30s* dan batasan *Cloudflare/Nginx*, menyetel `set_time_limit(0)`, mengeksekusi parameter Python *unbuffered* (`-u`), dan menangkap HTTP *ReadableStream* untuk menampilkan proses log ke layar secara *real-time*.
+- `[x]` **Bypass Timeout & Asynchronous Streaming:** Menghancurkan batas *PHP Timeout 30s* dan batasan *Cloudflare/Nginx*, menyetel `set_time_limit(0)`, mengeksecusi parameter Python *unbuffered* (`-u`), dan menangkap HTTP *ReadableStream* untuk menampilkan proses log ke layar secara *real-time*.
 - `[x]` **No-FG Indexing (AI Indexing Bebas Hambatan):** Mengubah *regular expression* pada pelatih AI agar sanggup mengindeks semua gambar tak peduli apakah failnya memiliki nama berformat khusus (`FG-XXXX`) atau format mentah biasa (`IMG_1234`). Total sinkronisasi melonjak 20x lipat (Rasio 100%).
 
 **Tahap IV: Harmonisasi AI & Web Crawler**
@@ -58,8 +58,14 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Pilar 3: Log Audit (Data Telemetry)**: Menambahkan kolom `source` ke MySQL dan menyuntikkannya ke `LogCariModel` agar dasbor Web mengenali lalu lintas dari Telegram.
 - `[x]` **Pilar 4: Typo Tolerance (Penyelamat Typo)**: Membuat indeks *Full-Text* dan mengganti `LIKE` yang lambat dengan gabungan `MATCH AGAINST` (MySQL) serta `levenshtein()` (PHP AI) untuk akurasi tertinggi.
 
+**Tahap X: UX Interaktif, Cropper.js & Telegram Notifier**
+- `[x]` **Autocomplete Pencarian Teks:** Membangun endpoint `/api/autocomplete` di `GraciaApi.php` dan mengintegrasikannya dengan Vue.js 3 (`index.js`) menggunakan *debounce* 300ms serta navigasi kibor (Panah Atas/Bawah & Enter).
+- `[x]` **Pemotong Gambar Interaktif (Cropper.js):** Mengintegrasikan Cropper.js pada modal pencarian gambar visual untuk memungkinkan pengguna melakukan *crop* area objek produk sebelum inferensi AI.
+- `[x]` **Spotlight Aura UI Animation:** Mengimplementasikan efek pendaran aura yang mengikuti gerakan kursor pengguna pada tombol pencarian utama (`.google-ai-container-spotlight`).
+- `[x]` **AI Trainer Engine `ai_index.py` & Telegram Notifier:** Memperbarui skrip pelatih AI dengan pembatasan thread PyTorch ARM (`OMP_NUM_THREADS=1`), penanganan gambar korup (`image.load()`), pengalihan cache `TORCH_HOME` ke `writable/torch_cache`, serta pengiriman notifikasi otomatis ke Telegram Bot saat sinkronisasi selesai.
+
 ## 🛠️ Prioritas Rendah / Kosmetik (Low Priority)
 - `[x]` **Dark Mode (Tema Gelap):**
   - Implementasikan tema gelap memanfaatkan variabel CSS dari Bootstrap 5.3 (Terbatas pada ruang Admin).
-- `[ ]` **Autocomplete Pencarian Teks:**
-  - Integrasikan sistem saran pencarian *real-time* yang terhubung ke endpoint RESTful API.
+- `[x]` **Autocomplete Pencarian Teks & Interactive Cropper:**
+  - Telah diselesaikan secara menyeluruh di Tahap X.

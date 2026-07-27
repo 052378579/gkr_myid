@@ -8,6 +8,16 @@ class AdminController extends BaseController
 {
     public function index()
     {
+        return redirect()->to('/admin/dashboard');
+    }
+
+    public function dashboard()
+    {
+        return view('admin/dashboard_admin', ['version' => $this->getAppVersion()]);
+    }
+
+    public function cari()
+    {
         return view('admin/beranda_admin', ['version' => $this->getAppVersion()]);
     }
 

@@ -27,7 +27,12 @@
         <div class="sidebar-header mt-3">MENU UTAMA</div>
         <ul class="sidebar-menu">
             <li>
-                <a href="<?= base_url('admin') ?>" class="<?= (uri_string() == 'admin') ? 'active' : '' ?>">
+                <a href="<?= base_url('admin/dashboard') ?>" class="<?= (uri_string() == 'admin/dashboard' || uri_string() == 'admin') ? 'active' : '' ?>">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="<?= base_url('admin/cari') ?>" class="<?= (uri_string() == 'admin/cari') ? 'active' : '' ?>">
                     <i class="fas fa-search"></i> Mesin Pencari
                 </a>
             </li>

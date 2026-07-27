@@ -73,18 +73,22 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-def extract_vector(img_path):
-    if not os.path.exists(img_path): return None
-    try:
-        image = Image.open(img_path).convert('RGB')
-        image.load() # Paksa baca ke RAM untuk menangkap error korup (menghindari Bus Error)
-        
-        tensor = transform(image).unsqueeze(0)
-        with torch.no_grad():
-            embedding = feature_extractor(tensor).flatten().numpy()
-        return embedding / np.linalg.norm(embedding)
-    except:
-        return None
+BATCH_SIZE = 16
+
+def process_batch(tensors, ids, target_vectors, target_mapping):
+    if not tensors: return
+    batch_input = torch.stack(tensors)
+    with torch.no_grad():
+        embeddings = feature_extractor(batch_input).flatten(start_dim=1).numpy()
+    
+    # Normalisasi vektor per baris (axis=1) untuk Cosine Similarity FAISS
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+    norms[norms == 0] = 1e-10 # Hindari pembagian nol
+    embeddings = embeddings / norms
+    
+    for i in range(len(embeddings)):
+        target_vectors.append(embeddings[i])
+        target_mapping[str(len(target_vectors) - 1)] = ids[i]
 
 vectors = []
 mapping = {}
@@ -102,7 +106,11 @@ for target in TARGET_DIRS:
                 if file.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
                     all_files.append((target, os.path.join(root, file), file))
 
-print(f"{C_GREEN}Menemukan {len(all_files)} file gambar.{C_RESET} Mulai ekstraksi fitur AI...")
+print(f"{C_GREEN}Menemukan {len(all_files)} file gambar.{C_RESET} Mulai ekstraksi fitur AI secara batch...")
+
+batch_tensors = []
+batch_identifiers = []
+processed_count = 0
 
 for target_folder, full_path, file_name in all_files:
     identifier = None
@@ -125,14 +133,34 @@ for target_folder, full_path, file_name in all_files:
     if not identifier:
         continue
         
-    print(f"{C_GREEN}[{len(vectors)+1}/{len(all_files)}]{C_RESET} {C_BOLD}->{C_RESET} Ekstrak fitur: {C_YELLOW}{file_name}{C_RESET}")
+    # Load and transform image
+    if os.path.exists(full_path):
+        try:
+            image = Image.open(full_path).convert('RGB')
+            image.load() # Paksa baca ke RAM untuk menangkap error korup (menghindari Bus Error)
+            tensor = transform(image)
+            batch_tensors.append(tensor)
+            batch_identifiers.append(identifier)
+        except Exception:
+            pass
+
+    processed_count += 1
+    
+    # Proses ekstraksi jika mencapai batch size
+    if len(batch_tensors) == BATCH_SIZE:
+        process_batch(batch_tensors, batch_identifiers, vectors, mapping)
+        print(f"{C_GREEN}[{processed_count}/{len(all_files)}]{C_RESET} {C_BOLD}->{C_RESET} {BATCH_SIZE} gambar diekstrak & di-batch...")
         
-    vector = extract_vector(full_path)
-    if vector is not None:
-        vectors.append(vector)
-        mapping[str(len(vectors) - 1)] = identifier
-        
-    # Bersihkan memori secara manual
+        batch_tensors = []
+        batch_identifiers = []
+        gc.collect() # Bersihkan memori secara manual (per batch)
+
+# Proses sisa gambar yang tidak genap 16
+if batch_tensors:
+    process_batch(batch_tensors, batch_identifiers, vectors, mapping)
+    print(f"{C_GREEN}[{processed_count}/{len(all_files)}]{C_RESET} {C_BOLD}->{C_RESET} {len(batch_tensors)} gambar sisa diekstrak...")
+    batch_tensors = []
+    batch_identifiers = []
     gc.collect()
 
 # 2. Bangun dan Ekspor Berkas Database Vektor

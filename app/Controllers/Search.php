@@ -2,11 +2,64 @@
 
 namespace App\Controllers;
 
-use App\Models\SiteModel;
-use App\Models\ImageModel;
+use App\Models\CariModel;
 
 class Search extends BaseController
 {
+    /**
+     * Mendapatkan prefix URL foto secara dinamis sesuai lingkungan server (DEV vs PROD)
+     */
+    private function getFotoUrlPrefix(): string
+    {
+        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+        $serverIp = $_SERVER['SERVER_ADDR'] ?? '';
+        $combined = strtolower($host . ' ' . $serverIp);
+
+        if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id|localhost/', $combined)) {
+            return 'https://foto.budi.biz.id/';
+        }
+
+        return 'https://foto.gkr.my.id/';
+    }
+
+    /**
+     * Memformat array baris data hasil pencarian dengan prefix URL foto yang sesuai
+     */
+    private function formatResultUrls(array &$results, string $urlPrefix): void
+    {
+        if (empty($results)) return;
+
+        foreach ($results as &$row) {
+            $row['title'] = $row['judul'] ?? $row['title'] ?? '';
+            $row['description'] = $row['deskripsi'] ?? $row['description'] ?? '';
+
+            // Format URL Situs (Galeri atau Alamat Utama)
+            if (!empty($row['url'])) {
+                if (str_starts_with($row['url'], '?')) {
+                    $row['url'] = $urlPrefix . $row['url'];
+                } elseif (!str_starts_with($row['url'], 'http://') && !str_starts_with($row['url'], 'https://')) {
+                    $row['url'] = $urlPrefix . ltrim($row['url'], '/');
+                }
+            }
+
+            // Format Site URL
+            if (!empty($row['siteUrl'])) {
+                if (str_starts_with($row['siteUrl'], '?')) {
+                    $row['siteUrl'] = $urlPrefix . $row['siteUrl'];
+                } elseif (!str_starts_with($row['siteUrl'], 'http://') && !str_starts_with($row['siteUrl'], 'https://')) {
+                    $row['siteUrl'] = $urlPrefix . ltrim($row['siteUrl'], '/');
+                }
+            }
+
+            // Format Image URL
+            if (!empty($row['imageUrl'])) {
+                if (!str_starts_with($row['imageUrl'], 'http://') && !str_starts_with($row['imageUrl'], 'https://')) {
+                    $row['imageUrl'] = $urlPrefix . ltrim($row['imageUrl'], '/');
+                }
+            }
+        }
+    }
+
     public function index()
     {
         // Sanitasi input pencarian untuk mencegah Reflected XSS
@@ -19,13 +72,12 @@ class Search extends BaseController
             return redirect()->to('/');
         }
 
-        $modelSitus = new SiteModel();
-        $modelGambar = new ImageModel();
+        $cariModel = new CariModel();
         $doodleModel = new \App\Models\DoodleModel();
 
         $dataPencarian = [
-            'query' => $kataKunci, // Dipertahankan 'query' untuk kompatibilitas View
-            'type'  => $tipe,      // Dipertahankan 'type' untuk kompatibilitas View
+            'query' => $kataKunci,
+            'type'  => $tipe,
             'page'  => $halaman,
         ];
 
@@ -35,27 +87,28 @@ class Search extends BaseController
             $dataPencarian['altLogo'] = $doodle['event'];
         }
 
+        $urlPrefix = $this->getFotoUrlPrefix();
+
         if ($tipe === 'sites') {
-            $dataPencarian['totalResults'] = $modelSitus->like('title', $kataKunci)
-                                                        ->orLike('description', $kataKunci)
-                                                        ->orLike('url', $kataKunci)
-                                                        ->orLike('keywords', $kataKunci)
+            // Tab "Semua": Mencari pada seluruh produk
+            $dataPencarian['totalResults'] = $cariModel->groupStart()
+                                                            ->like('judul', $kataKunci)
+                                                            ->orLike('deskripsi', $kataKunci)
+                                                            ->orLike('url', $kataKunci)
+                                                            ->orLike('kata_kunci', $kataKunci)
+                                                        ->groupEnd()
                                                         ->countAllResults(false);
-            $dataPencarian['results'] = $modelSitus->like('title', $kataKunci)
-                                                   ->orLike('description', $kataKunci)
-                                                   ->orLike('url', $kataKunci)
-                                                   ->orLike('keywords', $kataKunci)
-                                                   ->paginate($batasHalaman, 'default', $halaman);
-            $dataPencarian['pager'] = $modelSitus->pager;
+            $dataPencarian['results'] = $cariModel->groupStart()
+                                                      ->like('judul', $kataKunci)
+                                                      ->orLike('deskripsi', $kataKunci)
+                                                      ->orLike('url', $kataKunci)
+                                                      ->orLike('kata_kunci', $kataKunci)
+                                                  ->groupEnd()
+                                                  ->paginate($batasHalaman, 'default', $halaman);
+            $dataPencarian['pager'] = $cariModel->pager;
 
-            // Logika penggantian URL dinamis
-            $urlPrefix = 'https://foto.gkr.my.id/';
+            $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
 
-            if (!empty($dataPencarian['results'])) {
-                foreach ($dataPencarian['results'] as &$row) {
-                    $row['url'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['url']);
-                }
-            }
         } elseif ($tipe === 'image_results') {
             $kodeBom = session()->get('search_kode_bom');
             $aiResults = session()->get('search_ai_results');
@@ -65,86 +118,65 @@ class Search extends BaseController
             }
 
             if (strpos($kodeBom, 'SWATCH:') === 0) {
-                // Jangan cari ke DB jika hasil utamanya adalah corak/swatch
                 $dataPencarian['totalResults'] = 0;
                 $dataPencarian['results'] = [];
                 $dataPencarian['pager'] = null;
             } else {
-                // Ambil semua kode_bom dari array AI (maksimal 5)
                 $kodeBomList = [$kodeBom];
                 if (!empty($aiResults) && is_array($aiResults)) {
                     $kodeBomList = array_unique(array_column($aiResults, 'kode_bom'));
                 }
 
-                // Hitung total hasil
-                $modelGambar->select('cari_images.*')->groupStart();
+                $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->groupStart();
                 foreach ($kodeBomList as $kb) {
-                    // Abaikan swatch di pencarian sekunder jika ada
                     if (strpos($kb, 'SWATCH:') !== 0) {
-                        $modelGambar->orLike('title', $kb)->orLike('imageUrl', $kb);
+                        $cariModel->orLike('judul', $kb)->orLike('imageUrl', $kb);
                     }
                 }
-                $modelGambar->groupEnd()->where('broken', 0);
-                $dataPencarian['totalResults'] = $modelGambar->countAllResults(false);
+                $cariModel->groupEnd()->where('rusak', 0);
+                $dataPencarian['totalResults'] = $cariModel->countAllResults(false);
                 
-                // Ambil data halaman
-                $modelGambar->select('cari_images.*')->groupStart();
+                $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->groupStart();
                 foreach ($kodeBomList as $kb) {
                     if (strpos($kb, 'SWATCH:') !== 0) {
-                        $modelGambar->orLike('title', $kb)->orLike('imageUrl', $kb);
+                        $cariModel->orLike('judul', $kb)->orLike('imageUrl', $kb);
                     }
                 }
-                $modelGambar->groupEnd()->where('broken', 0);
-                $dataPencarian['results'] = $modelGambar->paginate($batasHalaman, 'default', $halaman);
-                $dataPencarian['pager'] = $modelGambar->pager;
+                $cariModel->groupEnd()->where('rusak', 0);
+                $dataPencarian['results'] = $cariModel->paginate($batasHalaman, 'default', $halaman);
+                $dataPencarian['pager'] = $cariModel->pager;
             }
 
-            $host = $_SERVER['HTTP_HOST'] ?? '';
-            if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id/', $host)) {
-                $urlPrefix = 'https://foto.budi.biz.id/';
-            } else {
-                $urlPrefix = 'https://foto.gkr.my.id/';
-            }
+            $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
 
-            if (!empty($dataPencarian['results'])) {
-                foreach ($dataPencarian['results'] as &$row) {
-                    $row['siteUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['siteUrl']);
-                    $row['imageUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(.*)/', $urlPrefix . '$1', ltrim($row['imageUrl'], '/'));
-                }
-            }
         } else {
-            $dataPencarian['totalResults'] = $modelGambar->groupStart()
-                                                             ->like('title', $kataKunci)
-                                                             ->orLike('alt', $kataKunci)
-                                                             ->orLike('imageUrl', $kataKunci)
-                                                         ->groupEnd()
-                                                         ->where('broken', 0)
-                                                         ->countAllResults(false);
-            $dataPencarian['results'] = $modelGambar->groupStart()
-                                                        ->like('title', $kataKunci)
-                                                        ->orLike('alt', $kataKunci)
-                                                        ->orLike('imageUrl', $kataKunci)
-                                                    ->groupEnd()
-                                                    ->where('broken', 0)
-                                                    ->paginate($batasHalaman, 'default', $halaman);
-            $dataPencarian['pager'] = $modelGambar->pager;
+            // Tab "Gambar" (type === 'images')
+            $dataPencarian['totalResults'] = $cariModel->where('imageUrl IS NOT NULL')
+                                                      ->where('imageUrl !=', '')
+                                                      ->groupStart()
+                                                          ->like('judul', $kataKunci)
+                                                          ->orLike('alt', $kataKunci)
+                                                          ->orLike('imageUrl', $kataKunci)
+                                                          ->orLike('kata_kunci', $kataKunci)
+                                                      ->groupEnd()
+                                                      ->where('rusak', 0)
+                                                      ->countAllResults(false);
+            $dataPencarian['results'] = $cariModel->where('imageUrl IS NOT NULL')
+                                                  ->where('imageUrl !=', '')
+                                                  ->groupStart()
+                                                      ->like('judul', $kataKunci)
+                                                      ->orLike('alt', $kataKunci)
+                                                      ->orLike('imageUrl', $kataKunci)
+                                                      ->orLike('kata_kunci', $kataKunci)
+                                                  ->groupEnd()
+                                                  ->where('rusak', 0)
+                                                  ->paginate($batasHalaman, 'default', $halaman);
+            $dataPencarian['pager'] = $cariModel->pager;
 
-            $host = $_SERVER['HTTP_HOST'] ?? '';
-            // Jika host mengandung IP Dev atau domain Dev (budi.biz.id)
-            if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id/', $host)) {
-                $urlPrefix = 'https://foto.budi.biz.id/';
-            } else {
-                $urlPrefix = 'https://foto.gkr.my.id/';
-            }
-
-            if (!empty($dataPencarian['results'])) {
-                foreach ($dataPencarian['results'] as &$row) {
-                    $row['siteUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['siteUrl']);
-                    $row['imageUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(.*)/', $urlPrefix . '$1', ltrim($row['imageUrl'], '/'));
-                }
-            }
+            $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
         }
 
+        // Fallback SpellChecker jika hasil pencarian 0
         $exact = $this->request->getGet('exact');
         if ($dataPencarian['totalResults'] == 0 && empty($exact) && $tipe !== 'image_results' && !empty(trim($kataKunci))) {
             $spellChecker = new \App\Libraries\SpellChecker();
@@ -158,52 +190,43 @@ class Search extends BaseController
                 $dataPencarian['query'] = $kataKunci;
 
                 if ($tipe === 'sites') {
-                    $dataPencarian['totalResults'] = $modelSitus->like('title', $kataKunci)
-                                                                ->orLike('description', $kataKunci)
-                                                                ->orLike('url', $kataKunci)
+                    $dataPencarian['totalResults'] = $cariModel->groupStart()
+                                                                    ->like('judul', $kataKunci)
+                                                                    ->orLike('deskripsi', $kataKunci)
+                                                                    ->orLike('url', $kataKunci)
+                                                                ->groupEnd()
                                                                 ->countAllResults(false);
-                    $dataPencarian['results'] = $modelSitus->like('title', $kataKunci)
-                                                           ->orLike('description', $kataKunci)
-                                                           ->orLike('url', $kataKunci)
-                                                           ->paginate($batasHalaman, 'default', $halaman);
-                    $dataPencarian['pager'] = $modelSitus->pager;
+                    $dataPencarian['results'] = $cariModel->groupStart()
+                                                              ->like('judul', $kataKunci)
+                                                              ->orLike('deskripsi', $kataKunci)
+                                                              ->orLike('url', $kataKunci)
+                                                          ->groupEnd()
+                                                          ->paginate($batasHalaman, 'default', $halaman);
+                    $dataPencarian['pager'] = $cariModel->pager;
 
-                    $urlPrefix = 'https://foto.gkr.my.id/';
-                    if (!empty($dataPencarian['results'])) {
-                        foreach ($dataPencarian['results'] as &$row) {
-                            $row['url'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['url']);
-                        }
-                    }
+                    $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
                 } else {
-                    $dataPencarian['totalResults'] = $modelGambar->groupStart()
-                                                                     ->like('title', $kataKunci)
-                                                                     ->orLike('alt', $kataKunci)
-                                                                     ->orLike('imageUrl', $kataKunci)
-                                                                 ->groupEnd()
-                                                                 ->where('broken', 0)
-                                                                 ->countAllResults(false);
-                    $dataPencarian['results'] = $modelGambar->groupStart()
-                                                                ->like('title', $kataKunci)
-                                                                ->orLike('alt', $kataKunci)
-                                                                ->orLike('imageUrl', $kataKunci)
-                                                            ->groupEnd()
-                                                            ->where('broken', 0)
-                                                            ->paginate($batasHalaman, 'default', $halaman);
-                    $dataPencarian['pager'] = $modelGambar->pager;
+                    $dataPencarian['totalResults'] = $cariModel->where('imageUrl IS NOT NULL')
+                                                              ->where('imageUrl !=', '')
+                                                              ->groupStart()
+                                                                  ->like('judul', $kataKunci)
+                                                                  ->orLike('alt', $kataKunci)
+                                                                  ->orLike('imageUrl', $kataKunci)
+                                                              ->groupEnd()
+                                                              ->where('rusak', 0)
+                                                              ->countAllResults(false);
+                    $dataPencarian['results'] = $cariModel->where('imageUrl IS NOT NULL')
+                                                          ->where('imageUrl !=', '')
+                                                          ->groupStart()
+                                                              ->like('judul', $kataKunci)
+                                                              ->orLike('alt', $kataKunci)
+                                                              ->orLike('imageUrl', $kataKunci)
+                                                          ->groupEnd()
+                                                          ->where('rusak', 0)
+                                                          ->paginate($batasHalaman, 'default', $halaman);
+                    $dataPencarian['pager'] = $cariModel->pager;
 
-                    $host = $_SERVER['HTTP_HOST'] ?? '';
-                    if (preg_match('/192\.168\.1\.4|10\.147\.17\.40|budi\.biz\.id/', $host)) {
-                        $urlPrefix = 'https://foto.budi.biz.id/';
-                    } else {
-                        $urlPrefix = 'https://foto.gkr.my.id/';
-                    }
-
-                    if (!empty($dataPencarian['results'])) {
-                        foreach ($dataPencarian['results'] as &$row) {
-                            $row['siteUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(\?[^\#]+)/', $urlPrefix . '$1', $row['siteUrl']);
-                            $row['imageUrl'] = preg_replace('/^(?:http:\/\/[^\/]+\/)?(.*)/', $urlPrefix . '$1', ltrim($row['imageUrl'], '/'));
-                        }
-                    }
+                    $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
                 }
             }
         }
@@ -219,15 +242,15 @@ class Search extends BaseController
             }
         }
 
-        // Trigger Event Pencarian
+        // Trigger Event Log Pencarian
         $id_user = session()->get('id_user') ?? null;
         if (!empty(trim($kataKunci)) || $tipe === 'image_results') {
-            $logTipe = 'teks'; // Default tipe teks (images/all)
+            $logTipe = 'teks';
             $logKataKunci = $kataKunci;
             if ($tipe === 'sites') {
                 $logTipe = 'situs';
             } elseif ($tipe === 'image_results') {
-                $logTipe = 'gambar';
+                $logTipe = 'gambar (MobileNetV3 & FAISS Vector Database)';
                 $logKataKunci = $kodeBom ?? 'UPLOADED_IMAGE';
             }
             

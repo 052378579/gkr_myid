@@ -15,7 +15,7 @@ const { createApp, ref, computed, watch, onMounted } = Vue;
 
 createApp({
     setup() {
-        const currentTab = ref('sites');
+        const currentTab = ref('images');
         const sites = ref([]);
         const images = ref([]);
         const doodles = ref([]);

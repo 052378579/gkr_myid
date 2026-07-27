@@ -2,8 +2,7 @@
 
 namespace App\Libraries;
 
-use App\Models\SiteModel;
-use App\Models\ImageModel;
+use App\Models\CariModel;
 
 class SpellChecker
 {
@@ -61,28 +60,16 @@ class SpellChecker
     private function buildDictionary(): array
     {
         $words = [];
-        $siteModel = new SiteModel();
-        $imageModel = new ImageModel();
+        $cariModel = new CariModel();
 
-        // Ambil data untuk membangun kamus (dilimit agar tidak berat)
-        $sites = $siteModel->select('title, description')->findAll(5000);
-        foreach ($sites as $site) {
-            $this->extractWords($site['title'] . ' ' . $site['description'], $words);
-        }
-
-        // Pastikan kolom alt ada di cari_images, kalau tidak gunakan title
-        try {
-            $images = $imageModel->select('title, alt')->findAll(5000);
-            foreach ($images as $img) {
-                $alt = $img['alt'] ?? '';
-                $this->extractWords($img['title'] . ' ' . $alt, $words);
-            }
-        } catch (\Exception $e) {
-            // Jika kolom alt tidak ada
-            $images = $imageModel->select('title')->findAll(5000);
-            foreach ($images as $img) {
-                $this->extractWords($img['title'], $words);
-            }
+        // Ambil data untuk membangun kamus langsung dari tabel gkr_cari
+        $items = $cariModel->select('judul, alt, deskripsi, kata_kunci')->findAll(5000);
+        foreach ($items as $item) {
+            $combinedText = ($item['judul'] ?? '') . ' ' . 
+                             ($item['alt'] ?? '') . ' ' . 
+                             ($item['deskripsi'] ?? '') . ' ' . 
+                             ($item['kata_kunci'] ?? '');
+            $this->extractWords($combinedText, $words);
         }
 
         // Hilangkan duplikat dan index ulang

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gracia-cache-v1';
+const CACHE_NAME = 'gracia-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/site.webmanifest',
@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
   '/apple-touch-icon.png',
   '/web-app-manifest-192x192.png',
   '/web-app-manifest-512x512.png',
-  '/css/login.css' // Tambahkan aset CSS/JS lokal Anda yang lain di sini
+  '/css/login.css'
 ];
 
 // 1. Install Service Worker & Cache Aset Utama
@@ -37,16 +37,25 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. Strategi Fetch: Network First, Fallback to Cache (Bagus untuk Web Dinamis/PHP)
+// 3. Strategi Fetch: Hanya tangani GET Aset Statis, ABAIKAN POST/API/Crawler Streaming
 self.addEventListener('fetch', (event) => {
-  // Hanya tangani request HTTP/HTTPS (hindari chrome-extension:// dsb)
+  // PENTING: Wajib mengabaikan request POST, PUT, DELETE, streaming crawler, & API agar tidak diintersepsi PWA SW
+  if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
+  
+  // Abaikan rute API, Crawler, Admin Streaming, dan rute dinamis backend
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith('/crawler/') || 
+      url.pathname.startsWith('/api/') || 
+      url.pathname.startsWith('/admin/')) {
+    return;
+  }
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Jika sukses, duplikasi respons ke dalam cache untuk cadangan offline
-        if (event.request.method === 'GET' && response.status === 200) {
+        // Jika sukses GET 200, simpan cadangan offline
+        if (response.status === 200) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseClone);
@@ -55,7 +64,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() => {
-        // Jika jaringan gagal/offline, ambil dari cache
+        // Jika offline, ambil dari cache
         return caches.match(event.request);
       })
   );

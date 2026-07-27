@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const errorMsg = (data.messages && data.messages.error) || data.message || data.error || 'Terjadi kesalahan.';
                     throw new Error(errorMsg);
                 }
-                if (data.status === 'success') {
+                if (data.status === 'success' || data.status === 'sukses') {
                     let baseUrl = (window.SearchConfig && window.SearchConfig.searchUrl) ? window.SearchConfig.searchUrl : '/cari';
                     window.location.href = baseUrl + '?type=image_results';
                 } else {
