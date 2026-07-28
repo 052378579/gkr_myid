@@ -2,9 +2,8 @@
     background-color: #e4e7eb;
 }
 
-/* --- Rainbow Animation for Cari Button & Input --- */
-.google-ai-container,
-.google-ai-container-spotlight {
+/* --- Glow Animation for Input Area --- */
+.google-ai-container {
     position: relative;
     display: inline-block;
 }
@@ -13,8 +12,7 @@
     display: block;
 }
 
-.google-ai-container::before,
-.google-ai-container-spotlight::before {
+.google-ai-container::before {
     content: '';
     position: absolute;
     top: -2px;
@@ -43,26 +41,9 @@
     animation: geserPelangi 2s linear infinite;
 }
 
-/* Spotlight Glow Animation (Tombol Cari) */
-.google-ai-container-spotlight::before {
-    transition: opacity 0.4s ease, background-position 0.4s ease, -webkit-mask-image 0.4s ease, mask-image 0.4s ease;
-    -webkit-mask-image: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 100%);
-    mask-image: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 100%);
-}
-
-.google-ai-container-spotlight:hover::before,
-.google-ai-container-spotlight:focus-within::before {
-    opacity: 0.85;
-    animation: geserPelangi 3s linear infinite;
-}
-
 /* Background Overrides */
-.google-ai-container:hover .btn-mode-ai,
-.google-ai-container:focus-within .btn-mode-ai,
 .google-ai-container:hover .input-mode-ai,
-.google-ai-container:focus-within .input-mode-ai,
-.google-ai-container-spotlight:hover .btn-mode-ai,
-.google-ai-container-spotlight:focus-within .btn-mode-ai {
+.google-ai-container:focus-within .input-mode-ai {
     background-color: var(--bs-body-bg) !important;
 }
 

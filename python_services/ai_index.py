@@ -55,7 +55,7 @@ def send_telegram_notification(kesimpulan):
 
 # Base direktori (Real Path)
 BASE_DIR = "/var/www/FOTO"
-TARGET_DIRS = ["BUYER", "GRACIA", "SAMPLE GRACIA", "SWATCHES", "WEB"]
+TARGET_DIRS = ["BUYER", "GRACIA", "SWATCHES", "WEB"]
 
 # Batasi PyTorch agar tidak menghabiskan RAM & CPU
 torch.set_num_threads(1)

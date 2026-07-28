@@ -7,6 +7,7 @@ createApp({
             totalItems: 0,
             totalKlik: 0,
             totalBroken: 0,
+            totalUsers: 0,
             topProduct: '-',
             top10: []
         });
@@ -103,7 +104,10 @@ createApp({
             const chartEl = document.querySelector("#apexTopChart");
             if (chartEl) {
                 if (chartInstance) {
-                    chartInstance.destroy();
+                    try {
+                        chartInstance.destroy();
+                    } catch (e) {}
+                    chartInstance = null;
                 }
                 chartInstance = new ApexCharts(chartEl, options);
                 chartInstance.render();

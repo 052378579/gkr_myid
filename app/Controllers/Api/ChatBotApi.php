@@ -69,16 +69,21 @@ class ChatBotApi extends BaseController
             $userModel = new UserModel();
             $karyawan = $userModel->where('telegram_chat_id', $id_obrolan)->first();
 
-            // Hanya proses jika karyawan ditemukan DAN statusnya aktif
+            // Jika karyawan BELUM terdaftar di database via telegram_chat_id
             if (!$karyawan || $karyawan['status'] !== 'aktif') {
-                // Karyawan Tidak Dikenali / Suspend, Tolak Akses
-                $this->kirimPeringatanAdmin($id_obrolan);
+                $this->prosesAutoBind($id_obrolan, $pesanMasuk, $userModel);
             } else {
                 // Karyawan Terverifikasi & Aktif, Lanjut Logika Pencarian
-                // Deteksi Skenario Perintah 'Cari ...' (Case Insensitive)
                 if (preg_match('/^cari\s+(.*)/i', $pesanMasuk, $cocok)) {
                     $kataKunci = $cocok[1];
                     $this->prosesPencarian($id_obrolan, $kataKunci, $karyawan['id_user']);
+                } else if (preg_match('/^\/(start|daftar)/i', $pesanMasuk)) {
+                    $pesanAktif = "✅ *Akun Anda Sudah Terhubung!*\n\n";
+                    $pesanAktif .= "Halo *" . $karyawan['nama_lengkap'] . "*! Akun Telegram Anda telah aktif dan terhubung.\n\n";
+                    $pesanAktif .= "Ketik *Cari <Nama Barang>* untuk mencari katalog.\n";
+                    $pesanAktif .= "Contoh: *Cari Alcova*";
+                    
+                    $this->kirimPesanTelegram($id_obrolan, $pesanAktif);
                 } else {
                     // Balasan jika tidak menggunakan format 'Cari'
                     $pesanPanduan = "Halo " . $karyawan['nama_lengkap'] . "! Saya Asisten Gracia 🤖\n\n";
@@ -92,6 +97,62 @@ class ChatBotApi extends BaseController
 
         // Response wajib 200 OK standar REST API agar Telegram tidak spam notifikasi
         return $this->response->setJSON(['status' => 'sukses', 'pesan' => 'Webhook berhasil diproses']);
+    }
+
+    /**
+     * Logika Pendaftaran Otomatis (Auto-Bind) telegram_chat_id berbasis nomor HP
+     */
+    private function prosesAutoBind($id_obrolan, $pesanMasuk, $userModel)
+    {
+        // Ekstraksi nomor HP dari pesan (Mendukung format: /daftar 08..., /start 08..., atau langsung 08... / 628...)
+        preg_match('/(?:[\/\#]?(?:daftar|start|register)\s+)?(\+?62|0)?(8[0-9]{8,12})/', $pesanMasuk, $matches);
+
+        if (!empty($matches[2])) {
+            $inputDigits = '0' . $matches[2]; // Normalisasi format ke 08...
+            $inputRaw    = preg_replace('/[^0-9]/', '', $pesanMasuk);
+
+            // Cari user berdasarkan no_hp (format 08... atau angka mentah)
+            $userFound = $userModel->where('no_hp', $inputDigits)
+                                   ->orWhere('no_hp', $inputRaw)
+                                   ->first();
+
+            if ($userFound) {
+                if ($userFound['status'] !== 'aktif') {
+                    $pesanGagal = "⚠️ *Akun Dinonaktifkan!*\n\nProfil Karyawan *" . $userFound['nama_lengkap'] . "* terdaftar tetapi dalam status *" . $userFound['status'] . "*. Silakan hubungi Administrator.";
+                    $this->kirimPesanTelegram($id_obrolan, $pesanGagal);
+                    return;
+                }
+
+                // Jalankan AUTO-BIND DATABASE
+                $userModel->update($userFound['id_user'], [
+                    'telegram_chat_id' => $id_obrolan
+                ]);
+
+                $pesanSukses = "✅ *Pendaftaran Otomatis Berhasil!*\n\n";
+                $pesanSukses .= "Halo *" . $userFound['nama_lengkap'] . "*! Akun Telegram Anda berhasil terhubung dengan profil Karyawan Gracia:\n";
+                $pesanSukses .= "👤 *Nama:* " . $userFound['nama_lengkap'] . "\n";
+                $pesanSukses .= "🏢 *Divisi:* " . $userFound['divisi'] . "\n";
+                $pesanSukses .= "📱 *No HP:* " . $userFound['no_hp'] . "\n\n";
+                $pesanSukses .= "Kini Anda dapat langsung menggunakan perintah *Cari <Nama Barang>* untuk mencari katalog.\n";
+                $pesanSukses .= "Contoh: *Cari Alcova*";
+
+                $this->kirimPesanTelegram($id_obrolan, $pesanSukses);
+                return;
+            } else {
+                $pesanNotFound = "❌ *Nomor HP Tidak Ditemukan!*\n\nNomor HP *" . $inputDigits . "* tidak terdaftar dalam sistem Karyawan Gracia. Silakan periksa kembali atau hubungi Administrator.";
+                $this->kirimPesanTelegram($id_obrolan, $pesanNotFound);
+                return;
+            }
+        }
+
+        // Jika pesan hanya berupa /start atau instruksi awal tanpa nomor HP
+        $pesanInstruksi = "🤖 *Selamat Datang di Bot Asisten Gracia!*\n\n";
+        $pesanInstruksi .= "Akun Telegram Anda belum terhubung dengan profil Karyawan Gracia.\n\n";
+        $pesanInstruksi .= "Silakan balas pesan ini dengan perintah:\n";
+        $pesanInstruksi .= "👉 `/daftar <Nomor_HP>` atau ketik Nomor HP terdaftar Anda.\n\n";
+        $pesanInstruksi .= "*Contoh:* `/daftar 08123456789`";
+
+        $this->kirimPesanTelegram($id_obrolan, $pesanInstruksi);
     }
 
     /**

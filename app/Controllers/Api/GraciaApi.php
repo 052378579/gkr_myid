@@ -229,10 +229,11 @@ class GraciaApi extends BaseController
             }
         }
 
-        $totalKlikResult = $cariModel->selectSum('klik')->first();
+        $totalKlikResult = (new CariModel())->selectSum('klik')->first();
         $totalKlik = (int)($totalKlikResult['klik'] ?? 0);
-        $totalItems = $cariModel->countAllResults();
-        $totalBroken = $cariModel->where('rusak', 1)->countAllResults();
+        $totalItems = (new CariModel())->countAllResults();
+        $totalBroken = (new CariModel())->where('rusak', 1)->countAllResults();
+        $totalUsers = (new \App\Models\UserModel())->countAllResults();
         
         $topProduct = $topItems[0]['judul'] ?? '-';
 
@@ -244,6 +245,7 @@ class GraciaApi extends BaseController
                 'totalKlik'   => $totalKlik,
                 'totalItems'  => $totalItems,
                 'totalBroken' => $totalBroken,
+                'totalUsers'  => $totalUsers,
                 'topProduct'  => $topProduct
             ]
         ]);

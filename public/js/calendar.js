@@ -11,12 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth(); 
     let currentYear = currentDate.getFullYear();
-    const thisYear = currentYear;
     const todayDate = currentDate.getDate();
     const todayMonth = currentDate.getMonth();
     const todayYear = currentDate.getFullYear();
 
-    // Prevent dropdown close
+    // Prevent dropdown close on internal click
     const calendarDropdownWrap = document.getElementById('calendarDropdownWrap');
     if (calendarDropdownWrap) {
         calendarDropdownWrap.addEventListener('click', function (e) {
@@ -69,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 0; i < 6; i++) {
             let rowHtml = '<tr>';
-            
             let isCurrentWeek = false;
             let cellsHtml = '';
             
@@ -79,20 +77,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (i === 0 && j < adjustedFirstDay) {
                     let prevDate = daysInPrevMonth - (adjustedFirstDay - 1 - j);
-                    cellsHtml += `<td><span class="text-muted" style="opacity: 0.5;">${prevDate}</span></td>`;
+                    cellsHtml += `<td><span class="text-muted" style="opacity: 0.4;">${prevDate}</span></td>`;
                 } else if (date > daysInMonth) {
-                    cellsHtml += `<td><span class="text-muted" style="opacity: 0.5;">${nextMonthDate}</span></td>`;
+                    cellsHtml += `<td><span class="text-muted" style="opacity: 0.4;">${nextMonthDate}</span></td>`;
                     nextMonthDate++;
                 } else {
                     let isToday = (date === todayDate && month === todayMonth && year === todayYear);
                     if (isToday) {
                         isCurrentWeek = true;
-                        let bgColor = isWeekend ? '#dc3545' : 'var(--gkr-primary)';
-                        let shadowColor = isWeekend ? 'rgba(220,53,69,0.3)' : 'rgba(43,51,133,0.3)';
-                        let circleText = isWeekend ? 'white' : 'var(--gkr-primary-text)';
-                        cellsHtml += `<td><span style="background-color: ${bgColor}; color: ${circleText}; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; box-shadow: 0 2px 4px ${shadowColor};">${date}</span></td>`;
+                        let bgColor = isWeekend ? '#dc3545' : '#2B3385';
+                        let shadowColor = isWeekend ? 'rgba(220,53,69,0.4)' : 'rgba(43,51,133,0.4)';
+                        cellsHtml += `<td><span style="background-color: ${bgColor} !important; color: #ffffff !important; width: 26px; height: 26px; line-height: 26px; border-radius: 50%; display: inline-block; font-weight: bold; box-shadow: 0 3px 6px ${shadowColor};">${date}</span></td>`;
                     } else {
-                        cellsHtml += `<td><span style="color: ${textColor};">${date}</span></td>`;
+                        cellsHtml += `<td><span style="color: ${textColor}; display: inline-block; width: 26px; height: 26px; line-height: 26px;">${date}</span></td>`;
                     }
                     
                     date++;
@@ -103,10 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentWeekNumber = getWeekNumber(new Date(year, month, weekDateFallback));
             
             let isCurrentWeekWeekend = isCurrentWeek && (new Date().getDay() === 0 || new Date().getDay() === 6);
-            let weekBgColor = isCurrentWeekWeekend ? '#dc3545' : 'var(--gkr-primary)';
-            let weekCircleText = isCurrentWeekWeekend ? 'white' : 'var(--gkr-primary-text)';
+            let weekBgColor = isCurrentWeekWeekend ? '#dc3545' : '#2B3385';
             
-            let weekStyle = isCurrentWeek ? `background-color: ${weekBgColor}; color: ${weekCircleText}; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; display: inline-block; font-weight: bold;` : "color: #6c757d; font-weight: bold;";
+            let weekStyle = isCurrentWeek 
+                ? `background-color: ${weekBgColor} !important; color: #ffffff !important; width: 26px; height: 26px; line-height: 26px; border-radius: 50%; display: inline-block; font-weight: bold; box-shadow: 0 2px 5px rgba(43,51,133,0.3);` 
+                : "color: #6c757d; font-weight: bold; display: inline-block; width: 26px; height: 26px; line-height: 26px;";
             
             rowHtml += `<td><span style="${weekStyle}">${currentWeekNumber}</span></td>`;
             rowHtml += cellsHtml;
@@ -119,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        if(calendarBody) calendarBody.innerHTML = html;
+        if (calendarBody) calendarBody.innerHTML = html;
     }
 
     renderCalendar(currentMonth, currentYear);

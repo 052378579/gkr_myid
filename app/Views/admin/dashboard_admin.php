@@ -33,9 +33,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold mb-1" style="color: #2B3385;">
-                <i class="fas fa-chart-line me-2"></i>Dashboard KPI Administrasi
+                <i class="fas fa-chart-line me-2"></i>Dashboard
             </h4>
-            <p class="text-muted small mb-0">Indikator Kinerja Utama & Visualisasi Produk Sering Dicari (`gkr_cari`)</p>
         </div>
         <div>
             <button class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" @click="loadKpiData" :disabled="isLoading">
@@ -93,16 +92,16 @@
             </div>
         </div>
 
-        <!-- Card 4: Status Rusak -->
+        <!-- Card 4: Total Users (Karyawan) -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card shadow-sm rounded-4 kpi-card p-3 bg-body">
                 <div class="d-flex align-items-center">
-                    <div class="kpi-icon bg-danger-subtle text-danger me-3">
-                        <i class="fas fa-image-portrait"></i>
+                    <div class="kpi-icon bg-info-subtle text-info me-3">
+                        <i class="fas fa-users"></i>
                     </div>
                     <div>
-                        <div class="text-muted small fw-medium">Gambar Rusak</div>
-                        <h3 class="fw-bold mb-0 text-danger">{{ kpi.totalBroken }}</h3>
+                        <div class="text-muted small fw-medium">Total Users</div>
+                        <h3 class="fw-bold mb-0 text-info">{{ kpi.totalUsers }}</h3>
                     </div>
                 </div>
             </div>
@@ -116,11 +115,9 @@
             <div class="card shadow-sm rounded-4 border-0 p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0" style="color: #2B3385;">
-                        <i class="fas fa-chart-bar me-2"></i>10 Barang Sering Dicari (Custom Data Labels)
+                        <i class="fas fa-chart-bar me-2"></i>10 Barang Sering Dicari
                     </h5>
-                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3">ApexCharts</span>
                 </div>
-                <p class="text-muted small mb-3">Peringkat 10 produk terbanyak diklik oleh pengguna berdasarkan kolom <code>klik</code> pada tabel <code>gkr_cari</code>.</p>
                 <div class="chart-container">
                     <div id="apexTopChart"></div>
                 </div>
@@ -132,7 +129,7 @@
             <div class="card shadow-sm rounded-4 border-0 p-3 h-100">
                 <div class="card-header border-0 bg-transparent pt-2 pb-3">
                     <h5 class="fw-bold mb-0" style="color: #2B3385;">
-                        <i class="fas fa-list-ol me-2"></i>Top 10 Detail Items
+                        <i class="fas fa-list-ol me-2"></i>10 Barang Baru
                     </h5>
                 </div>
                 <div class="card-body p-0">

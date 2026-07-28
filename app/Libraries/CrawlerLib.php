@@ -208,6 +208,7 @@ class CrawlerLib
         $rootPath = '/var/www/FOTO';
         $itemsAdded = 0;
         
+        $targetPath = str_replace('\\', '/', $targetPath);
         $targetPath = rtrim($targetPath, '/');
         
         if (!str_starts_with($targetPath, $rootPath)) {
@@ -224,6 +225,11 @@ class CrawlerLib
         }
 
         foreach ($foldersToScan as $folderPath) {
+            if (str_contains(strtoupper($folderPath), 'SAMPLE GRACIA')) {
+                $this->out("<span style='color: #ffc107;'>[SKIP]</span> <span style='color: #a9a9a9;'>Mengabaikan direktori terlarang: $folderPath</span>", 'yellow');
+                continue;
+            }
+
             if (!is_dir($folderPath)) {
                 $this->out("<span style='color: #dc3545;'>[ERROR] Folder tidak ditemukan:</span> $folderPath", 'red');
                 continue;
@@ -237,6 +243,10 @@ class CrawlerLib
             foreach ($iterator as $item) {
                 $relativePath = substr($item->getPathname(), strlen(rtrim($rootPath, '/')) + 1);
                 $relativePath = str_replace('\\', '/', $relativePath);
+
+                if (str_contains(strtoupper($relativePath), 'SAMPLE GRACIA')) {
+                    continue; // Skip file di dalam SAMPLE GRACIA
+                }
 
                 if ($item->isFile()) {
                     $ext = strtolower($item->getExtension());

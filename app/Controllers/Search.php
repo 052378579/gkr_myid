@@ -62,13 +62,14 @@ class Search extends BaseController
 
     public function index()
     {
-        // Sanitasi input pencarian untuk mencegah Reflected XSS
-        $kataKunci = esc($this->request->getGet('q') ?? '');
+        // Sanitasi input pencarian: gunakan string mentah yang bersih untuk kueri SQL
+        $kataKunciRaw = trim($this->request->getGet('q') ?? '');
+        $kataKunci = esc($kataKunciRaw);
         $tipe = esc($this->request->getGet('type') ?? 'sites');
         $halaman = (int)($this->request->getGet('page') ?? 1);
         $batasHalaman = 20;
 
-        if (empty(trim($kataKunci)) && $tipe !== 'image_results') {
+        if (empty($kataKunciRaw) && $tipe !== 'image_results') {
             return redirect()->to('/');
         }
 
@@ -92,17 +93,17 @@ class Search extends BaseController
         if ($tipe === 'sites') {
             // Tab "Semua": Mencari pada seluruh produk
             $dataPencarian['totalResults'] = $cariModel->groupStart()
-                                                            ->like('judul', $kataKunci)
-                                                            ->orLike('deskripsi', $kataKunci)
-                                                            ->orLike('url', $kataKunci)
-                                                            ->orLike('kata_kunci', $kataKunci)
+                                                            ->like('judul', $kataKunciRaw)
+                                                            ->orLike('deskripsi', $kataKunciRaw)
+                                                            ->orLike('url', $kataKunciRaw)
+                                                            ->orLike('kata_kunci', $kataKunciRaw)
                                                         ->groupEnd()
                                                         ->countAllResults(false);
             $dataPencarian['results'] = $cariModel->groupStart()
-                                                      ->like('judul', $kataKunci)
-                                                      ->orLike('deskripsi', $kataKunci)
-                                                      ->orLike('url', $kataKunci)
-                                                      ->orLike('kata_kunci', $kataKunci)
+                                                      ->like('judul', $kataKunciRaw)
+                                                      ->orLike('deskripsi', $kataKunciRaw)
+                                                      ->orLike('url', $kataKunciRaw)
+                                                      ->orLike('kata_kunci', $kataKunciRaw)
                                                   ->groupEnd()
                                                   ->paginate($batasHalaman, 'default', $halaman);
             $dataPencarian['pager'] = $cariModel->pager;
@@ -154,20 +155,20 @@ class Search extends BaseController
             $dataPencarian['totalResults'] = $cariModel->where('imageUrl IS NOT NULL')
                                                       ->where('imageUrl !=', '')
                                                       ->groupStart()
-                                                          ->like('judul', $kataKunci)
-                                                          ->orLike('alt', $kataKunci)
-                                                          ->orLike('imageUrl', $kataKunci)
-                                                          ->orLike('kata_kunci', $kataKunci)
+                                                          ->like('judul', $kataKunciRaw)
+                                                          ->orLike('alt', $kataKunciRaw)
+                                                          ->orLike('imageUrl', $kataKunciRaw)
+                                                          ->orLike('kata_kunci', $kataKunciRaw)
                                                       ->groupEnd()
                                                       ->where('rusak', 0)
                                                       ->countAllResults(false);
             $dataPencarian['results'] = $cariModel->where('imageUrl IS NOT NULL')
                                                   ->where('imageUrl !=', '')
                                                   ->groupStart()
-                                                      ->like('judul', $kataKunci)
-                                                      ->orLike('alt', $kataKunci)
-                                                      ->orLike('imageUrl', $kataKunci)
-                                                      ->orLike('kata_kunci', $kataKunci)
+                                                      ->like('judul', $kataKunciRaw)
+                                                      ->orLike('alt', $kataKunciRaw)
+                                                      ->orLike('imageUrl', $kataKunciRaw)
+                                                      ->orLike('kata_kunci', $kataKunciRaw)
                                                   ->groupEnd()
                                                   ->where('rusak', 0)
                                                   ->paginate($batasHalaman, 'default', $halaman);

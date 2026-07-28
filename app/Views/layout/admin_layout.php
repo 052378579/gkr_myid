@@ -84,13 +84,37 @@
             </div>
             
             <div class="d-flex align-items-center gap-3">
-                <span class="d-none d-md-block fw-medium" style="font-size: 0.9rem;">
-                    <?php
-                        $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-                        $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-                        echo $hari[date('w')] . ', ' . date('d/m/Y');
-                    ?>
-                </span>
+                <div class="dropdown" id="calendarDropdownWrap">
+                    <a href="#" id="calendarDropdownToggle" class="text-body fw-medium text-decoration-none d-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="font-size: 0.9rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary, #2B3385)'" onmouseout="this.style.color=''">
+                        <?php
+                            $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                            echo $hari[date('w')] . ', ' . date('d/m/Y');
+                        ?>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4 border-0" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
+                            <div class="text-center fw-bold" style="color: #2B3385; font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
+                            <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <table class="table table-sm table-borderless text-center mb-0" style="font-size: 0.85rem;">
+                            <thead>
+                                <tr>
+                                    <th class="text-muted fw-bold" style="font-size: 0.8rem;">W</th>
+                                    <th class="fw-medium">S</th>
+                                    <th class="fw-medium">S</th>
+                                    <th class="fw-medium">R</th>
+                                    <th class="fw-medium">K</th>
+                                    <th class="fw-medium">J</th>
+                                    <th class="text-danger fw-medium">S</th>
+                                    <th class="text-danger fw-medium">M</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendarBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 
                 <?php 
                     $namaLengkap = session()->get('nama_lengkap') ?? 'Admin';
@@ -156,6 +180,7 @@
 
 <script src="<?= base_url('js/theme.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/admin_layout.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
 
 <?= $this->renderSection('scripts') ?>
 

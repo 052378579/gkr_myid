@@ -9,12 +9,12 @@ $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 ?>
 
-<div class="position-absolute top-0 end-0 p-3 d-flex align-items-center gap-3 z-3">
+<div class="position-absolute top-0 end-0 p-3 d-flex align-items-center gap-3" style="z-index: 1050 !important;">
     <div class="dropdown" id="calendarDropdownWrap">
         <a href="#" id="calendarDropdownToggle" class="text-body small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color=''">
             <?= $dateStr ?>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
+        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; z-index: 1060 !important; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
                 <div class="text-center fw-bold" style="color: var(--gkr-primary); font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
@@ -143,8 +143,8 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     </li>
                 </ul>
             </div>
-            <div class="google-ai-container-spotlight">
-                <button type="submit" class="btn bg-body-tertiary rounded-pill text-body shadow-sm btn-mode-ai border" style="min-width: 120px; font-size: 0.95rem;">
+            <div>
+                <button type="submit" class="btn bg-body-tertiary rounded-pill text-body shadow-sm px-4 border" style="min-width: 120px; font-size: 0.95rem; height: 42px;">
                     Cari
                 </button>
             </div>
