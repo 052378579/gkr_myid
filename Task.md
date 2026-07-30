@@ -23,7 +23,7 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Optimalisasi Perayap `CrawlerLib.php`:** Mengubah pengindeksan lokal `/var/www/FOTO` agar 1 produk foto lokal tersimpan murni sebagai **1 Baris Utuh** (menampung `url` dan `imageUrl` sekaligus), menghemat 50% kapasitas database.
 
 **Tahap IV: Dashboard KPI Admin ApexCharts & Reposisi UI `/admin/cari`**
-- `[x]` **Rute Utama Admin (`/admin` & `/admin/dashboard`):** Menjadikan `/admin/dashboard` landing page admin dengan 4 Card Summary KPI dan **ApexCharts Bar Chart (Custom Data Labels)** menampilkan Top 10 barang sering dicari (`klik DESC`).
+- `[x]` **Rute Utama Admin (`/admin` & `/admin/dashboard`):** Menjadikan `/admin/dashboard` landing page admin dengan 4 Card Summary KPI (Termasuk KPI Total Users Karyawan Terdaftar) dan **ApexCharts Bar Chart (Custom Data Labels)** menampilkan Top 10 barang sering dicari (`klik DESC`).
 - `[x]` **Pembaruan Halaman Engine (`/admin/cari`):** Menyajikan tabel `gkr_cari` tanpa TAB navigasi terpisah, judul "Manajemen Mesin Pencari", reposisi Select Box `Tampilkan: [10 v]` di Card Header sebelah kiri search box, serta thumbnail foto kolom Gambar dibungkus tautan aktif.
 - `[x]` **Perbaikan PWA Service Worker (`public/sw.js`):** Mengecualikan request non-GET (`POST`) dan rute `/crawler/`, `/api/`, `/admin/` agar streaming log perayap `/admin/crawl` dan Reset DB berjalan 100% lancar.
 
@@ -33,5 +33,13 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
   - PROD (`192.168.1.17`, `10.147.17.60`, `gkr.my.id`) -> **`https://foto.gkr.my.id/`**
 
 **Tahap VI: Deployment DEV & Production (PROD)**
-- `[x]` **Deploy GitHub DEV:** Berhasil melakukan commit dan push cabang `dev` (`7874c42`) ke GitHub.
+- `[x]` **Deploy GitHub DEV:** Berhasil melakukan commit dan push cabang `dev` (`253891b`) ke GitHub.
 - `[x]` **Deploy Server PROD (`root@gracia`):** Berhasil melakukan `git pull origin dev` dan eksekusi skrip migrasi bersih DDL Opsi B pada server PROD (`gkr.my.id`).
+
+**Tahap VII: Integrasi Kalender Navbar, Telegram Auto-Bind, & Penyempurnaan UI**
+- `[x]` **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):** Mengganti teks tanggal statis menjadi widget kalender melayang interaktif dengan sorotan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih pada tanggal aktif.
+- `[x]` **Penyesuaian Stacking Context (`beranda.php`):** Menetapkan `z-index: 1060 !important;` pada kalender dropdown agar melayang sempurna di atas seluruh elemen beranda tanpa bentrokan tombol kamera (`z-index: 3`).
+- `[x]` **Clean Search UI (`beranda.php` & `index.css`):** Menghapus pendaran garis warna pelangi pada tombol **Cari**, mengembalikannya ke gaya tombol bersih Bootstrap `rounded-pill` (`bg-body-tertiary`, `height: 42px`, `min-width: 120px`).
+- `[x]` **Pembersihan Direktori Scan `SAMPLE GRACIA`:** Menghapus `SAMPLE GRACIA` dari `ai_index.py` dan menambahkan *Exclusion Guard* di `CrawlerLib.php` (hanya memindai `BUYER`, `GRACIA`, `SWATCHES`, `WEB`).
+- `[x]` **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):** Mengimplementasikan fitur auto-bind mandiri karyawan via `/start 08...` atau `/daftar 08...` yang otomatis memperbarui `telegram_chat_id` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar).
+- `[x]` **Penguncian Notifikasi Sistem Statis (`Auth.php` & `ai_index.py`):** Mempertahankan pengiriman notifikasi audit Login, Logout, dan Perayapan Selesai tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).

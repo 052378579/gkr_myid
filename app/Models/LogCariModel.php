@@ -21,4 +21,14 @@ class LogCariModel extends Model
             'source'         => $source
         ]);
     }
+
+    public function getWordCloudData($limit = 100)
+    {
+        return $this->select('kata_kunci, COUNT(*) as frekuensi')
+                    ->where('tipe_pencarian', 'teks')
+                    ->groupBy('kata_kunci')
+                    ->orderBy('frekuensi', 'DESC')
+                    ->limit($limit)
+                    ->findAll();
+    }
 }

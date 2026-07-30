@@ -31,6 +31,7 @@ $routes->get('/admin/cari', '\App\Controllers\Admin\AdminController::cari');
 $routes->get('/admin/doodle', '\App\Controllers\Admin\AdminController::doodle');
 $routes->get('/admin/log', '\App\Controllers\Admin\AdminController::log');
 $routes->get('/trend', 'TrendController::index');
+$routes->get('/awan_kata', 'AwanKata::index');
 $routes->get('/admin/crawl', '\App\Controllers\Admin\Crawler::index');
 $routes->post('/crawler/doCrawl', 'Api\CrawlerApi::doCrawl');
 $routes->post('/crawler/resetDb', 'Api\CrawlerApi::resetDb');

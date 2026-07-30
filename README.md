@@ -10,8 +10,18 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 
 * **Single Physical Table Database `gkr_cari` & Kolom Bahasa Indonesia:**
   Menggabungkan tabel lama menjadi satu tabel fisik murni **`gkr_cari`** dengan kolom baku Bahasa Indonesia (`judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `klik`, `rusak`). Tipe entitas diidentifikasi murni dari `imageUrl IS NOT NULL`.
+* **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):**
+  Tanggal navbar `Selasa, 28/07/2026 ▾` mengusung Bootstrap Dropdown `#calendarDropdownWrap`. Tanggal hari ini disorot dengan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih (`#ffffff`).
+* **Desain Bersih Tombol Cari (`beranda.php`):**
+  Tombol **Cari** menggunakan gaya murni Bootstrap `rounded-pill` (`bg-body-tertiary`, `height: 42px`, `min-width: 120px`) tanpa pendaran warna pelangi. Layering dropdown kalender diset ke `z-index: 1060 !important;` agar melayang mulus di atas seluruh elemen beranda.
+* **Pembersihan Scan Direktori (`SAMPLE GRACIA` Excluded):**
+  Seluruh proses pengindeksan perayap web (`CrawlerLib.php`) dan pelatih AI (`ai_index.py`) hanya menyisir 4 direktori aktif (`BUYER`, `GRACIA`, `SWATCHES`, `WEB`). Direktori legacy `SAMPLE GRACIA` diblokir total.
+* **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):**
+  Karyawan terdaftar dapat menghubungkan akun Telegram pribadi secara mandiri via `/start 08...` atau `/daftar 08...`. Sistem otomatis mencocokkan `no_hp` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar oleh Admin/HRD).
+* **Penguncian Notifikasi Sistem Statis Administrator:**
+  Metode `sendTelegramNotification()` di `Auth.php` (login/logout) dan `ai_index.py` (crawler) tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).
 * **Dashboard KPI Administrasi & Visualisasi ApexCharts (`/admin/dashboard`):**
-  Rute `/admin` dan `/admin/dashboard` menyajikan Dasbor KPI Utama dengan 4 Summary Cards dan **ApexCharts Bar Chart (Custom Data Labels)** yang menampilkan 10 produk paling sering dicari (`klik DESC`).
+  Rute `/admin` dan `/admin/dashboard` menyajikan Dasbor KPI Utama dengan 4 Summary Cards (Termasuk **Total Users** Karyawan Terdaftar) dan **ApexCharts Bar Chart (Custom Data Labels)** yang menampilkan 10 produk paling sering dicari (`klik DESC`).
 * **Halaman Manajemen Mesin Pencari (`/admin/cari`):**
   Antarmuka pengelolaan data `gkr_cari` dengan desain Card Header bersih tanpa TAB, reposisi pemilih baris `Tampilkan: [10 v]` di sebelah kiri kotak pencarian, serta thumbnail foto kolom **Gambar** yang dapat diklik langsung untuk membuka gambar ukuran penuh pada domain server asal.
 * **Optimalisasi Crawler 1 Produk = 1 Baris Utuh (`CrawlerLib.php`):**
@@ -24,22 +34,14 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   Mengunggah sampel foto produk untuk mencocokkan kemiripan visual secara presisi menggunakan PyTorch *MobileNetV3-Small* (576 dimensi) dan FAISS Vector Database (`IndexFlatIP`, *Cosine Similarity* $\ge 0.68$, $k=15$). Dilengkapi pemotong gambar interaktif **Cropper.js** di browser.
 * **Autocomplete Pencarian Teks (Debounced RESTful API):**
   Fitur rekomendasi kata kunci pencarian *real-time* berbasis API (`/api/autocomplete`) yang menyaring data dari tabel `gkr_material` (bahan & warna) dan `gkr_cari` (judul) dengan *debounce* 300ms serta navigasi kibor.
-* **Efek Visual Spotlight Aura:**
-  Antarmuka pencarian utama dipercantik dengan efek pendaran cahaya (Aura Glow) yang mengikuti pergerakan kursor mouse pengguna (`.google-ai-container-spotlight`).
 * **Zero-Footprint Storage (Auto-Cleanup):**
   Gambar unggahan pengguna ditransfer via `multipart/form-data` ke layanan FastAPI dan seketika dimusnahkan (`unlink()`) dari storage web server, menjaga penyimpanan server tetap bersih.
 * **PWA Service Worker Exception (`public/sw.js`):**
   Service Worker mengabaikan permintaan `POST` dan rute `/crawler/`, `/api/`, `/admin/` agar streaming log perayap `/admin/crawl` dan Reset DB berjalan 100% lancar.
 * **Dasbor Pelatih AI & Terminal Streaming HTTP (`/admin/ai`):**
   Menyajikan dasbor operasi pelatih AI (`ai_index.py`) dengan tampilan konsol terminal peretas (*hacker style* `#1e1e1e`). Mengalirkan baris log komputasi Python secara *real-time* via *HTTP ReadableStream API* tanpa risiko *PHP Timeout*, dilengkapi notifikasi Telegram Bot.
-* **Arsitektur RESTful API Terstandarisasi:**
-  Seluruh *endpoint* API terisolasi di sub-direktori `app/Controllers/Api/` (`GraciaApi.php`, `VersiApi.php`, `ChatBotApi.php`, `ImageSearchApi.php`, `CrawlerApi.php`) dengan format balasan JSON baku: `{"status": "sukses", "pesan": "...", "data": [...]}`.
-* **Zero-DB Hit Changelog & Auto-Versioning:**
-  Riwayat rilis aplikasi disimpan murni pada *flat-file* statis `/public/versi.json` untuk meniadakan *query overhead* ke MySQL (`0.{Bulan}.{Tanggal}`).
-* **Integrasi Telegram Chatbot Enterprise:**
-  Asisten virtual cerdas (`@Bot`) didukung Asinkronisasi *Anti-Timeout* (`fastcgi_finish_request`), pencarian hibrida kebal *typo* (*MySQL Full-Text* dipadu algoritma *AI Levenshtein Distance*), serta Keamanan Lapis Ganda (`BOT_SECRET_TOKEN` + RBAC `status === 'aktif'`).
-* **Sistem Otorisasi & Audit Log (RBAC):**
-  Diperkuat filter `SuperAdminFilter` yang mengunci akses ke rute `/admin/*` khusus bagi sesi `id_user = 1`.
+* **Sistem Otorisasi, Private Mode & Audit Log (RBAC):**
+  Ekosistem dikunci secara absolut ke dalam mode privat (Private Mode) melalui `AuthFilter.php` (hanya membuka celah untuk halaman `/login`, `/daftar`, dan webhook Telegram). Rute `/admin/*` diisolasi lapis kedua menggunakan `SuperAdminFilter` yang khusus mengizinkan sesi `id_user = 1`.
 
 ---
 
