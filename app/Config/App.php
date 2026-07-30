@@ -167,14 +167,19 @@ class App extends BaseConfig
      * Reverse Proxy IPs
      * --------------------------------------------------------------------------
      *
-     * If your server is behind a reverse proxy, you must whitelist the proxy
-     * IP addresses from which CodeIgniter should trust headers such as
-     * HTTP_X_FORWARDED_FOR and HTTP_CLIENT_IP in order to properly identify
-     * the visitor's IP address.
+     * Jika aplikasi berada di balik Reverse Proxy (Nginx, ZeroTier, Docker), 
+     * kita harus mendaftarkan subnet IP proxy tersebut agar CodeIgniter 
+     * membaca header HTTP_X_FORWARDED_FOR untuk mendapatkan IP asli pengunjung.
      *
      * @var list<string>
      */
-    public array $proxyIPs = [];
+    public array $proxyIPs = [
+        '10.0.0.0/8'     => 'X-Forwarded-For', // Rentang Private IP (ZeroTier, Docker, Tunnels)
+        '192.168.0.0/16' => 'X-Forwarded-For', // Rentang Private IP (LAN)
+        '172.16.0.0/12'  => 'X-Forwarded-For', // Rentang Private IP (Docker / Tunnels)
+        '127.0.0.1'      => 'X-Forwarded-For', // Localhost Nginx/Apache Proxy
+        '::1'            => 'X-Forwarded-For'
+    ];
 
     /**
      * --------------------------------------------------------------------------

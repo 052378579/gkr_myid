@@ -12,6 +12,13 @@ class LogCariModel extends Model
 
     public function catatPencarian($idUser, $tipePencarian, $kataKunci, $jumlahHasil, $alamatIp, $source = 'Web')
     {
+        // Paksa ke format IPv4 murni (Hapus prefix ::ffff: dan localhost ipv6)
+        if (strpos($alamatIp, '::ffff:') === 0) {
+            $alamatIp = substr($alamatIp, 7);
+        } elseif ($alamatIp === '::1') {
+            $alamatIp = '127.0.0.1';
+        }
+
         return $this->insert([
             'id_user'        => $idUser,
             'tipe_pencarian' => $tipePencarian,
