@@ -175,10 +175,16 @@ createApp({
                     
                 } catch (err) {
                     uploadError.value = err.message;
-                } finally {
-                    isUploading.value = false;
                 }
             }, 'image/jpeg', 0.9);
+        };
+
+        const handleFocus = () => {
+            if (query.value.trim() !== '' && suggestions.value.length > 0) {
+                showSuggestions.value = true;
+            } else {
+                showSuggestions.value = false;
+            }
         };
 
         return {
@@ -191,6 +197,7 @@ createApp({
             navigateUp,
             selectCurrentSuggestion,
             selectSuggestion,
+            handleFocus,
             handleBlur,
             search,
             uploadFile,

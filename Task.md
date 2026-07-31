@@ -45,3 +45,17 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Penyelarasan Cronjob & Format Notifikasi Telegram Ringkas:**
   - Auto Crawler: `0 18 * * * cd /var/www/gkr_myid && php spark crawl:run /var/www/FOTO` -> Notifikasi Telegram `Server: DEV/PROD`, `💾 X Item Baru Ditambahkan`.
   - AI Trainer: `1 0 * * * cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python3 ai_index.py && cp produk.index /mnt/sdcard/ai-scanner/ && cp mapping.json /mnt/sdcard/ai-scanner/ && systemctl restart ai_scanner.service` -> Notifikasi Telegram `Server: DEV/PROD`, `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`.
+
+**Tahap VIII: Evolusi Algoritma Pencarian Presisi & Pencarian Suara Bahasa Indonesia**
+- `[x]` **Modul Voice Search Native (`voice_search.js`):** Integrasi Web Speech API `id-ID` dengan modal animasi pendaran gelombang suara reaktif & redirect otomatis ke Tab Gambar (`/cari?q=...&type=images`).
+- `[x]` **Normalisasi Simbol URL:** Pembersihan otomatis simbol pemisah (`+`, `-`, `_`, `,`) pada `Search.php` menjadi spasi netral.
+- `[x]` **Primary Brand/Series Anchor Search:** Deteksi token merk spesifik (`bonanza`) yang mewajibkan produk memuat kata merk utama, 100% mengeliminasi *Riazor Rectangular Coffee Table*, *Tamika Coffee Table*, *Alandra Coffee Table*, dan *Side Table Type 02*.
+- `[x]` **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi *Leora Dinning Chair* (kursi) dan *Mida Table Lamp Organic Motif* (lampu meja) pada pencarian `dinning table`.
+- `[x]` **Multi-Tier Relevance Scoring:** Perhitungan skor SQL `ORDER BY` bertingkat (Skor 100 untuk exact phrase, Skor 80 untuk all-tokens match, dan pengurutan popularitas `klik DESC`).
+- `[x]` **Proteksi Frontend UI/UX (`beranda.php` & `index.js`):** Integrasi `v-cloak` dan `@focus="handleFocus"` untuk mengeliminasi bayangan sintaks mentah Vue 3 `{{ item }}` dan terbukanya autocomplete kosong saat fokus.
+
+**Tahap IX: Refaktorisasi Ekstraksi Assets View CSS & JS ke `public/css` & `public/js`**
+- `[x]` **Sentralisasi `window.AppConfig`:** Pembuatan objek konfigurasi global terpusat pada header layout utama `main.php` dan `admin_layout.php` (`baseUrl`, `csrfToken`, `versiUrl`, `swUrl`), menghapus duplikasi `<script>` variabel di 12 berkas View.
+- `[x]` **Ekstraksi CSS Modul Fisik (`public/css/`):** Pembuatan `admin.css` (Panel Admin), `awan_kata.css` (Animations WordCloud), `auth.css` (Halaman Login & Daftar), dan `index.css` (Aturan global `v-cloak`).
+- `[x]` **Ekstraksi JS Modul Fisik (`public/js/`):** Pembuatan `daftar.js` (Formulir Pendaftaran) dan `awan_kata.js` (WordCloud2 & Auto-Refresh Timer).
+- `[x]` **Clean Views Sterilization:** Mengeliminasi seluruh tag `<style>` dan `<script>` inline di `app/Views` serta menstandardisasi pemanggilan aset dengan versioning `?v=<?= time() ?>`.

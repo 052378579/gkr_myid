@@ -2,17 +2,7 @@
 
 <?= $this->section('title') ?>Mesin Pencari<?= $this->endSection() ?>
 
-<?= $this->section('styles') ?>
-<style>
-    .img-thumbnail-link {
-        display: inline-block;
-        transition: transform 0.2s ease-in-out;
-    }
-    .img-thumbnail-link:hover {
-        transform: scale(1.08);
-    }
-</style>
-<?= $this->endSection() ?>
+
 
 <?= $this->section('content') ?>
 <div id="gkr">   

@@ -1,0 +1,14 @@
+/* Animasi CSS Fade-In untuk memunculkan kanvas perlahan */
+#canvas-container {
+    animation: fadeIn 1.5s ease-in-out forwards;
+    opacity: 0;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Animasi kelap-kelip berkelanjutan pada setiap kata (Twinkling) */
+@keyframes randomFade {
+    0% { opacity: 0.15; }
+    100% { opacity: 1; }
+}

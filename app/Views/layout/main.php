@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="<?= base_url('vendor/fontawesome/css/all.min.css') ?>">
     <!-- Base Styles -->
     <link rel="stylesheet" href="<?= base_url('css/main.css') ?>?v=<?= time() ?>">
+    <script>
+        window.AppConfig = {
+            baseUrl: '<?= base_url() ?>',
+            csrfToken: '<?= csrf_token() ?>',
+            versiUrl: '<?= base_url('versi.json') ?>',
+            swUrl: '<?= base_url('sw.js') ?>'
+        };
+    </script>
     <?php if (strpos(uri_string(), 'admin') === 0): ?>
         <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
     <?php else: ?>

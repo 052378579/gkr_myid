@@ -10,12 +10,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('apple-touch-icon.png') ?>" />
 <meta name="apple-mobile-web-app-title" content="GRACIA" />
 <link rel="manifest" href="<?= base_url('site.webmanifest') ?>" />
-<link rel="stylesheet" href="<?= base_url('css/login.css') ?>">
-<style>
-    body {
-        text-align: center;
-    }
-</style>
+<link rel="stylesheet" href="<?= base_url('css/login.css') ?>?v=<?= time() ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -67,9 +62,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    document.querySelector('select[name="divisi"]').addEventListener('change', function() {
-        this.style.color = '#212529';
-    });
-</script>
+<script src="<?= base_url('js/daftar.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

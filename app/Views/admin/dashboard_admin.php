@@ -2,30 +2,7 @@
 
 <?= $this->section('title') ?>Dashboard KPI<?= $this->endSection() ?>
 
-<?= $this->section('styles') ?>
-<style>
-    .kpi-card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        border: none;
-    }
-    .kpi-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
-    }
-    .kpi-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-    .chart-container {
-        min-height: 420px;
-    }
-</style>
-<?= $this->endSection() ?>
+
 
 <?= $this->section('content') ?>
 <div id="gkrDashboard">

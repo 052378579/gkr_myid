@@ -112,7 +112,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
 
-<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app">
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app" v-cloak>
     <div class="text-center mb-4">
         <?php 
             $finalUrlLogo = $urlLogo ?? base_url('Gracia_logo.png');
@@ -130,12 +130,17 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     </div>
 
     <div class="w-100" style="max-width: 580px;">
-        <form @submit.prevent="search" class="d-flex flex-column align-items-center gap-4 w-100">
+        <form action="<?= url_to('Search::index') ?>" method="GET" @submit.prevent="search" class="d-flex flex-column align-items-center gap-4 w-100">
             <div class="position-relative w-100 d-block google-ai-container">
-                <input type="text" v-model="query" @input="fetchSuggestions" @keydown.down.prevent="navigateDown" @keydown.up.prevent="navigateUp" @keydown.enter.prevent="selectCurrentSuggestion" @focus="showSuggestions = true" @blur="handleBlur" class="form-control form-control-lg rounded-pill px-4 border input-mode-ai" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 60px !important;" autocomplete="off" autofocus required>
-                <button type="button" class="btn text-secondary position-absolute top-50 end-0 translate-middle-y border-0" style="margin-right: 12px; background: transparent; z-index: 3;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
-                    <i class="fa-solid fa-camera fs-5 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
-                </button>
+                <input type="text" v-model="query" @input="fetchSuggestions" @keydown.down.prevent="navigateDown" @keydown.up.prevent="navigateUp" @keydown.enter.prevent="selectCurrentSuggestion" @focus="handleFocus" @blur="handleBlur" class="form-control form-control-lg rounded-pill px-4 border input-mode-ai" style="box-shadow: 0 1px 6px rgba(32,33,36,.1) !important; border-color: #dfe1e5 !important; height: 50px; padding-right: 90px !important;" autocomplete="off" autofocus required>
+                <div class="position-absolute top-50 end-0 translate-middle-y d-flex align-items-center me-2" style="z-index: 3;">
+                    <button type="button" class="btn text-secondary border-0 p-1 btn-voice-search" style="background: transparent;" title="Telusuri dengan suara">
+                        <i class="fa-solid fa-microphone fs-5 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
+                    </button>
+                    <button type="button" class="btn text-secondary border-0 p-1 me-1 ms-1" style="background: transparent;" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Telusuri pakai gambar">
+                        <i class="fa-solid fa-camera fs-5 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
+                    </button>
+                </div>
                 <ul v-if="showSuggestions && suggestions.length > 0" class="autocomplete-dropdown list-unstyled position-absolute w-100 bg-body shadow-sm rounded-4 mt-1 overflow-hidden" style="z-index: 1000; border: 1px solid var(--bs-border-color); text-align: left; transition: all 0.2s ease;">
                     <li v-for="(item, index) in suggestions" :key="index" @mousedown.prevent="selectSuggestion(item)" class="px-4 py-2 d-flex align-items-center autocomplete-item" :class="{'bg-body-tertiary': index === activeIndex}" style="cursor: pointer; transition: background 0.1s ease;">
                         <i class="fas fa-search me-3 text-muted" style="font-size: 0.9rem;"></i>
@@ -253,5 +258,6 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     };
 </script>
 <script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/voice_search.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/index.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

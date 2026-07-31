@@ -12,6 +12,13 @@
     <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
     
     <link rel="stylesheet" href="<?= base_url('css/admin_layout.css') ?>?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= base_url('css/admin.css') ?>?v=<?= time() ?>">
+    <script>
+        window.AppConfig = {
+            baseUrl: '<?= base_url() ?>',
+            csrfToken: '<?= csrf_token() ?>'
+        };
+    </script>
     
     <?= $this->renderSection('styles') ?>
 </head>
@@ -163,7 +170,7 @@
 
                     <!-- Rata Kanan (Right): Teks Versi -->
                     <div class="text-end flex-shrink-0">
-                        <a href="<?= base_url('admin/versi') ?>" class="text-decoration-none text-muted fw-medium" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= isset($version) ? esc($version) : 'v0.7.23' ?></a>
+                        <a href="<?= base_url('admin/versi') ?>" class="text-decoration-none text-muted fw-medium" style="transition: color 0.2s;" onmouseover="this.style.color='#2B3385'" onmouseout="this.style.color='inherit'"><?= isset($version) ? esc($version) : 'v0.8.1' ?></a>
                     </div>
                 </div>
             </footer>

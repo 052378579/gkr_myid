@@ -62,8 +62,11 @@ class Search extends BaseController
 
     public function index()
     {
-        // Sanitasi input pencarian: gunakan string mentah yang bersih untuk kueri SQL
+        // Sanitasi input pencarian: bersihkan dan normalisasi simbol pemisah (+, -, _, ,)
         $kataKunciRaw = trim($this->request->getGet('q') ?? '');
+        $kataKunciNormalized = preg_replace('/[\+\-_,]+/', ' ', $kataKunciRaw);
+        $kataKunciNormalized = preg_replace('/\s+/', ' ', $kataKunciNormalized);
+        
         $kataKunci = esc($kataKunciRaw);
         $tipe = esc($this->request->getGet('type') ?? 'sites');
         $halaman = (int)($this->request->getGet('page') ?? 1);
@@ -91,23 +94,109 @@ class Search extends BaseController
         $urlPrefix = $this->getFotoUrlPrefix();
 
         if ($tipe === 'sites') {
-            // Tab "Semua": Mencari pada seluruh produk
-            $dataPencarian['totalResults'] = $cariModel->groupStart()
-                                                            ->like('judul', $kataKunciRaw)
-                                                            ->orLike('deskripsi', $kataKunciRaw)
-                                                            ->orLike('url', $kataKunciRaw)
-                                                            ->orLike('kata_kunci', $kataKunciRaw)
-                                                        ->groupEnd()
-                                                        ->countAllResults(false);
-            $dataPencarian['results'] = $cariModel->groupStart()
-                                                      ->like('judul', $kataKunciRaw)
-                                                      ->orLike('deskripsi', $kataKunciRaw)
-                                                      ->orLike('url', $kataKunciRaw)
-                                                      ->orLike('kata_kunci', $kataKunciRaw)
-                                                  ->groupEnd()
-                                                  ->paginate($batasHalaman, 'default', $halaman);
-            $dataPencarian['pager'] = $cariModel->pager;
+            // Tab "Semua": Unified Brand Anchor & Category Exclusion Search
+            $tokens = array_values(array_unique(array_filter(explode(' ', $kataKunciNormalized), fn($t) => mb_strlen(trim($t)) >= 2)));
+            $queryLower = mb_strtolower($kataKunciNormalized);
+            
+            $categoryWords = ['table', 'meja', 'desk', 'chair', 'kursi', 'stool', 'armchair', 'bench', 'lamp', 'lampu', 'light', 'dinning', 'dining', 'sofa', 'daybed'];
+            $firstToken = mb_strtolower($tokens[0] ?? '');
+            $specificBrandAnchor = (!empty($firstToken) && !in_array($firstToken, $categoryWords)) ? $tokens[0] : null;
 
+            $isTableQuery = (strpos($queryLower, 'table') !== false || strpos($queryLower, 'meja') !== false || strpos($queryLower, 'desk') !== false);
+            $isChairQuery = (strpos($queryLower, 'chair') !== false || strpos($queryLower, 'kursi') !== false || strpos($queryLower, 'stool') !== false || strpos($queryLower, 'armchair') !== false || strpos($queryLower, 'bench') !== false);
+            $isLampQuery  = (strpos($queryLower, 'lamp') !== false || strpos($queryLower, 'lampu') !== false || strpos($queryLower, 'light') !== false);
+
+            $buildQuery = function($model) use ($tokens, $specificBrandAnchor, $isTableQuery, $isChairQuery, $isLampQuery, $kataKunciNormalized, $kataKunciRaw) {
+                $model->groupStart();
+                
+                // 1. Syarat Wajib Brand/Seri Spesifik (misal: Bonanza pada bonanza+table)
+                if (!empty($specificBrandAnchor)) {
+                    $model->groupStart()
+                          ->like('judul', $specificBrandAnchor)
+                          ->orLike('deskripsi', $specificBrandAnchor)
+                          ->orLike('url', $specificBrandAnchor)
+                          ->orLike('kata_kunci', $specificBrandAnchor)
+                          ->groupEnd();
+                }
+
+                // 2. Filter Kategori Eksklusif Komprehensif
+                if ($isTableQuery && !$isChairQuery && !$isLampQuery) {
+                    $model->groupStart()
+                          ->like('judul', 'table')
+                          ->orLike('judul', 'meja')
+                          ->orLike('judul', 'desk')
+                          ->orLike('kata_kunci', 'table')
+                          ->groupEnd();
+                    $model->notLike('judul', 'lamp')
+                          ->notLike('judul', 'lampu')
+                          ->notLike('judul', 'light')
+                          ->notLike('judul', 'chair')
+                          ->notLike('judul', 'kursi')
+                          ->notLike('judul', 'stool')
+                          ->notLike('judul', 'armchair');
+                } elseif ($isChairQuery && !$isTableQuery && !$isLampQuery) {
+                    $model->groupStart()
+                          ->like('judul', 'chair')
+                          ->orLike('judul', 'kursi')
+                          ->orLike('judul', 'stool')
+                          ->orLike('judul', 'armchair')
+                          ->orLike('judul', 'bench')
+                          ->orLike('kata_kunci', 'chair')
+                          ->groupEnd();
+                    $model->notLike('judul', 'table')
+                          ->notLike('judul', 'meja')
+                          ->notLike('judul', 'desk')
+                          ->notLike('judul', 'lamp')
+                          ->notLike('judul', 'lampu');
+                } elseif ($isLampQuery && !$isTableQuery && !$isChairQuery) {
+                    $model->groupStart()
+                          ->like('judul', 'lamp')
+                          ->orLike('judul', 'lampu')
+                          ->orLike('judul', 'light')
+                          ->orLike('kata_kunci', 'lamp')
+                          ->groupEnd();
+                    $model->notLike('judul', 'table')
+                          ->notLike('judul', 'meja')
+                          ->notLike('judul', 'chair')
+                          ->notLike('judul', 'kursi');
+                } else {
+                    if (empty($specificBrandAnchor)) {
+                        foreach ($tokens as $token) {
+                            $model->orLike('judul', $token)
+                                  ->orLike('deskripsi', $token)
+                                  ->orLike('url', $token)
+                                  ->orLike('kata_kunci', $token);
+                        }
+                    }
+                }
+
+                $model->groupEnd();
+            };
+
+            $buildQuery($cariModel);
+            $dataPencarian['totalResults'] = $cariModel->countAllResults(false);
+
+            $buildQuery($cariModel);
+            $escapedExact = addslashes($kataKunciNormalized);
+            $tokenScores = [];
+            $allTokensMatchCases = [];
+            foreach ($tokens as $t) {
+                $escapedT = addslashes($t);
+                $tokenScores[] = "(CASE WHEN judul LIKE '%{$escapedT}%' OR kata_kunci LIKE '%{$escapedT}%' THEN 1 ELSE 0 END)";
+                $allTokensMatchCases[] = "(CASE WHEN judul LIKE '%{$escapedT}%' OR deskripsi LIKE '%{$escapedT}%' OR kata_kunci LIKE '%{$escapedT}%' THEN 1 ELSE 0 END)";
+            }
+            $bothScore = !empty($tokenScores) ? implode(' + ', $tokenScores) : '0';
+            $allMatchCondition = count($tokens) > 1 ? implode(' * ', $allTokensMatchCases) : '0';
+
+            $cariModel->orderBy("(CASE 
+                WHEN judul LIKE '%{$escapedExact}%' OR kata_kunci LIKE '%{$escapedExact}%' THEN 100 
+                WHEN ({$allMatchCondition}) = 1 THEN 80
+                ELSE ({$bothScore}) 
+            END)", 'DESC');
+            $cariModel->orderBy('klik', 'DESC');
+
+            $dataPencarian['results'] = $cariModel->paginate($batasHalaman, 'default', $halaman);
+            $dataPencarian['pager'] = $cariModel->pager;
             $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
 
         } elseif ($tipe === 'image_results') {
@@ -151,27 +240,114 @@ class Search extends BaseController
             $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
 
         } else {
-            // Tab "Gambar" (type === 'images')
-            $dataPencarian['totalResults'] = $cariModel->where('imageUrl IS NOT NULL')
-                                                      ->where('imageUrl !=', '')
-                                                      ->groupStart()
-                                                          ->like('judul', $kataKunciRaw)
-                                                          ->orLike('alt', $kataKunciRaw)
-                                                          ->orLike('imageUrl', $kataKunciRaw)
-                                                          ->orLike('kata_kunci', $kataKunciRaw)
-                                                      ->groupEnd()
-                                                      ->where('rusak', 0)
-                                                      ->countAllResults(false);
-            $dataPencarian['results'] = $cariModel->where('imageUrl IS NOT NULL')
-                                                  ->where('imageUrl !=', '')
-                                                  ->groupStart()
-                                                      ->like('judul', $kataKunciRaw)
-                                                      ->orLike('alt', $kataKunciRaw)
-                                                      ->orLike('imageUrl', $kataKunciRaw)
-                                                      ->orLike('kata_kunci', $kataKunciRaw)
-                                                  ->groupEnd()
-                                                  ->where('rusak', 0)
-                                                  ->paginate($batasHalaman, 'default', $halaman);
+            // Tab "Gambar" (type === 'images'): Unified Brand Anchor & Category Exclusion Search
+            $tokens = array_values(array_unique(array_filter(explode(' ', $kataKunciNormalized), fn($t) => mb_strlen(trim($t)) >= 2)));
+            $queryLower = mb_strtolower($kataKunciNormalized);
+            
+            $categoryWords = ['table', 'meja', 'desk', 'chair', 'kursi', 'stool', 'armchair', 'bench', 'lamp', 'lampu', 'light', 'dinning', 'dining', 'sofa', 'daybed'];
+            $firstToken = mb_strtolower($tokens[0] ?? '');
+            $specificBrandAnchor = (!empty($firstToken) && !in_array($firstToken, $categoryWords)) ? $tokens[0] : null;
+
+            $isTableQuery = (strpos($queryLower, 'table') !== false || strpos($queryLower, 'meja') !== false || strpos($queryLower, 'desk') !== false);
+            $isChairQuery = (strpos($queryLower, 'chair') !== false || strpos($queryLower, 'kursi') !== false || strpos($queryLower, 'stool') !== false || strpos($queryLower, 'armchair') !== false || strpos($queryLower, 'bench') !== false);
+            $isLampQuery  = (strpos($queryLower, 'lamp') !== false || strpos($queryLower, 'lampu') !== false || strpos($queryLower, 'light') !== false);
+
+            $buildQueryImages = function($model) use ($tokens, $specificBrandAnchor, $isTableQuery, $isChairQuery, $isLampQuery, $kataKunciNormalized, $kataKunciRaw) {
+                $model->where('imageUrl IS NOT NULL')
+                      ->where('imageUrl !=', '')
+                      ->where('rusak', 0)
+                      ->groupStart();
+
+                // 1. Syarat Wajib Brand/Seri Spesifik (misal: Bonanza pada bonanza+table)
+                if (!empty($specificBrandAnchor)) {
+                    $model->groupStart()
+                          ->like('judul', $specificBrandAnchor)
+                          ->orLike('alt', $specificBrandAnchor)
+                          ->orLike('imageUrl', $specificBrandAnchor)
+                          ->orLike('kata_kunci', $specificBrandAnchor)
+                          ->groupEnd();
+                }
+
+                // 2. Filter Kategori Eksklusif Komprehensif
+                if ($isTableQuery && !$isChairQuery && !$isLampQuery) {
+                    $model->groupStart()
+                          ->like('judul', 'table')
+                          ->orLike('judul', 'meja')
+                          ->orLike('judul', 'desk')
+                          ->orLike('alt', 'table')
+                          ->orLike('kata_kunci', 'table')
+                          ->groupEnd();
+                    $model->notLike('judul', 'lamp')
+                          ->notLike('judul', 'lampu')
+                          ->notLike('judul', 'light')
+                          ->notLike('judul', 'chair')
+                          ->notLike('judul', 'kursi')
+                          ->notLike('judul', 'stool')
+                          ->notLike('judul', 'armchair');
+                } elseif ($isChairQuery && !$isTableQuery && !$isLampQuery) {
+                    $model->groupStart()
+                          ->like('judul', 'chair')
+                          ->orLike('judul', 'kursi')
+                          ->orLike('judul', 'stool')
+                          ->orLike('judul', 'armchair')
+                          ->orLike('judul', 'bench')
+                          ->orLike('alt', 'chair')
+                          ->orLike('kata_kunci', 'chair')
+                          ->groupEnd();
+                    $model->notLike('judul', 'table')
+                          ->notLike('judul', 'meja')
+                          ->notLike('judul', 'desk')
+                          ->notLike('judul', 'lamp')
+                          ->notLike('judul', 'lampu');
+                } elseif ($isLampQuery && !$isTableQuery && !$isChairQuery) {
+                    $model->groupStart()
+                          ->like('judul', 'lamp')
+                          ->orLike('judul', 'lampu')
+                          ->orLike('judul', 'light')
+                          ->orLike('alt', 'lamp')
+                          ->orLike('kata_kunci', 'lamp')
+                          ->groupEnd();
+                    $model->notLike('judul', 'table')
+                          ->notLike('judul', 'meja')
+                          ->notLike('judul', 'chair')
+                          ->notLike('judul', 'kursi');
+                } else {
+                    if (empty($specificBrandAnchor)) {
+                        foreach ($tokens as $token) {
+                            $model->orLike('judul', $token)
+                                  ->orLike('alt', $token)
+                                  ->orLike('imageUrl', $token)
+                                  ->orLike('kata_kunci', $token);
+                        }
+                    }
+                }
+
+                $model->groupEnd();
+            };
+
+            $buildQueryImages($cariModel);
+            $dataPencarian['totalResults'] = $cariModel->countAllResults(false);
+
+            $buildQueryImages($cariModel);
+            $escapedExact = addslashes($kataKunciNormalized);
+            $tokenScores = [];
+            $allTokensMatchCases = [];
+            foreach ($tokens as $t) {
+                $escapedT = addslashes($t);
+                $tokenScores[] = "(CASE WHEN judul LIKE '%{$escapedT}%' OR kata_kunci LIKE '%{$escapedT}%' THEN 1 ELSE 0 END)";
+                $allTokensMatchCases[] = "(CASE WHEN judul LIKE '%{$escapedT}%' OR alt LIKE '%{$escapedT}%' OR kata_kunci LIKE '%{$escapedT}%' THEN 1 ELSE 0 END)";
+            }
+            $bothScore = !empty($tokenScores) ? implode(' + ', $tokenScores) : '0';
+            $allMatchCondition = count($tokens) > 1 ? implode(' * ', $allTokensMatchCases) : '0';
+
+            $cariModel->orderBy("(CASE 
+                WHEN judul LIKE '%{$escapedExact}%' OR kata_kunci LIKE '%{$escapedExact}%' THEN 100 
+                WHEN ({$allMatchCondition}) = 1 THEN 80
+                ELSE ({$bothScore}) 
+            END)", 'DESC');
+            $cariModel->orderBy('klik', 'DESC');
+
+            $dataPencarian['results'] = $cariModel->paginate($batasHalaman, 'default', $halaman);
             $dataPencarian['pager'] = $cariModel->pager;
 
             $this->formatResultUrls($dataPencarian['results'], $urlPrefix);

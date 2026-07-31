@@ -30,10 +30,13 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 <div class="search-actions">
                     <button type="button" class="clear-btn" onclick="document.getElementById('search-input').value = ''; document.getElementById('search-input').focus();"><i class="fas fa-times"></i></button>
                     <span class="divider"></span>
-                    <button type="button" class="btn border-0 p-0" style="background: transparent; margin: 0 6px; color: var(--bs-body-color);" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
+                    <button type="button" class="btn border-0 p-0 btn-voice-search" style="background: transparent; margin: 0 4px; color: var(--bs-body-color);" title="Pencarian Suara Bahasa Indonesia">
+                        <i class="fa-solid fa-microphone fs-6 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
+                    </button>
+                    <button type="button" class="btn border-0 p-0" style="background: transparent; margin: 0 4px; color: var(--bs-body-color);" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
                         <i class="fa-solid fa-camera fs-6 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
                     </button>
-                    <button type="submit" class="search-button" style="margin-left: 6px;"><i class="fas fa-search"></i></button>
+                    <button type="submit" class="search-button" style="margin-left: 4px;"><i class="fas fa-search"></i></button>
                 </div>
             </form>
         </div>
@@ -371,6 +374,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     };
 </script>
 <script src="<?= base_url('js/calendar.js') ?>"></script>
+<script src="<?= base_url('js/voice_search.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/search.js') ?>"></script>
 <script>
     window.SearchConfig = {

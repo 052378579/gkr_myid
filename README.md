@@ -43,6 +43,14 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   Service Worker mengabaikan permintaan `POST` dan rute `/crawler/`, `/api/`, `/admin/` agar streaming log perayap `/admin/crawl` dan Reset DB berjalan 100% lancar.
 * **Dasbor Pelatih AI & Terminal Streaming HTTP (`/admin/ai`):**
   Menyajikan dasbor operasi pelatih AI (`ai_index.py`) dengan tampilan konsol terminal peretas (*hacker style* `#1e1e1e`). Mengalirkan baris log komputasi Python secara *real-time* via *HTTP ReadableStream API* tanpa risiko *PHP Timeout*, dilengkapi notifikasi Telegram Bot.
+* **Pencarian Suara Bahasa Indonesia Native (`id-ID`) & Tab Gambar Default:**
+  Pencarian suara berbasis Web Speech API `id-ID` (`public/js/voice_search.js`) dengan animasi pendaran gelombang suara reaktif. Pencarian suara dari beranda secara otomatis mengarahkan ke **Tab Gambar Katalog** (`/cari?q=...&type=images`).
+* **Mesin Pencari Presisi Presisi Tinggi (`Search.php`):**
+  * **Primary Brand/Series Anchor Search:** Deteksi otomatis token merk/seri spesifik (`$specificBrandAnchor`, misal `"bonanza"` pada `bonanza+table` atau `bonanza+coffee`) yang mewajibkan produk memuat kata merk utama. Mengeliminasi 100% produk pengotor seperti *Riazor Rectangular Coffee Table*, *Tamika Coffee Table*, *Alandra Coffee Table*, dan *Side Table Type 02*.
+  * **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi *Leora Dinning Chair* (kursi) dan *Mida Table Lamp Organic Motif* (lampu meja) pada pencarian `dinning table`.
+  * **Multi-Tier Relevance Scoring:** Perhitungan skor SQL `ORDER BY` bertingkat (Skor 100 untuk exact phrase, Skor 80 untuk all-tokens match, dan pengurutan popularitas `klik DESC`).
+* **Refaktorisasi Ekstraksi Assets View CSS & JS (`public/css/` & `public/js/`):**
+  Ekstraksi seluruh tag `<style>` dan `<script>` inline di `app/Views` ke berkas fisik murni (`public/css/admin.css`, `public/css/auth.css`, `public/css/awan_kata.css`, `public/js/daftar.js`, `public/js/awan_kata.js`), disentralisasi dengan objek global `window.AppConfig` pada layout utama (`main.php` & `admin_layout.php`), serta versioning *cache busting* `?v=<?= time() ?>`.
 * **Sistem Otorisasi, Private Mode & Audit Log (RBAC):**
   Ekosistem dikunci secara absolut ke dalam mode privat (Private Mode) melalui `AuthFilter.php` (hanya membuka celah untuk halaman `/login`, `/daftar`, dan webhook Telegram). Rute `/admin/*` diisolasi lapis kedua menggunakan `SuperAdminFilter` yang khusus mengizinkan sesi `id_user = 1`. Seluruh aktivitas (Log Cari & Log User) direkam dengan pelacakan *Real IP* menembus jaringan *Reverse Proxy* / VPN ZeroTier (membaca `X-Forwarded-For`), yang dibersihkan secara otomatis ke format **IPv4 murni** untuk keperluan Audit Forensik presisi.
 

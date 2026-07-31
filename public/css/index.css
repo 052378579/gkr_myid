@@ -1,3 +1,5 @@
+[v-cloak] { display: none !important; }
+
 .hover-bg:hover {
     background-color: #e4e7eb;
 }
@@ -138,3 +140,63 @@
         81.25%, 100% { opacity: 0; transform: scale(0.5); } /* Menghilang saat dihapus */
     }
 }
+
+/* --- Voice Search Wave Animation Styles --- */
+.voice-wave-wrapper {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.voice-wave-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2B3385 0%, #4285F4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    box-shadow: 0 4px 15px rgba(43, 51, 133, 0.5);
+}
+
+.voice-wave-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(66, 133, 244, 0.6);
+    opacity: 0;
+    z-index: 1;
+}
+
+.ring-1 {
+    animation: voice-pulse-ring 2s infinite ease-out 0s;
+}
+.ring-2 {
+    animation: voice-pulse-ring 2s infinite ease-out 0.6s;
+}
+.ring-3 {
+    animation: voice-pulse-ring 2s infinite ease-out 1.2s;
+}
+
+@keyframes voice-pulse-ring {
+    0% {
+        width: 60px;
+        height: 60px;
+        opacity: 0.8;
+    }
+    100% {
+        width: 130px;
+        height: 130px;
+        opacity: 0;
+    }
+}
+
