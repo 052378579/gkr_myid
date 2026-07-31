@@ -299,6 +299,51 @@ class CrawlerLib
         $kesimpulan = "SELESAI: Berhasil menambahkan $itemsAdded produk tunggal ke tabel gkr_cari.";
         $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>" . $kesimpulan . "</span>", 'yellow');
         
+        $this->sendTelegramNotification($targetPath, $itemsAdded);
+
         return $kesimpulan;
+    }
+
+    private function sendTelegramNotification($target, $itemsAdded)
+    {
+        $botToken = env('BOT_TOKEN');
+        $chatId   = env('CHAT_ID');
+
+        if (empty($botToken) || empty($chatId)) {
+            return;
+        }
+
+        // Deteksi Label Server (DEV vs PROD)
+        $serverIp    = $_SERVER['SERVER_ADDR'] ?? gethostbyname(gethostname());
+        $environment = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
+        $serverLabel = (str_contains($serverIp, '192.168.1.4') || str_contains($serverIp, '10.147.17.40') || $environment === 'development') ? 'DEV' : 'PROD';
+
+        date_default_timezone_set('Asia/Jakarta');
+        $waktu = date('d-m-Y H:i:s');
+
+        $itemInfo = ($itemsAdded > 0) ? "{$itemsAdded} Item Baru Ditambahkan" : "Perayapan Selesai (0 Item Baru)";
+
+        $pesan = "🤖 <b>Auto Crawler Selesai!</b>\n\n";
+        $pesan .= "🖥️ <b>Server:</b> " . $serverLabel . "\n";
+        $pesan .= "📂 <b>Direktori:</b> " . htmlspecialchars($target) . "\n";
+        $pesan .= "⏰ <b>Waktu:</b> " . $waktu . " WIB\n\n";
+        $pesan .= "💾 " . htmlspecialchars($itemInfo);
+
+        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+        
+        try {
+            $client = \Config\Services::curlrequest();
+            $client->post($url, [
+                'form_params' => [
+                    'chat_id'    => $chatId,
+                    'text'       => $pesan,
+                    'parse_mode' => 'HTML'
+                ],
+                'timeout' => 5,
+                'verify'  => false
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Telegram Crawler Notification Error: ' . $e->getMessage());
+        }
     }
 }

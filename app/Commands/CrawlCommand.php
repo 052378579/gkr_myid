@@ -90,16 +90,33 @@ class CrawlCommand extends BaseCommand
     private function sendTelegramNotification($target, $kesimpulan)
     {
         $botToken = env('BOT_TOKEN');
-        $chatId = env('CHAT_ID');
+        $chatId   = env('CHAT_ID');
 
         if (empty($botToken) || empty($chatId)) {
             CLI::write('Peringatan: Kredensial Telegram (BOT_TOKEN/CHAT_ID) tidak ditemukan di .env', 'yellow');
             return;
         }
 
+        // Deteksi Label Server (DEV vs PROD)
+        $serverIp    = $_SERVER['SERVER_ADDR'] ?? gethostbyname(gethostname());
+        $environment = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
+        $serverLabel = (str_contains($serverIp, '192.168.1.4') || str_contains($serverIp, '10.147.17.40') || $environment === 'development') ? 'DEV' : 'PROD';
+
         date_default_timezone_set('Asia/Jakarta');
         $waktu = date('d-m-Y H:i:s');
-        $pesan = "<b>Auto Crawler Selesai!</b>\n\n<b>Target:</b> " . htmlspecialchars($target) . "\n<b>Waktu:</b> " . $waktu . " WIB\n\n<b>Hasil:</b>\n" . htmlspecialchars($kesimpulan);
+
+        // Extract atau susun ringkasan item
+        if (preg_match('/Berhasil menambahkan (\d+) produk/i', $kesimpulan, $matches)) {
+            $itemInfo = $matches[1] . " Item Baru Ditambahkan";
+        } else {
+            $itemInfo = $kesimpulan;
+        }
+
+        $pesan = "🤖 <b>Auto Crawler Selesai!</b>\n\n";
+        $pesan .= "🖥️ <b>Server:</b> " . $serverLabel . "\n";
+        $pesan .= "📂 <b>Direktori:</b> " . htmlspecialchars($target) . "\n";
+        $pesan .= "⏰ <b>Waktu:</b> " . $waktu . " WIB\n\n";
+        $pesan .= "💾 " . htmlspecialchars($itemInfo);
 
         $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
         
@@ -107,9 +124,9 @@ class CrawlCommand extends BaseCommand
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            'chat_id' => $chatId,
+            'chat_id'    => $chatId,
             'parse_mode' => 'HTML',
-            'text' => $pesan
+            'text'       => $pesan
         ]));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);

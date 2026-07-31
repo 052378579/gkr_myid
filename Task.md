@@ -36,10 +36,12 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Deploy GitHub DEV:** Berhasil melakukan commit dan push cabang `dev` (`253891b`) ke GitHub.
 - `[x]` **Deploy Server PROD (`root@gracia`):** Berhasil melakukan `git pull origin dev` dan eksekusi skrip migrasi bersih DDL Opsi B pada server PROD (`gkr.my.id`).
 
-**Tahap VII: Integrasi Kalender Navbar, Telegram Auto-Bind, & Penyempurnaan UI**
+**Tahap VII: Integrasi Kalender Navbar, Telegram Auto-Bind, & Format Cronjob Notifikasi**
 - `[x]` **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):** Mengganti teks tanggal statis menjadi widget kalender melayang interaktif dengan sorotan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih pada tanggal aktif.
 - `[x]` **Penyesuaian Stacking Context (`beranda.php`):** Menetapkan `z-index: 1060 !important;` pada kalender dropdown agar melayang sempurna di atas seluruh elemen beranda tanpa bentrokan tombol kamera (`z-index: 3`).
 - `[x]` **Clean Search UI (`beranda.php` & `index.css`):** Menghapus pendaran garis warna pelangi pada tombol **Cari**, mengembalikannya ke gaya tombol bersih Bootstrap `rounded-pill` (`bg-body-tertiary`, `height: 42px`, `min-width: 120px`).
 - `[x]` **Pembersihan Direktori Scan `SAMPLE GRACIA`:** Menghapus `SAMPLE GRACIA` dari `ai_index.py` dan menambahkan *Exclusion Guard* di `CrawlerLib.php` (hanya memindai `BUYER`, `GRACIA`, `SWATCHES`, `WEB`).
-- `[x]` **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):** Mengimplementasikan fitur auto-bind mandiri karyawan via `/start 08...` atau `/daftar 08...` yang otomatis memperbarui `telegram_chat_id` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar).
-- `[x]` **Penguncian Notifikasi Sistem Statis (`Auth.php` & `ai_index.py`):** Mempertahankan pengiriman notifikasi audit Login, Logout, dan Perayapan Selesai tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).
+- `[x]` **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):** Mengimplementasikan fitur auto-bind mandiri karyawan via `/start 08...` atau `/daftar 08...` yang otomatis memperbarui `telegram_chat_id` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar oleh Admin/HRD).
+- `[x]` **Penyelarasan Cronjob & Format Notifikasi Telegram Ringkas:**
+  - Auto Crawler: `0 18 * * * cd /var/www/gkr_myid && php spark crawl:run /var/www/FOTO` -> Notifikasi Telegram `Server: DEV/PROD`, `💾 X Item Baru Ditambahkan`.
+  - AI Trainer: `1 0 * * * cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python3 ai_index.py && cp produk.index /mnt/sdcard/ai-scanner/ && cp mapping.json /mnt/sdcard/ai-scanner/ && systemctl restart ai_scanner.service` -> Notifikasi Telegram `Server: DEV/PROD`, `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`.
