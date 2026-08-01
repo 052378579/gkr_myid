@@ -200,3 +200,265 @@
     }
 }
 
+/* ==========================================================================
+   GOOGLE KNOWLEDGE PANEL CARD STYLING, 65%:35% RATIO & TEMA GRACIA (#2B3385)
+   ========================================================================== */
+.results-container {
+    padding-left: 10% !important;
+    padding-right: 10% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+@media (min-width: 992px) {
+    .results-left-col {
+        flex: 0 0 65% !important;
+        max-width: 65% !important;
+        width: 65% !important;
+    }
+    .knowledge-panel-col {
+        flex: 0 0 35% !important;
+        max-width: 35% !important;
+        width: 35% !important;
+        padding-right: 10px !important;
+        border-left: 1px solid #ebebeb !important;
+        padding-left: 24px !important;
+    }
+    .google-knowledge-hero-img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 230px !important;
+        aspect-ratio: 16 / 10 !important;
+        object-fit: contain !important;
+        background-color: transparent !important;
+        border-radius: 0 !important;
+        margin: 0 0 16px 0 !important;
+        border: none !important;
+        outline: none !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        box-shadow: none !important;
+        display: block !important;
+    }
+}
+
+.google-knowledge-card {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    color: inherit;
+    box-shadow: none !important;
+    position: sticky;
+    top: 140px !important;
+    z-index: 100 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: 0 !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.google-knowledge-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #202124;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #e8eaed;
+    padding-bottom: 8px;
+}
+
+.google-spec-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    font-size: 0.88rem;
+    color: #4d5156;
+}
+
+.google-spec-list li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.google-spec-list strong {
+    color: #202124;
+    display: inline-block;
+    min-width: 110px;
+}
+
+.google-action-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.google-action-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    color: #2B3385 !important;
+    border: 1px solid #2B3385 !important;
+    border-radius: 50rem;
+    padding: 7px 16px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+.google-action-pill:hover {
+    background: #2B3385 !important;
+    color: #ffffff !important;
+    border-color: #1E2568 !important;
+    transform: translateY(-1px);
+}
+
+.gracia-title-link {
+    color: #2B3385 !important;
+    transition: color 0.2s ease;
+}
+
+.gracia-title-link:hover {
+    color: #1E2568 !important;
+    text-decoration: underline !important;
+}
+
+/* --------------------------------------------------------------------------
+   ADAPTASI TEMA ADAPTIF (LIGHT THEME vs DARK THEME)
+   -------------------------------------------------------------------------- */
+/* LIGHT THEME ADAPTATION */
+[data-bs-theme="light"] .google-knowledge-card {
+    background: transparent !important;
+    border: none !important;
+    color: #202124 !important;
+    box-shadow: none !important;
+}
+
+[data-bs-theme="light"] .google-knowledge-heading {
+    color: #202124 !important;
+    border-bottom-color: #e8eaed !important;
+}
+
+[data-bs-theme="light"] .google-spec-list {
+    color: #4d5156 !important;
+}
+
+[data-bs-theme="light"] .google-spec-list strong {
+    color: #202124 !important;
+}
+
+[data-bs-theme="light"] .google-action-pill {
+    background: #ffffff !important;
+    color: #2B3385 !important;
+    border-color: #2B3385 !important;
+}
+
+[data-bs-theme="light"] .google-action-pill:hover {
+    background: #2B3385 !important;
+    color: #ffffff !important;
+    border-color: #1E2568 !important;
+}
+
+/* DARK THEME ADAPTATION */
+[data-bs-theme="dark"] .google-knowledge-card {
+    background: transparent !important;
+    border: none !important;
+    color: #e8eaed !important;
+    box-shadow: none !important;
+}
+
+[data-bs-theme="dark"] .google-knowledge-hero-img {
+    border-color: #3c4043 !important;
+}
+
+[data-bs-theme="dark"] .google-knowledge-heading {
+    color: #ffffff !important;
+    border-bottom-color: #3c4043 !important;
+}
+
+[data-bs-theme="dark"] .google-spec-list {
+    color: #bdc1c6 !important;
+}
+
+[data-bs-theme="dark"] .google-spec-list strong {
+    color: #e8eaed !important;
+}
+
+[data-bs-theme="dark"] .google-action-pill {
+    background: #303134 !important;
+    color: #8ab4f8 !important;
+    border-color: #5f6368 !important;
+}
+
+[data-bs-theme="dark"] .google-action-pill:hover {
+    background: #3c4043 !important;
+    color: #c2e7ff !important;
+    border-color: #8ab4f8 !important;
+}
+
+/* Active Highlight Ring pada Item Hasil Pencarian Kiri */
+.site-result-item {
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    padding-left: 14px !important;
+    padding-right: 16px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    cursor: pointer;
+    margin-left: 0 !important;
+}
+
+.site-result-item.active-knowledge-item {
+    border-left-color: #2B3385 !important;
+    background-color: #f1f3f4 !important;
+    border-radius: 0 12px 12px 0;
+}
+
+/* Pagination Google-Grade Rata Tengah Presisi di Dalam Kolom 65% Hasil Pencarian */
+.google-pagination-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
+}
+
+.google-pagination-links .pagination {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-bottom: 0 !important;
+}
+
+.google-pagination-links .page-item .page-link {
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #4d5156 !important;
+    border: none !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+}
+
+.google-pagination-links .page-item.active .page-link {
+    background-color: #2B3385 !important;
+    color: #ffffff !important;
+}
+
+

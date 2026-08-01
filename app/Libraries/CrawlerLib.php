@@ -54,6 +54,11 @@ class CrawlerLib
         $siteUrl  = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $siteUrl);
         $imageUrl = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $imageUrl);
 
+        $kodeBom = null;
+        if (preg_match('/\b(FG-\d+|BOM-[A-Z0-9-]+)\b/i', $keywords . ' ' . $title . ' ' . $siteUrl, $matches)) {
+            $kodeBom = strtoupper($matches[1]);
+        }
+
         return $this->cariModel->insert([
             'judul'      => $title,
             'alt'        => $alt,
@@ -62,6 +67,7 @@ class CrawlerLib
             'imageUrl'   => $imageUrl,
             'siteUrl'    => $siteUrl,
             'kata_kunci' => $keywords,
+            'kode_bom'   => $kodeBom,
             'klik'       => 0,
             'rusak'      => 0
         ]);

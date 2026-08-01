@@ -139,3 +139,68 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 'image/jpeg', 0.9);
     });
 });
+
+/* ==========================================================================
+   VUE 3 GOOGLE KNOWLEDGE PANEL REACTIVE CONTROLLER
+   ========================================================================== */
+document.addEventListener("DOMContentLoaded", function() {
+    const knowledgeElem = document.getElementById('knowledgeApp');
+    if (!knowledgeElem || typeof Vue === 'undefined') return;
+
+    const { createApp, ref } = Vue;
+
+    createApp({
+        setup() {
+            const selectedIndex = ref(0);
+
+            const BLANK_WHITE_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="%23ffffff"/></svg>';
+
+            const activeItem = ref({
+                title: 'Bonanza Coffee Table',
+                description: 'Bonanza Series Katalog Mebel Gracia',
+                kodeBom: 'FG-15547',
+                produksi: 'UNIT 1',
+                dirPath: 'GRACIA/2022/',
+                siteUrl: '#',
+                imageUrl: BLANK_WHITE_SVG,
+                erpUrl: 'http://103.39.49.86:82/desk#Form/Item/FG-15547',
+                pdfUrl: 'http://103.39.49.86:82/printview?doctype=BOM&name=BOM-FG-15547-001&format=BOM%20Rincian&no_letterhead=0'
+            });
+
+            function selectKnowledgeItem(index, title, description, kodeBom, produksi, dirPath, siteUrl, imageUrl, erpUrl, pdfUrl) {
+                selectedIndex.value = index;
+                activeItem.value = {
+                    title: title || 'Mebel Gracia',
+                    description: description || 'Bonanza Series Katalog Mebel Gracia',
+                    kodeBom: kodeBom || 'FG-15547',
+                    produksi: produksi || 'UNIT 1',
+                    dirPath: dirPath || 'GRACIA/2022/',
+                    siteUrl: siteUrl,
+                    imageUrl: (imageUrl && imageUrl !== 'undefined' && imageUrl !== 'null') ? imageUrl : BLANK_WHITE_SVG,
+                    erpUrl: erpUrl,
+                    pdfUrl: pdfUrl
+                };
+            }
+
+            function handleImgError(e) {
+                e.target.src = BLANK_WHITE_SVG;
+            }
+
+            // Inisialisasi klik item pertama jika ada
+            const firstItem = document.querySelector('.site-result-item');
+            if (firstItem) {
+                setTimeout(() => {
+                    firstItem.click();
+                }, 50);
+            }
+
+            return {
+                selectedIndex,
+                activeItem,
+                selectKnowledgeItem,
+                handleImgError
+            };
+        }
+    }).mount('#knowledgeApp');
+});
+

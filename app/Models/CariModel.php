@@ -33,6 +33,7 @@ class CariModel extends Model
         'imageUrl',
         'siteUrl',
         'kata_kunci',
+        'kode_bom',
         'klik',
         'rusak',
         'deleted_at'

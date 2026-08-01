@@ -22,6 +22,28 @@ body {
     transition: box-shadow 0.2s, padding-bottom 0.2s;
 }
 
+@media (min-width: 992px) {
+    .header-container {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .header-right-icons,
+    .desktop-right-wrapper {
+        margin-left: auto !important;
+        padding-right: 0 !important;
+    }
+    .tabs-container,
+    .nav-tabs-wrapper,
+    .nav-tabs {
+        padding-left: 10% !important;
+        padding-right: 10% !important;
+        box-sizing: border-box !important;
+    }
+}
+
 .header-container.scrolled {
     box-shadow: 0 1px 6px rgba(32, 33, 36, .28);
     padding-bottom: 15px;
@@ -179,6 +201,10 @@ body {
     border-bottom: none;
 }
 
+.nav-tabs .nav-item:first-child .nav-link {
+    padding-left: 0 !important;
+}
+
 .nav-tabs .nav-link {
     border: none;
     color: #5f6368;
@@ -200,8 +226,10 @@ body {
 
 .results-container {
     padding-left: 20px;
+    padding-right: 20px;
     padding-top: 15px;
-    max-width: 800px;
+    width: 100%;
+    max-width: 100% !important;
 }
 
 .result-count {

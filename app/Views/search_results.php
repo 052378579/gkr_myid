@@ -5,7 +5,7 @@
 <?= $this->section('styles') ?>
 <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
 <link rel="stylesheet" href="<?= base_url('assets/css/fancybox/3.3.5/jquery.fancybox.min.css') ?>">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+<link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
 <link rel="stylesheet" href="<?= base_url('css/search.css') ?>?v=<?= time() ?>">
 <?= $this->endSection() ?>
 
@@ -14,7 +14,7 @@
 $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 ?>
-<div class="header-container" id="header-container">
+<div class="header-container" id="header-container" style="padding-left: 24px !important; padding-right: 24px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; width: 100% !important;">
         <div class="desktop-left-wrapper">
             <a href="<?= base_url() ?>" class="logo-container">
                 <?php if(isset($urlLogo)): ?>
@@ -41,7 +41,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             </form>
         </div>
 
-        <div class="header-right-icons d-flex align-items-center gap-3 z-3">
+        <div class="header-right-icons d-flex align-items-center gap-3 z-3" style="margin-left: auto !important; padding-right: 0 !important;">
             <div class="dropdown" id="calendarDropdownWrap">
                 <a href="#" id="calendarDropdownToggle" class="small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s; color: var(--bs-body-color);" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='var(--bs-body-color)'">
                     <span class="d-none d-md-inline"><?= $dateStr ?></span>
@@ -101,7 +101,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             </div>
 
             <?php 
-                $namaLengkap = session()->get('nama_lengkap') ?? 'User';
+                $namaLengkap = session()->get('nama_lengkap') ?? 'Pengguna';
                 $fotoProfil = session()->get('foto_profil');
                 if (!empty($fotoProfil)) {
                     $avatarUrl = base_url('dokumen/karyawan/' . $fotoProfil);
@@ -125,10 +125,10 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         </div>
     </div>
     
-    <div class="tabs-container">
-        <ul class="nav nav-tabs">
+    <div class="tabs-container" style="padding-left: 10% !important; padding-right: 10% !important;">
+        <ul class="nav nav-tabs" style="padding-left: 0 !important; margin-left: 0 !important;">
             <li class="nav-item">
-                <a class="nav-link <?= $type === 'sites' ? 'active' : '' ?>" href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=sites">Semua</a>
+                <a class="nav-link <?= $type === 'sites' ? 'active' : '' ?>" style="padding-left: 0 !important; margin-left: 0 !important;" href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=sites">Semua</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= $type === 'images' ? 'active' : '' ?>" href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=images">Gambar</a>
@@ -141,7 +141,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
 <div class="main-content-wrapper" style="min-height: calc(100vh - 140px); display: flex; flex-direction: column;">
     <?php if (isset($correctedQuery)): ?>
-        <div class="results-container pt-2 pb-0 mb-0">
+        <div class="results-container pt-2 pb-0 mb-0" style="padding-left: 10% !important; padding-right: 10% !important;">
             <div class="text-dark mb-0 py-1">
                 <span class="fs-6" style="color: var(--bs-body-color);">Ini adalah hasil untuk <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($correctedQuery) ?>" class="fw-bold fst-italic query-link"><?= esc($correctedQuery) ?></a></span><br>
                 <span class="small text-muted">Atau telusuri <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($originalQuery) ?>&exact=1" class="query-link"><?= esc($originalQuery) ?></a></span>
@@ -150,24 +150,103 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     <?php endif; ?>
 
     <?php if ($type === 'sites'): ?>
-        <div class="results-container">
-            <p class="result-count">Ditemukan <?= $totalResults ?> hasil</p>
+        <div class="results-container" id="knowledgeApp" style="padding-left: 10% !important; padding-right: 10% !important;">
+            <div class="row g-4">
+                <!-- Kolom Kiri: Daftar Hasil Teks (Lebar Presisi 65% di Desktop, 100% di Mobile) -->
+                <div class="col-12 col-lg-8 results-left-col">
+                    <p class="result-count mb-3" style="padding-left: 0 !important; margin-left: 0 !important;">Ditemukan <?= $totalResults ?> hasil</p>
+                    <?php foreach ($results as $index => $site): ?>
+                        <?php 
+                            $siteUrlClean = esc($site['url']);
+                            $siteBom = esc($site['kode_bom'] ?? 'FG-15547');
+                            $siteProduksi = esc($site['produksi'] ?? 'UNIT 1');
+                            $siteImg = esc(!empty($site['imageUrl']) ? $site['imageUrl'] : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="%23ffffff"/></svg>');
+                            $siteTitle = esc($site['title']);
+                            $siteDesc = esc(!empty($site['description']) ? $site['description'] : 'Bonanza Series Katalog Mebel Gracia');
+                            $erpUrl = "http://103.39.49.86:82/desk#Form/Item/{$siteBom}";
+                            $pdfUrl = "http://103.39.49.86:82/printview?doctype=BOM&name=BOM-{$siteBom}-001&format=BOM%20Rincian&no_letterhead=0";
+                            
+                            $dirPath = 'GRACIA/2022/';
+                            if (preg_match('~/\\?([^#]+)~', $siteUrlClean, $mDir)) {
+                                $dirPath = $mDir[1];
+                            }
+                        ?>
+                        <div class="site-result site-result-item mb-3" 
+                             :class="{ 'active-knowledge-item': selectedIndex === <?= $index ?> }"
+                             @click="selectKnowledgeItem(<?= $index ?>, '<?= addslashes($siteTitle) ?>', '<?= addslashes($siteDesc) ?>', '<?= addslashes($siteBom) ?>', '<?= addslashes($siteProduksi) ?>', '<?= addslashes($dirPath) ?>', '<?= addslashes($siteUrlClean) ?>', '<?= addslashes($siteImg) ?>', '<?= addslashes($erpUrl) ?>', '<?= addslashes($pdfUrl) ?>')">
+                            <div class="title">
+                                <a href="<?= $siteUrlClean ?>" target="_blank" class="gracia-title-link" style="color: #2B3385 !important; font-weight: 600; text-decoration: none;" onclick="updateLinkCount(<?= $site['id'] ?>)">
+                                    <?= $siteTitle ?>
+                                </a>
+                            </div>
+                            <div class="url"><?= $siteUrlClean ?></div>
+                            <div class="description"><?= $siteDesc ?></div>
+                        </div>
+                    <?php endforeach; ?>
 
-            <?php foreach ($results as $site): ?>
-                <div class="site-result">
-                    <div class="title">
-                        <a href="<?= esc($site['url']) ?>" target="_blank" onclick="updateLinkCount(<?= $site['id'] ?>)">
-                            <?= esc($site['title']) ?>
-                        </a>
-                    </div>
-                    <div class="url"><?= esc($site['url']) ?></div>
-                    <div class="description"><?= esc($site['description']) ?></div>
+                    <!-- Custom Pagination Logo cari 1 (Rata Lurus Horizontal Presisi 100% Baseline) -->
+                    <?php if (isset($pager) && !empty($results)): ?>
+                        <?php 
+                            $currentPage = $pager->getCurrentPage();
+                            $pageCount = $pager->getPageCount();
+                            $startPage = max(1, $currentPage - 4);
+                            $endPage = min($pageCount, $currentPage + 4);
+                        ?>
+                        <div class="google-pagination-container d-flex flex-column align-items-center justify-content-center w-100 my-5 text-center">
+                            <div class="google-pagination-brand d-inline-flex align-items-baseline justify-content-center mb-4" style="font-family: 'Outfit', 'Product Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 0px; line-height: 1;">
+                                <span style="color: #4285F4; font-size: 2.2rem; font-weight: 700; line-height: 1;">c</span><!--
+                                --><?php for ($i = $startPage; $i <= $endPage; $i++): 
+                                    $isActive = ($i == $currentPage);
+                                    $colorA = $isActive ? '#EA4335' : '#FBBC05';
+                                ?><div class="position-relative d-inline-block text-center" style="margin: 0 1px;">
+                                        <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="text-decoration-none" style="color: <?= $colorA ?>; font-size: 2.2rem; font-weight: 700; line-height: 1;">a</a>
+                                        <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="position-absolute start-50 translate-middle-x text-decoration-none fw-bold" style="bottom: -22px; font-size: 0.88rem; color: #4285F4;"><?= $i ?></a>
+                                    </div><?php endfor; ?><!--
+                                --><span style="color: #34A853; font-size: 2.2rem; font-weight: 700; line-height: 1;">r</span><!--
+                                --><span style="color: #EA4335; font-size: 2.2rem; font-weight: 700; line-height: 1;">i</span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (empty($results)): ?>
+                        <p>Tidak ada situs mebel yang ditemukan.</p>
+                    <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
-            
-            <?php if (empty($results)): ?>
-                <p>Tidak ada situs yang ditemukan.</p>
-            <?php endif; ?>
+
+                <!-- Kolom Kanan: Google Knowledge Panel Card (Lebar Presisi 35% di Desktop, 100% Hilang di Mobile) -->
+                <?php if (!empty($results)): ?>
+                <div class="col-lg-4 d-none d-lg-block knowledge-panel-col">
+                    <div class="google-knowledge-card">
+                        <!-- Hero Media Foto Utama (Fluid 100% Presisi, Rasio 16:10) -->
+                        <img :src="activeItem.imageUrl" :alt="activeItem.title" class="google-knowledge-hero-img" style="width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 230px !important; aspect-ratio: 16 / 10 !important; object-fit: contain !important; margin: 0 0 16px 0 !important; box-sizing: border-box !important; display: block !important;" @error="handleImgError">
+                        
+                        <!-- Header Rincian -->
+                        <div class="google-knowledge-heading">RINCIAN</div>
+                        
+                        <!-- List Spesifikasi (Deskripsi, Kode BOM, Lihat BOM, Produksi) -->
+                        <ul class="google-spec-list">
+                            <li><strong>Deskripsi</strong> : <span v-text="activeItem.description"></span></li>
+                            <li><strong>Kode BOM</strong> : <span style="color: #2B3385; font-weight: bold; font-family: monospace;">{{ activeItem.kodeBom }}</span></li>
+                            <li><strong>Lihat BOM</strong> : <span class="font-monospace text-info">BOM-{{ activeItem.kodeBom }}-001</span></li>
+                            <li><strong>Produksi</strong> : <span class="fw-bold" style="color: #2B3385;">{{ activeItem.produksi }}</span></li>
+                        </ul>
+                        
+                        <!-- 3 Action Pills Buttons Presisi: [ 📄 BOM ] [ 🌐 ERP ] [ 🖼️ Foto ] -->
+                        <div class="google-action-pill-group">
+                            <a :href="activeItem.pdfUrl" target="_blank" class="google-action-pill" title="Cetak PDF Rincian BOM">
+                                <i class="fa-solid fa-file-pdf me-1"></i> BOM
+                            </a>
+                            <a :href="activeItem.erpUrl" target="_blank" class="google-action-pill" title="Kunjungi Form Item ERP">
+                                <i class="fa-solid fa-globe me-1"></i> ERP
+                            </a>
+                            <a :href="activeItem.siteUrl" target="_blank" class="google-action-pill" title="Lihat Foto Katalog">
+                                <i class="fa-solid fa-image me-1"></i> Foto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
         </div>
     <?php else: ?>
         <div class="results-container">
@@ -249,36 +328,30 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 <p style="padding-left: 150px;">Tidak ada gambar yang ditemukan.</p>
             <?php endif; ?>
         </div>
-    <?php endif; ?>
 
-    <!-- Custom Pagination -->
-    <?php if (isset($pager) && !empty($results)): ?>
-        <div class="pagination-container" style="margin-top: auto;">
-            <div class="pagination-logo">
-                    <div class="page-number-box" style="pointer-events: none;">
-                        <img src="<?= base_url('assets/images/pageStart.png') ?>" alt="D" style="height: 37px;">
-                    </div>
-                
-                <?php 
+        <!-- Custom Pagination Logo cari 1 untuk Tab Gambar (type=images) -->
+        <?php if (isset($pager) && !empty($results)): ?>
+            <?php 
                 $currentPage = $pager->getCurrentPage();
                 $pageCount = $pager->getPageCount();
                 $startPage = max(1, $currentPage - 4);
                 $endPage = min($pageCount, $currentPage + 4);
-                
-                for ($i = $startPage; $i <= $endPage; $i++): 
-                    $isActive = ($i == $currentPage);
-                    $imgSrc = $isActive ? 'pageSelected.png' : 'page.png';
-                ?>
-                    <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="page-number-box <?= $isActive ? 'active' : '' ?>">
-                            <img src="<?= base_url('assets/images/' . $imgSrc) ?>" alt="o" style="height: 37px;">
-                        <span><?= $i ?></span>
-                    </a>
-                <?php endfor; ?>
-                                <div class="page-number-box" style="pointer-events: none;">
-                        <img src="<?= base_url('assets/images/pageEnd.png') ?>" alt="gle" style="height: 43px;">
-                    </div>
+            ?>
+            <div class="google-pagination-container d-flex flex-column align-items-center justify-content-center w-100 my-5 text-center">
+                <div class="google-pagination-brand d-inline-flex align-items-baseline justify-content-center mb-4" style="font-family: 'Outfit', 'Product Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 0px; line-height: 1;">
+                    <span style="color: #4285F4; font-size: 2.2rem; font-weight: 700; line-height: 1;">c</span><!--
+                    --><?php for ($i = $startPage; $i <= $endPage; $i++): 
+                        $isActive = ($i == $currentPage);
+                        $colorA = $isActive ? '#EA4335' : '#FBBC05';
+                    ?><div class="position-relative d-inline-block text-center" style="margin: 0 1px;">
+                            <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="text-decoration-none" style="color: <?= $colorA ?>; font-size: 2.2rem; font-weight: 700; line-height: 1;">a</a>
+                            <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="position-absolute start-50 translate-middle-x text-decoration-none fw-bold" style="bottom: -22px; font-size: 0.88rem; color: #4285F4;"><?= $i ?></a>
+                        </div><?php endfor; ?><!--
+                    --><span style="color: #34A853; font-size: 2.2rem; font-weight: 700; line-height: 1;">r</span><!--
+                    --><span style="color: #EA4335; font-size: 2.2rem; font-weight: 700; line-height: 1;">i</span>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
     <?php endif; ?>
     
     <footer class="mt-auto py-3 position-relative w-100" style="background-color: var(--bs-tertiary-bg); border-top: 1px solid var(--bs-border-color); color: var(--bs-secondary-color); font-size: 0.9rem; margin-top: 40px !important;">
