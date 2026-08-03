@@ -108,11 +108,6 @@
                                 </div>
                             </div>
 
-                            <div class="mb-2">
-                                <label class="form-label text-muted small fw-medium mb-1">Deskripsi Produk (deskripsi)</label>
-                                <textarea class="form-control rounded-3" rows="2" v-model="formEditImage.description" placeholder="Deskripsi rincian mebel..."></textarea>
-                            </div>
-
                             <!-- Dropdown Material & Warna Bersebelahan -->
                             <div class="row mb-2">
                                 <div class="col-6">
