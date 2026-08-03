@@ -32,6 +32,7 @@
                     <thead class="bg-body-tertiary">
                         <tr>
                             <th class="ps-4">Gambar</th>
+                            <th>Kode BOM</th>
                             <th>Nama Barang</th>
                             <th>URL</th>
                             <th>Klik</th>
@@ -47,6 +48,7 @@
                                 </a>
                                 <span v-else class="badge bg-secondary">No Image</span>
                             </td>
+                            <td><span class="badge bg-light text-dark border font-monospace">{{ img.kode_bom || '-' }}</span></td>
                             <td class="fw-medium">{{ img.judul || img.title || img.alt }}</td>
                             <td>
                                 <a :href="img.siteUrl || img.url" target="_blank" class="text-truncate d-inline-block text-primary text-decoration-none" style="max-width:220px;">
