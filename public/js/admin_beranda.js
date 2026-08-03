@@ -369,13 +369,17 @@ createApp({
 
         const simpanEditImage = async () => {
             const formData = new FormData();
+            formData.append('id', formEditImage.value.id || '');
             formData.append('title', formEditImage.value.title || '');
             formData.append('alt', formEditImage.value.alt || '');
+            formData.append('description', formEditImage.value.description || '');
+            formData.append('url', formEditImage.value.url || '');
             formData.append('imageUrl', formEditImage.value.imageUrl || '');
             formData.append('siteUrl', formEditImage.value.siteUrl || '');
+            formData.append('keywords', formEditImage.value.keywords || '');
+            formData.append('kode_bom', formEditImage.value.kode_bom || '');
             formData.append('clicks', formEditImage.value.clicks || 0);
             formData.append('broken', formEditImage.value.broken || 0);
-            formData.append('keywords', formEditImage.value.keywords || '');
             
             try {
                 await fetch(window.AppConfig.apiUpdateImage + formEditImage.value.id, {
@@ -384,7 +388,7 @@ createApp({
                 });
                 if(modalEditImageInstance.value) modalEditImageInstance.value.hide();
                 loadImages();
-                Swal.fire('Berhasil!', 'Data gambar telah diubah.', 'success');
+                Swal.fire('Berhasil!', 'Data mesin pencari telah berhasil diperbarui.', 'success');
             } catch (e) {
                 Swal.fire('Gagal!', 'Terjadi kesalahan sistem.', 'error');
             }

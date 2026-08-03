@@ -9,14 +9,27 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 ## 🚀 Fitur Unggulan Sistem
 
 * **Single Physical Table Database `gkr_cari` & Kolom Bahasa Indonesia:**
-  Menggabungkan tabel lama menjadi satu tabel fisik murni **`gkr_cari`** dengan kolom baku Bahasa Indonesia (`judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `klik`, `rusak`). Tipe entitas diidentifikasi murni dari `imageUrl IS NOT NULL`.
+  Menggabungkan tabel lama menjadi satu tabel fisik murni **`gkr_cari`** dengan 11 kolom baku Bahasa Indonesia: `id`, `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak`. Tipe entitas diidentifikasi murni dari `imageUrl IS NOT NULL`.
+* **Manajemen Engine Modal Box 11 Field (`/admin/cari`):**
+  Modal Box **"Edit Data Mesin Pencari"** (`#modalEditImage`) 2-kolom memfasilitasi pengeditan **100% seluruh 11 field tabel `gkr_cari`**: `id` (Badge ID #123), `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak` dilengkapi pratinjau gambar 16:10 live dan integrasi API `GraciaApi.php`.
+* **Standardisasi Layout Google-Grade & Dark Mode Adaptif (`/cari`):**
+  * **Responsivitas Header Mobile 2-Baris:** On Mobile (<768px), layout header menyusun Baris 1: Logo GRACIA (kiri) + Date/Apps/Avatar (kanan), Baris 2: Search Box 100% lebar penuh dengan penyembunyian ikon Kaca Pembesar (`.search-button`) dan `gap: 5px !important`.
+  * **Icon Action Buttons Presisi (`search.css`):** Tombol ikon mic, kamera, dan cari dikemas dalam kelas `.icon-action-btn` (32px x 32px).
+  * **Knowledge Card Borderless & Background Transparan:** Hero image `.google-knowledge-hero-img` diset `border: none !important; border-radius: 0 !important; padding: 0 !important; background-color: transparent !important;` pada Mode TERANG dan GELAP dengan SVG fallback 100% transparan (`fill="transparent"`). Knowledge Panel 35% kanan tampil responsif di Mobile (`col-12 col-lg-4 mt-4 mt-lg-0`).
+  * **Penyelarasan Garis Vertikal Pembatas (`border-left`):** Diset dengan `margin-top: 38px !important;` pada Desktop agar dimulai presisi sejajar dengan titik puncak hero image / hasil pertama, dan di-reset `border-left: none !important;` pada Mobile (<992px).
+  * **Formatting Hyphen BOM Kosong (`Kode BOM : -`):** `Search.php` mengembalikan `-` secara bersih saat `kode_bom` di DB kosong, merender `Kode BOM : -`, `Lihat BOM : -`, dan `Produksi : -`.
+  * **Flush Left Vertical Alignment (Margin 10% Kiri):** Tab `[Semua]`, `Ditemukan {jumlah} hasil`, dan garis aksen 3px Biru Dongker `.site-result-item` berderet 100% rata lurus vertikal.
+  * **Pagination Logo `c a r i` Vector Typography Baseline:** Tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`) dan Rata Tengah (*Centered*).
+* **Keseragaman Dropdown Menu (Apps Grid & Kalender):**
+  Dropdown Apps Grid dan Kalender menggunakan kelas native Bootstrap `dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4` dan `text-body` (`color: var(--bs-body-color)`), tanpa inline glassmorphism, adaptif 100% pada Mode Terang dan Gelap.
+* **Halaman Catatan Versi Rilis (`/versi`):**
+  * Format tanggal Indonesia seragam `01/08/2026` (`dd/mm/yyyy`).
+  * Tampilan responsif Mobile 1-Kolom Stack (`@media (max-width: 767px)`) pada `public/css/admin_versi.css` agar judul dan deskripsi changelog tidak terpotong.
+* **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):**
+  Tanggal navbar `Selasa, 28/07/2026 ▾` mengusung Bootstrap Dropdown `#calendarDropdownWrap`. Tanggal hari ini disorot dengan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih (`#ffffff`). Layering dropdown kalender diset ke `z-index: 1060 !important;` melayang mulus di atas seluruh elemen beranda.
 * **Otomatisasi Cronjob & Notifikasi Telegram Ringkas:**
   - **Auto Crawler (`0 18 * * *`)**: Dijalankan setiap pukul **18:00 WIB** via CLI `php spark crawl:run /var/www/FOTO`. Mengirimkan notifikasi Telegram ringkas dengan label `Server: DEV/PROD` dan jumlah item terbackup (`💾 X Item Baru Ditambahkan`).
   - **AI Trainer Engine (`1 0 * * *`)**: Dijalankan setiap pukul **00:01 WIB** via Python `ai_index.py`, otomatis menyalin berkas `produk.index` & `mapping.json` ke `/mnt/sdcard/ai-scanner/` serta memuat ulang `ai_scanner.service`. Mengirimkan notifikasi Telegram ringkas (`Server: DEV/PROD` & `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`).
-* **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):**
-  Tanggal navbar `Selasa, 28/07/2026 ▾` mengusung Bootstrap Dropdown `#calendarDropdownWrap`. Tanggal hari ini disorot dengan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih (`#ffffff`).
-* **Desain Bersih Tombol Cari (`beranda.php`):**
-  Tombol **Cari** menggunakan gaya murni Bootstrap `rounded-pill` (`bg-body-tertiary`, `height: 42px`, `min-width: 120px`) tanpa pendaran warna pelangi. Layering dropdown kalender diset ke `z-index: 1060 !important;` agar melayang mulus di atas seluruh elemen beranda.
 * **Pembersihan Scan Direktori (`SAMPLE GRACIA` Excluded):**
   Seluruh proses pengindeksan perayap web (`CrawlerLib.php`) dan pelatih AI (`ai_index.py`) hanya menyisir 4 direktori aktif (`BUYER`, `GRACIA`, `SWATCHES`, `WEB`). Direktori legacy `SAMPLE GRACIA` diblokir total.
 * **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):**
@@ -25,8 +38,6 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   Metode `sendTelegramNotification()` di `Auth.php` (login/logout) dan `ai_index.py` (crawler) tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).
 * **Dashboard KPI Administrasi & Visualisasi ApexCharts (`/admin/dashboard`):**
   Rute `/admin` dan `/admin/dashboard` menyajikan Dasbor KPI Utama dengan 4 Summary Cards (Termasuk **Total Users** Karyawan Terdaftar) dan **ApexCharts Bar Chart (Custom Data Labels)** yang menampilkan 10 produk paling sering dicari (`klik DESC`).
-* **Halaman Manajemen Mesin Pencari (`/admin/cari`):**
-  Antarmuka pengelolaan data `gkr_cari` dengan desain Card Header bersih tanpa TAB, reposisi pemilih baris `Tampilkan: [10 v]` di sebelah kiri kotak pencarian, serta thumbnail foto kolom **Gambar** yang dapat diklik langsung untuk membuka gambar ukuran penuh pada domain server asal.
 * **Optimalisasi Crawler 1 Produk = 1 Baris Utuh (`CrawlerLib.php`):**
   Setiap file foto produk diindeks murni sebagai **1 Baris Utuh** (menampung `url` dan `imageUrl` secara bersamaan), menghemat 50% kapasitas penyimpanan database.
 * **Resolusi URL Dinamis Host (DEV vs PROD):**
@@ -49,14 +60,6 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   * **Primary Brand/Series Anchor Search:** Deteksi otomatis token merk/seri spesifik (`$specificBrandAnchor`, misal `"bonanza"` pada `bonanza+table` atau `bonanza+coffee`) yang mewajibkan produk memuat kata merk utama. Mengeliminasi 100% produk pengotor seperti *Riazor Rectangular Coffee Table*, *Tamika Coffee Table*, *Alandra Coffee Table*, dan *Side Table Type 02*.
   * **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi *Leora Dinning Chair* (kursi) dan *Mida Table Lamp Organic Motif* (lampu meja) pada pencarian `dinning table`.
   * **Multi-Tier Relevance Scoring:** Perhitungan skor SQL `ORDER BY` bertingkat (Skor 100 untuk exact phrase, Skor 80 untuk all-tokens match, dan pengurutan popularitas `klik DESC`).
-* **Redesain Presisi Layout Halaman Hasil Pencarian (`/cari` - Google-Grade UI & Dark Mode):**
-  * **Header Layout Alignment:** Logo GRACIA bersandar di tepi paling kiri (`24px`), dan grup menu header kanan (`Sabtu, 01/08/2026`, tombol bulat App Launcher Grid `[:::]`, dan Profile Avatar `[👤]`) bersandar di tepi paling kanan (`24px`).
-  * **Penyelarasan Vertikal Presisi 100% (Margin 10% Kiri):** Huruf pertama Tab **`[S]emua`**, teks **`[D]itemukan {jumlah} hasil`**, dan batas luar garis aksen item aktif (`.site-result-item`) berderet 100% Rata Lurus Vertikal Presisi pada garis margin 10% Kiri (`padding-left: 10% !important;`).
-  * **Harmonisasi Adaptif Dark Mode & Light Mode (`[data-bs-theme="dark"]`):** Latar item aktif menggunakan abu-abu transparan `rgba(138, 180, 248, 0.12)` dengan garis aksen biru muda `#8ab4f8`, judul produk `#8ab4f8`, URL `#81c995`, garis pemisah `#3c4043`, dan action pills `#303134`.
-  * **Knowledge Card Borderless & Divider Gray Line:** Knowledge Panel Card 35% kanan berlatar transparan tanpa border/shadow luar, dipisahkan oleh **Garis Abu-Abu Pemisah Vertikal** (`border-left: 1px solid #ebebeb; padding-left: 24px;` di Light Mode, `#3c4043` di Dark Mode) dari kolom 65% hasil kiri, dan memiliki garis abu-abu horizontal di bawah judul `RINCIAN`.
-  * **Default Fallback Foto Putih Polos (`#ffffff`):** Gambar default fallback diganti dari logo 'G' / `favicon.ico` menjadi SVG Putih Polos murni (`#ffffff`) saat produk tidak memiliki foto.
-  * **Pagination Logo `c a r i` Vector Typography Baseline:** Logo `c a r i` menggunakan tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`) dan Rata Tengah (*Centered*) di Tab Semua (`type=sites`) dan Tab Gambar (`type=images`).
-  * **Pemetaan Produksi Strict:** Pengklasifikasian unit produksi berbasis awalan `kode_bom` (`FG-1...` -> `UNIT 1`, `FG-2...` -> `UNIT 2`, `FG-4...` -> `UNIT 4`).
 * **Sistem Otorisasi, Private Mode & Audit Log (RBAC):**
   Ekosistem dikunci secara absolut ke dalam mode privat (Private Mode) melalui `AuthFilter.php` (hanya membuka celah untuk halaman `/login`, `/daftar`, dan webhook Telegram). Rute `/admin/*` diisolasi lapis kedua menggunakan `SuperAdminFilter` yang khusus mengizinkan sesi `id_user = 1`. Seluruh aktivitas (Log Cari & Log User) direkam dengan pelacakan *Real IP* menembus jaringan *Reverse Proxy* / VPN ZeroTier (membaca `X-Forwarded-For`), yang dibersihkan secara otomatis ke format **IPv4 murni** untuk keperluan Audit Forensik presisi.
 
@@ -84,6 +87,8 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 * **`app/Models/`**: Representasi tabel SQL (`CariModel.php`, `MaterialModel.php`, `LogCariModel.php`, `LogUserModel.php`, `UserModel.php`, `DoodleModel.php`).
 * **`app/Views/layout/`**: Kerangka utama UI terpusat (`main.php` & `admin_layout.php`).
 * **`public/`**: Titik masuk web (`index.php`), aset statis, `sw.js` (PWA Service Worker), dan flat-file changelog (`versi.json`).
+* **`public/css/`**: Modul CSS fisik (`index.css`, `search.css`, `admin.css`, `admin_versi.css`, `auth.css`, `awan_kata.css`).
+* **`public/js/`**: Skrip JS fisik modular (`admin_beranda.js`, `admin_dashboard.js`, `calendar.js`, `voice_search.js`, `awan_kata.js`, `daftar.js`).
 * **`python_services/`**: Karantina kecerdasan buatan Python (`ai_index.py`, `ai_scanner.service`, `produk.index`, `mapping.json`).
 
 ---

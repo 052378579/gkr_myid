@@ -405,10 +405,17 @@ class GraciaApi extends BaseController
         $klik = $this->request->getPost('klik') ?? $this->request->getPost('clicks');
         $rusak = $this->request->getPost('rusak') ?? $this->request->getPost('broken');
 
+        $desc = $this->request->getPost('deskripsi') ?? $this->request->getPost('description');
+        $url = $this->request->getPost('url');
+        $kodeBom = $this->request->getPost('kode_bom');
+
         if ($title !== null) $dataPembaruan['judul'] = esc($title);
         if ($this->request->getPost('alt') !== null) $dataPembaruan['alt'] = esc($this->request->getPost('alt'));
+        if ($desc !== null) $dataPembaruan['deskripsi'] = esc($desc);
+        if ($url !== null) $dataPembaruan['url'] = esc($url);
         if ($this->request->getPost('imageUrl') !== null) $dataPembaruan['imageUrl'] = esc($this->request->getPost('imageUrl'));
         if ($this->request->getPost('siteUrl') !== null) $dataPembaruan['siteUrl'] = esc($this->request->getPost('siteUrl'));
+        if ($kodeBom !== null) $dataPembaruan['kode_bom'] = esc($kodeBom);
         if ($klik !== null) $dataPembaruan['klik'] = (int)$klik;
         if ($rusak !== null) $dataPembaruan['rusak'] = (int)$rusak;
         if ($kw !== null) $dataPembaruan['kata_kunci'] = esc($kw);

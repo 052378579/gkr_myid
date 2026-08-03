@@ -82,34 +82,48 @@
     <div class="modal fade" id="modalEditImage" tabindex="-1" aria-labelledby="modalEditImageLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded-4 border-0 shadow">
-                <div class="modal-header border-bottom-0 pb-0">
-                    <h4 class="modal-title fw-bold text-secondary w-100 text-center" id="modalEditImageLabel">Edit Data Mesin Pencari</h4>
-                    <button type="button" class="btn-close shadow-none position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="modal-title fw-bold text-body mb-0">Edit Data Mesin Pencari <span class="badge bg-secondary fs-6 ms-2">ID: #{{ formEditImage.id }}</span></h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="row">
-                        <!-- Kolom Kiri: Data Teks & Klasifikasi -->
+                        <!-- Kolom Kiri: Data Teks & Identitas -->
                         <div class="col-md-6 border-end pe-4">
-                            <div class="mb-3">
-                                <label class="form-label text-muted mb-1">Nama Barang / Judul</label>
-                                <input type="text" class="form-control rounded-3" v-model="formEditImage.title">
+                            <input type="hidden" v-model="formEditImage.id">
+
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-medium mb-1">Nama Barang / Judul (judul)</label>
+                                <input type="text" class="form-control rounded-3" v-model="formEditImage.title" placeholder="Nama barang...">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label text-muted mb-1">Teks Alternatif (Alt)</label>
-                                <input type="text" class="form-control rounded-3" v-model="formEditImage.alt">
-                            </div>
-                            
-                            <!-- Dropdown Material & Warna Bersebelahan -->
-                            <div class="row mb-3">
+
+                            <div class="row mb-2">
                                 <div class="col-6">
-                                    <label class="form-label text-muted mb-1">Material</label>
+                                    <label class="form-label text-muted small fw-medium mb-1">Teks Alternatif (alt)</label>
+                                    <input type="text" class="form-control rounded-3" v-model="formEditImage.alt" placeholder="Alt text...">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label text-muted small fw-medium mb-1">Kode BOM (kode_bom)</label>
+                                    <input type="text" class="form-control rounded-3" v-model="formEditImage.kode_bom" placeholder="FG-15547 atau -">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-medium mb-1">Deskripsi Produk (deskripsi)</label>
+                                <textarea class="form-control rounded-3" rows="2" v-model="formEditImage.description" placeholder="Deskripsi rincian mebel..."></textarea>
+                            </div>
+
+                            <!-- Dropdown Material & Warna Bersebelahan -->
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <label class="form-label text-muted small fw-medium mb-1">Material (Bantu)</label>
                                     <select class="form-select rounded-3" v-model="selectedMaterialImage">
                                         <option value="">-- Pilih Material --</option>
                                         <option v-for="mat in uniqueMaterials" :key="mat" :value="mat">{{ mat }}</option>
                                     </select>
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label text-muted mb-1">Warna</label>
+                                    <label class="form-label text-muted small fw-medium mb-1">Warna (Bantu)</label>
                                     <select class="form-select rounded-3" v-model="selectedWarnaImage">
                                         <option value="">-- Pilih Warna --</option>
                                         <option v-for="war in uniqueWarna" :key="war" :value="war">{{ war }}</option>
@@ -117,19 +131,19 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label text-muted mb-1">Kata Kunci</label>
-                                <input type="text" class="form-control rounded-3" v-model="formEditImage.keywords">
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-medium mb-1">Kata Kunci (kata_kunci)</label>
+                                <input type="text" class="form-control rounded-3" v-model="formEditImage.keywords" placeholder="kata1, kata2...">
                             </div>
 
                             <!-- Klik & Status Bersebelahan -->
-                            <div class="row mb-3">
+                            <div class="row mb-2">
                                 <div class="col-6">
-                                    <label class="form-label text-muted mb-1">Klik</label>
+                                    <label class="form-label text-muted small fw-medium mb-1">Klik (klik)</label>
                                     <input type="number" class="form-control rounded-3" v-model="formEditImage.clicks">
                                 </div>
                                 <div class="col-6">
-                                    <label class="form-label text-muted mb-1">Status</label>
+                                    <label class="form-label text-muted small fw-medium mb-1">Status (rusak)</label>
                                     <select class="form-select rounded-3" v-model="formEditImage.broken">
                                         <option value="0">Aktif (0)</option>
                                         <option value="1">Rusak (1)</option>
@@ -138,30 +152,33 @@
                             </div>
                         </div>
                         
-                        <!-- Kolom Kanan: Visual & URL Terkunci -->
+                        <!-- Kolom Kanan: Visual & URL Tautan -->
                         <div class="col-md-6 ps-4">
-                            <!-- Pratinjau Gambar 8:5 Anti-Terpotong dengan Tautan Aktif -->
-                            <div class="mb-3 text-center bg-light rounded-3 d-flex align-items-center justify-content-center overflow-hidden border position-relative" style="aspect-ratio: 8/5; max-height: 250px;">
-                                <a v-if="formEditImage.imageUrl" :href="formEditImage.imageUrl" target="_blank" class="w-100 h-100 d-block" title="Klik untuk membuka gambar berukuran penuh">
+                            <!-- Pratinjau Gambar 16:10 -->
+                            <div class="mb-3 text-center bg-light rounded-3 d-flex align-items-center justify-content-center overflow-hidden border position-relative" style="aspect-ratio: 16/10; max-height: 200px;">
+                                <a v-if="formEditImage.imageUrl" :href="formEditImage.imageUrl" target="_blank" class="w-100 h-100 d-block" title="Pratinjau gambar">
                                     <img :src="formEditImage.imageUrl" alt="Preview Gambar" class="w-100 h-100" style="object-fit: contain;">
                                 </a>
                                 <span v-else class="text-muted small">Pratinjau tidak tersedia</span>
                             </div>
                             
-                            <!-- URL Terkunci -->
-                            <div class="mb-3">
-                                <label class="form-label text-muted mb-1">URL Situs Induk</label>
-                                <input type="text" class="form-control rounded-3 bg-body-secondary text-muted" v-model="formEditImage.siteUrl" disabled>
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-medium mb-1">URL Gambar / Source (imageUrl)</label>
+                                <input type="text" class="form-control rounded-3" v-model="formEditImage.imageUrl" placeholder="https://foto.gkr.my.id/...">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label text-muted mb-1">URL Gambar (Source)</label>
-                                <input type="text" class="form-control rounded-3 bg-body-secondary text-muted" v-model="formEditImage.imageUrl" disabled>
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-medium mb-1">URL Situs Induk (siteUrl)</label>
+                                <input type="text" class="form-control rounded-3" v-model="formEditImage.siteUrl" placeholder="https://foto.gkr.my.id/?GRACIA/...">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-medium mb-1">URL Tautan Utama (url)</label>
+                                <input type="text" class="form-control rounded-3" v-model="formEditImage.url" placeholder="URL landing utama...">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Area Tombol Aksi Modal (Hapus di Kiri, OK/Batal di Kanan) -->
-                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <!-- Area Tombol Aksi Modal -->
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
                         <div>
                             <button type="button" class="btn btn-danger px-4 shadow-sm rounded-3" @click="deleteImage(formEditImage.id)"><i class="fas fa-trash me-1"></i>Hapus</button>
                         </div>

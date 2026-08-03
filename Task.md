@@ -18,7 +18,7 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 
 **Tahap III: Refaktorisasi Database Tunggal `gkr_cari` & Kolom Bahasa Indonesia**
 - `[x]` **Physical Single Table Migration:** Menggabungkan tabel lama `cari_sites` dan `cari_images` menjadi satu tabel murni **`gkr_cari`**.
-- `[x]` **Penerjemahan Kolom Bahasa Indonesia:** Mengubah nama kolom menjadi `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `klik`, `rusak`.
+- `[x]` **Penerjemahan Kolom Bahasa Indonesia:** Mengubah nama kolom menjadi `id`, `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak`.
 - `[x]` **Penghapusan Kolom `tipe`:** Menentukan entitas murni dari `imageUrl IS NOT NULL` tanpa kolom discriminator `tipe`.
 - `[x]` **Optimalisasi Perayap `CrawlerLib.php`:** Mengubah pengindeksan lokal `/var/www/FOTO` agar 1 produk foto lokal tersimpan murni sebagai **1 Baris Utuh** (menampung `url` dan `imageUrl` sekaligus), menghemat 50% kapasitas database.
 
@@ -49,22 +49,38 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 **Tahap VIII: Evolusi Algoritma Pencarian Presisi & Pencarian Suara Bahasa Indonesia**
 - `[x]` **Modul Voice Search Native (`voice_search.js`):** Integrasi Web Speech API `id-ID` dengan modal animasi pendaran gelombang suara reaktif & redirect otomatis ke Tab Gambar (`/cari?q=...&type=images`).
 - `[x]` **Normalisasi Simbol URL:** Pembersihan otomatis simbol pemisah (`+`, `-`, `_`, `,`) pada `Search.php` menjadi spasi netral.
-- `[x]` **Primary Brand/Series Anchor Search:** Deteksi token merk spesifik (`bonanza`) yang mewajibkan produk memuat kata merk utama, 100% mengeliminasi *Riazor Rectangular Coffee Table*, *Tamika Coffee Table*, *Alandra Coffee Table*, dan *Side Table Type 02*.
-- `[x]` **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi *Leora Dinning Chair* (kursi) dan *Mida Table Lamp Organic Motif* (lampu meja) pada pencarian `dinning table`.
-- `[x]` **Multi-Tier Relevance Scoring:** Perhitungan skor SQL `ORDER BY` bertingkat (Skor 100 untuk exact phrase, Skor 80 untuk all-tokens match, dan pengurutan popularitas `klik DESC`).
-- `[x]` **Proteksi Frontend UI/UX (`beranda.php` & `index.js`):** Integrasi `v-cloak` dan `@focus="handleFocus"` untuk mengeliminasi bayangan sintaks mentah Vue 3 `{{ item }}` dan terbukanya autocomplete kosong saat fokus.
+- `[x]` **Primary Brand/Series Anchor Search:** Deteksi token merk spesifik (`bonanza`) yang mewajibkan produk memuat kata merk utama, 100% mengeliminasi produk pengotor.
+- `[x]` **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi produk kategori berlawanan.
+- `[x]` **Multi-Tier Relevance Scoring:** Perhitungan skor SQL `ORDER BY` bertingkat.
+- `[x]` **Proteksi Frontend UI/UX (`beranda.php` & `index.js`):** Integrasi `v-cloak` dan `@focus="handleFocus"`.
 
 **Tahap IX: Refaktorisasi Ekstraksi Assets View CSS & JS ke `public/css` & `public/js`**
-- `[x]` **Sentralisasi `window.AppConfig`:** Pembuatan objek konfigurasi global terpusat pada header layout utama `main.php` dan `admin_layout.php` (`baseUrl`, `csrfToken`, `versiUrl`, `swUrl`), menghapus duplikasi `<script>` variabel di 12 berkas View.
-- `[x]` **Ekstraksi CSS Modul Fisik (`public/css/`):** Pembuatan `admin.css` (Panel Admin), `awan_kata.css` (Animations WordCloud), `auth.css` (Halaman Login & Daftar), dan `index.css` (Aturan global `v-cloak`).
-- `[x]` **Ekstraksi JS Modul Fisik (`public/js/`):** Pembuatan `daftar.js` (Formulir Pendaftaran) dan `awan_kata.js` (WordCloud2 & Auto-Refresh Timer).
-- `[x]` **Clean Views Sterilization:** Mengeliminasi seluruh tag `<style>` dan `<script>` inline di `app/Views` serta menstandardisasi pemanggilan aset dengan versioning `?v=<?= time() ?>`.
+- `[x]` **Sentralisasi `window.AppConfig`:** Pembuatan objek konfigurasi global terpusat pada header layout utama `main.php` dan `admin_layout.php`.
+- `[x]` **Ekstraksi CSS Modul Fisik (`public/css/`):** `admin.css`, `awan_kata.css`, `auth.css`, `index.css`, `search.css`, `admin_versi.css`.
+- `[x]` **Ekstraksi JS Modul Fisik (`public/js/`):** `daftar.js`, `awan_kata.js`, `admin_beranda.js`, `calendar.js`, `voice_search.js`.
+- `[x]` **Clean Views Sterilization:** Mengeliminasi seluruh tag `<style>` dan `<script>` inline di `app/Views`.
 
-**Tahap X: Redesain Presisi & Penyelarasan Layout Halaman `/cari` (Desktop Responsive & Tema Gracia `#2B3385`)**
-- `[x]` **Header Alignment:** Logo GRACIA di tepi paling kiri (`24px`), menu header kanan (`Sabtu, 01/08/2026`, tombol bulat App Launcher Grid `[:::]`, dan Profile Avatar `[👤]`) di tepi paling kanan (`24px`).
+**Tahap X: Redesain Presisi & Penyelarasan Layout Halaman `/cari` & Dropdown Uniformity**
+- `[x]` **Header Alignment:** Logo GRACIA di tepi paling kiri (`24px`), menu header kanan di tepi paling kanan (`24px`).
 - `[x]` **Flush Left Vertical Alignment (10% Margin Kiri):** Tab `[Semua]`, `Ditemukan {jumlah} hasil`, dan garis aksen 3px Biru Dongker `.site-result-item` berderet 100% rata lurus vertikal.
-- `[x]` **Harmonisasi Adaptif Dark/Light Mode:** CSS Override `[data-bs-theme="dark"]` pada `index.css` (Latar item aktif `rgba(138,180,248,0.12)`, judul `#8ab4f8`, URL `#81c995`, garis pemisah `#3c4043`, action pills `#303134`).
-- `[x]` **Knowledge Card Borderless & Garis Pemisah Abu-Abu:** Kartu 35% kanan berlatar transparan tanpa border/shadow luar, dipisahkan oleh garis abu-abu vertikal (`border-left: 1px solid #ebebeb; padding-left: 24px;`) dari kolom 65% hasil kiri.
-- `[x]` **Default Fallback Foto Putih Polos (`#ffffff`):** Mengganti gambar default fallback (Logo 'G' / `favicon.ico`) menjadi SVG Putih Polos murni (`#ffffff`) jika produk tidak memiliki foto.
-- `[x]` **Pagination Logo `c a r i` Vector Typography Baseline:** Pagination `c a r i` menggunakan tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`) dan Rata Tengah (*Centered*) di Tab Semua (`type=sites`) dan Tab Gambar (`type=images`).
-- `[x]` **Pemetaan Produksi Strict:** `formatResultUrls()` menghitung `$row['produksi']` secara ketat berdasarkan awalan `kode_bom` (`FG-1...` -> `UNIT 1`, `FG-2...` -> `UNIT 2`, `FG-4...` -> `UNIT 4`).
+- `[x]` **Harmonisasi Adaptif Dark/Light Mode:** CSS Override `[data-bs-theme="dark"]` pada `index.css`.
+- `[x]` **Standardisasi Dropdown Menu (Apps Grid & Kalender):** Menggunakan kelas native Bootstrap `dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4` dan `text-body`, tanpa inline glassmorphism.
+- `[x]` **Default Fallback Foto Putih Polos (`#ffffff`):** SVG Putih Polos murni (`#ffffff`) jika produk tidak memiliki foto.
+- `[x]` **Pagination Logo `c a r i` Vector Typography Baseline:** Tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`).
+- `[x]` **Pemetaan Produksi Strict:** `formatResultUrls()` menghitung `$row['produksi']` secara ketat berdasarkan awalan `kode_bom`.
+
+**Tahap XI: Responsivitas Mobile Seluler & Penyelarasan UI Search Action Buttons**
+- `[x]` **Responsivitas Header Mobile 2-Baris (`/cari`):** Tata letak `@media (max-width: 767px)` di `search.css` menyusun Baris 1: Logo GRACIA (kiri) + Date/Apps/Avatar (kanan), Baris 2: Search Box 100% lebar penuh.
+- `[x]` **Action Icon Buttons Presisi & Sembunyikan Kaca Pembesar Mobile:** Pembuatan kelas `.icon-action-btn` (ukuran `32px x 32px`), `gap: 8px` (desktop), `gap: 5px !important` (mobile), serta menyembunyikan ikon `.search-button` di Mobile view.
+- `[x]` **Responsivitas Stack 1-Kolom `/versi` & Format Tanggal `01/08/2026`:** Pengaturan 1-kolom vertical stack di `admin_versi.css` untuk Mobile (<768px) dan format tanggal `date('d/m/Y')` di `Versi.php`.
+
+**Tahap XII: Eliminasi Kotak Rounded & Latar Belakang Transparan Knowledge Card Hero Image**
+- `[x]` **Hero Image Background Transparan & Borderless (`index.css`):** Aturan `.google-knowledge-hero-img` diset `border: none !important; border-radius: 0 !important; padding: 0 !important; background-color: transparent !important;` pada Mode TERANG dan GELAP.
+- `[x]` **SVG Fallback Transparan:** Mengubah `fill="%23ffffff"` menjadi `fill="transparent"`, sehingga gambar cadangan menyatu 100% transparan dengan latar belakang halaman.
+- `[x]` **Responsivitas Knowledge Panel Mobile:** Kolom 35% kanan diubah menjadi `col-12 col-lg-4 knowledge-panel-col mt-4 mt-lg-0` agar tampil responsif di bawah hasil pencarian pada layar seluler.
+- `[x]` **Penyelarasan Garis Pembatas Vertikal:** Garis `border-left` diset dengan `margin-top: 38px !important;` pada Desktop agar dimulai presisi sejajar dengan titik puncak gambar hero / hasil pertama, dan di-reset `border-left: none !important;` pada Mobile (<992px).
+- `[x]` **Format Hyphen Kode BOM Kosong:** Menghapus generator kode tiruan `FG-15547` di `Search.php` dan merender `Kode BOM : -`, `Lihat BOM : -`, dan `Produksi : -` saat `kode_bom` di DB kosong.
+
+**Tahap XIII: Pembaruan 100% (11 Field) Tabel `gkr_cari` pada Modal Box "Edit Data Mesin Pencari"**
+- `[x]` **Redesain Modal Box 2-Kolom Ergonomis (`beranda_admin.php`):** Menampilkan seluruh 11 field tabel `gkr_cari` (`id` Badge #123, `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak`) dilengkapi pratinjau gambar 16:10 live.
+- `[x]` **Pengintegrasian Script JS & Controller API (`admin_beranda.js` & `GraciaApi.php`):** Fungsi `simpanEditImage` dan metode API `updateImage($id)` memproses pengkinian seluruh 11 field data secara menyeluruh ke dalam basis data.
