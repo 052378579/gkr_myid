@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const knowledgeElem = document.getElementById('knowledgeApp');
     if (!knowledgeElem || typeof Vue === 'undefined') return;
 
-    const { createApp, ref } = Vue;
+    const { createApp, ref, onMounted } = Vue;
 
     createApp({
         setup() {
@@ -156,24 +156,30 @@ document.addEventListener("DOMContentLoaded", function() {
             const BLANK_WHITE_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="%23ffffff"/></svg>';
 
             const activeItem = ref({
-                title: 'Bonanza Coffee Table',
-                description: 'Bonanza Series Katalog Mebel Gracia',
-                kodeBom: 'FG-15547',
-                produksi: 'UNIT 1',
+                title: 'Mebel Gracia',
+                description: '-',
+                kodeBom: 'FG-',
+                produksi: 'UNIT -',
                 dirPath: 'GRACIA/2022/',
                 siteUrl: '#',
                 imageUrl: BLANK_WHITE_SVG,
-                erpUrl: 'http://103.39.49.86:82/desk#Form/Item/FG-15547',
-                pdfUrl: 'http://103.39.49.86:82/printview?doctype=BOM&name=BOM-FG-15547-001&format=BOM%20Rincian&no_letterhead=0'
+                erpUrl: '#',
+                pdfUrl: '#'
             });
 
             function selectKnowledgeItem(index, title, description, kodeBom, produksi, dirPath, siteUrl, imageUrl, erpUrl, pdfUrl) {
                 selectedIndex.value = index;
+                
+                let fallbackDesc = '-';
+                if (title) {
+                    fallbackDesc = title.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+                }
+
                 activeItem.value = {
                     title: title || 'Mebel Gracia',
-                    description: description || 'Bonanza Series Katalog Mebel Gracia',
-                    kodeBom: kodeBom || 'FG-15547',
-                    produksi: produksi || 'UNIT 1',
+                    description: description || fallbackDesc,
+                    kodeBom: kodeBom || 'FG-',
+                    produksi: produksi || 'UNIT -',
                     dirPath: dirPath || 'GRACIA/2022/',
                     siteUrl: siteUrl,
                     imageUrl: (imageUrl && imageUrl !== 'undefined' && imageUrl !== 'null') ? imageUrl : BLANK_WHITE_SVG,
@@ -186,13 +192,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.target.src = BLANK_WHITE_SVG;
             }
 
-            // Inisialisasi klik item pertama jika ada
-            const firstItem = document.querySelector('.site-result-item');
-            if (firstItem) {
-                setTimeout(() => {
-                    firstItem.click();
-                }, 50);
-            }
+            // Inisialisasi klik item pertama secara reaktif setelah Vue dipasang
+            onMounted(() => {
+                const firstItem = document.querySelector('.site-result-item');
+                if (firstItem) {
+                    setTimeout(() => {
+                        firstItem.click();
+                    }, 50);
+                }
+            });
 
             return {
                 selectedIndex,

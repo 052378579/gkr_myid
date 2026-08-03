@@ -168,14 +168,15 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <?php foreach ($results as $index => $site): ?>
                         <?php 
                             $siteUrlClean = esc($site['url']);
-                            $siteBom = esc(!empty($site['kode_bom']) ? $site['kode_bom'] : '-');
-                            $siteProduksi = esc(!empty($site['produksi']) ? $site['produksi'] : '-');
-                            $siteLihatBom = ($siteBom !== '-') ? "BOM-{$siteBom}-001" : '-';
+                            $siteBom = esc(!empty($site['kode_bom']) ? $site['kode_bom'] : 'FG-');
+                            $siteProduksi = esc(!empty($site['produksi']) ? $site['produksi'] : 'UNIT -');
+                            $siteLihatBom = ($siteBom !== 'FG-') ? "BOM-{$siteBom}-001" : 'BOM-FG-';
                             $siteImg = esc(!empty($site['imageUrl']) ? $site['imageUrl'] : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="transparent"/></svg>');
                             $siteTitle = esc($site['title']);
-                            $siteDesc = esc(!empty($site['description']) ? $site['description'] : 'Bonanza Series Katalog Mebel Gracia');
-                            $erpUrl = ($siteBom !== '-') ? "http://103.39.49.86:82/desk#Form/Item/{$siteBom}" : '#';
-                            $pdfUrl = ($siteBom !== '-') ? "http://103.39.49.86:82/printview?doctype=BOM&name=BOM-{$siteBom}-001&format=BOM%20Rincian&no_letterhead=0" : '#';
+                            $titleCase = ucwords(strtolower($siteTitle));
+                            $siteDesc = esc(!empty($site['description']) ? $site['description'] : $titleCase);
+                            $erpUrl = ($siteBom !== 'FG-') ? "http://103.39.49.86:82/desk#Form/Item/{$siteBom}" : '#';
+                            $pdfUrl = ($siteBom !== 'FG-') ? "http://103.39.49.86:82/printview?doctype=BOM&name=BOM-{$siteBom}-001&format=BOM%20Rincian&no_letterhead=0" : '#';
                             
                             $dirPath = 'GRACIA/2022/';
                             if (preg_match('~/\\?([^#]+)~', $siteUrlClean, $mDir)) {
@@ -231,9 +232,9 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <?php endif; ?>
                 </div>
 
-                <!-- Kolom Kanan: Google Knowledge Panel Card (Lebar Presisi 35% di Desktop, 100% Responsif di Mobile) -->
+                <!-- Kolom Kanan: Google Knowledge Panel Card (Disembunyikan di Mobile, Muncul di Desktop) -->
                 <?php if (!empty($results)): ?>
-                <div class="col-12 col-lg-4 knowledge-panel-col mt-4 mt-lg-0">
+                <div class="d-none d-lg-block col-lg-4 knowledge-panel-col mt-0">
                     <div class="google-knowledge-card">
                         <!-- Hero Media Foto Utama (Fluid 100% Presisi, Rasio 16:10) -->
                         <img :src="activeItem.imageUrl" :alt="activeItem.title" class="google-knowledge-hero-img" style="width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 230px !important; aspect-ratio: 16 / 10 !important; object-fit: contain !important; margin: 0 0 16px 0 !important; box-sizing: border-box !important; display: block !important;" @error="handleImgError">
@@ -245,7 +246,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <ul class="google-spec-list">
                             <li><strong>Deskripsi</strong> : <span v-text="activeItem.description"></span></li>
                             <li><strong>Kode BOM</strong> : <span style="color: #2B3385; font-weight: bold; font-family: monospace;">{{ activeItem.kodeBom }}</span></li>
-                            <li><strong>Lihat BOM</strong> : <span class="font-monospace text-info">{{ (activeItem.kodeBom && activeItem.kodeBom !== '-') ? 'BOM-' + activeItem.kodeBom + '-001' : '-' }}</span></li>
+                            <li><strong>Lihat BOM</strong> : <span class="font-monospace text-info">{{ (activeItem.kodeBom && activeItem.kodeBom !== 'FG-') ? 'BOM-' + activeItem.kodeBom + '-001' : 'BOM-FG-' }}</span></li>
                             <li><strong>Produksi</strong> : <span class="fw-bold" style="color: #2B3385;">{{ activeItem.produksi }}</span></li>
                         </ul>
                         

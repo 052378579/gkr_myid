@@ -77,9 +77,9 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 **Tahap XII: Eliminasi Kotak Rounded & Latar Belakang Transparan Knowledge Card Hero Image**
 - `[x]` **Hero Image Background Transparan & Borderless (`index.css`):** Aturan `.google-knowledge-hero-img` diset `border: none !important; border-radius: 0 !important; padding: 0 !important; background-color: transparent !important;` pada Mode TERANG dan GELAP.
 - `[x]` **SVG Fallback Transparan:** Mengubah `fill="%23ffffff"` menjadi `fill="transparent"`, sehingga gambar cadangan menyatu 100% transparan dengan latar belakang halaman.
-- `[x]` **Responsivitas Knowledge Panel Mobile:** Kolom 35% kanan diubah menjadi `col-12 col-lg-4 knowledge-panel-col mt-4 mt-lg-0` agar tampil responsif di bawah hasil pencarian pada layar seluler.
+- `[x]` **Penyembunyian Knowledge Panel Mobile:** Kolom kanan diubah menjadi `d-none d-lg-block col-lg-4 knowledge-panel-col mt-0` agar lenyap sepenuhnya di layar seluler dan memberikan ruang lapang 100% untuk daftar hasil pencarian.
 - `[x]` **Penyelarasan Garis Pembatas Vertikal:** Garis `border-left` diset dengan `margin-top: 38px !important;` pada Desktop agar dimulai presisi sejajar dengan titik puncak gambar hero / hasil pertama, dan di-reset `border-left: none !important;` pada Mobile (<992px).
-- `[x]` **Format Hyphen Kode BOM Kosong:** Menghapus generator kode tiruan `FG-15547` di `Search.php` dan merender `Kode BOM : -`, `Lihat BOM : -`, dan `Produksi : -` saat `kode_bom` di DB kosong.
+- `[x]` **Format Default Fallback Knowledge Panel & Perbaikan Vue Lifecycle:** Mengatur nilai default/fallback menjadi `Deskripsi: {Title Case}`, `Kode BOM: FG-`, `Lihat BOM: BOM-FG-`, dan `Produksi: UNIT -` saat data kosong. Menghapus awalan strip (`-`) pada fallback judul, dan membungkus inisialisasi klik pertama (`firstItem.click()`) ke dalam `onMounted` Vue guna mengamankan dari potensi *race condition*.
 
 **Tahap XIII: Pembaruan 100% (11 Field) Tabel `gkr_cari` pada Modal Box "Edit Data Mesin Pencari"**
 - `[x]` **Redesain Modal Box 2-Kolom Ergonomis (`beranda_admin.php`):** Menampilkan seluruh 11 field tabel `gkr_cari` (`id` Badge #123, `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak`) dilengkapi pratinjau gambar 16:10 live.
