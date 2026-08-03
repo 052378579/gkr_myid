@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "01-08-2026 00:22:00 WIB",
-    "versi_diperbarui": "0.8.1",
+    "tanggal_diperbarui": "01-08-2026 20:04:00 WIB",
+    "versi_diperbarui": "0.8.01",
     "data": [
         {
             "id": 1,
@@ -222,30 +222,34 @@
         },
         {
             "id": 12,
-            "versi": "0.8.1",
+            "versi": "0.8.01",
             "tanggal_rilis": "2026-08-01",
-            "judul": "Evolusi Mesin Pencari Presisi & Refaktorisasi Ekstraksi View Assets",
-            "deskripsi": "Rilis besar yang meluncurkan Algoritma Pencarian Presisi (Primary Brand Anchor & Category Exclusion), Pencarian Suara Native Bahasa Indonesia, serta Pembersihan Arsitektur Frontend View Assets ke berkas fisik public/css dan public/js.",
+            "judul": "Evolusi Mesin Pencari Presisi, Google-Grade UI `/cari`, & Refaktorisasi Ekstraksi View Assets",
+            "deskripsi": "Rilis raksasa yang meluncurkan Redesain Presisi Layout Halaman /cari Berstandar Google (Flush Left 10%, Knowledge Card Borderless + Garis Abu-Abu Pemisah Vertikal, Default Fallback SVG Putih Polos, dan Pagination Vector Baseline), Algoritma Pencarian Presisi (Primary Brand Anchor & Category Exclusion), Pencarian Suara Native Bahasa Indonesia, serta Pembersihan Arsitektur Frontend View Assets ke berkas fisik public/css dan public/js.",
             "improvements": [
+                "Redesain Presisi Layout Halaman Hasil Pencarian (/cari - Google-Grade UI): Penataan Header 24px (Logo Kiri & Menu Profil Kanan), Penyelarasan Vertikal Margin 10% Kiri (Tab Semua, Ditemukan X Hasil, dan Garis Aksen 3px .site-result-item 100% rata lurus vertikal).",
+                "Penerapan Knowledge Panel Card 35% Kanan berlatar transparan tanpa border/shadow luar, dipisahkan oleh Garis Abu-Abu Pemisah Vertikal (border-left: 1px solid #ebebeb; padding-left: 24px;) dari kolom 65% hasil kiri.",
+                "Penggantian Gambar Default Fallback Foto dari logo 'G' / favicon.ico menjadi SVG Putih Polos murni (#ffffff) saat produk tidak memiliki foto.",
+                "Penerapan Logo Pagination c a r i berbasis Tipografi Vektor HTML/CSS Google-Grade (Outfit/Product Sans) yang 100% Rata Lurus Horizontal Baseline (align-items: baseline) dan Rata Tengah (Centered) di Tab Semua (type=sites) dan Tab Gambar (type=images).",
+                "Pemetaan Unit Produksi Strict pada controller Search.php berdasarkan awalan kode_bom (FG-1... -> UNIT 1, FG-2... -> UNIT 2, FG-4... -> UNIT 4).",
                 "Peluncuran modul Pencarian Suara Native Bahasa Indonesia (id-ID) dengan modal visualizer gelombang suara reaktif dan navigasi otomatis ke Tab Gambar Katalog.",
                 "Penerapan Algoritma Primary Brand/Series Anchor Search yang mewajibkan produk memuat kata utama merk (seperti 'bonanza' pada 'bonanza+table'/'bonanza+coffee'), 100% mengeliminasi produk pengotor.",
                 "Penerapan Algoritma Comprehensive Category Antonym Exclusion yang memadukan matriks konflik tiga arah (Table vs Chair vs Lamp) untuk mengeliminasi Leora Dinning Chair dan Mida Table Lamp pada pencarian 'dinning table'.",
-                "Penerapan Multi-Tier Relevance Scoring pada perintah SQL ORDER BY (Skor 100 frasa utuh, Skor 80 all-tokens match, dan pengurutan popularitas klik).",
-                "Refaktorisasi menyeluruh pada direktori app/Views: Menguraikan seluruh tag style dan script inline ke dalam berkas fisik murni public/css/ (admin.css, auth.css, awan_kata.css) dan public/js/ (voice_search.js, daftar.js, awan_kata.js).",
-                "Sentralisasi objek konfigurasi global window.AppConfig pada header layout utama (main.php & admin_layout.php) untuk mengeliminasi duplikasi variabel di 12 berkas View.",
-                "Standardisasi parameter cache busting versioning (?v=<?= time() ?>) pada seluruh pemanggilan aset CSS dan JS.",
+                "Refaktorisasi menyeluruh pada direktori app/Views: Menguraikan seluruh tag style dan script inline ke dalam berkas fisik murni public/css/ dan public/js/ dengan versioning cache busting (?v=<?= time() ?>).",
                 "Penyelarasan penuh terhadap 8 pilar dokumen aplikasi (PRD.md, Memory.md, Skills.md, StyleGuide.md, Task.md, README.md, Tautan.md, struktur_folder.md)."
             ],
             "fixes": [
-                "Mengeliminasi tampilan produk acak (Alandra Coffee Table, Riazor Coffee Table, Side Table Type 02) saat mencari bonanza+coffee / bonanza+table.",
-                "Mengeliminasi bayangan sintaks mentah Vue 3 {{ item }} pada beranda melalui integrasi global v-cloak.",
-                "Memperbaiki penanganan fokus kotak pencarian (handleFocus) agar rekomendasi autocomplete hanya terbuka jika kotak terisi."
+                "Mengeliminasi garis bingkai rounded border dan shadow pada foto Knowledge Card agar warna latar menyatu 100% tanpa garis pemisah.",
+                "Menghapus duplikasi pagination lama pada bagian bawah footer halaman hasil pencarian.",
+                "Memperbaiki ketidaksejajaran huruf logo pagination c a r i dengan menyelaraskan seluruh karakter pada 1 garis lurus baseline horizontal.",
+                "Memperbaiki masalah pagination yang tidak tampil saat berpindah ke Tab Gambar (type=images).",
+                "Mengeliminasi bayangan sintaks mentah Vue 3 {{ item }} pada beranda melalui integrasi global v-cloak."
             ],
             "patches": [
-                "Menyelaraskan rute pencarian suara agar secara otomatis memilih Tab Gambar (type=images).",
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.1)."
+                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.01).",
+                "Sinkronisasi penuh terhadap seluruh dokumen internal tim dan etalase publik GitHub."
             ],
-            "created_at": "2026-08-01 00:22:00"
+            "created_at": "2026-08-01 20:04:00"
         }
     ]
 }

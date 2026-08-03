@@ -28,7 +28,7 @@ class Versi extends BaseController
         // 5. Pemformatan Tanggal Tambahan untuk UI
         foreach ($versiData as &$row) {
             if (!empty($row['tanggal_rilis'])) {
-                $row['tanggal_rilis_formatted'] = date('F j, Y', strtotime($row['tanggal_rilis']));
+                $row['tanggal_rilis_formatted'] = date('d/m/Y', strtotime($row['tanggal_rilis']));
             } else {
                 $row['tanggal_rilis_formatted'] = '';
             }

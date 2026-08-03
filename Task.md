@@ -59,3 +59,12 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Ekstraksi CSS Modul Fisik (`public/css/`):** Pembuatan `admin.css` (Panel Admin), `awan_kata.css` (Animations WordCloud), `auth.css` (Halaman Login & Daftar), dan `index.css` (Aturan global `v-cloak`).
 - `[x]` **Ekstraksi JS Modul Fisik (`public/js/`):** Pembuatan `daftar.js` (Formulir Pendaftaran) dan `awan_kata.js` (WordCloud2 & Auto-Refresh Timer).
 - `[x]` **Clean Views Sterilization:** Mengeliminasi seluruh tag `<style>` dan `<script>` inline di `app/Views` serta menstandardisasi pemanggilan aset dengan versioning `?v=<?= time() ?>`.
+
+**Tahap X: Redesain Presisi & Penyelarasan Layout Halaman `/cari` (Desktop Responsive & Tema Gracia `#2B3385`)**
+- `[x]` **Header Alignment:** Logo GRACIA di tepi paling kiri (`24px`), menu header kanan (`Sabtu, 01/08/2026`, tombol bulat App Launcher Grid `[:::]`, dan Profile Avatar `[👤]`) di tepi paling kanan (`24px`).
+- `[x]` **Flush Left Vertical Alignment (10% Margin Kiri):** Tab `[Semua]`, `Ditemukan {jumlah} hasil`, dan garis aksen 3px Biru Dongker `.site-result-item` berderet 100% rata lurus vertikal.
+- `[x]` **Harmonisasi Adaptif Dark/Light Mode:** CSS Override `[data-bs-theme="dark"]` pada `index.css` (Latar item aktif `rgba(138,180,248,0.12)`, judul `#8ab4f8`, URL `#81c995`, garis pemisah `#3c4043`, action pills `#303134`).
+- `[x]` **Knowledge Card Borderless & Garis Pemisah Abu-Abu:** Kartu 35% kanan berlatar transparan tanpa border/shadow luar, dipisahkan oleh garis abu-abu vertikal (`border-left: 1px solid #ebebeb; padding-left: 24px;`) dari kolom 65% hasil kiri.
+- `[x]` **Default Fallback Foto Putih Polos (`#ffffff`):** Mengganti gambar default fallback (Logo 'G' / `favicon.ico`) menjadi SVG Putih Polos murni (`#ffffff`) jika produk tidak memiliki foto.
+- `[x]` **Pagination Logo `c a r i` Vector Typography Baseline:** Pagination `c a r i` menggunakan tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`) dan Rata Tengah (*Centered*) di Tab Semua (`type=sites`) dan Tab Gambar (`type=images`).
+- `[x]` **Pemetaan Produksi Strict:** `formatResultUrls()` menghitung `$row['produksi']` secara ketat berdasarkan awalan `kode_bom` (`FG-1...` -> `UNIT 1`, `FG-2...` -> `UNIT 2`, `FG-4...` -> `UNIT 4`).

@@ -117,21 +117,40 @@ body {
 .search-actions {
     display: flex;
     align-items: center;
+    gap: 8px;
+}
+
+.icon-action-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    background: transparent !important;
+    color: #70757a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.icon-action-btn:hover {
+    background-color: rgba(60, 64, 67, 0.08) !important;
+    color: var(--gkr-primary) !important;
 }
 
 .clear-btn {
     background: none;
     border: none;
     color: #70757a;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
 }
 
 .divider {
-    height: 28px;
+    height: 24px;
     border-left: 1px solid #dfe1e5;
     margin: 0 4px;
 }
@@ -139,12 +158,9 @@ body {
 .search-button {
     background: none;
     border: none;
-    color: #4285f4;
-    font-size: 16px;
+    color: #4285f4 !important;
+    font-size: 15px;
     cursor: pointer;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
 }
 
 .header-right-icons {
@@ -341,12 +357,12 @@ body {
         grid-template-areas:
             "logo right"
             "search search";
-        gap: 15px 0;
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        margin-bottom: 10px;
+        gap: 12px 0;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        padding-top: 15px !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 5px;
     }
 
     .header-container.scrolled {
@@ -370,19 +386,29 @@ body {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        gap: 8px !important;
     }
 
     .search-box {
         grid-area: search;
-        max-width: 95%;
+        width: 100% !important;
+        max-width: 100% !important;
         margin: 0;
         box-shadow: 0 1px 6px rgba(32, 33, 36, .28);
         border-radius: 24px;
         padding: 0 10px 0 14px;
     }
 
-    .search-button, .clear-btn {
-        padding: 0 8px;
+    .search-actions {
+        gap: 5px !important;
+    }
+
+    .search-button {
+        display: none !important;
+    }
+
+    .clear-btn {
+        padding: 0 4px;
     }
     
     .divider {
@@ -394,8 +420,8 @@ body {
     }
 
     .tabs-container {
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
         overflow-x: auto;
         white-space: nowrap;
     }

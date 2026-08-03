@@ -147,3 +147,62 @@ body {
 .accordion-body-custom li:last-child {
     margin-bottom: 0;
 }
+
+/* ==========================================================================
+   PENYESUAIAN RESPONSIVE MOBILE 1-KOLOM PADA ROUTE /VERSI
+   ========================================================================== */
+@media (max-width: 767px) {
+    .changelog-container {
+        margin: 20px auto !important;
+        padding: 15px !important;
+    }
+
+    .column-headers {
+        display: none !important;
+    }
+
+    .version-item {
+        flex-direction: column !important;
+        margin-bottom: 24px !important;
+    }
+
+    .version-meta {
+        width: 100% !important;
+        padding-right: 0 !important;
+        padding-bottom: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .version-number {
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #2B3385 !important;
+    }
+
+    .version-card {
+        width: 100% !important;
+        padding: 16px 18px !important;
+        border-radius: 14px !important;
+    }
+
+    .card-header-flex {
+        flex-direction: column !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .card-title {
+        width: 100% !important;
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+    }
+
+    .card-desc {
+        width: 100% !important;
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+    }
+}

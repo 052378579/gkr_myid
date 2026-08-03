@@ -210,6 +210,17 @@
     max-width: 100% !important;
 }
 
+@media (max-width: 991.98px) {
+    .results-container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    .knowledge-panel-col {
+        border-left: none !important;
+        padding-left: 0 !important;
+    }
+}
+
 @media (min-width: 992px) {
     .results-left-col {
         flex: 0 0 65% !important;
@@ -223,6 +234,7 @@
         padding-right: 10px !important;
         border-left: 1px solid #ebebeb !important;
         padding-left: 24px !important;
+        margin-top: 38px !important;
     }
     .google-knowledge-hero-img {
         width: 100% !important;
@@ -377,7 +389,19 @@
 }
 
 [data-bs-theme="dark"] .google-knowledge-hero-img {
-    border-color: #3c4043 !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+[data-bs-theme="light"] .google-knowledge-hero-img {
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
 }
 
 [data-bs-theme="dark"] .google-knowledge-heading {
@@ -460,5 +484,67 @@
     background-color: #2B3385 !important;
     color: #ffffff !important;
 }
+
+/* ==========================================================================
+   OVERRIDE ADAPTIF MODE GELAP (DARK MODE) UNTUK ROUTE /CARI
+   ========================================================================== */
+.gracia-title-link,
+.site-result .title a {
+    color: #2B3385;
+    transition: color 0.2s ease;
+}
+
+[data-bs-theme="dark"] .site-result-item {
+    border-left-color: transparent !important;
+}
+
+[data-bs-theme="dark"] .site-result-item.active-knowledge-item {
+    border-left-color: #8ab4f8 !important;
+    background-color: rgba(138, 180, 248, 0.12) !important;
+    border-radius: 0 12px 12px 0 !important;
+}
+
+[data-bs-theme="dark"] .gracia-title-link,
+[data-bs-theme="dark"] .site-result .title a {
+    color: #8ab4f8 !important;
+}
+
+[data-bs-theme="dark"] .site-result .url {
+    color: #81c995 !important;
+}
+
+[data-bs-theme="dark"] .site-result .description {
+    color: #bdc1c6 !important;
+}
+
+[data-bs-theme="dark"] .knowledge-panel-col {
+    border-left-color: #3c4043 !important;
+}
+
+[data-bs-theme="dark"] .google-knowledge-heading {
+    border-bottom-color: #3c4043 !important;
+    color: #e8eaed !important;
+}
+
+[data-bs-theme="dark"] .google-spec-list,
+[data-bs-theme="dark"] .google-spec-list li {
+    color: #bdc1c6 !important;
+}
+
+[data-bs-theme="dark"] .google-spec-list strong {
+    color: #e8eaed !important;
+}
+
+[data-bs-theme="dark"] .google-action-pill {
+    background-color: #303134 !important;
+    color: #8ab4f8 !important;
+    border-color: #5f6368 !important;
+}
+
+[data-bs-theme="dark"] .google-action-pill:hover {
+    background-color: #3c4043 !important;
+    color: #c2e7ff !important;
+}
+
 
 

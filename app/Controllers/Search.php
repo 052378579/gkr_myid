@@ -58,23 +58,22 @@ class Search extends BaseController
                 }
             }
 
-            // Format Kode BOM (Autogenerate / Extract)
-            if (empty($row['kode_bom'])) {
-                if (preg_match('/\b(FG-\d+|BOM-[A-Z0-9-]+)\b/i', ($row['judul'] ?? '') . ' ' . ($row['kata_kunci'] ?? '') . ' ' . ($row['url'] ?? ''), $matches)) {
-                    $row['kode_bom'] = strtoupper($matches[1]);
+            // Format Kode BOM (Hanya jika tersedia di DB/Ekstraksi Asli)
+            if (!empty($row['kode_bom'])) {
+                $kb = strtoupper($row['kode_bom']);
+                $row['kode_bom'] = $kb;
+                $row['lihat_bom'] = "BOM-{$kb}-001";
+                if (str_starts_with($kb, 'FG-2')) {
+                    $row['produksi'] = 'UNIT 2';
+                } elseif (str_starts_with($kb, 'FG-4')) {
+                    $row['produksi'] = 'UNIT 4';
                 } else {
-                    $row['kode_bom'] = 'FG-' . sprintf('%05d', $row['id'] ?? 15547);
+                    $row['produksi'] = 'UNIT 1';
                 }
-            }
-
-            // Pemetaan Unit Produksi Ketat (FG-1 -> UNIT 1, FG-2 -> UNIT 2, FG-4 -> UNIT 4)
-            $kb = strtoupper($row['kode_bom']);
-            if (str_starts_with($kb, 'FG-2')) {
-                $row['produksi'] = 'UNIT 2';
-            } elseif (str_starts_with($kb, 'FG-4')) {
-                $row['produksi'] = 'UNIT 4';
             } else {
-                $row['produksi'] = 'UNIT 1';
+                $row['kode_bom'] = '-';
+                $row['lihat_bom'] = '-';
+                $row['produksi'] = '-';
             }
         }
     }

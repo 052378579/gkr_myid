@@ -14,7 +14,7 @@
 $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 ?>
-<div class="header-container" id="header-container" style="padding-left: 24px !important; padding-right: 24px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; width: 100% !important;">
+<div class="header-container" id="header-container">
         <div class="desktop-left-wrapper">
             <a href="<?= base_url() ?>" class="logo-container">
                 <?php if(isset($urlLogo)): ?>
@@ -27,16 +27,20 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <form action="<?= url_to('Search::index') ?>" method="GET" class="search-box">
                 <input type="hidden" name="type" value="<?= esc($type) ?>">
                 <input type="text" name="q" id="search-input" class="search-input" value="<?= esc($query) ?>" required>
-                <div class="search-actions">
-                    <button type="button" class="clear-btn" onclick="document.getElementById('search-input').value = ''; document.getElementById('search-input').focus();"><i class="fas fa-times"></i></button>
-                    <span class="divider"></span>
-                    <button type="button" class="btn border-0 p-0 btn-voice-search" style="background: transparent; margin: 0 4px; color: var(--bs-body-color);" title="Pencarian Suara Bahasa Indonesia">
-                        <i class="fa-solid fa-microphone fs-6 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
+                <div class="search-actions d-flex align-items-center gap-1">
+                    <button type="button" class="icon-action-btn clear-btn" onclick="document.getElementById('search-input').value = ''; document.getElementById('search-input').focus();" title="Hapus Teks">
+                        <i class="fas fa-times"></i>
                     </button>
-                    <button type="button" class="btn border-0 p-0" style="background: transparent; margin: 0 4px; color: var(--bs-body-color);" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
-                        <i class="fa-solid fa-camera fs-6 hover-primary" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"></i>
+                    <span class="divider me-1"></span>
+                    <button type="button" class="icon-action-btn btn-voice-search" title="Pencarian Suara Bahasa Indonesia">
+                        <i class="fa-solid fa-microphone fs-6"></i>
                     </button>
-                    <button type="submit" class="search-button" style="margin-left: 4px;"><i class="fas fa-search"></i></button>
+                    <button type="button" class="icon-action-btn" data-bs-toggle="modal" data-bs-target="#uploadImageModal" title="Pencarian Gambar">
+                        <i class="fa-solid fa-camera fs-6"></i>
+                    </button>
+                    <button type="submit" class="icon-action-btn search-button" title="Cari">
+                        <i class="fas fa-search fs-6"></i>
+                    </button>
                 </div>
             </form>
         </div>
@@ -47,11 +51,11 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <span class="d-none d-md-inline"><?= $dateStr ?></span>
                     <span class="d-inline d-md-none"><?= date('d/m/y') ?></span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4" style="width: 320px; z-index: 1060 !important;">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2"><i class="fas fa-chevron-left"></i></button>
+                        <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
                         <div class="text-center fw-bold" style="color: var(--gkr-primary); font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
-                        <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2"><i class="fas fa-chevron-right"></i></button>
+                        <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     <table class="table table-sm table-borderless text-center mb-0" style="font-size: 0.85rem;">
                         <thead>
@@ -76,24 +80,30 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 <a href="#" id="appsDropdownToggle" class="text-body text-decoration-none d-flex align-items-center justify-content-center bg-body-tertiary" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; transition: background-color 0.2s;" onmouseover="this.classList.add('bg-body-secondary')" onmouseout="this.classList.remove('bg-body-secondary')">
                     <i class="fas fa-th fs-5" style="color: var(--bs-secondary-color);"></i>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
+                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4" style="width: 320px;">
                     <div class="row g-3 text-center">
                         <div class="col-4">
-                            <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                            <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                                 <img src="assets/icon/erp.png" style="width:45px; height:45px;" class="mb-1">
                                 <div class="small text-truncate">ERP</div>
                             </a>
                         </div>
                         <div class="col-4">
-                            <a href="https://wickerkane.com/" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                            <a href="https://wickerkane.com/" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                                 <img src="assets/icon/wickerkane.png" style="width:45px; height:45px;" class="mb-1">
-                                <div class="small">WIckerKAne</div>
+                                <div class="small text-truncate">WIckerKAne</div>
                             </a>
                         </div>
                         <div class="col-4">
-                            <a href="https://srv180.niagahoster.com:2096/" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                            <a href="https://srv180.niagahoster.com:2096/" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                                 <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
-                                <div class="small">WebMail</div>
+                                <div class="small text-truncate">WebMail</div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="https://3d.gkr.my.id" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
+                                <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
+                                <div class="small text-truncate">3D</div>
                             </a>
                         </div>
                     </div>
@@ -125,7 +135,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         </div>
     </div>
     
-    <div class="tabs-container" style="padding-left: 10% !important; padding-right: 10% !important;">
+    <div class="tabs-container">
         <ul class="nav nav-tabs" style="padding-left: 0 !important; margin-left: 0 !important;">
             <li class="nav-item">
                 <a class="nav-link <?= $type === 'sites' ? 'active' : '' ?>" style="padding-left: 0 !important; margin-left: 0 !important;" href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=sites">Semua</a>
@@ -141,7 +151,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
 <div class="main-content-wrapper" style="min-height: calc(100vh - 140px); display: flex; flex-direction: column;">
     <?php if (isset($correctedQuery)): ?>
-        <div class="results-container pt-2 pb-0 mb-0" style="padding-left: 10% !important; padding-right: 10% !important;">
+        <div class="results-container pt-2 pb-0 mb-0">
             <div class="text-dark mb-0 py-1">
                 <span class="fs-6" style="color: var(--bs-body-color);">Ini adalah hasil untuk <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($correctedQuery) ?>" class="fw-bold fst-italic query-link"><?= esc($correctedQuery) ?></a></span><br>
                 <span class="small text-muted">Atau telusuri <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($originalQuery) ?>&exact=1" class="query-link"><?= esc($originalQuery) ?></a></span>
@@ -150,7 +160,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     <?php endif; ?>
 
     <?php if ($type === 'sites'): ?>
-        <div class="results-container" id="knowledgeApp" style="padding-left: 10% !important; padding-right: 10% !important;">
+        <div class="results-container" id="knowledgeApp">
             <div class="row g-4">
                 <!-- Kolom Kiri: Daftar Hasil Teks (Lebar Presisi 65% di Desktop, 100% di Mobile) -->
                 <div class="col-12 col-lg-8 results-left-col">
@@ -158,13 +168,14 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <?php foreach ($results as $index => $site): ?>
                         <?php 
                             $siteUrlClean = esc($site['url']);
-                            $siteBom = esc($site['kode_bom'] ?? 'FG-15547');
-                            $siteProduksi = esc($site['produksi'] ?? 'UNIT 1');
-                            $siteImg = esc(!empty($site['imageUrl']) ? $site['imageUrl'] : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="%23ffffff"/></svg>');
+                            $siteBom = esc(!empty($site['kode_bom']) ? $site['kode_bom'] : '-');
+                            $siteProduksi = esc(!empty($site['produksi']) ? $site['produksi'] : '-');
+                            $siteLihatBom = ($siteBom !== '-') ? "BOM-{$siteBom}-001" : '-';
+                            $siteImg = esc(!empty($site['imageUrl']) ? $site['imageUrl'] : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="transparent"/></svg>');
                             $siteTitle = esc($site['title']);
                             $siteDesc = esc(!empty($site['description']) ? $site['description'] : 'Bonanza Series Katalog Mebel Gracia');
-                            $erpUrl = "http://103.39.49.86:82/desk#Form/Item/{$siteBom}";
-                            $pdfUrl = "http://103.39.49.86:82/printview?doctype=BOM&name=BOM-{$siteBom}-001&format=BOM%20Rincian&no_letterhead=0";
+                            $erpUrl = ($siteBom !== '-') ? "http://103.39.49.86:82/desk#Form/Item/{$siteBom}" : '#';
+                            $pdfUrl = ($siteBom !== '-') ? "http://103.39.49.86:82/printview?doctype=BOM&name=BOM-{$siteBom}-001&format=BOM%20Rincian&no_letterhead=0" : '#';
                             
                             $dirPath = 'GRACIA/2022/';
                             if (preg_match('~/\\?([^#]+)~', $siteUrlClean, $mDir)) {
@@ -175,7 +186,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                              :class="{ 'active-knowledge-item': selectedIndex === <?= $index ?> }"
                              @click="selectKnowledgeItem(<?= $index ?>, '<?= addslashes($siteTitle) ?>', '<?= addslashes($siteDesc) ?>', '<?= addslashes($siteBom) ?>', '<?= addslashes($siteProduksi) ?>', '<?= addslashes($dirPath) ?>', '<?= addslashes($siteUrlClean) ?>', '<?= addslashes($siteImg) ?>', '<?= addslashes($erpUrl) ?>', '<?= addslashes($pdfUrl) ?>')">
                             <div class="title">
-                                <a href="<?= $siteUrlClean ?>" target="_blank" class="gracia-title-link" style="color: #2B3385 !important; font-weight: 600; text-decoration: none;" onclick="updateLinkCount(<?= $site['id'] ?>)">
+                                <a href="<?= $siteUrlClean ?>" target="_blank" class="gracia-title-link fw-bold text-decoration-none" onclick="updateLinkCount(<?= $site['id'] ?>)">
                                     <?= $siteTitle ?>
                                 </a>
                             </div>
@@ -184,7 +195,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         </div>
                     <?php endforeach; ?>
 
-                    <!-- Custom Pagination Logo cari 1 (Rata Lurus Horizontal Presisi 100% Baseline) -->
+                    <!-- Custom Pagination Logo cari 1 (Gambar PNG Asli pageStart/page/pageSelected/pageEnd + Pager CI4) -->
                     <?php if (isset($pager) && !empty($results)): ?>
                         <?php 
                             $currentPage = $pager->getCurrentPage();
@@ -193,17 +204,24 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                             $endPage = min($pageCount, $currentPage + 4);
                         ?>
                         <div class="google-pagination-container d-flex flex-column align-items-center justify-content-center w-100 my-5 text-center">
-                            <div class="google-pagination-brand d-inline-flex align-items-baseline justify-content-center mb-4" style="font-family: 'Outfit', 'Product Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 0px; line-height: 1;">
-                                <span style="color: #4285F4; font-size: 2.2rem; font-weight: 700; line-height: 1;">c</span><!--
-                                --><?php for ($i = $startPage; $i <= $endPage; $i++): 
+                            <div class="google-pagination-brand d-inline-flex align-items-end justify-content-center gap-0 position-relative mb-4">
+                                <div class="page-number-box d-inline-flex align-items-end" style="pointer-events: none; margin: 0; padding: 0;">
+                                    <img src="<?= base_url('assets/images/pageStart.png') ?>" alt="c" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                                </div>
+                                
+                                <?php for ($i = $startPage; $i <= $endPage; $i++): 
                                     $isActive = ($i == $currentPage);
-                                    $colorA = $isActive ? '#EA4335' : '#FBBC05';
-                                ?><div class="position-relative d-inline-block text-center" style="margin: 0 1px;">
-                                        <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="text-decoration-none" style="color: <?= $colorA ?>; font-size: 2.2rem; font-weight: 700; line-height: 1;">a</a>
-                                        <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="position-absolute start-50 translate-middle-x text-decoration-none fw-bold" style="bottom: -22px; font-size: 0.88rem; color: #4285F4;"><?= $i ?></a>
-                                    </div><?php endfor; ?><!--
-                                --><span style="color: #34A853; font-size: 2.2rem; font-weight: 700; line-height: 1;">r</span><!--
-                                --><span style="color: #EA4335; font-size: 2.2rem; font-weight: 700; line-height: 1;">i</span>
+                                    $imgSrc = $isActive ? 'pageSelected.png' : 'page.png';
+                                ?>
+                                    <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="page-number-box position-relative d-inline-flex flex-column align-items-center justify-content-end text-decoration-none <?= $isActive ? 'active' : '' ?>" style="margin: 0; padding: 0;">
+                                        <img src="<?= base_url('assets/images/' . $imgSrc) ?>" alt="a" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                                        <span style="position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 0.88rem; font-weight: 700; color: <?= $isActive ? '#EA4335' : '#4285F4' ?>;"><?= $i ?></span>
+                                    </a>
+                                <?php endfor; ?>
+                                
+                                <div class="page-number-box d-inline-flex align-items-end" style="pointer-events: none; margin: 0; padding: 0;">
+                                    <img src="<?= base_url('assets/images/pageEnd.png') ?>" alt="ri" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                                </div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -213,9 +231,9 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <?php endif; ?>
                 </div>
 
-                <!-- Kolom Kanan: Google Knowledge Panel Card (Lebar Presisi 35% di Desktop, 100% Hilang di Mobile) -->
+                <!-- Kolom Kanan: Google Knowledge Panel Card (Lebar Presisi 35% di Desktop, 100% Responsif di Mobile) -->
                 <?php if (!empty($results)): ?>
-                <div class="col-lg-4 d-none d-lg-block knowledge-panel-col">
+                <div class="col-12 col-lg-4 knowledge-panel-col mt-4 mt-lg-0">
                     <div class="google-knowledge-card">
                         <!-- Hero Media Foto Utama (Fluid 100% Presisi, Rasio 16:10) -->
                         <img :src="activeItem.imageUrl" :alt="activeItem.title" class="google-knowledge-hero-img" style="width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 230px !important; aspect-ratio: 16 / 10 !important; object-fit: contain !important; margin: 0 0 16px 0 !important; box-sizing: border-box !important; display: block !important;" @error="handleImgError">
@@ -227,7 +245,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <ul class="google-spec-list">
                             <li><strong>Deskripsi</strong> : <span v-text="activeItem.description"></span></li>
                             <li><strong>Kode BOM</strong> : <span style="color: #2B3385; font-weight: bold; font-family: monospace;">{{ activeItem.kodeBom }}</span></li>
-                            <li><strong>Lihat BOM</strong> : <span class="font-monospace text-info">BOM-{{ activeItem.kodeBom }}-001</span></li>
+                            <li><strong>Lihat BOM</strong> : <span class="font-monospace text-info">{{ (activeItem.kodeBom && activeItem.kodeBom !== '-') ? 'BOM-' + activeItem.kodeBom + '-001' : '-' }}</span></li>
                             <li><strong>Produksi</strong> : <span class="fw-bold" style="color: #2B3385;">{{ activeItem.produksi }}</span></li>
                         </ul>
                         
@@ -338,17 +356,24 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 $endPage = min($pageCount, $currentPage + 4);
             ?>
             <div class="google-pagination-container d-flex flex-column align-items-center justify-content-center w-100 my-5 text-center">
-                <div class="google-pagination-brand d-inline-flex align-items-baseline justify-content-center mb-4" style="font-family: 'Outfit', 'Product Sans', sans-serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 0px; line-height: 1;">
-                    <span style="color: #4285F4; font-size: 2.2rem; font-weight: 700; line-height: 1;">c</span><!--
-                    --><?php for ($i = $startPage; $i <= $endPage; $i++): 
+                <div class="google-pagination-brand d-inline-flex align-items-end justify-content-center gap-0 position-relative mb-4">
+                    <div class="page-number-box d-inline-flex align-items-end" style="pointer-events: none; margin: 0; padding: 0;">
+                        <img src="<?= base_url('assets/images/pageStart.png') ?>" alt="c" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                    </div>
+                    
+                    <?php for ($i = $startPage; $i <= $endPage; $i++): 
                         $isActive = ($i == $currentPage);
-                        $colorA = $isActive ? '#EA4335' : '#FBBC05';
-                    ?><div class="position-relative d-inline-block text-center" style="margin: 0 1px;">
-                            <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="text-decoration-none" style="color: <?= $colorA ?>; font-size: 2.2rem; font-weight: 700; line-height: 1;">a</a>
-                            <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="position-absolute start-50 translate-middle-x text-decoration-none fw-bold" style="bottom: -22px; font-size: 0.88rem; color: #4285F4;"><?= $i ?></a>
-                        </div><?php endfor; ?><!--
-                    --><span style="color: #34A853; font-size: 2.2rem; font-weight: 700; line-height: 1;">r</span><!--
-                    --><span style="color: #EA4335; font-size: 2.2rem; font-weight: 700; line-height: 1;">i</span>
+                        $imgSrc = $isActive ? 'pageSelected.png' : 'page.png';
+                    ?>
+                        <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="page-number-box position-relative d-inline-flex flex-column align-items-center justify-content-end text-decoration-none <?= $isActive ? 'active' : '' ?>" style="margin: 0; padding: 0;">
+                            <img src="<?= base_url('assets/images/' . $imgSrc) ?>" alt="a" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                            <span style="position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 0.88rem; font-weight: 700; color: <?= $isActive ? '#EA4335' : '#4285F4' ?>;"><?= $i ?></span>
+                        </a>
+                    <?php endfor; ?>
+                    
+                    <div class="page-number-box d-inline-flex align-items-end" style="pointer-events: none; margin: 0; padding: 0;">
+                        <img src="<?= base_url('assets/images/pageEnd.png') ?>" alt="ri" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                    </div>
                 </div>
             </div>
         <?php endif; ?>

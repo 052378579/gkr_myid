@@ -14,7 +14,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <a href="#" id="calendarDropdownToggle" class="text-body small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color=''">
             <?= $dateStr ?>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; z-index: 1060 !important; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
+        <div class="dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4" style="width: 320px; z-index: 1060 !important;">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
                 <div class="text-center fw-bold" style="color: var(--gkr-primary); font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
@@ -43,7 +43,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <a href="#" id="appsDropdownToggle" class="text-body text-decoration-none d-flex align-items-center justify-content-center bg-body-tertiary" data-bs-toggle="dropdown" aria-expanded="false" style="width: 40px; height: 40px; border-radius: 50%; transition: background-color 0.2s;" onmouseover="this.classList.add('bg-body-secondary')" onmouseout="this.classList.remove('bg-body-secondary')">
             <i class="fas fa-th fs-5" style="color: var(--bs-secondary-color);"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
+        <div class="dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4" style="width: 320px;">
             <div class="row g-3 text-center">
                 <div class="col-4">
                     <a href="http://103.39.49.86:82/desk" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
@@ -64,7 +64,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     </a>
                 </div>
                 <div class="col-4">
-                    <a href="https://3d.gkr.my.id" class="text-decoration-none text-dark d-block p-2 rounded-3 hover-bg">
+                    <a href="https://3d.gkr.my.id" class="text-decoration-none text-body d-block p-2 rounded-3 hover-bg">
                         <img src="assets/icon/roundcube.ico" style="width:45px; height:45px;" class="mb-1">
                         <div class="small">3D</div>
                     </a>
