@@ -444,7 +444,7 @@
 .site-result-item.active-knowledge-item {
     border-left-color: #2B3385 !important;
     background-color: #f1f3f4 !important;
-    border-radius: 0 12px 12px 0;
+    border-radius: 0 10px 10px 0 !important;
 }
 
 /* Pagination Google-Grade Rata Tengah Presisi di Dalam Kolom 65% Hasil Pencarian */

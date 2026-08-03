@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "01-08-2026 20:04:00 WIB",
-    "versi_diperbarui": "0.8.01",
+    "tanggal_diperbarui": "03-08-2026 13:14:36 WIB",
+    "versi_diperbarui": "0.8.03",
     "data": [
         {
             "id": 1,
@@ -250,6 +250,27 @@
                 "Sinkronisasi penuh terhadap seluruh dokumen internal tim dan etalase publik GitHub."
             ],
             "created_at": "2026-08-01 20:04:00"
+        },
+        {
+            "id": 13,
+            "versi": "0.8.03",
+            "tanggal_rilis": "2026-08-03",
+            "judul": "Optimalisasi Knowledge Panel Default, Tabel Admin Responsif, & Pewarnaan Badge Dinamis",
+            "deskripsi": "Rilis yang berfokus pada penyempurnaan nilai bawaan (fallback) panel hasil pencarian dan perombakan arsitektur halaman Manajemen Mesin Pencari agar lebih ergonomis di perangkat seluler.",
+            "improvements": [
+                "Penyempurnaan Knowledge Panel: Sistem kini otomatis merender rapi 'Deskripsi: -', 'Kode BOM: FG-', 'Lihat BOM: BOM-FG-', dan 'Produksi: UNIT -' saat data kosong, diamankan dengan proteksi onMounted Vue JS.",
+                "Penyederhanaan Form Modal Box Edit Data (Admin) menjadi hanya 10 field input, dengan menyembunyikan isian 'Deskripsi Produk' demi keringkasan visual, namun tetap melindungi eksistensi data lamanya via reaktivitas Vue JS.",
+                "Penambahan kolom 'Kode BOM' pada tabel Admin yang dilengkapi inovasi pewarnaan dinamis adaptif (FG-1 Oranye, FG-2 Biru, FG-4 Merah) menggunakan teknik Translucent Opacity 10% untuk kontras mutlak pada Light Mode maupun Dark Mode.",
+                "Pembebasan ruang (*screen real estate*) di layar seluler dengan melenyapkan kotak dropdown pagination (jumlah baris), menyembunyikan kolom URL/Klik/Status, serta membuang ikon edit.",
+                "Sinkronisasi total seluruh dokumen pengembang internal (PRD.md, Memory.md, dll) beserta README repositori etalase publik."
+            ],
+            "fixes": [
+                "Mengeliminasi potensi galat tumpang tindih waktu muat (*race condition*) pada saat memicu hasil klik gambar pertama di halaman pencarian."
+            ],
+            "patches": [
+                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.03)."
+            ],
+            "created_at": "2026-08-03 13:14:36"
         }
     ]
 }

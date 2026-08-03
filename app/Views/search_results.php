@@ -183,7 +183,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                                 $dirPath = $mDir[1];
                             }
                         ?>
-                        <div class="site-result site-result-item mb-3" 
+                        <div class="site-result site-result-item mb-2" 
                              :class="{ 'active-knowledge-item': selectedIndex === <?= $index ?> }"
                              @click="selectKnowledgeItem(<?= $index ?>, '<?= addslashes($siteTitle) ?>', '<?= addslashes($siteDesc) ?>', '<?= addslashes($siteBom) ?>', '<?= addslashes($siteProduksi) ?>', '<?= addslashes($dirPath) ?>', '<?= addslashes($siteUrlClean) ?>', '<?= addslashes($siteImg) ?>', '<?= addslashes($erpUrl) ?>', '<?= addslashes($pdfUrl) ?>')">
                             <div class="title">
@@ -204,24 +204,24 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                             $startPage = max(1, $currentPage - 4);
                             $endPage = min($pageCount, $currentPage + 4);
                         ?>
-                        <div class="google-pagination-container d-flex flex-column align-items-center justify-content-center w-100 my-5 text-center">
-                            <div class="google-pagination-brand d-inline-flex align-items-end justify-content-center gap-0 position-relative mb-4">
-                                <div class="page-number-box d-inline-flex align-items-end" style="pointer-events: none; margin: 0; padding: 0;">
-                                    <img src="<?= base_url('assets/images/pageStart.png') ?>" alt="c" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                        <div class="google-pagination-container d-flex flex-column align-items-center justify-content-center w-100 text-center">
+                            <div class="google-pagination-brand d-inline-flex align-items-end justify-content-center position-relative mb-4" style="gap: 0 !important;">
+                                <div class="page-part" style="pointer-events: none; margin: 0; padding: 0; line-height: 1;">
+                                    <img src="<?= base_url('assets/images/pageStart.png') ?>" alt="c" style="height: 38px !important; display: block !important; vertical-align: bottom !important;">
                                 </div>
                                 
                                 <?php for ($i = $startPage; $i <= $endPage; $i++): 
                                     $isActive = ($i == $currentPage);
                                     $imgSrc = $isActive ? 'pageSelected.png' : 'page.png';
                                 ?>
-                                    <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="page-number-box position-relative d-inline-flex flex-column align-items-center justify-content-end text-decoration-none <?= $isActive ? 'active' : '' ?>" style="margin: 0; padding: 0;">
-                                        <img src="<?= base_url('assets/images/' . $imgSrc) ?>" alt="a" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
-                                        <span style="position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 0.88rem; font-weight: 700; color: <?= $isActive ? '#EA4335' : '#4285F4' ?>;"><?= $i ?></span>
+                                    <a href="<?= url_to('Search::index') ?>?q=<?= urlencode($query) ?>&type=<?= esc($type) ?>&page=<?= $i ?>" class="page-number-box position-relative d-inline-flex flex-column align-items-center justify-content-end text-decoration-none <?= $isActive ? 'active' : '' ?>" style="margin: 0; padding: 0; line-height: 1;">
+                                        <img src="<?= base_url('assets/images/' . $imgSrc) ?>" alt="a" style="height: 38px !important; display: block !important; vertical-align: bottom !important;">
+                                        <span class="page-num-label" style="position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 0.9rem; font-weight: 700; color: <?= $isActive ? '#EA4335' : 'var(--bs-primary)' ?>;"><?= $i ?></span>
                                     </a>
                                 <?php endfor; ?>
                                 
-                                <div class="page-number-box d-inline-flex align-items-end" style="pointer-events: none; margin: 0; padding: 0;">
-                                    <img src="<?= base_url('assets/images/pageEnd.png') ?>" alt="ri" style="height: 37px !important; display: block !important; vertical-align: bottom !important;">
+                                <div class="page-part" style="pointer-events: none; margin: 0; padding: 0; line-height: 1;">
+                                    <img src="<?= base_url('assets/images/pageEnd.png') ?>" alt="ri" style="height: 38px !important; display: block !important; vertical-align: bottom !important;">
                                 </div>
                             </div>
                         </div>
@@ -244,22 +244,26 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         
                         <!-- List Spesifikasi (Deskripsi, Kode BOM, Lihat BOM, Produksi) -->
                         <ul class="google-spec-list">
-                            <li><strong>Deskripsi</strong> : <span v-text="activeItem.description"></span></li>
-                            <li><strong>Kode BOM</strong> : <span style="color: #2B3385; font-weight: bold; font-family: monospace;">{{ activeItem.kodeBom }}</span></li>
-                            <li><strong>Lihat BOM</strong> : <span class="font-monospace text-info">{{ (activeItem.kodeBom && activeItem.kodeBom !== 'FG-') ? 'BOM-' + activeItem.kodeBom + '-001' : 'BOM-FG-' }}</span></li>
-                            <li><strong>Produksi</strong> : <span class="fw-bold" style="color: #2B3385;">{{ activeItem.produksi }}</span></li>
+                            <li><strong>Deskripsi</strong> : <span v-text="formatTitleCase(activeItem.description)"></span></li>
+                            <li><strong>Kode BOM</strong> : <span class="fw-bold" style="color: var(--gkr-primary); font-family: monospace;">{{ formatKodeBom(activeItem.kodeBom) }}</span></li>
+                            <li><strong>Lihat BOM</strong> : <span class="fw-bold" style="color: var(--gkr-primary); font-family: monospace;">{{ formatLihatBom(activeItem.kodeBom) }}</span></li>
+                            <li><strong>Produksi</strong> : <span class="fw-bold" style="color: var(--gkr-primary);">{{ formatProduksi(activeItem.produksi) }}</span></li>
                         </ul>
                         
                         <!-- 3 Action Pills Buttons Presisi: [ 📄 BOM ] [ 🌐 ERP ] [ 🖼️ Foto ] -->
                         <div class="google-action-pill-group">
-                            <a :href="activeItem.pdfUrl" target="_blank" class="google-action-pill" title="Cetak PDF Rincian BOM">
+                            <a :href="isBomAvailable(activeItem.kodeBom) ? activeItem.pdfUrl : 'javascript:void(0)'" 
+                               :class="['google-action-pill', isBomAvailable(activeItem.kodeBom) ? 'btn-action-active' : 'disabled']" 
+                               :title="isBomAvailable(activeItem.kodeBom) ? 'Cetak PDF Rincian BOM' : 'BOM belum tersedia'">
                                 <i class="fa-solid fa-file-pdf me-1"></i> BOM
                             </a>
-                            <a :href="activeItem.erpUrl" target="_blank" class="google-action-pill" title="Kunjungi Form Item ERP">
+                            <a :href="isBomAvailable(activeItem.kodeBom) ? activeItem.erpUrl : 'javascript:void(0)'" 
+                               :class="['google-action-pill', isBomAvailable(activeItem.kodeBom) ? 'btn-action-active' : 'disabled']" 
+                               :title="isBomAvailable(activeItem.kodeBom) ? 'Kunjungi Form Item ERP' : 'ERP belum tersedia'">
                                 <i class="fa-solid fa-globe me-1"></i> ERP
                             </a>
-                            <a :href="activeItem.siteUrl" target="_blank" class="google-action-pill" title="Lihat Foto Katalog">
-                                <i class="fa-solid fa-image me-1"></i> Foto
+                            <a :href="activeItem.siteUrl" target="_blank" class="google-action-pill btn-action-active" title="Lihat Foto Katalog">
+                                <i class="fa-solid fa-camera me-1"></i> Foto
                             </a>
                         </div>
                     </div>

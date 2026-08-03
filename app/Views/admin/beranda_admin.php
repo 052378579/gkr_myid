@@ -9,10 +9,13 @@
     <!-- Tabel Utama Manajemen Mesin Pencari -->
     <div class="card shadow-sm rounded-4 border-0">
         <div class="card-header border-0 d-flex justify-content-between align-items-center pt-4 pb-2">
-            <h5 class="mb-0 fw-bold" style="color: #2B3385;">Manajemen Mesin Pencari</h5>
+            <h5 class="mb-0 fw-bold" style="color: #2B3385;">
+                <span class="d-none d-md-inline">Manajemen Mesin Pencari</span>
+                <span class="d-inline d-md-none">Manajemen Cari</span>
+            </h5>
             <div class="d-flex gap-3 align-items-center">
-                <div class="d-flex align-items-center">
-                    <label class="me-2 text-muted small mb-0">Tampilkan:</label>
+                <div class="d-none d-md-flex align-items-center">
+                    <label class="me-2 text-muted small mb-0 d-none d-md-inline-block">Tampilkan:</label>
                     <select class="form-select form-select-sm rounded-pill w-auto" v-model.number="perPage" @change="currentPageImages=1">
                         <option value="10">10</option>
                         <option value="25">25</option>
@@ -34,9 +37,9 @@
                             <th class="ps-4">Gambar</th>
                             <th>Kode BOM</th>
                             <th>Nama Barang</th>
-                            <th>URL</th>
-                            <th>Klik</th>
-                            <th>Status</th>
+                            <th class="d-none d-md-table-cell">URL</th>
+                            <th class="d-none d-md-table-cell">Klik</th>
+                            <th class="d-none d-md-table-cell">Status</th>
                             <th class="pe-4 text-end">Aksi</th>
                         </tr>
                     </thead>
@@ -48,20 +51,20 @@
                                 </a>
                                 <span v-else class="badge bg-secondary">No Image</span>
                             </td>
-                            <td><span class="badge bg-light text-dark border font-monospace">{{ img.kode_bom || '-' }}</span></td>
+                            <td><span class="badge border font-monospace" :class="getBomBadgeClass(img.kode_bom)" :style="getBomBadgeStyle(img.kode_bom)">{{ img.kode_bom || '-' }}</span></td>
                             <td class="fw-medium">{{ img.judul || img.title || img.alt }}</td>
-                            <td>
+                            <td class="d-none d-md-table-cell">
                                 <a :href="img.siteUrl || img.url" target="_blank" class="text-truncate d-inline-block text-primary text-decoration-none" style="max-width:220px;">
                                     {{ img.siteUrl || img.url }}
                                 </a>
                             </td>
-                            <td><span class="badge bg-secondary rounded-pill">{{ img.klik !== undefined ? img.klik : img.clicks }}</span></td>
-                            <td>
+                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary rounded-pill">{{ img.klik !== undefined ? img.klik : img.clicks }}</span></td>
+                            <td class="d-none d-md-table-cell">
                                 <span v-if="(img.rusak !== undefined ? img.rusak : img.broken) == 1" class="badge bg-danger rounded-pill px-3">Broken</span>
                                 <span v-else class="badge bg-success rounded-pill px-3">OK</span>
                             </td>
                             <td class="pe-4 text-end text-nowrap">
-                                <button class="btn btn-sm btn-primary rounded-pill px-3" @click="openModalEditImage(img)"><i class="fas fa-edit me-1"></i>Edit</button>
+                                <button class="btn btn-sm btn-primary rounded-pill px-3" @click="openModalEditImage(img)"><i class="fas fa-edit me-1 d-none d-md-inline-block"></i>Edit</button>
                             </td>
                         </tr>
                         <tr v-if="paginatedImages.length === 0">

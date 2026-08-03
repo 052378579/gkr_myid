@@ -192,6 +192,30 @@ document.addEventListener("DOMContentLoaded", function() {
                 e.target.src = BLANK_WHITE_SVG;
             }
 
+            function formatTitleCase(str) {
+                if (!str || str === '-') return '-';
+                return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            }
+
+            function formatKodeBom(bom) {
+                if (!bom || bom === '-' || bom === 'FG-') return 'FG-';
+                return bom;
+            }
+
+            function formatLihatBom(bom) {
+                if (!bom || bom === '-' || bom === 'FG-') return 'BOM-FG- -001';
+                return 'BOM-' + bom + '-001';
+            }
+
+            function formatProduksi(prod) {
+                if (!prod || prod === 'UNIT -' || prod === '-') return '-';
+                return prod;
+            }
+
+            function isBomAvailable(bom) {
+                return (bom && bom !== '-' && bom !== 'FG-');
+            }
+
             // Inisialisasi klik item pertama secara reaktif setelah Vue dipasang
             onMounted(() => {
                 const firstItem = document.querySelector('.site-result-item');
@@ -206,7 +230,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 selectedIndex,
                 activeItem,
                 selectKnowledgeItem,
-                handleImgError
+                handleImgError,
+                formatTitleCase,
+                formatKodeBom,
+                formatLihatBom,
+                formatProduksi,
+                isBomAvailable
             };
         }
     }).mount('#knowledgeApp');

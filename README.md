@@ -10,14 +10,15 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 
 * **Single Physical Table Database `gkr_cari` & Kolom Bahasa Indonesia:**
   Menggabungkan tabel lama menjadi satu tabel fisik murni **`gkr_cari`** dengan 11 kolom baku Bahasa Indonesia: `id`, `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak`. Tipe entitas diidentifikasi murni dari `imageUrl IS NOT NULL`.
-* **Manajemen Engine Modal Box 11 Field (`/admin/cari`):**
-  Modal Box **"Edit Data Mesin Pencari"** (`#modalEditImage`) 2-kolom memfasilitasi pengeditan **100% seluruh 11 field tabel `gkr_cari`**: `id` (Badge ID #123), `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak` dilengkapi pratinjau gambar 16:10 live dan integrasi API `GraciaApi.php`.
+* **Manajemen Engine Modal Box Ergonomis & Tabel Dinamis (`/admin/cari`):**
+  * **Tabel Responsif Mobile & Pewarnaan Lencana Dinamis:** Menggunakan kelas `d-none d-md-table-cell/flex` untuk membebaskan ruang di layar seluler secara ekstrem (menyembunyikan *dropdown pagination*, ikon edit, dan 3 kolom sekunder). Kolom **Kode BOM** diwarnai dinamis di sisi klien (Vue JS) menggunakan teknik opasitas latar 10% (RGBA) agar kontras teks selalu tinggi pada *Light Mode* maupun *Dark Mode*.
+  * **Modal Box 10 Field Ergonomis:** Modal Box **"Edit Data Mesin Pencari"** (`#modalEditImage`) 2-kolom memfasilitasi pengeditan field secara bersih tanpa kotak *textarea* `deskripsi`, namun nilai `deskripsi` lama tetap dilestarikan (dilindungi) di latar belakang oleh reaktivitas Vue JS saat disimpan.
 * **Standardisasi Layout Google-Grade & Dark Mode Adaptif (`/cari`):**
   * **Responsivitas Header Mobile 2-Baris:** On Mobile (<768px), layout header menyusun Baris 1: Logo GRACIA (kiri) + Date/Apps/Avatar (kanan), Baris 2: Search Box 100% lebar penuh dengan penyembunyian ikon Kaca Pembesar (`.search-button`) dan `gap: 5px !important`.
   * **Icon Action Buttons Presisi (`search.css`):** Tombol ikon mic, kamera, dan cari dikemas dalam kelas `.icon-action-btn` (32px x 32px).
   * **Knowledge Card Borderless & Background Transparan:** Hero image `.google-knowledge-hero-img` diset `border: none !important; border-radius: 0 !important; padding: 0 !important; background-color: transparent !important;` pada Mode TERANG dan GELAP dengan SVG fallback 100% transparan (`fill="transparent"`). Knowledge Panel 35% kanan tampil responsif di Mobile (`col-12 col-lg-4 mt-4 mt-lg-0`).
   * **Penyelarasan Garis Vertikal Pembatas (`border-left`):** Diset dengan `margin-top: 38px !important;` pada Desktop agar dimulai presisi sejajar dengan titik puncak hero image / hasil pertama, dan di-reset `border-left: none !important;` pada Mobile (<992px).
-  * **Formatting Hyphen BOM Kosong (`Kode BOM : -`):** `Search.php` mengembalikan `-` secara bersih saat `kode_bom` di DB kosong, merender `Kode BOM : -`, `Lihat BOM : -`, dan `Produksi : -`.
+  * **Default Fallback Knowledge Panel:** Merender bersih nilai asali `Deskripsi: -`, `Kode BOM: FG-`, `Lihat BOM: BOM-FG-`, dan `Produksi: UNIT -` saat data tidak tersedia dari basis data. Inisialisasi perenderan diamankan menggunakan `onMounted` di Vue JS untuk menghindari *race condition*.
   * **Flush Left Vertical Alignment (Margin 10% Kiri):** Tab `[Semua]`, `Ditemukan {jumlah} hasil`, dan garis aksen 3px Biru Dongker `.site-result-item` berderet 100% rata lurus vertikal.
   * **Pagination Logo `c a r i` Vector Typography Baseline:** Tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`) dan Rata Tengah (*Centered*).
 * **Keseragaman Dropdown Menu (Apps Grid & Kalender):**

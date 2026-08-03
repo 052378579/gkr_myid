@@ -263,18 +263,45 @@ class CrawlerLib
                         $parentFolder = basename($item->getPath());
                         
                         if (str_starts_with(strtoupper($filename), 'IMG_') || str_starts_with(strtoupper($filename), 'DCIM_')) {
-                            $title = $parentFolder;
+                            $titleBase = ucwords(strtolower(str_replace(['-', '_'], ' ', $parentFolder)));
+                            $title = $titleBase;
+                            $alt = $titleBase;
+                            $description = $titleBase;
+                            $keywords = implode(', ', array_values(array_filter(explode(' ', strtolower($titleBase)))));
                         } else {
-                            $baseName = preg_replace('/[ _-]*(depan|belakang|samping|perspektif|detail|b|c|d|e)$/i', '', $filenameWithoutExt);
-                            $title = str_replace(['-', '_'], ' ', $baseName);
-                            $title = trim($title);
-                            $title = preg_replace('/\(?\bfg\s*([0-9]+)\)?/i', '(FG-$1)', $title);
+                            $cleanFilename = preg_replace('/[ _-]*(depan|belakang|samping|perspektif|detail|_b|_c|_d|_e)$/i', '', $filenameWithoutExt);
+                            
+                            $bomCode = null;
+                            $baseText = $cleanFilename;
+                            
+                            if (preg_match('/(?:_|-|\s|^)(fg[-_\s]*\d+|bom[-_\s]*[a-z0-9-]+)/i', $cleanFilename, $m)) {
+                                $digits = preg_replace('/[^0-9]/', '', $m[1]);
+                                if (!empty($digits)) {
+                                    $bomCode = 'FG-' . $digits;
+                                }
+                                $baseText = preg_replace('/(?:_|-|\s|^)(fg[-_\s]*\d+|bom[-_\s]*[a-z0-9-]+)/i', '', $cleanFilename);
+                            }
+                            
+                            $baseWords = str_replace(['_', '-'], ' ', $baseText);
+                            $baseWords = preg_replace('/\s+/', ' ', trim($baseWords));
+                            $titleBase = ucwords(strtolower($baseWords));
+                            
+                            if ($bomCode) {
+                                $formattedTitle = $titleBase . ' (' . $bomCode . ')';
+                            } else {
+                                $formattedTitle = $titleBase;
+                            }
+                            
+                            $title       = $formattedTitle;
+                            $alt         = $formattedTitle;
+                            $description = $formattedTitle;
+                            
+                            $tokens = array_values(array_filter(explode(' ', strtolower($baseWords))));
+                            if ($bomCode) {
+                                $tokens[] = $bomCode;
+                            }
+                            $keywords = implode(', ', array_unique($tokens));
                         }
-                        
-                        $description = $title;
-                        $keywordsArray = explode(' ', strtolower($title));
-                        $keywords = implode(', ', $keywordsArray);
-                        $alt = $title;
                         
                         $imageUrl = $relativePath;
                         $parentRelativeDir = dirname($relativePath);

@@ -144,6 +144,20 @@ createApp({
             sites.value = json.data;
         };
 
+        const getBomBadgeStyle = (kode) => {
+            if (!kode || kode === '-') return {};
+            if (kode.startsWith('FG-1')) return { color: '#FFA500', backgroundColor: 'rgba(255, 165, 0, 0.1)', borderColor: '#FFA500' };
+            if (kode.startsWith('FG-2')) return { color: '#0d6efd', backgroundColor: 'rgba(13, 110, 253, 0.1)', borderColor: '#0d6efd' };
+            if (kode.startsWith('FG-4')) return { color: '#FF0000', backgroundColor: 'rgba(255, 0, 0, 0.1)', borderColor: '#FF0000' };
+            return {};
+        };
+
+        const getBomBadgeClass = (kode) => {
+            if (!kode || kode === '-') return 'bg-light text-dark';
+            if (kode.startsWith('FG-1') || kode.startsWith('FG-2') || kode.startsWith('FG-4')) return '';
+            return 'bg-light text-dark';
+        };
+
         const loadImages = async () => {
             const res = await fetch(window.AppConfig.apiGetImages);
             const json = await res.json();
@@ -519,6 +533,8 @@ createApp({
             totalSitePages,
             paginatedImages,
             totalImagePages,
+            getBomBadgeStyle,
+            getBomBadgeClass,
             deleteSite,
             deleteImage,
             tambahSite,
