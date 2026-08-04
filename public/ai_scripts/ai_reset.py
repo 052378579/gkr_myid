@@ -176,6 +176,6 @@ if vectors:
     print(f"\n{C_BOLD}{C_GREEN}=== HARD RESET BERHASIL: {msg} ==={C_RESET}")
     send_telegram_notification(msg)
     print(f"{C_YELLOW}Merestart layanan ai_scanner...{C_RESET}")
-    os.system("systemctl restart ai_scanner.service")
+    os.system("sudo systemctl restart ai_scanner.service")
 else:
     print(f"{C_RED}ERROR: Tidak ada gambar valid!{C_RESET}")

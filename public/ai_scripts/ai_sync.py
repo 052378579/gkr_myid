@@ -45,7 +45,10 @@ def send_telegram_notification(kesimpulan):
              f"🖥️ <b>Server:</b> {server_label}\n"
              f"⏰ <b>Waktu:</b> {waktu} WIB\n\n"
              f"💾 {kesimpulan}")
-    requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", data={'chat_id': CHAT_ID, 'parse_mode': 'HTML', 'text': pesan}, timeout=10)
+    try:
+        requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", data={'chat_id': CHAT_ID, 'parse_mode': 'HTML', 'text': pesan}, timeout=10)
+    except Exception:
+        pass
 
 BASE_DIR = "/var/www/FOTO"
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -160,4 +163,4 @@ with open(BUKU_CATATAN_PATH, "w") as f:
 msg = f"Inkremental Berhasil: {len(new_ids)} Ditambahkan, {len(removed_ids)} Dihapus."
 print(f"{C_BOLD}{C_GREEN}=== {msg} ==={C_RESET}")
 send_telegram_notification(msg)
-os.system("systemctl restart ai_scanner.service")
+os.system("sudo systemctl restart ai_scanner.service")
