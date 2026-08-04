@@ -21,19 +21,24 @@
             
             <!-- Form Container -->
             <div class="w-100" style="max-width: 400px;">
-                <form @submit.prevent="startCrawl">
+                <div>
                     <div class="mb-3">
                         <label class="form-label fw-bold text-secondary" style="font-size: 0.85rem;">Target Sinkronisasi</label>
-                        <input type="text" class="form-control" value="BUYER, GRACIA, SAMPLE GRACIA, SWATCHES, WEB" disabled>
+                        <input type="text" class="form-control" value="BUYER, GRACIA, SWATCHES, WEB" disabled>
                         <div class="form-text mt-1" style="font-size: 0.75rem;">Mengekstrak ciri visual dan memuat ulang otak AI.</div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-bold mb-3" :disabled="isCrawling">
+                    <button type="button" @click="startCrawl('sync')" class="btn btn-success rounded-pill w-100 py-2 fw-bold mb-2" :disabled="isCrawling">
                         <span v-if="isCrawling" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        <i class="fa-solid fa-wand-magic-sparkles me-1" v-if="!isCrawling"></i>
-                        {{ isCrawling ? 'Sinkronisasi berjalan...' : 'Mulai Pelatihan AI' }}
+                        <i class="fa-solid fa-bolt me-1" v-if="!isCrawling"></i>
+                        {{ isCrawling ? 'Sinkronisasi berjalan...' : 'Sinkronisasi Harian (Inkremental)' }}
                     </button>
-                </form>
+
+                    <button type="button" @click="startCrawl('reset')" class="btn btn-outline-danger rounded-pill w-100 py-2 fw-bold mb-3" :disabled="isCrawling">
+                        <i class="fa-solid fa-skull-crossbones me-1" v-if="!isCrawling"></i>
+                        Latih Ulang Total (Hard Reset)
+                    </button>
+                </div>
                 
                 <button v-if="isCrawling" @click="stopCrawl" class="btn btn-danger rounded-pill w-100 py-2 fw-bold mt-3">Hentikan Tampilan</button>
             </div>

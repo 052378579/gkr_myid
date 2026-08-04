@@ -15,17 +15,18 @@ createApp({
             });
         };
 
-        const startCrawl = async () => {
+        const startCrawl = async (mode = 'sync') => {
             if (isCrawling.value) return;
 
             isCrawling.value = true;
-            output.value = '<span style="color: #4db8ff;">[START]</span> Memulai sinkronisasi AI Trainer...<br>';
+            let modeText = mode === 'reset' ? 'HARD RESET' : 'INKREMENTAL';
+            output.value = `<span style="color: #4db8ff;">[START]</span> Memulai sinkronisasi AI Trainer (${modeText})...<br>`;
             scrollToBottom();
 
             abortController = new AbortController();
 
             try {
-                const response = await fetch(window.AppConfig.apiDoCrawl, {
+                const response = await fetch(window.AppConfig.apiDoCrawl + '?mode=' + mode, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

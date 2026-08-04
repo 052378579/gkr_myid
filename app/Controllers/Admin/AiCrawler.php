@@ -26,11 +26,19 @@ class AiCrawler extends BaseController
         set_time_limit(0);
         ini_set('max_execution_time', '0');
 
-        echo "Menjalankan AI Scanner Engine (CLI Mode)...\n";
+        $mode = $this->request->getGetPost('mode') ?? 'sync';
+        
+        if ($mode === 'reset') {
+            echo "Menjalankan AI Scanner Engine (Mode HARD RESET)...\n";
+            $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_reset.py 2>&1';
+        } else {
+            echo "Menjalankan AI Scanner Engine (Mode SINKRONISASI INKREMENTAL)...\n";
+            $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_sync.py 2>&1';
+        }
+
         @ob_flush(); @flush();
 
         // Eksekusi skrip python secara langsung dan tangkap outputnya (termasuk error)
-        $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_index.py 2>&1';
         $handle = popen($cmd, 'r');
         
         if (is_resource($handle)) {

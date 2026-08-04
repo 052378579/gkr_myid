@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "03-08-2026 13:14:36 WIB",
-    "versi_diperbarui": "0.8.03",
+    "tanggal_diperbarui": "04-08-2026 10:50:00 WIB",
+    "versi_diperbarui": "0.8.04",
     "data": [
         {
             "id": 1,
@@ -270,7 +270,29 @@
             "patches": [
                 "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.03)."
             ],
-            "created_at": "2026-08-03 13:14:36"
+        },
+        {
+            "id": 14,
+            "versi": "0.8.04",
+            "tanggal_rilis": "2026-08-04",
+            "judul": "Pelatihan Inkremental AI (State Ledger) & Otorisasi Mandiri",
+            "deskripsi": "Rilis revolusioner yang memperkenalkan arsitektur State Ledger untuk Pelatihan AI Inkremental. Memangkas waktu komputasi pembaruan memori AI dari belasan menit menjadi di bawah 1 detik dengan deteksi perubahan diferensial cerdas.",
+            "improvements": [
+                "Penerapan Arsitektur AI State Ledger (gkr_katalog.json) sebagai jembatan anti-amnesia antara web server dan layanan kecerdasan buatan.",
+                "Evolusi mesin pelatih AI dengan skrip ganda: Sinkronisasi Inkremental Harian yang secepat kilat dan Latih Ulang Total untuk pemulihan darurat.",
+                "Peningkatan basis data vektor dari FAISS IndexFlatIP menjadi IndexIDMap lengkap dengan pemetaan identitas persisten (mapping.json).",
+                "Perombakan Terminal UI Admin (/admin/ai) yang kini menyajikan 2 tombol diskrit: Sinkronisasi Inkremental (Hijau) & Latih Ulang Total (Merah).",
+                "Pemutakhiran otonomi Web Server dengan hak akses Sudoers NOPASSWD untuk melakukan hot-reload daemon AI (ai_scanner.service) tanpa hambatan autentikasi."
+            ],
+            "fixes": [
+                "Mengeliminasi masalah kehabisan memori (Crash) dan waktu muat sangat panjang saat server memperbarui indeks katalog harian.",
+                "Menuntaskan masalah perizinan penulisan berkas (Permission Denied) antara layanan sistem root dan pelayan web www-data pada direktori python_services."
+            ],
+            "patches": [
+                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.04).",
+                "Sinkronisasi komprehensif terhadap 8 pilar dokumen pengembang (PRD.md, Memory.md, dll) beserta etalase GitHub publik (README.md)."
+            ],
+            "created_at": "2026-08-04 10:50:00"
         }
     ]
 }

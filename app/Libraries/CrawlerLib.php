@@ -332,6 +332,26 @@ class CrawlerLib
         $kesimpulan = "SELESAI: Berhasil menambahkan $itemsAdded produk tunggal ke tabel gkr_cari.";
         $this->out("<span style='color: #4db8ff;'>[INFO]</span> <span style='color: #ffffff;'>" . $kesimpulan . "</span>", 'yellow');
         
+        // [AI STATE LEDGER] Export Katalog ke File JSON untuk Sinkronisasi Inkremental AI
+        $katalogImages = $this->cariModel->select('id, imageUrl')
+                                         ->where('imageUrl IS NOT NULL')
+                                         ->where('imageUrl !=', '')
+                                         ->findAll();
+                                         
+        if (count($katalogImages) > 0) {
+            $exportPath = '/var/www/gkr_myid/python_services/gkr_katalog.json';
+            $jsonContent = json_encode($katalogImages, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            if (@file_put_contents($exportPath, $jsonContent) !== false) {
+                $this->out("<span style='color: #28a745;'>[AI SYNC]</span> <span style='color: #d4d4d4;'>Berhasil mengekspor " . count($katalogImages) . " ID ke gkr_katalog.json</span>", 'green');
+            } else {
+                $err = error_get_last();
+                $errMsg = $err ? $err['message'] : 'Unknown error';
+                $this->out("<span style='color: #dc3545;'>[AI ERROR]</span> <span style='color: #d4d4d4;'>Gagal menulis ke $exportPath. Reason: $errMsg</span>", 'red');
+            }
+        } else {
+            $this->out("<span style='color: #ffc107;'>[AI WARNING]</span> <span style='color: #d4d4d4;'>Database kosong! Ekspor dibatalkan untuk mencegah amnesia AI.</span>", 'yellow');
+        }
+
         $this->sendTelegramNotification($targetPath, $itemsAdded);
 
         return $kesimpulan;

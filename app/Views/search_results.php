@@ -258,16 +258,18 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                         <!-- 3 Action Pills Buttons Presisi: [ 📄 BOM ] [ 🌐 ERP ] [ 🖼️ Foto ] -->
                         <div class="google-action-pill-group">
                             <a :href="isBomAvailable(activeItem.kodeBom) ? activeItem.pdfUrl : 'javascript:void(0)'" 
+                               :target="isBomAvailable(activeItem.kodeBom) ? '_blank' : '_self'"
                                :class="['google-action-pill', isBomAvailable(activeItem.kodeBom) ? 'btn-action-active' : 'disabled']" 
-                               :title="isBomAvailable(activeItem.kodeBom) ? 'Cetak PDF Rincian BOM' : 'BOM belum tersedia'">
+                               :title="isBomAvailable(activeItem.kodeBom) ? 'Cetak PDF Rincian BOM (Buka Jendela Baru)' : 'BOM belum tersedia'">
                                 <i class="fa-solid fa-file-pdf me-1"></i> BOM
                             </a>
                             <a :href="isBomAvailable(activeItem.kodeBom) ? activeItem.erpUrl : 'javascript:void(0)'" 
+                               :target="isBomAvailable(activeItem.kodeBom) ? '_blank' : '_self'"
                                :class="['google-action-pill', isBomAvailable(activeItem.kodeBom) ? 'btn-action-active' : 'disabled']" 
-                               :title="isBomAvailable(activeItem.kodeBom) ? 'Kunjungi Form Item ERP' : 'ERP belum tersedia'">
+                               :title="isBomAvailable(activeItem.kodeBom) ? 'Kunjungi Form Item ERP (Buka Jendela Baru)' : 'ERP belum tersedia'">
                                 <i class="fa-solid fa-globe me-1"></i> ERP
                             </a>
-                            <a :href="activeItem.siteUrl" target="_blank" class="google-action-pill btn-action-active" title="Lihat Foto Katalog">
+                            <a :href="activeItem.siteUrl" target="_blank" class="google-action-pill btn-action-active" title="Lihat Foto Katalog (Buka Jendela Baru)">
                                 <i class="fa-solid fa-camera me-1"></i> Foto
                             </a>
                         </div>
