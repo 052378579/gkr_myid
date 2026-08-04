@@ -170,14 +170,13 @@ document.addEventListener("DOMContentLoaded", function() {
             function selectKnowledgeItem(index, title, description, kodeBom, produksi, dirPath, siteUrl, imageUrl, erpUrl, pdfUrl) {
                 selectedIndex.value = index;
                 
-                let fallbackDesc = '-';
-                if (title) {
-                    fallbackDesc = title.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-                }
+                let patternBOM = /\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/gi;
+                let cleanTitle = title ? title.replace(patternBOM, '(FG-$1)') : 'Mebel Gracia';
+                let cleanDesc  = description ? description.replace(patternBOM, '(FG-$1)') : cleanTitle;
 
                 activeItem.value = {
-                    title: title || 'Mebel Gracia',
-                    description: description || fallbackDesc,
+                    title: cleanTitle,
+                    description: cleanDesc,
                     kodeBom: kodeBom || 'FG-',
                     produksi: produksi || 'UNIT -',
                     dirPath: dirPath || 'GRACIA/2022/',
@@ -194,17 +193,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
             function formatTitleCase(str) {
                 if (!str || str === '-') return '-';
-                return str.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+                let cleaned = str.replace(/\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/gi, '(FG-$1)');
+                return cleaned;
             }
 
             function formatKodeBom(bom) {
                 if (!bom || bom === '-' || bom === 'FG-') return 'FG-';
-                return bom;
+                let clean = bom.toUpperCase().trim();
+                if (!clean.startsWith('FG-') && clean.startsWith('FG')) {
+                    clean = 'FG-' + clean.substring(2).replace(/^[-_\s]+/, '');
+                }
+                return clean;
             }
 
             function formatLihatBom(bom) {
                 if (!bom || bom === '-' || bom === 'FG-') return 'BOM-FG- -001';
-                return 'BOM-' + bom + '-001';
+                let clean = formatKodeBom(bom);
+                return 'BOM-' + clean + '-001';
             }
 
             function formatProduksi(prod) {

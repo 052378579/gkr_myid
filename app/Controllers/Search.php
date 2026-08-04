@@ -29,9 +29,18 @@ class Search extends BaseController
     {
         if (empty($results)) return;
 
+        $patternBOM = '/\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/i';
+
         foreach ($results as &$row) {
-            $row['title'] = $row['judul'] ?? $row['title'] ?? '';
-            $row['description'] = $row['deskripsi'] ?? $row['description'] ?? '';
+            $rawTitle = $row['judul'] ?? $row['title'] ?? '';
+            $rawDesc  = $row['deskripsi'] ?? $row['description'] ?? '';
+            $rawAlt   = $row['alt'] ?? '';
+
+            $row['title']       = preg_replace($patternBOM, '(FG-$1)', $rawTitle);
+            $row['judul']       = preg_replace($patternBOM, '(FG-$1)', $rawTitle);
+            $row['deskripsi']   = preg_replace($patternBOM, '(FG-$1)', $rawDesc);
+            $row['description'] = preg_replace($patternBOM, '(FG-$1)', $rawDesc);
+            $row['alt']         = preg_replace($patternBOM, '(FG-$1)', $rawAlt);
 
             // Format URL Situs (Galeri atau Alamat Utama)
             if (!empty($row['url'])) {
@@ -59,8 +68,11 @@ class Search extends BaseController
             }
 
             // Format Kode BOM (Hanya jika tersedia di DB/Ekstraksi Asli)
-            if (!empty($row['kode_bom'])) {
-                $kb = strtoupper($row['kode_bom']);
+            if (!empty($row['kode_bom']) && $row['kode_bom'] !== '-' && $row['kode_bom'] !== 'FG-') {
+                $kb = strtoupper(trim($row['kode_bom']));
+                if (!str_starts_with($kb, 'FG-') && str_starts_with($kb, 'FG')) {
+                    $kb = 'FG-' . ltrim(substr($kb, 2), '-_ ');
+                }
                 $row['kode_bom'] = $kb;
                 $row['lihat_bom'] = "BOM-{$kb}-001";
                 if (str_starts_with($kb, 'FG-2')) {

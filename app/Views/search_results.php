@@ -167,14 +167,19 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <p class="result-count mb-3" style="padding-left: 0 !important; margin-left: 0 !important;">Ditemukan <?= $totalResults ?> hasil</p>
                     <?php foreach ($results as $index => $site): ?>
                         <?php 
+                            $patternBOM = '/\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/i';
                             $siteUrlClean = esc($site['url']);
                             $siteBom = esc(!empty($site['kode_bom']) ? $site['kode_bom'] : 'FG-');
                             $siteProduksi = esc(!empty($site['produksi']) ? $site['produksi'] : 'UNIT -');
                             $siteLihatBom = ($siteBom !== 'FG-') ? "BOM-{$siteBom}-001" : 'BOM-FG-';
                             $siteImg = esc(!empty($site['imageUrl']) ? $site['imageUrl'] : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="368" height="230" viewBox="0 0 368 230"><rect width="368" height="230" fill="transparent"/></svg>');
-                            $siteTitle = esc($site['title']);
-                            $titleCase = ucwords(strtolower($siteTitle));
-                            $siteDesc = esc(!empty($site['description']) ? $site['description'] : $titleCase);
+                            
+                            $rawTitle = esc($site['title']);
+                            $rawDesc  = esc(!empty($site['description']) ? $site['description'] : $rawTitle);
+                            
+                            $siteTitle = preg_replace($patternBOM, '(FG-$1)', $rawTitle);
+                            $siteDesc  = preg_replace($patternBOM, '(FG-$1)', $rawDesc);
+                            
                             $erpUrl = ($siteBom !== 'FG-') ? "http://103.39.49.86:82/desk#Form/Item/{$siteBom}" : '#';
                             $pdfUrl = ($siteBom !== 'FG-') ? "http://103.39.49.86:82/printview?doctype=BOM&name=BOM-{$siteBom}-001&format=BOM%20Rincian&no_letterhead=0" : '#';
                             

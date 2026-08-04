@@ -415,7 +415,16 @@ class GraciaApi extends BaseController
         if ($url !== null) $dataPembaruan['url'] = esc($url);
         if ($this->request->getPost('imageUrl') !== null) $dataPembaruan['imageUrl'] = esc($this->request->getPost('imageUrl'));
         if ($this->request->getPost('siteUrl') !== null) $dataPembaruan['siteUrl'] = esc($this->request->getPost('siteUrl'));
-        if ($kodeBom !== null) $dataPembaruan['kode_bom'] = esc($kodeBom);
+        if ($kodeBom !== null) {
+            $cleanBom = esc(trim($kodeBom));
+            if (!empty($cleanBom) && $cleanBom !== '-' && $cleanBom !== 'FG-') {
+                $cleanBom = strtoupper($cleanBom);
+                if (!str_starts_with($cleanBom, 'FG-') && str_starts_with($cleanBom, 'FG')) {
+                    $cleanBom = 'FG-' . ltrim(substr($cleanBom, 2), '-_ ');
+                }
+            }
+            $dataPembaruan['kode_bom'] = $cleanBom;
+        }
         if ($klik !== null) $dataPembaruan['klik'] = (int)$klik;
         if ($rusak !== null) $dataPembaruan['rusak'] = (int)$rusak;
         if ($kw !== null) $dataPembaruan['kata_kunci'] = esc($kw);

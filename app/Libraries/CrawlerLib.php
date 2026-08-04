@@ -274,15 +274,15 @@ class CrawlerLib
                             $bomCode = null;
                             $baseText = $cleanFilename;
                             
-                            if (preg_match('/(?:_|-|\s|^)(fg[-_\s]*\d+|bom[-_\s]*[a-z0-9-]+)/i', $cleanFilename, $m)) {
+                            if (preg_match('/(?:\(|\s|_|-)*(fg[-_\s]*\d+|bom[-_\s]*[a-z0-9-]+)(?:\)|\s|_|-)*/i', $cleanFilename, $m)) {
                                 $digits = preg_replace('/[^0-9]/', '', $m[1]);
                                 if (!empty($digits)) {
                                     $bomCode = 'FG-' . $digits;
                                 }
-                                $baseText = preg_replace('/(?:_|-|\s|^)(fg[-_\s]*\d+|bom[-_\s]*[a-z0-9-]+)/i', '', $cleanFilename);
+                                $baseText = preg_replace('/(?:\(|\s|_|-)*(fg[-_\s]*\d+|bom[-_\s]*[a-z0-9-]+)(?:\)|\s|_|-)*/i', '', $cleanFilename);
                             }
                             
-                            $baseWords = str_replace(['_', '-'], ' ', $baseText);
+                            $baseWords = str_replace(['_', '-', '(', ')'], ' ', $baseText);
                             $baseWords = preg_replace('/\s+/', ' ', trim($baseWords));
                             $titleBase = ucwords(strtolower($baseWords));
                             
