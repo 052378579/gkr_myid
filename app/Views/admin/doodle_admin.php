@@ -102,23 +102,22 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.AppConfig = {
-        apiGetSites: '<?= base_url('api/getSites') ?>',
-        apiGetImages: '<?= base_url('api/getImages') ?>',
-        apiGetMaterials: '<?= base_url('api/getMaterials') ?>',
-        apiDeleteSite: '<?= base_url('api/deleteSite/') ?>',
-        apiDeleteImage: '<?= base_url('api/deleteImage/') ?>',
-        apiUpdateSite: '<?= base_url('api/updateSite/') ?>',
-        apiUpdateImage: '<?= base_url('api/updateImage/') ?>',
-        apiStoreSite: '<?= base_url('api/storeSite') ?>',
-        apiStoreImage: '<?= base_url('api/storeImage') ?>',
-        urlDokumenDoodle: '<?= base_url('dokumen/doodle/') ?>',
-        apiStoreDoodle: '<?= base_url('doodle/store') ?>',
-        apiUpdateDoodle: '<?= base_url('doodle/update') ?>',
-        apiDeleteDoodle: '<?= base_url('doodle/delete') ?>',
-        apiGetAllDoodle: '<?= base_url('doodle/getAll') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-get-sites="<?= base_url('api/getSites') ?>"
+    data-api-get-images="<?= base_url('api/getImages') ?>"
+    data-api-get-materials="<?= base_url('api/getMaterials') ?>"
+    data-api-delete-site="<?= base_url('api/deleteSite/') ?>"
+    data-api-delete-image="<?= base_url('api/deleteImage/') ?>"
+    data-api-update-site="<?= base_url('api/updateSite/') ?>"
+    data-api-update-image="<?= base_url('api/updateImage/') ?>"
+    data-api-store-site="<?= base_url('api/storeSite') ?>"
+    data-api-store-image="<?= base_url('api/storeImage') ?>"
+    data-url-dokumen-doodle="<?= base_url('dokumen/doodle/') ?>"
+    data-api-store-doodle="<?= base_url('doodle/store') ?>"
+    data-api-update-doodle="<?= base_url('doodle/update') ?>"
+    data-api-delete-doodle="<?= base_url('doodle/delete') ?>"
+    data-api-get-all-doodle="<?= base_url('doodle/getAll') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_doodle.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

@@ -53,11 +53,10 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.AppConfig = {
-        apiDoCrawl: '<?= base_url('crawler/doCrawl') ?>',
-        apiResetDb: '<?= base_url('crawler/resetDb') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-do-crawl="<?= base_url('crawler/doCrawl') ?>"
+    data-api-reset-db="<?= base_url('crawler/resetDb') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_crawl.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

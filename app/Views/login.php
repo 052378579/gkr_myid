@@ -59,11 +59,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.AppConfig = {
-        versiUrl: '<?= base_url('versi.json') ?>',
-        swUrl: '<?= base_url('sw.js') ?>'
-    };
-</script>
+
 <script src="<?= base_url('js/login.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

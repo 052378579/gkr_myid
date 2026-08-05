@@ -46,7 +46,7 @@ createApp({
         const fetchKaryawan = async () => {
             isLoading.value = true;
             try {
-                const response = await fetch(window.KaryawanConfig.apiGetAll);
+                const response = await fetch(window.AppConfig.apiGetAll);
                 daftarKaryawan.value = await response.json();
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -81,7 +81,7 @@ createApp({
 
         const simpanKaryawan = async () => {
             isSubmitting.value = true;
-            const url = isEdit.value ? window.KaryawanConfig.apiUpdate : window.KaryawanConfig.apiStore;
+            const url = isEdit.value ? window.AppConfig.apiUpdate : window.AppConfig.apiStore;
             
             const formData = new URLSearchParams();
             if(isEdit.value) formData.append('id_user', form.value.id_user);
@@ -142,7 +142,7 @@ createApp({
                         const formData = new URLSearchParams();
                         formData.append('id_user', id_user);
                         
-                        const response = await fetch(window.KaryawanConfig.apiDelete, {
+                        const response = await fetch(window.AppConfig.apiDelete, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                             body: formData

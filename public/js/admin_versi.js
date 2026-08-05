@@ -23,7 +23,7 @@ createApp({
         const fetchVersi = async () => {
             isLoading.value = true;
             try {
-                const response = await fetch(window.VersiConfig.apiGetAll);
+                const response = await fetch(window.AppConfig.apiGetAll);
                 daftarVersi.value = await response.json();
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -76,7 +76,7 @@ createApp({
             form.value.fixes = form.value.fixes.filter(i => i.trim() !== '');
             form.value.patches = form.value.patches.filter(i => i.trim() !== '');
             
-            const url = isEdit.value ? window.VersiConfig.apiUpdate : window.VersiConfig.apiStore;
+            const url = isEdit.value ? window.AppConfig.apiUpdate : window.AppConfig.apiStore;
             
             const formData = new URLSearchParams();
             if(isEdit.value) formData.append('id', form.value.id);
@@ -137,7 +137,7 @@ createApp({
                         const formData = new URLSearchParams();
                         formData.append('id', id);
                         
-                        const response = await fetch(window.VersiConfig.apiDelete, {
+                        const response = await fetch(window.AppConfig.apiDelete, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                             body: formData

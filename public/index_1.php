@@ -39,61 +39,32 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
 
 /*
  *---------------------------------------------------------------
- * AUTO-DETECT ENVIRONMENT & DYNAMIC CONFIG (DEV / PROD)
+ * AUTO-DETECT ENVIRONMENT (DEV / PROD)
  *---------------------------------------------------------------
  */
-$host     = $_SERVER['HTTP_HOST'] ?? 'cli';
-$port     = $_SERVER['SERVER_PORT'] ?? '';
-$serverIp = $_SERVER['SERVER_ADDR'] ?? ''; // Keamanan tambahan: IP Fisik Server
+$host = $_SERVER['HTTP_HOST'] ?? 'cli';
+$port = $_SERVER['SERVER_PORT'] ?? '';
 
 // 1. DEV ZONE (Hak Akses Tertutup: ZeroTier, LAN, Spark, CLI)
 if (
-    strpos($serverIp, '10.147.17.40') !== false || 
-    strpos($serverIp, '192.168.1.4') !== false || 
+    strpos($host, '10.147.17.40') !== false || 
+    strpos($host, '192.168.1.4') !== false || 
     $port === '8000' || 
     $port === '8080' ||
-    $host === 'cli' ||
-    strpos($host, '10.147.17.40') !== false
+    $host === 'cli'
 ) {
-    // Set Environment
     $_SERVER['CI_ENVIRONMENT'] = 'development';
-    
-    // Inject Config App
-    $_SERVER['app.baseURL'] = 'http://' . ($host !== 'cli' ? $host : 'localhost') . '/';
-    $_SERVER['app.forceGlobalSecureRequests'] = 'false';
-
-    // Inject Config Database (DEV)
-    $_SERVER['database.default.hostname'] = 'localhost';
-    $_SERVER['database.default.database'] = 'gkr_myid';
-    $_SERVER['database.default.username'] = 'root';
-    $_SERVER['database.default.password'] = '102013';
 } 
 // 2. PROD ZONE (Hak Akses Publik via Domain)
 elseif (
     strpos($host, 'budi.biz.id') !== false || 
-    strpos($host, 'gkr.my.id') !== false ||
-    strpos($serverIp, '192.168.1.17') !== false
+    strpos($host, 'gkr.my.id') !== false
 ) {
-    // Set Environment
     $_SERVER['CI_ENVIRONMENT'] = 'production';
-    
-    // Inject Config App
-    $_SERVER['app.baseURL'] = 'https://' . $host . '/';
-    $_SERVER['app.forceGlobalSecureRequests'] = 'true';
-
-    // Inject Config Database (PROD) - HARAP UBAH USERNAME & PASSWORD INI!
-    $_SERVER['database.default.hostname'] = 'localhost';
-    $_SERVER['database.default.database'] = 'gkr_myid';
-    $_SERVER['database.default.username'] = 'user_gkr_prod';
-    $_SERVER['database.default.password'] = 'password_prod_anda_disini';
 } 
 // 3. SECURE FALLBACK (Sapu Jagat Perlindungan dari Bot/Scanner IP Publik)
 else {
     $_SERVER['CI_ENVIRONMENT'] = 'production';
-    
-    // Fallback Config (Mencegah error jika masuk sini)
-    $_SERVER['app.baseURL'] = 'https://gkr.my.id/';
-    $_SERVER['app.forceGlobalSecureRequests'] = 'true';
 }
 
 /*

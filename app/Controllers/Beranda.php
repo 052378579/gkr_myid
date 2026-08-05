@@ -15,7 +15,7 @@ class Beranda extends BaseController
             $data['altLogo'] = $doodle['event'];
         }
         $jsonPath = FCPATH . 'versi.json';
-        $data['version'] = 'v0.0.1';
+        $data['version'] = 'v0.0.0';
         if (file_exists($jsonPath)) {
             $json = json_decode(file_get_contents($jsonPath), true);
             $versiData = $json['data'] ?? [];

@@ -140,10 +140,8 @@
 <?= $this->section('scripts') ?>
 <!-- ApexCharts JS CDN -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-    window.AppConfig = {
-        apiGetTopSearched: '<?= base_url('api/getTopSearched') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" data-api-get-top-searched="<?= base_url('api/getTopSearched') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_dashboard.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

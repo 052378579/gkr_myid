@@ -15,6 +15,8 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   - Backend `Search.php` mengonversi seluruh teks judul, alt, dan deskripsi secara real-time via `/\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/i` -> `(FG-$1)`.
   - View `search_results.php` steril dari panggilan perusak `ucwords(strtolower(...))`.
   - RESTful API (`GraciaApi.php`) dan Vue Controller (`search_results.js`, `admin_beranda.js`) mensanitasi `kode_bom` ke **CAPITAL CASE `FG-`** secara absolut.
+* **Arsitektur Frontend Baru (Zero Inline Script & DOM Metadata Injection):**
+  Mensterilkan 100% tag `<script>` *inline* dari seluruh halaman View. Konfigurasi dinamis PHP diinjeksikan secara aman via HTML5 tag `<meta name="page-config" data-...>` yang dipindai otomatis oleh pengawal terpusat `public/js/config.js`.
 * **Perayap Berkas Foto Lokal (`/admin/crawl` & `CrawlerLib.php`):**
   - Pemrosesan berkas foto katalog dari `/var/www/FOTO` (seperti `amaala_dining_side_chair_fg-24600.jpg`, `karlsson_dining_table_(fg-24988).jpg`):
     - `judul`, `alt`, `deskripsi`: Title Case dengan `FG-` **selalu CAPITAL CASE** dan dibungkus kurung `()`, contoh: `Amaala Dining Side Chair (FG-24600)` / `Karlsson Dining Table (FG-24988)`.
@@ -25,9 +27,10 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   - `Kode BOM`: Default `"FG-"` dengan warna huruf **Tema Gracia** (`var(--gkr-primary)` / `#2B3385`).
   - `Lihat BOM`: Default `"BOM-FG- -001"` dengan warna huruf **Tema Gracia** (`var(--gkr-primary)`).
   - `Produksi`: Default `"-"` dengan warna huruf **Tema Gracia** (`var(--gkr-primary)`).
-  - `Action Pills Buttons {BOM, ERP, Foto}`:
+  - `Action Pills Buttons {BOM, ERP, Foto}` & Perilaku `target="_blank"`:
     - **Kondisi Kode BOM Kosong:** Tombol `BOM` dan `ERP` berstatus **Disabled Button** (gaya tombol mati abu-abu `#e0e0e0` / `#303134`, teks `#9e9e9e`, `pointer-events: none; opacity: 0.65; cursor: not-allowed;`). Tombol `Foto` tetap berstatus Aktif.
-    - **Kondisi Kode BOM Tersedia (misal `"FG-14540"`):** Tombol `BOM`, `ERP`, dan `Foto` berstatus **Tombol Aktif** (Default outline putih `#ffffff` + border 1px solid Biru Tema Gracia `#2B3385` -> Solid Biru Tema Gracia `#2B3385` saat Hover dengan teks/ikon warna putih `#ffffff`). Tombol Foto mengusung **Ikon Kamera** (`fa-solid fa-camera`).
+    - **Kondisi Kode BOM Tersedia (misal `"FG-14540"`):** Tombol `BOM`, `ERP`, dan `Foto` berstatus **Tombol Aktif** (Default outline putih `#ffffff` + border 1px solid Biru Tema Gracia `#2B3385` -> Solid Biru Tema Gracia `#2B3385` saat Hover dengan teks/ikon warna putih `#ffffff`).
+    - **Perilaku Buka Jendela Baru (`target="_blank"`):** Seluruh tombol aktif (`BOM`, `ERP`, `Foto`) 100% dipasangi atribut `:target="isBomAvailable(activeItem.kodeBom) ? '_blank' : '_self'"`, membuka PDF BOM, Form ERP, dan Foto Katalog di **Jendela / Tab Baru** tanpa mengganggu halaman pencarian `/cari`. Tombol Foto mengusung **Ikon Kamera** (`fa-solid fa-camera`).
 * **Penataan Kartu Rapat & Presisi Aksen Garis Biru Lurus Vertikal:**
   - Kartu hasil pencarian berukuran rapat (tinggi proporsional ~127px di Desktop 1920x1082 px, padding `8px 14px !important`, margin bawah `10px !important`). Aksen garis 3px Tema Gracia di sebelah kiri kartu aktif dibuat **100% Lurus Tegak Vertikal** tanpa sudut melengkung pada ujung atas/bawah (`border-radius: 0 10px 10px 0 !important;`).
 * **Pagination PNG `c-a-r-i` Horizontal Alignment:**
@@ -51,13 +54,13 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   Tanggal navbar `Selasa, 04/08/2026 ▾` mengusung Bootstrap Dropdown `#calendarDropdownWrap`. Tanggal hari ini disorot dengan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih (`#ffffff`). Layering dropdown kalender diset ke `z-index: 1060 !important;` melayang mulus di atas seluruh elemen beranda.
 * **Otomatisasi Cronjob & Notifikasi Telegram Ringkas:**
   - **Auto Crawler (`0 18 * * *`)**: Dijalankan setiap pukul **18:00 WIB** via CLI `php spark crawl:run /var/www/FOTO`. Mengirimkan notifikasi Telegram ringkas dengan label `Server: DEV/PROD` dan jumlah item terbackup (`💾 X Item Baru Ditambahkan`).
-  - **AI Trainer Engine (`1 0 * * *`)**: Dijalankan setiap pukul **00:01 WIB** via Python `ai_sync.py`, mengekstrak fitur foto secara diferensial dan memuat ulang `ai_scanner.service`. Mengirimkan notifikasi Telegram ringkas (`Server: DEV/PROD` & `💾 Inkremental Berhasil: X Ditambahkan, Y Dihapus.`).
+  - **AI Trainer Engine (`1 0 * * *`)**: Dijalankan setiap pukul **00:01 WIB** via skrip sinkronisasi inkremental Python `ai_sync.py`, menyalin `produk.index` & `mapping.json` ke `/mnt/sdcard/ai-scanner/`, dan memuat ulang `ai_scanner.service` menggunakan otoritas *sudoers NOPASSWD*. Mengirimkan notifikasi Telegram ringkas (`Server: DEV/PROD` & `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`).
 * **Pembersihan Scan Direktori (`SAMPLE GRACIA` Excluded):**
-  Seluruh proses pengindeksan perayap web (`CrawlerLib.php`) dan pelatih AI (`ai_sync.py` & `ai_reset.py`) hanya menyisir 4 direktori aktif (`BUYER`, `GRACIA`, `SWATCHES`, `WEB`). Direktori legacy `SAMPLE GRACIA` diblokir total.
+  Seluruh proses pengindeksan perayap web (`CrawlerLib.php`) dan pelatih AI (`ai_index.py`) hanya menyisir 4 direktori aktif (`BUYER`, `GRACIA`, `SWATCHES`, `WEB`). Direktori legacy `SAMPLE GRACIA` diblokir total.
 * **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):**
   Karyawan terdaftar dapat menghubungkan akun Telegram pribadi secara mandiri via `/start 08...` atau `/daftar 08...`. Sistem otomatis mencocokkan `no_hp` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar oleh Admin/HRD).
 * **Penguncian Notifikasi Sistem Statis Administrator:**
-  Metode `sendTelegramNotification()` di `Auth.php` (login/logout) dan `ai_sync.py` tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).
+  Metode `sendTelegramNotification()` di `Auth.php` (login/logout) dan `ai_index.py` (crawler) tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).
 * **Dashboard KPI Administrasi & Visualisasi ApexCharts (`/admin/dashboard`):**
   Rute `/admin` dan `/admin/dashboard` menyajikan Dasbor KPI Utama dengan 4 Summary Cards (Termasuk **Total Users** Karyawan Terdaftar) dan **ApexCharts Bar Chart (Custom Data Labels)** yang menampilkan 10 produk paling sering dicari (`klik DESC`).
 * **Optimalisasi Crawler 1 Produk = 1 Baris Utuh (`CrawlerLib.php`):**
@@ -67,7 +70,7 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   * **Server DEV** (`192.168.1.4`, `10.147.17.40`, `gkr.budi.biz.id`) -> **`https://foto.budi.biz.id/`**
   * **Server PROD** (`192.168.1.17`, `10.147.17.6`, `gkr.my.id`) -> **`https://foto.gkr.my.id/`**
 * **Pencarian Visual AI (Image-to-Image Search & Cropper.js):**
-  Mengunggah sampel foto produk untuk mencocokkan kemiripan visual secara presisi menggunakan PyTorch *MobileNetV3-Small* (576 dimensi) dan FAISS Vector Database (`IndexIDMap`, *Cosine Similarity* $\ge 0.68$, $k=15$). Dilengkapi pemotong gambar interaktif **Cropper.js** di browser.
+  Mengunggah sampel foto produk untuk mencocokkan kemiripan visual secara presisi menggunakan PyTorch *MobileNetV3-Small* (576 dimensi) dan FAISS Vector Database (**`IndexIDMap`** terhubung dengan *State Ledger*, *Cosine Similarity* $\ge 0.68$, $k=15$). Dilengkapi pemotong gambar interaktif **Cropper.js** di browser.
 * **Autocomplete Pencarian Teks (Debounced RESTful API):**
   Fitur rekomendasi kata kunci pencarian *real-time* berbasis API (`/api/autocomplete`) yang menyaring data dari tabel `gkr_material` (bahan & warna) dan `gkr_cari` (judul) dengan *debounce* 300ms serta navigasi kibor.
 * **Zero-Footprint Storage (Auto-Cleanup):**
@@ -75,9 +78,9 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 * **PWA Service Worker Exception (`public/sw.js`):**
   Service Worker mengabaikan permintaan `POST` dan rute `/crawler/`, `/api/`, `/admin/` agar streaming log perayap `/admin/crawl` dan Reset DB berjalan 100% lancar.
 * **Dasbor Pelatih AI & Terminal Streaming HTTP (`/admin/ai`):**
-  Menyajikan dasbor operasi pelatih AI (`ai_sync.py` & `ai_reset.py`) dengan tampilan konsol terminal peretas (*hacker style* `#1e1e1e`). Mengalirkan baris log komputasi Python secara *real-time* via *HTTP ReadableStream API* tanpa risiko *PHP Timeout*, dilengkapi notifikasi Telegram Bot.
-* **Pencarian Suara Bahasa Indonesia Native (`id-ID`) & Tab Gambar Default:**
-  Pencarian suara berbasis Web Speech API `id-ID` (`public/js/voice_search.js`) dengan animasi pendaran gelombang suara reaktif. Pencarian suara dari beranda secara otomatis mengarahkan ke **Tab Gambar Katalog** (`/cari?q=...&type=images`).
+  Menyajikan dasbor operasi pelatih AI dengan dua mode tegas: **Sinkronisasi Inkremental** (Aman/Hijau) dan **Latih Ulang Total** (Bahaya/Merah). Mengalirkan baris log komputasi Python secara *real-time* via *HTTP ReadableStream API* konsol peretas (`#1e1e1e`) tanpa risiko *PHP Timeout*, dilengkapi notifikasi Telegram Bot.
+* **Pencarian Suara Native Bahasa Indonesia (`id-ID`) & Tab Gambar Default:**
+  Pencarian suara eksklusif berbasis Web Speech API murni Bahasa Indonesia (`public/js/voice_search.js`) dengan animasi pendaran gelombang suara reaktif, instruksi teks lokal adaptif, dan navigasi otomatis ke **Tab Gambar Katalog** (`/cari?q=...&type=images`).
 * **Mesin Pencari Presisi Presisi Tinggi (`Search.php`):**
   * **Primary Brand/Series Anchor Search:** Deteksi otomatis token merk/seri spesifik (`$specificBrandAnchor`, misal `"bonanza"` pada `bonanza+table` atau `bonanza+coffee`) yang mewajibkan produk memuat kata merk utama. Mengeliminasi 100% produk pengotor seperti *Riazor Rectangular Coffee Table*, *Tamika Coffee Table*, *Alandra Coffee Table*, dan *Side Table Type 02*.
   * **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi *Leora Dinning Chair* (kursi) dan *Mida Table Lamp Organic Motif* (lampu meja) pada pencarian `dinning table`.
@@ -94,7 +97,7 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 * **Spesifikasi Server:** Armbian OS (Debian bookworm) Linux 6.12 pada peranti Amlogic S905x.
 * **Web Backend:** CodeIgniter 4 (PHP 8.2+, MVC).
 * **AI Microservice:** Python 3, FastAPI, PyTorch, FAISS (`http://127.0.0.1:5000` via daemon `ai_scanner.service`).
-* **AI Trainer Engine:** Python 3 (`ai_sync.py` dipanggil via subprocess CLI mode `-u` dengan PyTorch ARM Thread Clamping `OMP_NUM_THREADS=1` dan cache home `writable/torch_cache/`).
+* **AI Trainer Engine (State Ledger):** Python 3. Eksekusi dibagi menjadi dua mesin tangguh: `ai_sync.py` (Sinkronisasi kilat via `gkr_katalog.json`) dan `ai_reset.py` (Pemulihan/Latih ulang). Dipanggil via subprocess CLI mode `-u` dengan pemuatan ulang nir-sandi via *sudoers NOPASSWD*, disertai PyTorch ARM Thread Clamping `OMP_NUM_THREADS=1` pada `writable/torch_cache/`.
 * **Web Frontend:** Vue.js 3 (CDN), ApexCharts, Bootstrap 5.3 (Native Dark Mode), Cropper.js, FontAwesome 6, ReadableStream API.
 * **Database:** MySQL / MariaDB (Tabel Utama: `gkr_cari`).
 

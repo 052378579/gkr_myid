@@ -3,8 +3,8 @@
 <?= $this->section('title') ?>Pencarian: <?= esc($query) ?><?= $this->endSection() ?>
 
 <?= $this->section('styles') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/css/fancybox/3.3.5/jquery.fancybox.min.css') ?>">
+<link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/vendor/fancybox/jquery.fancybox.min.css') ?>?v=<?= time() ?>">
 <link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
 <link rel="stylesheet" href="<?= base_url('css/search.css') ?>?v=<?= time() ?>">
 <?= $this->endSection() ?>
@@ -472,25 +472,21 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
 <?= $this->section('scripts') ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
-<script src="<?= base_url('assets/js/jquery-3.3.1.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/fancybox/3.3.5/jquery.fancybox.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/masonry/4.2.2/masonry.pkgd.min.js') ?>"></script>
+<script src="<?= base_url('js/vendor/jquery-3.3.1.min.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/vendor/fancybox/jquery.fancybox.min.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/vendor/masonry/masonry.pkgd.min.js') ?>?v=<?= time() ?>"></script>
 
-<script>
-    window.AppConfig = {
-        apiUpdateLinkCount: '<?= base_url('api/updateLinkCount') ?>',
-        apiUpdateImageCount: '<?= base_url('api/updateImageCount') ?>',
-        apiSetBroken: '<?= base_url('api/setBroken') ?>'
-    };
-</script>
-<script src="<?= base_url('js/calendar.js') ?>"></script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-update-link-count="<?= base_url('api/updateLinkCount') ?>" 
+    data-api-update-image-count="<?= base_url('api/updateImageCount') ?>" 
+    data-api-set-broken="<?= base_url('api/setBroken') ?>"
+    data-api-search-upload="<?= base_url('api/search/upload') ?>"
+    data-search-url="<?= url_to('Search::index') ?>">
+<?= $this->endSection() ?>
+
+<script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/voice_search.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/search.js') ?>"></script>
-<script>
-    window.SearchConfig = {
-        apiSearchUpload: '<?= base_url('api/search/upload') ?>',
-        searchUrl: '<?= url_to('Search::index') ?>'
-    };
-</script>
+<script src="<?= base_url('js/search.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/search_results.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

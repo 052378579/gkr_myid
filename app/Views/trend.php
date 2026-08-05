@@ -66,11 +66,10 @@
 </div>
 
 <link rel="stylesheet" href="<?= base_url('css/trend.css') ?>?v=<?= time() ?>">
-<script>
-    window.TrendConfig = {
-        apiUrl: '<?= base_url('api/trend') ?>',
-        logoUrl: '<?= base_url('Gracia_logo.png') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-url="<?= base_url('api/trend') ?>"
+    data-logo-url="<?= base_url('Gracia_logo.png') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/trend.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

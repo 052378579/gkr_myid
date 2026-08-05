@@ -43,11 +43,11 @@
 
 <?= $this->section('scripts') ?>
 <?php if (!empty($wordList)): ?>
-<script>
-    window.wordListData = <?= json_encode($wordList) ?>;
-    window.AppConfig = window.AppConfig || {};
-    window.AppConfig.searchUrl = '<?= url_to('Search::index') ?>';
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-search-url="<?= url_to('Search::index') ?>"
+    data-word-list-data='<?= htmlspecialchars(json_encode($wordList), ENT_QUOTES, 'UTF-8') ?>'>
+<?= $this->endSection() ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
 <script src="<?= base_url('js/awan_kata.js') ?>?v=<?= time() ?>"></script>
 <?php endif; ?>

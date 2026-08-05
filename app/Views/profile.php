@@ -97,5 +97,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url('js/profile.js') ?>"></script>
+<script src="<?= base_url('js/profile.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

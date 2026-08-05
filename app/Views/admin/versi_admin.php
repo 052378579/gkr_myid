@@ -156,13 +156,12 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.VersiConfig = {
-        apiGetAll: '<?= base_url('admin/versi/getAll') ?>',
-        apiStore: '<?= base_url('admin/versi/store') ?>',
-        apiUpdate: '<?= base_url('admin/versi/update') ?>',
-        apiDelete: '<?= base_url('admin/versi/delete') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-get-all="<?= base_url('admin/versi/getAll') ?>"
+    data-api-store="<?= base_url('admin/versi/store') ?>"
+    data-api-update="<?= base_url('admin/versi/update') ?>"
+    data-api-delete="<?= base_url('admin/versi/delete') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_versi.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

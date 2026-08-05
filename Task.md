@@ -102,9 +102,23 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **View Rendering Sterilization (`search_results.php`):** Mengeliminasi fungsi perusak `ucwords(strtolower(...))` yang mengonversi `FG-` menjadi `Fg-` (huruf `g` kecil).
 - `[x]` **REST API & Vue Controller Standardisation (`GraciaApi.php`, `search_results.js`, `admin_beranda.js`):** Sanitasi otomatis pada API (`updateImage()`, `storeImage()`) dan Vue helpers (`formatKodeBom()`, `selectKnowledgeItem()`) menjamin penayangan `FG-` CAPITAL CASE secara absolut.
 
-**Tahap XVI: Pelatihan Inkremental AI (State Ledger)**
-- `[x]` **Ekspor Jembatan JSON (`CrawlerLib.php`):** Mengekspor ID aktif ke `gkr_katalog.json` (Perlindungan *anti-amnesia*).
-- `[x]` **Arsitektur Mesin Ganda Python:** Menghapus `ai_index.py` dan menciptakan `ai_sync.py` (Mesin Diferensial Harian) serta `ai_reset.py` (Mesin Pemulihan Total).
-- `[x]` **FAISS IndexIDMap & Pemetaan Identitas:** Mengubah arsitektur `IndexFlatIP` menjadi `IndexIDMap` dengan pemetaan ID persisten di `mapping.json` tanpa merusak rutinitas *live inference* FastAPI.
-- `[x]` **Redesain Terminal UI Admin (`/admin/ai`):** Menyediakan 2 tombol diskrit: Sinkronisasi Inkremental (Hijau) & Latih Ulang Total (Merah Outline).
-- `[x]` **Otorisasi Sudoers NOPASSWD:** Mengonfigurasi `/etc/sudoers.d/ai_scanner_restart` untuk user `www-data` agar FastAPI daemon (`ai_scanner.service`) dapat melakukan *hot-reload* dari Web UI tanpa *Password Prompt*.
+**Tahap XVI: Penambahan Atribut `target="_blank"` (Buka Jendela Baru) pada Button BOM & ERP (`10.png`)**
+- `[x]` **Perilaku Buka Jendela Baru pada Action Pills (`search_results.php`):** Menambahkan atribut dinamis `:target="isBomAvailable(activeItem.kodeBom) ? '_blank' : '_self'"` pada tag `<a>` tombol `BOM` dan `ERP`. Saat diklik pada item yang memiliki `kode_bom` (seperti `Balaton Dining Chair (FG-24974)`), berkas PDF Rincian BOM dan Form Item ERP 100% terbuka di **Jendela / Tab Baru**, sehingga halaman hasil pencarian `/cari` tetap terbuka dan tidak tertimpa.
+
+**Tahap XVII: Arsitektur Pelatihan Inkremental AI (State Ledger) & Otorisasi Mandiri (v0.8.04)**
+- `[x]` **Arsitektur State Ledger:** Mengimplementasikan `gkr_katalog.json` sebagai jembatan anti-amnesia, memungkinkan pemisahan mesin pelatih menjadi `ai_sync.py` (Inkremental) dan `ai_reset.py` (Latih Ulang Total).
+- `[x]` **FAISS IndexIDMap:** Meningkatkan basis data vektor dari `IndexFlatIP` ke `IndexIDMap` yang terhubung dengan `mapping.json` untuk manajemen identitas persisten.
+- `[x]` **Otorisasi Sudoers NOPASSWD:** Memutakhirkan otonomi Web Server dengan hak akses root tanpa kata sandi untuk me-reload `ai_scanner.service`, memecahkan masalah *Permission Denied*.
+- `[x]` **Terminal UI Admin (`/admin/ai`):** Memisahkan tombol operasi menjadi Sinkronisasi Inkremental (Hijau) dan Latih Ulang Total (Merah).
+
+**Tahap XVIII: Voice Search Eksklusif & Pembersihan Ekosistem (v0.8.04)**
+- `[x]` **Voice Search Native id-ID:** Mengembalikan dan mengeksklusifkan basis pengenalan suara Web Speech API ke dalam Bahasa Indonesia murni (`id-ID`).
+- `[x]` **Lokalisasi UI Voice Search:** Menerjemahkan seluruh notifikasi status pencarian suara ke dalam antarmuka Bahasa Indonesia.
+- `[x]` **Validasi JSON & Fallback Version:** Memperbaiki malformasi *trailing comma* pada `versi.json` dan menyetel *fallback* aman ke `v0.0.0` pada `Beranda.php`.
+
+**Tahap XIX: Standardisasi Frontend Assets, Eliminasi Inline Script & Responsivitas Tautan Beranda**
+- `[x]` **Sterilisasi View (No Inline JS/CSS):** Membasmi 100% penggunaan tag `<script>` *inline* di seluruh *views* publik dan admin (8 modul), memindahkannya ke *file* terpisah (`admin_log.js`, dll) atau *data attributes*.
+- `[x]` **Injeksi Konfigurasi via DOM Metadata (`config.js`):** Mengganti pengiriman variabel PHP ke JS dari `window.AppConfig = {...}` menjadi `<meta name="page-config" data-...>` yang dipindai otomatis oleh skrip pengawal `public/js/config.js`.
+- `[x]` **Pembersihan Direktori Pihak Ketiga (`vendor/`):** Merelokasi seluruh *library* usang dari `assets/` ke struktur standar `public/css/vendor/` dan `public/js/vendor/` secara fisik.
+- `[x]` **Responsivitas Ekstra Tautan Mobile 2-Baris (`beranda.php`):** Menerapkan kelas `flex-column flex-md-row` agar bilah tautan (*3D Viewer*, *Katalog*, dan *Telegram Chatbot*) membelah cerdas menjadi 2 baris atas-bawah pada tampilan gawai seluler.
+- `[x]` **Presisi Animasi Typewriter 'Telegram Chatbot':** Mengekspansi *max-width* keyframes menjadi 148px agar kursor ketik berhenti rapi sebelum lencana superskrip *New*.

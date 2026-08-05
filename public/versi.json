@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "04-08-2026 10:50:00 WIB",
-    "versi_diperbarui": "0.8.04",
+    "tanggal_diperbarui": "06-08-2026 06:30:00 WIB",
+    "versi_diperbarui": "0.8.06",
     "data": [
         {
             "id": 1,
@@ -270,6 +270,7 @@
             "patches": [
                 "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.03)."
             ],
+            "created_at": "2026-08-03 20:00:00"
         },
         {
             "id": 14,
@@ -293,6 +294,26 @@
                 "Sinkronisasi komprehensif terhadap 8 pilar dokumen pengembang (PRD.md, Memory.md, dll) beserta etalase GitHub publik (README.md)."
             ],
             "created_at": "2026-08-04 10:50:00"
+        },
+        {
+            "id": 15,
+            "versi": "0.8.06",
+            "tanggal_rilis": "2026-08-06",
+            "judul": "Standardisasi Frontend, Eliminasi Inline Script & Responsivitas Antarmuka Beranda",
+            "deskripsi": "Rilis yang berfokus pada perombakan total arsitektur aset antarmuka (frontend) guna mensterilkan penulisan kode sumber halaman, serta penyempurnaan adaptasi tata letak di perangkat seluler.",
+            "improvements": [
+                "Sterilisasi View: Melenyapkan 100% penulisan kode JavaScript dan CSS secara langsung (inline) pada seluruh halaman aplikasi.",
+                "Injeksi Konfigurasi DOM Metadata: Memperkenalkan mekanisme penyuntikan konfigurasi dinamis yang lebih handal melalui tag meta HTML terpusat (config.js).",
+                "Tata Letak Ekstra Responsif (Mobile): Mengoptimalkan tampilan tautan (3D Viewer, Katalog, dan Telegram) agar otomatis membelah menjadi 2 baris proporsional pada gawai seluler.",
+                "Konsolidasi pustaka eksternal (vendor) ke dalam direktori terstruktur public/css/vendor dan public/js/vendor."
+            ],
+            "fixes": [
+                "Perbaikan presisi jarak animasi teks mesin ketik (typewriter) pada fitur Chatbot Telegram."
+            ],
+            "patches": [
+                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.06)."
+            ],
+            "created_at": "2026-08-06 06:30:00"
         }
     ]
 }

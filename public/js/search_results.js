@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
             formData.append('image', blob, currentFile.name);
 
             try {
-                const uploadUrl = (window.SearchConfig && window.SearchConfig.apiSearchUpload) ? window.SearchConfig.apiSearchUpload : '/api/search/upload';
+                const uploadUrl = (window.AppConfig && window.AppConfig.apiSearchUpload) ? window.AppConfig.apiSearchUpload : '/api/search/upload';
                 const res = await fetch(uploadUrl, { method: 'POST', body: formData });
                 const data = await res.json();
                 if (!res.ok) {
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     throw new Error(errorMsg);
                 }
                 if (data.status === 'success' || data.status === 'sukses') {
-                    let baseUrl = (window.SearchConfig && window.SearchConfig.searchUrl) ? window.SearchConfig.searchUrl : '/cari';
+                    let baseUrl = (window.AppConfig && window.AppConfig.searchUrl) ? window.AppConfig.searchUrl : '/cari';
                     window.location.href = baseUrl + '?type=image_results';
                 } else {
                     showError('Terjadi kesalahan saat memproses gambar.');

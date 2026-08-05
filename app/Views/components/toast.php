@@ -15,4 +15,4 @@
     <?php endif; ?>
 </div>
 
-<script src="<?= base_url('js/toast.js') ?>"></script>
+<script src="<?= base_url('js/toast.js') ?>?v=<?= time() ?>"></script>

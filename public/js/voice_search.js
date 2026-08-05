@@ -1,5 +1,5 @@
 /**
- * Mesin Pencari Gracia - Voice Search Engine (Bahasa Indonesia id-ID)
+ * Mesin Pencari Gracia - Voice Search Engine (Native id-ID)
  * Menggunakan Web Speech API Native & Visualizer Audio Wave
  */
 
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initVoiceSearch() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+
     // Periksa dukungan peramban
     if (!SpeechRecognition) {
         console.warn('[Voice Search] Web Speech API tidak didukung di browser ini.');
@@ -39,7 +39,7 @@ function initVoiceSearch() {
     document.querySelectorAll('.btn-voice-search').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // Cari input teks pencarian terdekat
             const parentGroup = btn.closest('.input-group') || btn.closest('form');
             if (parentGroup) {
@@ -54,12 +54,12 @@ function initVoiceSearch() {
     function startRecognition() {
         try {
             recognition = new SpeechRecognition();
-            recognition.lang = 'id-ID';
+            recognition.lang = 'id-ID'; // 100% Eksklusif Bahasa Indonesia Native
             recognition.interimResults = true;
             recognition.maxAlternatives = 1;
 
             recognition.onstart = () => {
-                waveText.textContent = 'Mendengarkan... Bicara sekarang';
+                waveText.textContent = 'Mendengarkan... Ucapkan sekarang';
                 waveTranscript.textContent = '...';
                 voiceModal.show();
             };
@@ -69,7 +69,7 @@ function initVoiceSearch() {
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     currentTranscript += event.results[i][0].transcript;
                 }
-                
+
                 if (currentTranscript.trim() !== '') {
                     waveTranscript.textContent = `"${currentTranscript}"`;
                     if (activeInput) {
@@ -83,13 +83,13 @@ function initVoiceSearch() {
             recognition.onerror = (event) => {
                 console.error('[Voice Search Error]:', event.error);
                 if (event.error === 'not-allowed') {
-                    waveText.textContent = 'Izin Mikrofon Ditolak';
-                    waveTranscript.textContent = 'Silakan izinkan akses mikrofon di browser Anda.';
+                    waveText.textContent = 'Mikrofon tidak diizinkan';
+                    waveTranscript.textContent = 'Silakan izinkan akses mikrofon di pengaturan peramban Anda.';
                 } else if (event.error === 'no-speech') {
-                    waveText.textContent = 'Tidak Ada Suara Terdeteksi';
-                    waveTranscript.textContent = 'Silakan coba bicara kembali.';
+                    waveText.textContent = 'Suara Tidak Terdeteksi';
+                    waveTranscript.textContent = 'Silahkan coba berbicara kembali.';
                 } else {
-                    waveText.textContent = 'Terjadi Kesalahan Kesalahan';
+                    waveText.textContent = 'Terjadi Kesalahan';
                     waveTranscript.textContent = event.error;
                 }
                 setTimeout(() => {
@@ -106,11 +106,11 @@ function initVoiceSearch() {
                         const rawQuery = activeInput.value.trim();
                         // Format spasi menjadi '+' persis seperti standar form HTML (application/x-www-form-urlencoded)
                         const queryVal = encodeURIComponent(rawQuery).replace(/%20/g, '+');
-                        
+
                         // Membaca tab aktif saat ini dari URL, dengan default 'images' untuk pencarian visual katalog
                         const urlParams = new URLSearchParams(window.location.search);
                         const currentType = urlParams.get('type') || 'images';
-                        
+
                         const searchTarget = (window.AppConfig && window.AppConfig.searchUrl) ? window.AppConfig.searchUrl : 'cari';
                         window.location.href = `${searchTarget}?q=${queryVal}&type=${currentType}`;
                     }
@@ -127,7 +127,7 @@ function initVoiceSearch() {
     if (btnStopVoice) {
         btnStopVoice.addEventListener('click', () => {
             if (recognition) {
-                recognition.stop();
+                try { recognition.stop(); } catch (err) { }
             }
             voiceModal.hide();
         });
@@ -148,7 +148,7 @@ function injectVoiceSearchModal() {
                         <div class="voice-wave-ring ring-2"></div>
                         <div class="voice-wave-ring ring-3"></div>
                     </div>
-                    <h5 class="fw-bold mb-2 text-white" id="voiceWaveText">Mendengarkan...</h5>
+                    <h5 class="fw-bold mb-2 text-white" id="voiceWaveText">Mendengarkan... Ucapkan sekarang</h5>
                     <p class="text-info fs-6 fw-semibold fst-italic mb-4" id="voiceWaveTranscript" style="min-height: 24px;">"..."</p>
                     <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 btn-sm" id="btnStopVoice">
                         <i class="fa-solid fa-xmark me-1"></i> Batal

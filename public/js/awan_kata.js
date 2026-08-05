@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const wordList = window.wordListData || [];
+    let wordList = [];
+    try {
+        wordList = JSON.parse(window.AppConfig?.wordListData || '[]');
+    } catch (e) {
+        wordList = window.wordListData || [];
+    }
     const canvas = document.getElementById('wordCloudCanvas');
 
     if (!canvas || !wordList.length) return;

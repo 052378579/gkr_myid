@@ -55,10 +55,8 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.AppConfig = {
-        apiDoCrawl: '<?= base_url('admin/ai/doCrawl') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" data-api-do-crawl="<?= base_url('admin/ai/doCrawl') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_ai.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

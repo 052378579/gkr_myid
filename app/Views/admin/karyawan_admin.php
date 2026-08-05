@@ -141,13 +141,12 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.KaryawanConfig = {
-        apiGetAll: '<?= base_url('admin/karyawan/getAll') ?>',
-        apiStore: '<?= base_url('admin/karyawan/store') ?>',
-        apiUpdate: '<?= base_url('admin/karyawan/update') ?>',
-        apiDelete: '<?= base_url('admin/karyawan/delete') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-get-all="<?= base_url('admin/karyawan/getAll') ?>"
+    data-api-store="<?= base_url('admin/karyawan/store') ?>"
+    data-api-update="<?= base_url('admin/karyawan/update') ?>"
+    data-api-delete="<?= base_url('admin/karyawan/delete') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_karyawan.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>

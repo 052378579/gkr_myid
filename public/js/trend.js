@@ -117,7 +117,7 @@ createApp({
                         const img = topImages.value[dataPointIndex];
                         return `
                             <div class="p-2 text-center" style="max-width: 200px;">
-                                <img src="${img.imageUrl}" alt="Thumbnail" class="img-fluid rounded mb-2" style="max-height: 120px; object-fit: cover; width: 100%;" onerror="this.onerror=null; this.src='${window.TrendConfig.logoUrl}';">
+                                <img src="${img.imageUrl}" alt="Thumbnail" class="img-fluid rounded mb-2" style="max-height: 120px; object-fit: cover; width: 100%;" onerror="this.onerror=null; this.src='${window.AppConfig.logoUrl}';">
                                 <div class="fw-bold text-truncate" style="color: ${primaryColor}; font-size: 0.9rem;">${img.title}</div>
                                 <div class="text-muted small">${series[seriesIndex][dataPointIndex]} klik</div>
                             </div>
@@ -129,7 +129,7 @@ createApp({
 
         onMounted(async () => {
             try {
-                const response = await fetch(window.TrendConfig.apiUrl);
+                const response = await fetch(window.AppConfig.apiUrl);
                 const json = await response.json();
                 topSites.value = json.topSites;
                 topImages.value = json.topImages;

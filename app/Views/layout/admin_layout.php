@@ -13,12 +13,9 @@
     
     <link rel="stylesheet" href="<?= base_url('css/admin_layout.css') ?>?v=<?= time() ?>">
     <link rel="stylesheet" href="<?= base_url('css/admin.css') ?>?v=<?= time() ?>">
-    <script>
-        window.AppConfig = {
-            baseUrl: '<?= base_url() ?>',
-            csrfToken: '<?= csrf_token() ?>'
-        };
-    </script>
+    <meta name="app-config" 
+        data-base-url="<?= base_url() ?>" 
+        data-csrf-token="<?= csrf_token() ?>">
     
     <?= $this->renderSection('styles') ?>
 </head>
@@ -184,7 +181,7 @@
 <script src="<?= base_url('vendor/vue/vue.global.prod.js') ?>"></script>
 <!-- SweetAlert2 -->
 <script src="<?= base_url('vendor/sweetalert2/sweetalert2.all.min.js') ?>"></script>
-
+<script src="<?= base_url('js/config.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/theme.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/admin_layout.js') ?>?v=<?= time() ?>"></script>
 <script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>

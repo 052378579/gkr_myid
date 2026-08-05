@@ -95,7 +95,7 @@
 
 @keyframes typing {
     from { max-width: 0; }
-    to { max-width: 140px; }
+    to { max-width: 148px; }
 }
 
 @keyframes blink-caret {

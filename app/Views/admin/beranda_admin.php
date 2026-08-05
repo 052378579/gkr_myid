@@ -196,18 +196,17 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script>
-    window.AppConfig = {
-        apiGetSites: '<?= base_url('api/getSites') ?>',
-        apiGetImages: '<?= base_url('api/getImages') ?>',
-        apiGetMaterials: '<?= base_url('api/getMaterials') ?>',
-        apiDeleteSite: '<?= base_url('api/deleteSite/') ?>',
-        apiDeleteImage: '<?= base_url('api/deleteImage/') ?>',
-        apiUpdateSite: '<?= base_url('api/updateSite/') ?>',
-        apiUpdateImage: '<?= base_url('api/updateImage/') ?>',
-        apiStoreSite: '<?= base_url('api/storeSite') ?>',
-        apiStoreImage: '<?= base_url('api/storeImage') ?>'
-    };
-</script>
+<?= $this->section('styles') ?>
+<meta name="page-config" 
+    data-api-get-sites="<?= base_url('api/getSites') ?>"
+    data-api-get-images="<?= base_url('api/getImages') ?>"
+    data-api-get-materials="<?= base_url('api/getMaterials') ?>"
+    data-api-delete-site="<?= base_url('api/deleteSite/') ?>"
+    data-api-delete-image="<?= base_url('api/deleteImage/') ?>"
+    data-api-update-site="<?= base_url('api/updateSite/') ?>"
+    data-api-update-image="<?= base_url('api/updateImage/') ?>"
+    data-api-store-site="<?= base_url('api/storeSite') ?>"
+    data-api-store-image="<?= base_url('api/storeImage') ?>">
+<?= $this->endSection() ?>
 <script src="<?= base_url('js/admin_beranda.js') ?>?v=<?= time() ?>"></script>
 <?= $this->endSection() ?>
