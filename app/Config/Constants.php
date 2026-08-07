@@ -77,3 +77,12 @@ defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7);     // invalid u
 defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database error
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
+
+/*
+ |--------------------------------------------------------------------------
+ | Global Asset Versioning
+ |--------------------------------------------------------------------------
+ | Konstanta statis penangkal cache browser. Wajib dinaikkan
+ | seiring dengan rilis /versi baru.
+ */
+defined('ASSET_VERSION') || define('ASSET_VERSION', '0.8.07');

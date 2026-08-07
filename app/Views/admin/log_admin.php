@@ -151,5 +151,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url('js/admin_log.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_log.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

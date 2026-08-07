@@ -3,7 +3,7 @@
 <?= $this->section('title') ?>Awan Kata (Tren Pencarian)<?= $this->endSection() ?>
 
 <?= $this->section('styles') ?>
-<link rel="stylesheet" href="<?= base_url('css/awan_kata.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/awan_kata.css') ?>?v=<?= ASSET_VERSION ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -49,6 +49,6 @@
     data-word-list-data='<?= htmlspecialchars(json_encode($wordList), ENT_QUOTES, 'UTF-8') ?>'>
 <?= $this->endSection() ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
-<script src="<?= base_url('js/awan_kata.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/awan_kata.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?php endif; ?>
 <?= $this->endSection() ?>

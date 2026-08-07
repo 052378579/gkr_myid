@@ -43,7 +43,7 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Pembersihan Direktori Scan `SAMPLE GRACIA`:** Menghapus `SAMPLE GRACIA` dari `ai_index.py` dan menambahkan *Exclusion Guard* di `CrawlerLib.php` (hanya memindai `BUYER`, `GRACIA`, `SWATCHES`, `WEB`).
 - `[x]` **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):** Mengimplementasikan fitur auto-bind mandiri karyawan via `/start 08...` atau `/daftar 08...` yang otomatis memperbarui `telegram_chat_id` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar oleh Admin/HRD).
 - `[x]` **Penyelarasan Cronjob & Format Notifikasi Telegram Ringkas:**
-  - Auto Crawler: `0 18 * * * cd /var/www/gkr_myid && php spark crawl:run /var/www/FOTO` -> Notifikasi Telegram `Server: DEV/PROD`, `💾 X Item Baru Ditambahkan`.
+  - Auto Crawler: `0 18 * * * cd /var/www/gkr_myid && php spark crawl:run /var/www/FOTO` (Wajib dijalankan via `crontab -u www-data -e`) -> Notifikasi Telegram `Server: DEV/PROD`, `💾 X Item Baru Ditambahkan`.
   - AI Trainer: `1 0 * * * cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python3 ai_index.py && cp produk.index /mnt/sdcard/ai-scanner/ && cp mapping.json /mnt/sdcard/ai-scanner/ && systemctl restart ai_scanner.service` -> Notifikasi Telegram `Server: DEV/PROD`, `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`.
 
 **Tahap VIII: Evolusi Algoritma Pencarian Presisi & Pencarian Suara Bahasa Indonesia**
@@ -122,3 +122,15 @@ Dokumen ini berisi daftar tugas (*tasks*), perbaikan (*bug fixes*), dan peningka
 - `[x]` **Pembersihan Direktori Pihak Ketiga (`vendor/`):** Merelokasi seluruh *library* usang dari `assets/` ke struktur standar `public/css/vendor/` dan `public/js/vendor/` secara fisik.
 - `[x]` **Responsivitas Ekstra Tautan Mobile 2-Baris (`beranda.php`):** Menerapkan kelas `flex-column flex-md-row` agar bilah tautan (*3D Viewer*, *Katalog*, dan *Telegram Chatbot*) membelah cerdas menjadi 2 baris atas-bawah pada tampilan gawai seluler.
 - `[x]` **Presisi Animasi Typewriter 'Telegram Chatbot':** Mengekspansi *max-width* keyframes menjadi 148px agar kursor ketik berhenti rapi sebelum lencana superskrip *New*.
+
+**Tahap XX: Resolusi Konflik Kepemilikan AI Ledger & Penanaman Real-Time Stopwatch**
+- `[x]` **Resolusi Akses `gkr_katalog.json` (Ownership Collision Fix):** Memindahkan tujuan ekspor *AI State Ledger* di `CrawlerLib.php` ke direktori resmi CodeIgniter 4 (`WRITEPATH . 'uploads/'`) untuk membasmi ralat *Permission Denied* saat dieksekusi paralel oleh Web Server (`www-data`) dan Cronjob (`root`).
+- `[x]` **Modul Real-Time Stopwatch (mm:ss:ms):** Mengintegrasikan fitur penghitung waktu berjalan berformat digital minimalis pada antarmuka *Crawler Engine* (`/admin/crawl`) dan *AI Trainer* (`/admin/ai`).
+- `[x]` **Pemusnahan Zombie CSS & Redundansi Tema:** Mencabut pemuatan usang `style.css` pada `/cari`, menghapus dekorasi ganda `[data-bs-theme]` di `search.css`, serta mensentralisasi perlindungan kedipan Vue `[v-cloak]` ke `main.css`.
+- `[x]` **Penyegaran Kosakata UI AI Trainer:** Mengubah penyebutan tombol aksi menjadi "Sinkronisasi Vektor" dan "Hard Reset" yang lebih ringkas dan teknis.
+
+**Tahap XXI: Stabilisasi Cache & Operasional Server (v0.8.07)**
+- `[x]` **Sentralisasi Cache Busting (`ASSET_VERSION`):** Menginjeksikan konstanta abadi `ASSET_VERSION = '0.8.07'` di `Constants.php` dan memusnahkan `time()` secara massal di 18+ halaman *Views*. Hal ini memotong pemborosan latensi *bandwidth* server *Production* secara drastis melalui penyimpanan otomatis CSS/JS ke *memory cache* peramban.
+- `[x]` **PWA Console Log Sterilization:** Mengeliminasi peringatan `console.log` registrasi pekerja layanan (Service Worker) di `login.js`, memicu mode *silent fallback* yang profesional di hadapan pengunjung publik.
+- `[x]` **Penyempurnaan Stopwatch Milidetik `mm:ss:ms`:** Format hitung mundur dipresisikan dengan *superscript* dan *interval 10ms* agar gerak laju milidetik terlihat natural layaknya jam analog presisi tinggi di dasbor administrator.
+- `[x]` **Validasi Enterprise Cronjob (`which php`):** Menyempurnakan format dan perintah cronjob pengindeks otomatis dan pelatih AI dengan *Absolute Path* (`/usr/bin/php` & `env-ai/bin/python3`) serta penjebak log luaran ganda (`>> /.../logs/... 2>&1`), menjaga kebersihan antrean *mail spool* sistem Linux.

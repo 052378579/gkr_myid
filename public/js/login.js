@@ -57,7 +57,7 @@ if ('serviceWorker' in navigator && window.AppConfig && window.AppConfig.swUrl) 
     window.addEventListener('load', () => {
         navigator.serviceWorker.register(window.AppConfig.swUrl)
             .then((reg) => {
-                console.log('PWA Service Worker berhasil didaftarkan scope-nya pada: ', reg.scope);
+                // Berhasil (Silent fallback)
             })
             .catch((err) => {
                 console.error('PWA Service Worker gagal didaftarkan: ', err);

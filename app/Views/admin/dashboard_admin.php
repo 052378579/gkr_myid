@@ -1,6 +1,6 @@
 <?= $this->extend('layout/admin_layout') ?>
 
-<?= $this->section('title') ?>Dashboard KPI<?= $this->endSection() ?>
+<?= $this->section('title') ?>Dashboard<?= $this->endSection() ?>
 
 
 
@@ -143,5 +143,5 @@
 <?= $this->section('styles') ?>
 <meta name="page-config" data-api-get-top-searched="<?= base_url('api/getTopSearched') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_dashboard.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_dashboard.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

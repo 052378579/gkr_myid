@@ -39,6 +39,14 @@
                 </form>
                 
                 <button v-if="isCrawling" @click="stopCrawl" class="btn btn-danger rounded-pill w-100 py-2 fw-bold mt-3">Batalkan</button>
+
+                <!-- Stopwatch UI -->
+                <div class="mt-4 text-center" v-if="elapsedTime > 0 || isCrawling" v-cloak>
+                    <div class="font-monospace fw-bold text-primary d-flex justify-content-center align-items-baseline" style="font-size: 2.2rem; letter-spacing: 2px;">
+                        <span>{{ formattedTime.main }}</span><sup style="font-size: 1.2rem; margin-left: 1px;">{{ formattedTime.ms }}</sup>
+                    </div>
+                    <div class="text-muted small fw-medium text-uppercase mt-1" style="font-size: 0.75rem; letter-spacing: 3px;">Waktu Perayapan</div>
+                </div>
             </div>
         </div>
 
@@ -58,5 +66,5 @@
     data-api-do-crawl="<?= base_url('crawler/doCrawl') ?>"
     data-api-reset-db="<?= base_url('crawler/resetDb') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_crawl.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_crawl.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

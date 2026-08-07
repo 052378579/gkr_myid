@@ -11,8 +11,8 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
     
-    <link rel="stylesheet" href="<?= base_url('css/admin_layout.css') ?>?v=<?= time() ?>">
-    <link rel="stylesheet" href="<?= base_url('css/admin.css') ?>?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= base_url('css/admin_layout.css') ?>?v=<?= ASSET_VERSION ?>">
+    <link rel="stylesheet" href="<?= base_url('css/admin.css') ?>?v=<?= ASSET_VERSION ?>">
     <meta name="app-config" 
         data-base-url="<?= base_url() ?>" 
         data-csrf-token="<?= csrf_token() ?>">
@@ -181,10 +181,10 @@
 <script src="<?= base_url('vendor/vue/vue.global.prod.js') ?>"></script>
 <!-- SweetAlert2 -->
 <script src="<?= base_url('vendor/sweetalert2/sweetalert2.all.min.js') ?>"></script>
-<script src="<?= base_url('js/config.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/theme.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/admin_layout.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/config.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/theme.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/admin_layout.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/calendar.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 
 <?= $this->renderSection('scripts') ?>
 

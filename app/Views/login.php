@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('apple-touch-icon.png') ?>" />
 <meta name="apple-mobile-web-app-title" content="GRACIA" />
 <link rel="manifest" href="<?= base_url('site.webmanifest') ?>" />
-<link rel="stylesheet" href="<?= base_url('css/login.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/login.css') ?>?v=<?= ASSET_VERSION ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -60,5 +60,5 @@
 
 <?= $this->section('scripts') ?>
 
-<script src="<?= base_url('js/login.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/login.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

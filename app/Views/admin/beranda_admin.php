@@ -208,5 +208,5 @@
     data-api-store-site="<?= base_url('api/storeSite') ?>"
     data-api-store-image="<?= base_url('api/storeImage') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_beranda.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_beranda.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

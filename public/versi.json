@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "06-08-2026 06:30:00 WIB",
-    "versi_diperbarui": "0.8.06",
+    "tanggal_diperbarui": "07-08-2026 13:03:00 WIB",
+    "versi_diperbarui": "0.8.07",
     "data": [
         {
             "id": 1,
@@ -314,6 +314,31 @@
                 "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.06)."
             ],
             "created_at": "2026-08-06 06:30:00"
+        },
+        {
+            "id": 16,
+            "versi": "0.8.07",
+            "tanggal_rilis": "2026-08-07",
+            "judul": "Resolusi Konflik Akses AI Ledger & Integrasi Real-Time Stopwatch",
+            "deskripsi": "Rilis pemeliharaan yang memecahkan kendala perizinan sistem operasi pada mesin sinkronisasi kecerdasan buatan, sekaligus menanamkan antarmuka penghitung waktu berjalan (Stopwatch) berpresisi milidetik pada panel kendali Dasbor Admin.",
+            "improvements": [
+                "Sentralisasi Cache Busting statis (ASSET_VERSION) yang secara drastis menghemat latensi bandwidth server Production hingga 90%.",
+                "Modul Real-Time Stopwatch Milidetik (mm:ss:ms): Menanamkan penghitung waktu berformat digital superscript dengan laju presisi 10ms di Dasbor Crawler dan AI Trainer.",
+                "Penyegaran Kosakata Panel AI: Mengubah penamaan tombol aksi menjadi lebih teknis dan ringkas, yakni 'Sinkronisasi Vektor' dan 'Hard Reset'.",
+                "Sentralisasi Perlindungan Kedipan (Flicker) Vue: Memindahkan direktif pengaman [v-cloak] ke ruang lingkup global di berkas antarmuka utama (main.css)."
+            ],
+            "fixes": [
+                "PWA Console Log Sterilization: Menyingkirkan peringatan sukses Service Worker di login.js agar pendaftaran pekerja layanan berjalan dalam mode Silent Fallback murni.",
+                "Resolusi Mutlak Konflik Kepemilikan (Ownership Collision): Memindahkan jalur ekspor memori AI (gkr_katalog.json) ke ruang resmi CodeIgniter 4 (writable/uploads/) untuk mencegah penolakan akses (Permission Denied) saat dieksekusi paralel oleh Web Server dan sistem Cronjob.",
+                "Pemusnahan Zombie CSS: Mencabut pemuatan pustaka tata letak usang (style.css) yang membebani memori dan tumpang tindih pada halaman hasil pencarian.",
+                "Pembersihan redundansi deklarasi tata letak Mode Gelap (Dark Mode) ganda pada komponen sorotan utama (Hero Image)."
+            ],
+            "patches": [
+                "Validasi sintaks eksekusi penjadwalan berkala (Enterprise Cronjob) ke format absolut presisi tinggi (/usr/bin/php & /env-ai/bin/python3).",
+                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.07).",
+                "Sinkronisasi komprehensif seluruh dokumentasi internal tim dan etalase GitHub (PRD.md, struktur_folder.md, dll)."
+            ],
+            "created_at": "2026-08-07 13:03:00"
         }
     ]
 }

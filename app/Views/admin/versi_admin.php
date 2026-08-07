@@ -163,5 +163,5 @@
     data-api-update="<?= base_url('admin/versi/update') ?>"
     data-api-delete="<?= base_url('admin/versi/delete') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_versi.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_versi.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

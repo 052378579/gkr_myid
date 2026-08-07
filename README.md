@@ -15,8 +15,10 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   - Backend `Search.php` mengonversi seluruh teks judul, alt, dan deskripsi secara real-time via `/\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/i` -> `(FG-$1)`.
   - View `search_results.php` steril dari panggilan perusak `ucwords(strtolower(...))`.
   - RESTful API (`GraciaApi.php`) dan Vue Controller (`search_results.js`, `admin_beranda.js`) mensanitasi `kode_bom` ke **CAPITAL CASE `FG-`** secara absolut.
-* **Arsitektur Frontend Baru (Zero Inline Script & DOM Metadata Injection):**
-  Mensterilkan 100% tag `<script>` *inline* dari seluruh halaman View. Konfigurasi dinamis PHP diinjeksikan secara aman via HTML5 tag `<meta name="page-config" data-...>` yang dipindai otomatis oleh pengawal terpusat `public/js/config.js`.
+* **Arsitektur Frontend Baru (Zero Inline Script, Sentralisasi Cloak & DOM Metadata Injection):**
+  Mensterilkan 100% tag `<script>` dan `<style>` *inline* dari seluruh halaman View. Menerapkan direktif antikedip `[v-cloak]` secara global di `main.css`. Konfigurasi dinamis PHP diinjeksikan secara aman via HTML5 tag `<meta name="page-config" data-...>` yang dipindai otomatis oleh pengawal terpusat `public/js/config.js`.
+* **Zero-Footprint Bandwidth & Cache Strategy (`ASSET_VERSION`):**
+  Menerapkan mekanisme penyimpanan tembolok memori peramban (*Browser Memory Cache*) secara agresif dengan mengganti fungsi dinamis `time()` dengan konstanta statis terpusat `ASSET_VERSION` di `Constants.php`. Perubahan kecil ini secara radikal menghemat hingga 90% latensi pita lebar (*bandwidth*) peladen di lingkungan *Production*.
 * **Perayap Berkas Foto Lokal (`/admin/crawl` & `CrawlerLib.php`):**
   - Pemrosesan berkas foto katalog dari `/var/www/FOTO` (seperti `amaala_dining_side_chair_fg-24600.jpg`, `karlsson_dining_table_(fg-24988).jpg`):
     - `judul`, `alt`, `deskripsi`: Title Case dengan `FG-` **selalu CAPITAL CASE** dan dibungkus kurung `()`, contoh: `Amaala Dining Side Chair (FG-24600)` / `Karlsson Dining Table (FG-24988)`.
@@ -53,8 +55,8 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 * **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):**
   Tanggal navbar `Selasa, 04/08/2026 ▾` mengusung Bootstrap Dropdown `#calendarDropdownWrap`. Tanggal hari ini disorot dengan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih (`#ffffff`). Layering dropdown kalender diset ke `z-index: 1060 !important;` melayang mulus di atas seluruh elemen beranda.
 * **Otomatisasi Cronjob & Notifikasi Telegram Ringkas:**
-  - **Auto Crawler (`0 18 * * *`)**: Dijalankan setiap pukul **18:00 WIB** via CLI `php spark crawl:run /var/www/FOTO`. Mengirimkan notifikasi Telegram ringkas dengan label `Server: DEV/PROD` dan jumlah item terbackup (`💾 X Item Baru Ditambahkan`).
-  - **AI Trainer Engine (`1 0 * * *`)**: Dijalankan setiap pukul **00:01 WIB** via skrip sinkronisasi inkremental Python `ai_sync.py`, menyalin `produk.index` & `mapping.json` ke `/mnt/sdcard/ai-scanner/`, dan memuat ulang `ai_scanner.service` menggunakan otoritas *sudoers NOPASSWD*. Mengirimkan notifikasi Telegram ringkas (`Server: DEV/PROD` & `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`).
+  - **Auto Crawler (`0 18 * * *`)**: Dijalankan setiap pukul **18:00 WIB** via *Absolute Path* CLI `/usr/bin/php spark crawl:run /var/www/FOTO` yang diarahkan ke file log. Mengirimkan notifikasi Telegram ringkas dengan label `Server: DEV/PROD` dan jumlah item terbackup (`💾 X Item Baru Ditambahkan`).
+  - **AI Trainer Engine (`1 0 * * *`)**: Dijalankan setiap pukul **00:01 WIB** via skrip sinkronisasi inkremental Python absolut `/mnt/sdcard/ai-scanner/env-ai/bin/python3 ai_sync.py`. Mengirimkan notifikasi Telegram ringkas (`Server: DEV/PROD` & `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`).
 * **Pembersihan Scan Direktori (`SAMPLE GRACIA` Excluded):**
   Seluruh proses pengindeksan perayap web (`CrawlerLib.php`) dan pelatih AI (`ai_index.py`) hanya menyisir 4 direktori aktif (`BUYER`, `GRACIA`, `SWATCHES`, `WEB`). Direktori legacy `SAMPLE GRACIA` diblokir total.
 * **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):**
@@ -77,8 +79,8 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
   Gambar unggahan pengguna ditransfer via `multipart/form-data` ke layanan FastAPI dan seketika dimusnahkan (`unlink()`) dari storage web server, menjaga penyimpanan server tetap bersih.
 * **PWA Service Worker Exception (`public/sw.js`):**
   Service Worker mengabaikan permintaan `POST` dan rute `/crawler/`, `/api/`, `/admin/` agar streaming log perayap `/admin/crawl` dan Reset DB berjalan 100% lancar.
-* **Dasbor Pelatih AI & Terminal Streaming HTTP (`/admin/ai`):**
-  Menyajikan dasbor operasi pelatih AI dengan dua mode tegas: **Sinkronisasi Inkremental** (Aman/Hijau) dan **Latih Ulang Total** (Bahaya/Merah). Mengalirkan baris log komputasi Python secara *real-time* via *HTTP ReadableStream API* konsol peretas (`#1e1e1e`) tanpa risiko *PHP Timeout*, dilengkapi notifikasi Telegram Bot.
+* **Dasbor Pelatih AI & Mesin Crawler dengan Real-Time Stopwatch (`/admin/ai`, `/admin/crawl`):**
+  Menyajikan dasbor operasi pelatih AI dengan dua mode tegas: **Sinkronisasi Vektor** (Aman/Hijau) dan **Hard Reset** (Bahaya/Merah). Mengalirkan baris log komputasi secara *real-time* via *HTTP ReadableStream API* konsol peretas (`#1e1e1e`). Dilengkapi modul **Real-Time Stopwatch Milidetik** berformat `mm:ss:ms` (menit:detik:senidetik superscript) yang rata-tengah di bawah area kendali, berdetak dengan interval 10 milidetik layaknya perangkat keras presisi.
 * **Pencarian Suara Native Bahasa Indonesia (`id-ID`) & Tab Gambar Default:**
   Pencarian suara eksklusif berbasis Web Speech API murni Bahasa Indonesia (`public/js/voice_search.js`) dengan animasi pendaran gelombang suara reaktif, instruksi teks lokal adaptif, dan navigasi otomatis ke **Tab Gambar Katalog** (`/cari?q=...&type=images`).
 * **Mesin Pencari Presisi Presisi Tinggi (`Search.php`):**
@@ -97,7 +99,7 @@ Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomend
 * **Spesifikasi Server:** Armbian OS (Debian bookworm) Linux 6.12 pada peranti Amlogic S905x.
 * **Web Backend:** CodeIgniter 4 (PHP 8.2+, MVC).
 * **AI Microservice:** Python 3, FastAPI, PyTorch, FAISS (`http://127.0.0.1:5000` via daemon `ai_scanner.service`).
-* **AI Trainer Engine (State Ledger):** Python 3. Eksekusi dibagi menjadi dua mesin tangguh: `ai_sync.py` (Sinkronisasi kilat via `gkr_katalog.json`) dan `ai_reset.py` (Pemulihan/Latih ulang). Dipanggil via subprocess CLI mode `-u` dengan pemuatan ulang nir-sandi via *sudoers NOPASSWD*, disertai PyTorch ARM Thread Clamping `OMP_NUM_THREADS=1` pada `writable/torch_cache/`.
+* **AI Trainer Engine (State Ledger):** Python 3. Eksekusi dibagi menjadi dua mesin tangguh: `ai_sync.py` (Sinkronisasi kilat via `gkr_katalog.json` di `/writable/uploads/`) dan `ai_reset.py` (Pemulihan/Latih ulang). Dipanggil via subprocess CLI mode `-u` dengan pemuatan ulang nir-sandi via *sudoers NOPASSWD*, disertai PyTorch ARM Thread Clamping `OMP_NUM_THREADS=1` pada `writable/torch_cache/`.
 * **Web Frontend:** Vue.js 3 (CDN), ApexCharts, Bootstrap 5.3 (Native Dark Mode), Cropper.js, FontAwesome 6, ReadableStream API.
 * **Database:** MySQL / MariaDB (Tabel Utama: `gkr_cari`).
 

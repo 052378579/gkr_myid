@@ -1,6 +1,6 @@
 <?= $this->extend('layout/admin_layout') ?>
 
-<?= $this->section('title') ?>Pengaturan Karyawan<?= $this->endSection() ?>
+<?= $this->section('title') ?>Users<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="container-fluid px-0" id="adminKaryawanApp">   
@@ -148,5 +148,5 @@
     data-api-update="<?= base_url('admin/karyawan/update') ?>"
     data-api-delete="<?= base_url('admin/karyawan/delete') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_karyawan.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_karyawan.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

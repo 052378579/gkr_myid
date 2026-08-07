@@ -1,4 +1,4 @@
-const { createApp, ref, nextTick } = Vue;
+const { createApp, ref, computed, nextTick } = Vue;
 
 createApp({
     setup() {
@@ -8,6 +8,22 @@ createApp({
         const terminalBody = ref(null);
         let abortController = null;
 
+        // Stopwatch State
+        const startTime = ref(0);
+        const elapsedTime = ref(0);
+        let timerInterval = null;
+
+        const formattedTime = computed(() => {
+            let totalMs = elapsedTime.value;
+            let minutes = Math.floor(totalMs / 60000);
+            let seconds = Math.floor((totalMs % 60000) / 1000);
+            let centiseconds = Math.floor((totalMs % 1000) / 10);
+
+            return {
+                main: `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:`,
+                ms: String(centiseconds).padStart(2, '0')
+            };
+        });
         const scrollToBottom = () => {
             nextTick(() => {
                 if (terminalBody.value) {
@@ -28,6 +44,14 @@ createApp({
             isCrawling.value = true;
             output.value = 'doogleBot@server:~# Memulai scan ' + url.value + '...\n<br>';
             abortController = new AbortController();
+
+            // Start Stopwatch
+            elapsedTime.value = 0;
+            startTime.value = Date.now();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                elapsedTime.value = Date.now() - startTime.value;
+            }, 10);
 
             try {
                 const formData = new FormData();
@@ -56,6 +80,7 @@ createApp({
                 }
             } finally {
                 isCrawling.value = false;
+                if (timerInterval) clearInterval(timerInterval);
                 output.value += '<br><span style="color: #28a745; font-weight: bold;">[SELESAI]</span> <span style="color: #d4d4d4;">Proses Crawling ditutup</span><br>doogleBot@server:~# Menunggu perintah...\n';
                 scrollToBottom();
             }
@@ -65,6 +90,7 @@ createApp({
             if (abortController) {
                 abortController.abort();
             }
+            if (timerInterval) clearInterval(timerInterval);
         };
         
         const resetDb = async () => {
@@ -103,6 +129,8 @@ createApp({
             isCrawling,
             output,
             terminalBody,
+            elapsedTime,
+            formattedTime,
             startCrawl,
             stopCrawl,
             resetDb

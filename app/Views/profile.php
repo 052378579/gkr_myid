@@ -3,7 +3,7 @@
 <?= $this->section('title') ?><?= esc($title) ?><?= $this->endSection() ?>
 
 <?= $this->section('styles') ?>
-<link rel="stylesheet" href="<?= base_url('css/profile.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/profile.css') ?>?v=<?= ASSET_VERSION ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -97,5 +97,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url('js/profile.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/profile.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

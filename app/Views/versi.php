@@ -3,7 +3,7 @@
 <?= $this->section('title') ?>Changelog - Gracia<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<link rel="stylesheet" href="<?= base_url('css/admin_versi.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/admin_versi.css') ?>?v=<?= ASSET_VERSION ?>">
 
 <nav class="navbar navbar-expand-lg sticky-top" style="background: rgba(43, 51, 133, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
     <div class="container">

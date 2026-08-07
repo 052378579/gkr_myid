@@ -10,13 +10,13 @@
         data-sw-url="<?= base_url('sw.js') ?>">
     <title><?= $this->renderSection('title') ?></title>
     <!-- Skrip Tema (dijalankan awal untuk menghindari FOUC) -->
-    <script src="<?= base_url('js/theme.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= base_url('js/theme.js') ?>?v=<?= ASSET_VERSION ?>"></script>
     <!-- Bootstrap 5.3 CSS -->
     <link href="<?= base_url('vendor/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url('vendor/fontawesome/css/all.min.css') ?>">
     <!-- Base Styles -->
-    <link rel="stylesheet" href="<?= base_url('css/main.css') ?>?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= base_url('css/main.css') ?>?v=<?= ASSET_VERSION ?>">
     <?php if (strpos(uri_string(), 'admin') === 0): ?>
         <link rel="icon" type="image/x-icon" href="<?= base_url('faviconp.ico') ?>">
     <?php else: ?>
@@ -38,7 +38,7 @@
     <script src="<?= base_url('vendor/sweetalert2/sweetalert2.all.min.js') ?>"></script>
 
     <!-- App Config Loader -->
-    <script src="<?= base_url('js/config.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= base_url('js/config.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 
     <?= $this->renderSection('scripts') ?>
     

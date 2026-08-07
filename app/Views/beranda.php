@@ -110,7 +110,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
-<link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= ASSET_VERSION ?>">
 
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;" id="app" v-cloak>
     <div class="text-center mb-4">
@@ -263,7 +263,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 <?= $this->section('styles') ?>
 <meta name="page-config" data-search-url="<?= url_to('Search::index') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/voice_search.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/index.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/calendar.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/voice_search.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/index.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

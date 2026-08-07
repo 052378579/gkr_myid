@@ -339,7 +339,7 @@ class CrawlerLib
                                          ->findAll();
                                          
         if (count($katalogImages) > 0) {
-            $exportPath = '/var/www/gkr_myid/python_services/gkr_katalog.json';
+            $exportPath = WRITEPATH . 'uploads/gkr_katalog.json';
             $jsonContent = json_encode($katalogImages, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             if (@file_put_contents($exportPath, $jsonContent) !== false) {
                 $this->out("<span style='color: #28a745;'>[AI SYNC]</span> <span style='color: #d4d4d4;'>Berhasil mengekspor " . count($katalogImages) . " ID ke gkr_katalog.json</span>", 'green');

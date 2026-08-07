@@ -1,6 +1,6 @@
 <?= $this->extend('layout/admin_layout') ?>
 
-<?= $this->section('title') ?>Manajemen Doodle<?= $this->endSection() ?>
+<?= $this->section('title') ?>Doodle<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div id="gkr">
@@ -119,5 +119,5 @@
     data-api-delete-doodle="<?= base_url('doodle/delete') ?>"
     data-api-get-all-doodle="<?= base_url('doodle/getAll') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_doodle.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/admin_doodle.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

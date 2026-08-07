@@ -3,10 +3,9 @@
 <?= $this->section('title') ?>Pencarian: <?= esc($query) ?><?= $this->endSection() ?>
 
 <?= $this->section('styles') ?>
-<link rel="stylesheet" href="<?= base_url('css/style.css') ?>?v=<?= time() ?>">
-<link rel="stylesheet" href="<?= base_url('css/vendor/fancybox/jquery.fancybox.min.css') ?>?v=<?= time() ?>">
-<link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= time() ?>">
-<link rel="stylesheet" href="<?= base_url('css/search.css') ?>?v=<?= time() ?>">
+<link rel="stylesheet" href="<?= base_url('css/vendor/fancybox/jquery.fancybox.min.css') ?>?v=<?= ASSET_VERSION ?>">
+<link rel="stylesheet" href="<?= base_url('css/index.css') ?>?v=<?= ASSET_VERSION ?>">
+<link rel="stylesheet" href="<?= base_url('css/search.css') ?>?v=<?= ASSET_VERSION ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -472,9 +471,9 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
 <?= $this->section('scripts') ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
-<script src="<?= base_url('js/vendor/jquery-3.3.1.min.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/vendor/fancybox/jquery.fancybox.min.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/vendor/masonry/masonry.pkgd.min.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/vendor/jquery-3.3.1.min.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/vendor/fancybox/jquery.fancybox.min.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/vendor/masonry/masonry.pkgd.min.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 
 <?= $this->section('styles') ?>
 <meta name="page-config" 
@@ -485,8 +484,8 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     data-search-url="<?= url_to('Search::index') ?>">
 <?= $this->endSection() ?>
 
-<script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/voice_search.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/search.js') ?>?v=<?= time() ?>"></script>
-<script src="<?= base_url('js/search_results.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('js/calendar.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/voice_search.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/search.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/search_results.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>
