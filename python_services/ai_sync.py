@@ -1,0 +1,1 @@
+/mnt/sdcard/ai-scanner/ai_sync.py
