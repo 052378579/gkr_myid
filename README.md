@@ -1,109 +1,32 @@
-# Mesin Pencari Visual Gracia (gkr.my.id)
+# Mesin Pencari Visual Gracia
 
-**Mesin Pencari Gracia** adalah platform pencarian cerdas terpadu yang memadukan arsitektur **CodeIgniter 4 (PHP 8.2+)** dan **Layanan Mikro Python (FastAPI + PyTorch MobileNetV3 + FAISS)** sebagai inti pemrosesan Vektor Kecerdasan Buatan (*Artificial Intelligence*).
+**Mesin Pencari Gracia** adalah platform pencarian cerdas yang memadukan arsitektur **CodeIgniter 4 (PHP 8.2+)** dan **Layanan Mikro Python (FastAPI + PyTorch + FAISS)** sebagai inti pemrosesan Vektor Kecerdasan Buatan.
 
-Sistem hibrida ini dirancang khusus untuk mengindeks, menelusuri, dan merekomendasikan katalog furniture serta swatch bahan. Sistem ini mengotomatiskan pengolahan korpus foto dari direktori lokal (`/var/www/FOTO`) menjadi data vektor 576-dimensi untuk pencarian gambar visual (*Image-to-Image Search*), disajikan dengan antarmuka yang reaktif, cepat, intuitif, dan responsif.
-
----
-
-## 🚀 Fitur Unggulan Sistem
-
-* **Single Physical Table Database `gkr_cari` & Kolom Bahasa Indonesia:**
-  Menggabungkan tabel lama menjadi satu tabel fisik murni **`gkr_cari`** dengan 11 kolom baku Bahasa Indonesia: `id`, `judul`, `alt`, `deskripsi`, `url`, `imageUrl`, `siteUrl`, `kata_kunci`, `kode_bom`, `klik`, `rusak`. Tipe entitas diidentifikasi murni dari `imageUrl IS NOT NULL`.
-* **Standarisasi Absolute CAPITAL CASE `FG-` pada Kode BOM:**
-  - Penulisan `fg-`, `Fg-`, `fg 12345`, `Fg 12345`, `(fg 12345)` **100% Wajib Dikonversi menjadi CAPITAL CASE `(FG-12345)`** atau `FG-12345` di seluruh proyek `/var/www/gkr_myid`.
-  - Backend `Search.php` mengonversi seluruh teks judul, alt, dan deskripsi secara real-time via `/\(?\b(?:fg|Fg|FG)\s*[-_]?\s*([0-9]+)\)?/i` -> `(FG-$1)`.
-  - View `search_results.php` steril dari panggilan perusak `ucwords(strtolower(...))`.
-  - RESTful API (`GraciaApi.php`) dan Vue Controller (`search_results.js`, `admin_beranda.js`) mensanitasi `kode_bom` ke **CAPITAL CASE `FG-`** secara absolut.
-* **Arsitektur Frontend Baru (Zero Inline Script, Sentralisasi Cloak & DOM Metadata Injection):**
-  Mensterilkan 100% tag `<script>` dan `<style>` *inline* dari seluruh halaman View. Menerapkan direktif antikedip `[v-cloak]` secara global di `main.css`. Konfigurasi dinamis PHP diinjeksikan secara aman via HTML5 tag `<meta name="page-config" data-...>` yang dipindai otomatis oleh pengawal terpusat `public/js/config.js`.
-* **Zero-Footprint Bandwidth & Cache Strategy (`ASSET_VERSION`):**
-  Menerapkan mekanisme penyimpanan tembolok memori peramban (*Browser Memory Cache*) secara agresif dengan mengganti fungsi dinamis `time()` dengan konstanta statis terpusat `ASSET_VERSION` di `Constants.php`. Perubahan kecil ini secara radikal menghemat hingga 90% latensi pita lebar (*bandwidth*) peladen di lingkungan *Production*.
-* **Perayap Berkas Foto Lokal (`/admin/crawl` & `CrawlerLib.php`):**
-  - Pemrosesan berkas foto katalog dari `/var/www/FOTO` (seperti `amaala_dining_side_chair_fg-24600.jpg`, `karlsson_dining_table_(fg-24988).jpg`):
-    - `judul`, `alt`, `deskripsi`: Title Case dengan `FG-` **selalu CAPITAL CASE** dan dibungkus kurung `()`, contoh: `Amaala Dining Side Chair (FG-24600)` / `Karlsson Dining Table (FG-24988)`.
-    - `kata_kunci`: Lowercase tokens dipisahkan koma dan spasi, **kecuali teks `FG-XXXXX` yang tetap CAPITAL CASE** (contoh: `amaala, dining, side, chair, FG-24600`).
-    - `kode_bom`: Diekstrak murni sebagai **`FG-24600`** / **`FG-24988`**.
-* **Penyempurnaan Spesifikasi Knowledge Card Panel & Interaksi Tombol Action Pills (`/cari`):**
-  - `Deskripsi`: Title Case (contoh: `"Lindha Chair"` / `"Budapest Side Table (FG-42718)"`).
-  - `Kode BOM`: Default `"FG-"` dengan warna huruf **Tema Gracia** (`var(--gkr-primary)` / `#2B3385`).
-  - `Lihat BOM`: Default `"BOM-FG- -001"` dengan warna huruf **Tema Gracia** (`var(--gkr-primary)`).
-  - `Produksi`: Default `"-"` dengan warna huruf **Tema Gracia** (`var(--gkr-primary)`).
-  - `Action Pills Buttons {BOM, ERP, Foto}` & Perilaku `target="_blank"`:
-    - **Kondisi Kode BOM Kosong:** Tombol `BOM` dan `ERP` berstatus **Disabled Button** (gaya tombol mati abu-abu `#e0e0e0` / `#303134`, teks `#9e9e9e`, `pointer-events: none; opacity: 0.65; cursor: not-allowed;`). Tombol `Foto` tetap berstatus Aktif.
-    - **Kondisi Kode BOM Tersedia (misal `"FG-14540"`):** Tombol `BOM`, `ERP`, dan `Foto` berstatus **Tombol Aktif** (Default outline putih `#ffffff` + border 1px solid Biru Tema Gracia `#2B3385` -> Solid Biru Tema Gracia `#2B3385` saat Hover dengan teks/ikon warna putih `#ffffff`).
-    - **Perilaku Buka Jendela Baru (`target="_blank"`):** Seluruh tombol aktif (`BOM`, `ERP`, `Foto`) 100% dipasangi atribut `:target="isBomAvailable(activeItem.kodeBom) ? '_blank' : '_self'"`, membuka PDF BOM, Form ERP, dan Foto Katalog di **Jendela / Tab Baru** tanpa mengganggu halaman pencarian `/cari`. Tombol Foto mengusung **Ikon Kamera** (`fa-solid fa-camera`).
-* **Penataan Kartu Rapat & Presisi Aksen Garis Biru Lurus Vertikal:**
-  - Kartu hasil pencarian berukuran rapat (tinggi proporsional ~127px di Desktop 1920x1082 px, padding `8px 14px !important`, margin bawah `10px !important`). Aksen garis 3px Tema Gracia di sebelah kiri kartu aktif dibuat **100% Lurus Tegak Vertikal** tanpa sudut melengkung pada ujung atas/bawah (`border-radius: 0 10px 10px 0 !important;`).
-* **Pagination PNG `c-a-r-i` Horizontal Alignment:**
-  - Puncak logo pagination PNG (`pageStart.png`, `pageSelected.png`, `page.png`, `pageEnd.png`) sejajar horizontal dengan garis alas terbawah Knowledge Card Panel di kolom kanan (`margin-top: 48px !important; padding-top: 12px !important;`).
-* **Manajemen Engine Modal Box Ergonomis & Tabel Dinamis (`/admin/cari`):**
-  * **Tabel Responsif Mobile & Pewarnaan Lencana Dinamis:** Menggunakan kelas `d-none d-md-table-cell/flex` untuk membebaskan ruang di layar seluler secara ekstrem (menyembunyikan *dropdown pagination*, ikon edit, dan 3 kolom sekunder). Kolom **Kode BOM** diwarnai dinamis di sisi klien (Vue JS) menggunakan teknik opasitas latar 10% (RGBA) agar kontras teks selalu tinggi pada *Light Mode* maupun *Dark Mode*.
-  * **Modal Box 10 Field Ergonomis:** Modal Box **"Edit Data Mesin Pencari"** (`#modalEditImage`) 2-kolom memfasilitasi pengeditan field secara bersih tanpa kotak *textarea* `deskripsi`, namun nilai `deskripsi` lama tetap dilestarikan (dilindungi) di latar belakang oleh reaktivitas Vue JS saat disimpan.
-* **Standardisasi Layout Google-Grade & Dark Mode Adaptif (`/cari`):**
-  * **Responsivitas Header Mobile 2-Baris:** On Mobile (<768px), layout header menyusun Baris 1: Logo GRACIA (kiri) + Date/Apps/Avatar (kanan), Baris 2: Search Box 100% lebar penuh.
-  * **Icon Action Buttons Presisi (`search.css`):** Tombol ikon mic, kamera, dan cari dikemas dalam kelas `.icon-action-btn` (32px x 32px).
-  * **Knowledge Card Borderless & Background Transparan:** Hero image `.google-knowledge-hero-img` diset `border: none !important; border-radius: 0 !important; padding: 0 !important; background-color: transparent !important;` pada Mode TERANG dan GELAP dengan SVG fallback 100% transparan (`fill="transparent"`). Knowledge Panel 35% kanan tampil responsif di Mobile (`col-12 col-lg-4 mt-4 mt-lg-0`).
-  * **Penyelarasan Garis Vertikal Pembatas (`border-left`):** Diset dengan `margin-top: 38px !important;` pada Desktop agar dimulai presisi sejajar dengan titik puncak hero image / hasil pertama, dan di-reset `border-left: none !important;` pada Mobile (<992px).
-  * **Flush Left Vertical Alignment (Margin 10% Kiri):** Tab `[Semua]`, `Ditemukan {jumlah} hasil`, dan garis aksen 3px Biru Dongker `.site-result-item` berderet 100% rata lurus vertikal.
-  * **Pagination Logo `c a r i` Vector Typography Baseline:** Tipografi vektor HTML/CSS Google-Grade (`Outfit`/`Product Sans`) yang 100% Rata Lurus Horizontal Baseline (`align-items: baseline`) dan Rata Tengah (*Centered*).
-* **Keseragaman Dropdown Menu (Apps Grid & Kalender):**
-  Dropdown Apps Grid dan Kalender menggunakan kelas native Bootstrap `dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4` dan `text-body` (`color: var(--bs-body-color)`), tanpa inline glassmorphism, adaptif 100% pada Mode Terang dan Gelap.
-* **Halaman Catatan Versi Rilis (`/versi`):**
-  * Format tanggal Indonesia seragam `01/08/2026` (`dd/mm/yyyy`).
-  * Tampilan responsif Mobile 1-Kolom Stack (`@media (max-width: 767px)`) pada `public/css/admin_versi.css` agar judul dan deskripsi changelog tidak terpotong.
-* **Kalender Dropdown Interaktif Navbar (`admin_layout.php` & `calendar.js`):**
-  Tanggal navbar `Selasa, 04/08/2026 ▾` mengusung Bootstrap Dropdown `#calendarDropdownWrap`. Tanggal hari ini disorot dengan **lingkaran padat Biru Dongker Gracia (`#2B3385`)** dan teks putih (`#ffffff`). Layering dropdown kalender diset ke `z-index: 1060 !important;` melayang mulus di atas seluruh elemen beranda.
-* **Otomatisasi Cronjob & Notifikasi Telegram Ringkas:**
-  - **Auto Crawler (`0 18 * * *`)**: Dijalankan setiap pukul **18:00 WIB** via *Absolute Path* CLI `/usr/bin/php spark crawl:run /var/www/FOTO` yang diarahkan ke file log. Mengirimkan notifikasi Telegram ringkas dengan label `Server: DEV/PROD` dan jumlah item terbackup (`💾 X Item Baru Ditambahkan`).
-  - **AI Trainer Engine (`1 0 * * *`)**: Dijalankan setiap pukul **00:01 WIB** via skrip sinkronisasi inkremental Python absolut `/mnt/sdcard/ai-scanner/env-ai/bin/python3 ai_sync.py`. Mengirimkan notifikasi Telegram ringkas (`Server: DEV/PROD` & `💾 Berkas produk.index & mapping.json Berhasil Diperbarui`).
-* **Pembersihan Scan Direktori (`SAMPLE GRACIA` Excluded):**
-  Seluruh proses pengindeksan perayap web (`CrawlerLib.php`) dan pelatih AI (`ai_index.py`) hanya menyisir 4 direktori aktif (`BUYER`, `GRACIA`, `SWATCHES`, `WEB`). Direktori legacy `SAMPLE GRACIA` diblokir total.
-* **Pendaftaran Otomatis (*Auto-Bind*) Telegram Chatbot (`ChatBotApi.php`):**
-  Karyawan terdaftar dapat menghubungkan akun Telegram pribadi secara mandiri via `/start 08...` atau `/daftar 08...`. Sistem otomatis mencocokkan `no_hp` di `gkr_users` (Skenario 1 Keamanan terkunci untuk nomor HP terdaftar oleh Admin/HRD).
-* **Penguncian Notifikasi Sistem Statis Administrator:**
-  Metode `sendTelegramNotification()` di `Auth.php` (login/logout) dan `ai_index.py` (crawler) tetap dikunci pada 1 ID Statis Administrator (`8784856529` - Budi).
-* **Dashboard KPI Administrasi & Visualisasi ApexCharts (`/admin/dashboard`):**
-  Rute `/admin` dan `/admin/dashboard` menyajikan Dasbor KPI Utama dengan 4 Summary Cards (Termasuk **Total Users** Karyawan Terdaftar) dan **ApexCharts Bar Chart (Custom Data Labels)** yang menampilkan 10 produk paling sering dicari (`klik DESC`).
-* **Optimalisasi Crawler 1 Produk = 1 Baris Utuh (`CrawlerLib.php`):**
-  Setiap file foto produk diindeks murni sebagai **1 Baris Utuh** (menampung `url` dan `imageUrl` secara bersamaan), menghemat 50% kapasitas penyimpanan database.
-* **Resolusi URL Dinamis Host (DEV vs PROD):**
-  Penyesuaian domain foto otomatis terpusat via `getFotoUrlPrefix()`:
-  * **Server DEV** (`192.168.1.4`, `10.147.17.40`, `gkr.budi.biz.id`) -> **`https://foto.budi.biz.id/`**
-  * **Server PROD** (`192.168.1.17`, `10.147.17.6`, `gkr.my.id`) -> **`https://foto.gkr.my.id/`**
-* **Pencarian Visual AI (Image-to-Image Search & Cropper.js):**
-  Mengunggah sampel foto produk untuk mencocokkan kemiripan visual secara presisi menggunakan PyTorch *MobileNetV3-Small* (576 dimensi) dan FAISS Vector Database (**`IndexIDMap`** terhubung dengan *State Ledger*, *Cosine Similarity* $\ge 0.68$, $k=15$). Dilengkapi pemotong gambar interaktif **Cropper.js** di browser.
-* **Autocomplete Pencarian Teks (Debounced RESTful API):**
-  Fitur rekomendasi kata kunci pencarian *real-time* berbasis API (`/api/autocomplete`) yang menyaring data dari tabel `gkr_material` (bahan & warna) dan `gkr_cari` (judul) dengan *debounce* 300ms serta navigasi kibor.
-* **Zero-Footprint Storage (Auto-Cleanup):**
-  Gambar unggahan pengguna ditransfer via `multipart/form-data` ke layanan FastAPI dan seketika dimusnahkan (`unlink()`) dari storage web server, menjaga penyimpanan server tetap bersih.
-* **PWA Service Worker Exception (`public/sw.js`):**
-  Service Worker mengabaikan permintaan `POST` dan rute `/crawler/`, `/api/`, `/admin/` agar streaming log perayap `/admin/crawl` dan Reset DB berjalan 100% lancar.
-* **Dasbor Pelatih AI & Mesin Crawler dengan Real-Time Stopwatch (`/admin/ai`, `/admin/crawl`):**
-  Menyajikan dasbor operasi pelatih AI dengan dua mode tegas: **Sinkronisasi Vektor** (Aman/Hijau) dan **Hard Reset** (Bahaya/Merah). Mengalirkan baris log komputasi secara *real-time* via *HTTP ReadableStream API* konsol peretas (`#1e1e1e`). Dilengkapi modul **Real-Time Stopwatch Milidetik** berformat `mm:ss:ms` (menit:detik:senidetik superscript) yang rata-tengah di bawah area kendali, berdetak dengan interval 10 milidetik layaknya perangkat keras presisi.
-* **Pencarian Suara Native Bahasa Indonesia (`id-ID`) & Tab Gambar Default:**
-  Pencarian suara eksklusif berbasis Web Speech API murni Bahasa Indonesia (`public/js/voice_search.js`) dengan animasi pendaran gelombang suara reaktif, instruksi teks lokal adaptif, dan navigasi otomatis ke **Tab Gambar Katalog** (`/cari?q=...&type=images`).
-* **Mesin Pencari Presisi Presisi Tinggi (`Search.php`):**
-  * **Primary Brand/Series Anchor Search:** Deteksi otomatis token merk/seri spesifik (`$specificBrandAnchor`, misal `"bonanza"` pada `bonanza+table` atau `bonanza+coffee`) yang mewajibkan produk memuat kata merk utama. Mengeliminasi 100% produk pengotor seperti *Riazor Rectangular Coffee Table*, *Tamika Coffee Table*, *Alandra Coffee Table*, dan *Side Table Type 02*.
-  * **Comprehensive Category Antonym Exclusion:** Matriks konflik tiga arah (Table vs Chair vs Lamp) yang 100% mengeliminasi *Leora Dinning Chair* (kursi) dan *Mida Table Lamp Organic Motif* (lampu meja) pada pencarian `dinning table`.
-  * **Multi-Tier Relevance Scoring:** Perhitungan skor SQL `ORDER BY` bertingkat (Skor 100 untuk exact phrase, Skor 80 untuk all-tokens match, dan pengurutan popularitas `klik DESC`).
-* **Sistem Otorisasi, Private Mode & Audit Log (RBAC):**
-  Ekosistem dikunci secara absolut ke dalam mode privat (Private Mode) melalui `AuthFilter.php` (hanya membuka celah untuk halaman `/login`, `/daftar`, dan webhook Telegram). Rute `/admin/*` diisolasi lapis kedua menggunakan `SuperAdminFilter` yang khusus mengizinkan sesi `id_user = 1`. Seluruh aktivitas (Log Cari & Log User) direkam dengan pelacakan *Real IP* menembus jaringan *Reverse Proxy* / VPN ZeroTier (membaca `X-Forwarded-For`), yang dibersihkan secara otomatis ke format **IPv4 murni** untuk keperluan Audit Forensik presisi.
+Sistem hibrida ini dirancang untuk mengindeks, menelusuri, dan merekomendasikan Katalog Furniture. Pengolahan foto produk secara otomatis dikonversi menjadi vektor dimensi tinggi untuk mendukung fitur *Image-to-Image Search*, disajikan dengan antarmuka yang reaktif (Vue.js), cepat, intuitif, dan responsif.
 
 ---
 
-## 🛠️ Stack Teknologi & Topologi Infrastruktur
+## 🚀 Fitur Unggulan
 
-* **Lingkungan Server DEV:** `192.168.1.4` | ZeroTier `10.147.17.40` | `gkr.budi.biz.id` | Foto: **`https://foto.budi.biz.id/`**
-* **Lingkungan Server PROD:** `192.168.1.17` | ZeroTier `10.147.17.6` | `gkr.my.id` | Foto: **`https://foto.gkr.my.id/`**
-* **Spesifikasi Server:** Armbian OS (Debian bookworm) Linux 6.12 pada peranti Amlogic S905x.
+* **Pencarian Visual AI (Image-to-Image Search):** Menggunakan PyTorch *MobileNetV3* dan FAISS Vector Database untuk pencocokan kemiripan visual yang sangat presisi, dilengkapi dengan pemotong gambar interaktif (*Cropper.js*).
+* **Pencarian Suara Bahasa Indonesia:** Dukungan penuh *Web Speech API* murni berbahasa Indonesia (`id-ID`) dengan navigasi pintar.
+* **Autocomplete & Search Engine Cerdas:** Rekomendasi kata kunci *real-time* berbasis RESTful API dengan algoritma pengecualian antonim kategori dan perhitungan skor relevansi tingkat tinggi.
+* **Auto-Crawler & AI Trainer:** Sistem perayap katalog terotomatisasi via Cronjob dengan manajemen sinkronisasi inkremental dan fitur pemulihan (*Hard Reset*) via dasbor UI interaktif.
+* **Arsitektur Frontend Ringan:** Pendekatan *Zero Inline Script*, integrasi *Vue.js*, *DOM Metadata Injection*, dan strategi *Browser Memory Cache* agresif (`ASSET_VERSION`) yang menghemat latensi hingga 90%.
+* **Keamanan & Otorisasi Ketat (RBAC):** Mode privat berlapis ganda, pendaftaran Telegram Chatbot otentik, serta pelacakan jejak audit (*Real IP Audit Log*) menembus jaringan *Reverse Proxy*.
+* **Dashboard Administrator Interaktif:** Dasbor manajemen visual dengan metrik performa dan grafik *ApexCharts* responsif.
+
+---
+
+## 🛠️ Stack Teknologi & Infrastruktur
+
+* **Sistem Operasi:** Linux Armbian OS.
 * **Web Backend:** CodeIgniter 4 (PHP 8.2+, MVC).
-* **AI Microservice:** Python 3, FastAPI, PyTorch, FAISS (`http://127.0.0.1:5000` via daemon `ai_scanner.service`).
-* **AI Trainer Engine (State Ledger):** Python 3. Eksekusi dibagi menjadi dua mesin tangguh: `ai_sync.py` (Sinkronisasi kilat via `gkr_katalog.json` di `/writable/uploads/`) dan `ai_reset.py` (Pemulihan/Latih ulang). Dipanggil via subprocess CLI mode `-u` dengan pemuatan ulang nir-sandi via *sudoers NOPASSWD*, disertai PyTorch ARM Thread Clamping `OMP_NUM_THREADS=1` pada `writable/torch_cache/`.
-* **Web Frontend:** Vue.js 3 (CDN), ApexCharts, Bootstrap 5.3 (Native Dark Mode), Cropper.js, FontAwesome 6, ReadableStream API.
-* **Database:** MySQL / MariaDB (Tabel Utama: `gkr_cari`).
+* **AI Microservice:** Python 3, FastAPI, PyTorch, FAISS (Berjalan via *systemd daemon*).
+* **Web Frontend:** Vue.js 3, Bootstrap 5.3 (Dark Mode Adaptif), ApexCharts, FontAwesome 6.
+* **Database:** MySQL / MariaDB.
 
 ---
 
 ## 📜 Lisensi & Pengembang
-Dikembangkan oleh **RND &copy; 2026** untuk ekosistem Mebel Gracia.
+Dikembangkan oleh **RND &copy; 2026** khusus untuk ekosistem internal **PT. Gracia Kreasi Rotan**.
