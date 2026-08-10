@@ -125,7 +125,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <span style="color: var(--gkr-primary);">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
             <span style="color: var(--gkr-primary);">|</span>
-            <a href="https://gamtek.gkr.my.id" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">GAMTEK</a>
+            <a href="<?= esc($imgBaseUrl) ?>?SWATCHES" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">SWATCHES</a>
         </div>
     </div>
 
