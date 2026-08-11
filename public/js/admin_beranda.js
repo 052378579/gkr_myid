@@ -24,6 +24,12 @@ createApp({
         const currentPageImages = ref(1);
         const searchSite = ref('');
         const searchImage = ref('');
+        const filterBom = ref(localStorage.getItem('gkr_filter_bom') || '');
+
+        watch(filterBom, (newVal) => {
+            localStorage.setItem('gkr_filter_bom', newVal);
+            currentPageImages.value = 1;
+        });
 
         // Modal Edit Site
         const materials = ref([]);
@@ -123,13 +129,35 @@ createApp({
         const totalSitePages = computed(() => Math.ceil(filteredSites.value.length / perPage.value) || 1);
 
         const filteredImages = computed(() => {
-            if (!searchImage.value) return images.value;
-            const term = searchImage.value.toLowerCase();
-            return images.value.filter(img => {
-                const titleMatch = img.title && img.title.toLowerCase().includes(term);
-                const altMatch = img.alt && img.alt.toLowerCase().includes(term);
-                return titleMatch || altMatch;
-            });
+            let result = images.value;
+
+            // 1. Filter Kode BOM
+            if (filterBom.value) {
+                const bom = filterBom.value;
+                result = result.filter(img => {
+                    const k = img.kode_bom || '-';
+                    if (bom === '-') return k === '-';
+                    if (bom === 'FG-1') return k.startsWith('FG-1');
+                    if (bom === 'FG-2') return k.startsWith('FG-2');
+                    if (bom === 'FG-4') return k.startsWith('FG-4');
+                    if (bom === 'Lainnya') {
+                        return k !== '-' && !k.startsWith('FG-1') && !k.startsWith('FG-2') && !k.startsWith('FG-4');
+                    }
+                    return true;
+                });
+            }
+
+            // 2. Filter Pencarian Teks
+            if (searchImage.value) {
+                const term = searchImage.value.toLowerCase();
+                result = result.filter(img => {
+                    const titleMatch = img.title && img.title.toLowerCase().includes(term);
+                    const altMatch = img.alt && img.alt.toLowerCase().includes(term);
+                    return titleMatch || altMatch;
+                });
+            }
+
+            return result;
         });
 
         const paginatedImages = computed(() => {
@@ -529,6 +557,7 @@ createApp({
             currentPageImages,
             searchSite,
             searchImage,
+            filterBom,
             paginatedSites,
             totalSitePages,
             paginatedImages,

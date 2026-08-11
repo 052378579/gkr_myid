@@ -1,4 +1,4 @@
-const { createApp, ref, onMounted } = Vue;
+const { createApp, ref, computed, onMounted } = Vue;
 
 createApp({
     setup() {
@@ -6,6 +6,30 @@ createApp({
         const isLoading = ref(true);
         const isSubmitting = ref(false);
         const isEdit = ref(false);
+        const currentPage = ref(1);
+        const itemsPerPage = ref(10);
+        
+        const totalPages = computed(() => {
+            return Math.ceil(daftarVersi.value.length / itemsPerPage.value) || 1;
+        });
+        
+        const paginatedVersi = computed(() => {
+            const start = (currentPage.value - 1) * itemsPerPage.value;
+            const end = start + itemsPerPage.value;
+            return daftarVersi.value.slice(start, end);
+        });
+
+        const nextPage = () => {
+            if (currentPage.value < totalPages.value) currentPage.value++;
+        };
+
+        const prevPage = () => {
+            if (currentPage.value > 1) currentPage.value--;
+        };
+
+        const goToPage = (page) => {
+            currentPage.value = page;
+        };
         
         const form = ref({
             id: null,
@@ -24,7 +48,8 @@ createApp({
             isLoading.value = true;
             try {
                 const response = await fetch(window.AppConfig.apiGetAll);
-                daftarVersi.value = await response.json();
+                const jsonResponse = await response.json();
+                daftarVersi.value = jsonResponse.data || [];
             } catch (error) {
                 console.error("Error fetching data:", error);
                 Swal.fire('Error', 'Gagal memuat data versi.', 'error');
@@ -179,7 +204,13 @@ createApp({
             simpanVersi,
             addListItem,
             removeListItem,
-            formatTanggal
+            formatTanggal,
+            paginatedVersi,
+            currentPage,
+            totalPages,
+            nextPage,
+            prevPage,
+            goToPage
         };
     }
 }).mount('#adminVersiApp');

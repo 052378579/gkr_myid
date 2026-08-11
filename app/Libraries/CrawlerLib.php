@@ -37,13 +37,13 @@ class CrawlerLib
     public function linkExists($url) 
     {
         $url = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $url);
-        return $this->cariModel->where('url', $url)->first() !== null;
+        return $this->cariModel->where('url LIKE', '%' . $url)->first() !== null;
     }
     
     public function imageExists($src) 
     {
         $src = str_replace('192.168.1.17:81', 'foto.gkr.my.id', $src);
-        return $this->cariModel->where('imageUrl', $src)->first() !== null;
+        return $this->cariModel->where('imageUrl LIKE', '%' . $src)->first() !== null;
     }
 
     /**
@@ -367,9 +367,19 @@ class CrawlerLib
         }
 
         // Deteksi Label Server (DEV vs PROD)
-        $serverIp    = $_SERVER['SERVER_ADDR'] ?? gethostbyname(gethostname());
-        $environment = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
-        $serverLabel = (str_contains($serverIp, '192.168.1.4') || str_contains($serverIp, '10.147.17.40') || $environment === 'development') ? 'DEV' : 'PROD';
+        $serverIp   = $_SERVER['SERVER_ADDR'] ?? '';
+        $serverHost = $_SERVER['HTTP_HOST'] ?? gethostname();
+        $env        = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
+        
+        $identitas = strtolower($serverIp . ' | ' . $serverHost . ' | ' . $env);
+        
+        if (str_contains($identitas, '192.168.1.4') || str_contains($identitas, '10.147.17.40') || str_contains($identitas, 'gkr.budi.biz.id') || $env === 'development') {
+            $serverLabel = 'DEV';
+        } elseif (str_contains($identitas, '192.168.1.17') || str_contains($identitas, '10.147.17.60') || str_contains($identitas, 'gkr.my.id')) {
+            $serverLabel = 'PROD';
+        } else {
+            $serverLabel = 'TIDAK DIKENAL';
+        }
 
         date_default_timezone_set('Asia/Jakarta');
         $waktu = date('d-m-Y H:i:s');

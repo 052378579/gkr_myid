@@ -38,14 +38,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in daftarVersi" :key="item.id">
+                        <tr v-for="item in paginatedVersi" :key="item.id">
                             <td class="ps-4 fw-bold">{{ item.versi }}</td>
                             <td>{{ formatTanggal(item.tanggal_rilis) }}</td>
                             <td>{{ item.judul }}</td>
                             <td>
-                                <span class="badge bg-primary me-1 rounded-pill" v-if="item.improvements.length > 0">{{ item.improvements.length }} Imprv</span>
-                                <span class="badge bg-danger me-1 rounded-pill" v-if="item.fixes.length > 0">{{ item.fixes.length }} Fixes</span>
-                                <span class="badge bg-success rounded-pill" v-if="item.patches.length > 0">{{ item.patches.length }} Patch</span>
+                                <span class="badge bg-primary me-1 rounded-pill" v-if="item.improvements && item.improvements.length > 0">{{ item.improvements.length }} Imprv</span>
+                                <span class="badge bg-danger me-1 rounded-pill" v-if="item.fixes && item.fixes.length > 0">{{ item.fixes.length }} Fixes</span>
+                                <span class="badge bg-success rounded-pill" v-if="item.patches && item.patches.length > 0">{{ item.patches.length }} Patch</span>
                             </td>
                             <td class="pe-4 text-end text-nowrap">
                                 <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1" @click="editVersi(item)">Edit</button>
@@ -65,6 +65,25 @@
             </div>
         </div>
     </div>
+
+    <!-- Paginasi -->
+    <nav aria-label="Navigasi Halaman" v-if="totalPages > 1" class="mb-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <button class="page-link shadow-sm border-0" @click="prevPage" :disabled="currentPage === 1" style="border-radius: 20px 0 0 20px;">
+                    <i class="fas fa-chevron-left me-1"></i> Sebelumnya
+                </button>
+            </li>
+            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
+                <button class="page-link shadow-sm border-0" @click="goToPage(page)">{{ page }}</button>
+            </li>
+            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <button class="page-link shadow-sm border-0" @click="nextPage" :disabled="currentPage === totalPages" style="border-radius: 0 20px 20px 0;">
+                    Selanjutnya <i class="fas fa-chevron-right ms-1"></i>
+                </button>
+            </li>
+        </ul>
+    </nav>
 
     <!-- Modal Form -->
     <div class="modal fade" id="versiModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
@@ -155,7 +174,6 @@
 
 <?= $this->endSection() ?>
 
-<?= $this->section('scripts') ?>
 <?= $this->section('styles') ?>
 <meta name="page-config" 
     data-api-get-all="<?= base_url('admin/versi/getAll') ?>"
@@ -163,5 +181,7 @@
     data-api-update="<?= base_url('admin/versi/update') ?>"
     data-api-delete="<?= base_url('admin/versi/delete') ?>">
 <?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
 <script src="<?= base_url('js/admin_versi.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>

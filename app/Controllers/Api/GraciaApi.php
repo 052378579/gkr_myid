@@ -154,7 +154,7 @@ class GraciaApi extends BaseController
     public function getSites()
     {
         $cariModel = new CariModel();
-        $data = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()->findAll();
+        $data = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()->orderBy('id', 'DESC')->findAll();
         $urlDasarGambar = $this->getFotoUrlPrefix();
         
         foreach ($data as &$barisSitus) {
@@ -182,7 +182,7 @@ class GraciaApi extends BaseController
     public function getImages()
     {
         $cariModel = new CariModel();
-        $data = $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->findAll();
+        $data = $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->orderBy('id', 'DESC')->findAll();
         $urlDasarGambar = $this->getFotoUrlPrefix();
         
         foreach ($data as &$barisGambar) {
@@ -413,8 +413,16 @@ class GraciaApi extends BaseController
         if ($this->request->getPost('alt') !== null) $dataPembaruan['alt'] = esc($this->request->getPost('alt'));
         if ($desc !== null) $dataPembaruan['deskripsi'] = esc($desc);
         if ($url !== null) $dataPembaruan['url'] = esc($url);
-        if ($this->request->getPost('imageUrl') !== null) $dataPembaruan['imageUrl'] = esc($this->request->getPost('imageUrl'));
-        if ($this->request->getPost('siteUrl') !== null) $dataPembaruan['siteUrl'] = esc($this->request->getPost('siteUrl'));
+        if ($this->request->getPost('imageUrl') !== null) {
+            $rawImg = esc($this->request->getPost('imageUrl'));
+            $rawImg = str_replace(['https://foto.budi.biz.id/', 'http://foto.budi.biz.id/', 'https://foto.gkr.my.id/', 'http://foto.gkr.my.id/'], '', $rawImg);
+            $dataPembaruan['imageUrl'] = $rawImg;
+        }
+        if ($this->request->getPost('siteUrl') !== null) {
+            $rawSite = esc($this->request->getPost('siteUrl'));
+            $rawSite = str_replace(['https://foto.budi.biz.id/', 'http://foto.budi.biz.id/', 'https://foto.gkr.my.id/', 'http://foto.gkr.my.id/'], '', $rawSite);
+            $dataPembaruan['siteUrl'] = $rawSite;
+        }
         if ($kodeBom !== null) {
             $cleanBom = esc(trim($kodeBom));
             if (!empty($cleanBom) && $cleanBom !== '-' && $cleanBom !== 'FG-') {

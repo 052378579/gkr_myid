@@ -27,7 +27,7 @@ class CrawlCommand extends BaseCommand
      *
      * @var string
      */
-    protected $description = 'Mengeksekusi Crawler (Web/Lokal) via Terminal CLI.';
+    protected $description = 'Menjalankan Crawler (Web/Lokal) via Terminal CLI';
 
     /**
      * The Command's Usage
@@ -62,7 +62,7 @@ class CrawlCommand extends BaseCommand
         $target = array_shift($params);
 
         if (empty($target)) {
-            CLI::error('Kesalahan: Anda harus menyertakan URL tautan atau target direktori lokal.');
+            CLI::error('Kesalahan: Anda harus menyertakan URL tautan atau target direktori lokal');
             CLI::write('Contoh: php spark crawl:run /var/www/FOTO/BUYER', 'yellow');
             return;
         }
@@ -79,11 +79,11 @@ class CrawlCommand extends BaseCommand
         } else {
             // Tautan Eksternal/URL
             $mesinPencari->followLinks($target, 1, 3);
-            $kesimpulan = "SELESAI: Crawling eksternal selesai dilakukan.";
+            $kesimpulan = "SELESAI: Crawling eksternal selesai dilakukan";
         }
 
         CLI::newLine();
-        CLI::write('Proses crawling telah selesai dilakukan.', 'green');
+        CLI::write('Proses crawling telah selesai dilakukan', 'green');
         
         $this->sendTelegramNotification($target, $kesimpulan);
     }

@@ -23,6 +23,15 @@
                         <option value="100">100</option>
                     </select>
                 </div>
+                <div class="d-none d-md-flex align-items-center">
+                    <select class="form-select form-select-sm rounded-pill w-auto shadow-sm" v-model="filterBom">
+                        <option value="">-- Semua --</option>
+                        <option value="FG-1">UNIT 1 (FG-1)</option>
+                        <option value="FG-2">UNIT 2 (FG-2)</option>
+                        <option value="FG-4">UNIT 4 (FG-4)</option>
+                        <option value="-">Kosong (-)</option>
+                    </select>
+                </div>
                 <div class="input-group" style="max-width: 280px;">
                     <span class="input-group-text border-end-0 bg-body"><i class="fas fa-search text-muted"></i></span>
                     <input type="text" class="form-control border-start-0 ps-0 shadow-none" placeholder="Cari barang atau URL..." v-model="searchImage">

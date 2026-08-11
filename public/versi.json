@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "07-08-2026 13:03:00 WIB",
-    "versi_diperbarui": "0.8.07",
+    "tanggal_diperbarui": "11-08-2026 07:12:00 WIB",
+    "versi_diperbarui": "0.8.12",
     "data": [
         {
             "id": 1,
@@ -339,6 +339,27 @@
                 "Sinkronisasi komprehensif seluruh dokumentasi internal tim dan etalase GitHub (PRD.md, struktur_folder.md, dll)."
             ],
             "created_at": "2026-08-07 13:03:00"
+        },
+        {
+            "id": 17,
+            "versi": "0.8.12",
+            "tanggal_rilis": "2026-08-11",
+            "judul": "Resolusi Race Condition Vue & Bypassing Cache Browser Lapis Ganda",
+            "deskripsi": "Rilis ini berfokus pada penyempurnaan kestabilan sinkronisasi kecerdasan buatan, pendeteksian server DEV/PROD pada pelaporan Telegram secara ketat (berbasis IP+Domain), dan kelulusan mutlak pada audit bedah kode bersih arsitektur antarmuka pengguna.",
+            "improvements": [
+                "Sistem cerdas AI Trainer (State Ledger) yang mampu mengenali dan melompati pemrosesan pada gambar yang telah tersinkron sebelumnya (Anti-Duplication).",
+                "Pemisahan identitas notifikasi Telegram yang sangat ketat untuk peladen DEV dan PROD dengan mekanisme Unknown Fallback (TIDAK DIKENAL).",
+                "Kelulusan 100% pada audit bedah kebersihan kode antarmuka (Zero Inline Script & Style pada direktori Views)."
+            ],
+            "fixes": [
+                "Menutup celah penggandaan indeks data vektor FAISS yang berpotensi membebani memori mesin pencarian AI.",
+                "Menambal kebocoran identitas laporan harian Telegram yang sebelumnya gagal mendeteksi peladen operasional akibat anomali resolusi domain ZeroTier/lokal."
+            ],
+            "patches": [
+                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.11).",
+                "Sinkronisasi komprehensif terhadap 8 pilar dokumen internal tim (PRD.md, Memory.md, Skills.md, Task.md, StyleGuide.md) dan etalase publik GitHub (README.md, struktur_folder.md, Tautan.md)."
+            ],
+            "created_at": "2026-08-11 06:55:00"
         }
     ]
 }
