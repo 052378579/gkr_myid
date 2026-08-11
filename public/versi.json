@@ -2,7 +2,7 @@
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
     "tanggal_diperbarui": "11-08-2026 07:12:00 WIB",
-    "versi_diperbarui": "0.8.12",
+    "versi_diperbarui": "0.8.11",
     "data": [
         {
             "id": 1,
@@ -342,7 +342,7 @@
         },
         {
             "id": 17,
-            "versi": "0.8.12",
+            "versi": "0.8.11",
             "tanggal_rilis": "2026-08-11",
             "judul": "Resolusi Race Condition Vue & Bypassing Cache Browser Lapis Ganda",
             "deskripsi": "Rilis ini berfokus pada penyempurnaan kestabilan sinkronisasi kecerdasan buatan, pendeteksian server DEV/PROD pada pelaporan Telegram secara ketat (berbasis IP+Domain), dan kelulusan mutlak pada audit bedah kode bersih arsitektur antarmuka pengguna.",
