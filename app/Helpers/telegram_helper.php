@@ -22,7 +22,10 @@ if (!function_exists('send_telegram_notification')) {
         $serverHost = $_SERVER['HTTP_HOST'] ?? gethostname();
         $env        = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
         
-        $identitas = strtolower($serverIp . ' | ' . $serverHost . ' | ' . $env);
+        // Menangkap IP fisik langsung dari Sistem Operasi (Tangguh di CLI & Reverse Proxy)
+        $machineIps = function_exists('shell_exec') ? trim(@shell_exec('hostname -I 2>/dev/null')) : '';
+        
+        $identitas = strtolower($serverIp . ' | ' . $serverHost . ' | ' . $env . ' | ' . $machineIps);
         
         if (str_contains($identitas, '192.168.1.4') || str_contains($identitas, '10.147.17.40') || str_contains($identitas, 'gkr.budi.biz.id') || $env === 'development') {
             $serverLabel = 'DEV';

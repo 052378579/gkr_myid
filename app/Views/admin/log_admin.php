@@ -91,7 +91,7 @@
                             <thead class="">
                                 <tr>
                                     <th class="ps-4">Pengguna</th>
-                                    <th>Kata Kunci / Input</th>
+                                    <th>Kata Kunci</th>
                                     <th>Tipe</th>
                                     <th>Hasil</th>
                                     <th>Sumber</th>
@@ -119,7 +119,7 @@
                                                 <?php if (isset($log['source']) && strtolower($log['source']) === 'telegram'): ?>
                                                     <span class="badge bg-primary rounded-pill" style="background-color: #0088cc !important;"><i class="fab fa-telegram-plane me-1"></i> Telegram</span>
                                                 <?php else: ?>
-                                                    <span class="badge bg-secondary rounded-pill"><i class="fas fa-desktop me-1"></i> Web</span>
+                                                    <span class="badge bg-secondary rounded-pill"><i class="fas fa-globe me-1"></i> Web</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-nowrap"><?= date('d/m/Y H:i:s', strtotime($log['waktu'])) ?></td>
