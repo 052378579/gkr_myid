@@ -54,7 +54,7 @@ if (!function_exists('send_telegram_notification')) {
                     'text'       => $pesan,
                     'parse_mode' => 'HTML'
                 ],
-                'timeout' => 5, // Eksekusi sinkron dengan limit 5 detik standar
+                'timeout' => 30, // Melonggarkan Timeout (Sesuai Preferensi: Tidak agresif)
                 'verify'  => false
             ]);
         } catch (\Exception $e) {
