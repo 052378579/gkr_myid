@@ -13,7 +13,7 @@ Sistem hibrida ini dirancang untuk mengindeks, menelusuri, dan merekomendasikan 
 * **Autocomplete & Search Engine Cerdas:** Rekomendasi kata kunci *real-time* berbasis RESTful API dengan algoritma pengecualian antonim kategori dan perhitungan skor relevansi tingkat tinggi.
 * **Auto-Crawler & AI Trainer:** Sistem perayap katalog terotomatisasi via Cronjob dengan manajemen sinkronisasi inkremental dan fitur pemulihan (*Hard Reset*) via dasbor UI interaktif.
 * **Arsitektur Frontend Ringkas:** Pendekatan *Zero Inline Script & Style* (Lulus Audit 100%), integrasi *Vue.js*, *DOM Metadata Injection*, dan strategi *Browser Memory Cache* agresif (`ASSET_VERSION`) yang menghemat latensi hingga 90%.
-* **Keamanan & Otorisasi Ketat (RBAC):** Mode privat berlapis ganda, pendaftaran Telegram Chatbot otentik, serta pelacakan jejak audit (*Real IP Audit Log*) menembus jaringan *Reverse Proxy*.
+* **Keamanan RBAC & Telegram Dual-Command Chatbot:** Mode privat berlapis ganda, pendaftaran Telegram Chatbot otentik (*Auto-Bind*), pelacakan jejak audit IP asli menembus *Reverse Proxy*, serta integrasi Chatbot Arsitektur Ganda (Perintah Cepat *Cari* vs Kolase Galeri *Album*) yang anti-beku (*Crash-Proof*).
 * **Dashboard Administrator Interaktif:** Dasbor manajemen visual dengan metrik performa dan grafik *ApexCharts* responsif.
 
 ---

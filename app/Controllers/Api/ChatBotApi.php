@@ -74,21 +74,22 @@ class ChatBotApi extends BaseController
                 $this->prosesAutoBind($id_obrolan, $pesanMasuk, $userModel);
             } else {
                 // Karyawan Terverifikasi & Aktif, Lanjut Logika Pencarian
-                if (preg_match('/^cari\s+(.*)/i', $pesanMasuk, $cocok)) {
-                    $kataKunci = $cocok[1];
-                    $this->prosesPencarian($id_obrolan, $kataKunci, $karyawan['id_user']);
+                if (preg_match('/^(cari|album)\s+(.*)/i', $pesanMasuk, $cocok)) {
+                    $modeAlbum = strtolower($cocok[1]) === 'album';
+                    $kataKunci = $cocok[2];
+                    $this->prosesPencarian($id_obrolan, $kataKunci, $karyawan['id_user'], $modeAlbum);
                 } else if (preg_match('/^\/(start|daftar)/i', $pesanMasuk)) {
                     $pesanAktif = "✅ *Akun Anda Sudah Terhubung!*\n\n";
                     $pesanAktif .= "Halo *" . $karyawan['nama_lengkap'] . "*! Akun Telegram Anda telah aktif dan terhubung.\n\n";
-                    $pesanAktif .= "Ketik *Cari <Nama Barang>* untuk mencari katalog.\n";
+                    $pesanAktif .= "Ketik *Cari <Nama Barang>* (Cepat) atau *Album <Nama Barang>* (Galeri).\n";
                     $pesanAktif .= "Contoh: *Cari Alcova*";
                     
                     $this->kirimPesanTelegram($id_obrolan, $pesanAktif);
                 } else {
-                    // Balasan jika tidak menggunakan format 'Cari'
+                    // Balasan jika tidak menggunakan format yang benar
                     $pesanPanduan = "Halo " . $karyawan['nama_lengkap'] . "! Saya Asisten Gracia 🤖\n\n";
-                    $pesanPanduan .= "Ketik *Cari <Nama Barang>* untuk mencari katalog.\n";
-                    $pesanPanduan .= "Contoh: *Cari Alcova*";
+                    $pesanPanduan .= "Ketik *Cari <Nama Barang>* (Cepat) atau *Album <Nama Barang>* (Galeri).\n";
+                    $pesanPanduan .= "Contoh: *Album Alcova*";
                     
                     $this->kirimPesanTelegram($id_obrolan, $pesanPanduan);
                 }
@@ -133,8 +134,8 @@ class ChatBotApi extends BaseController
                 $pesanSukses .= "👤 *Nama:* " . $userFound['nama_lengkap'] . "\n";
                 $pesanSukses .= "🏢 *Divisi:* " . $userFound['divisi'] . "\n";
                 $pesanSukses .= "📱 *No HP:* " . $userFound['no_hp'] . "\n\n";
-                $pesanSukses .= "Kini Anda dapat langsung menggunakan perintah *Cari <Nama Barang>* untuk mencari katalog.\n";
-                $pesanSukses .= "Contoh: *Cari Alcova*";
+                $pesanSukses .= "Kini Anda dapat langsung menggunakan perintah *Cari <Nama Barang>* atau *Album <Nama Barang>*.\n";
+                $pesanSukses .= "Contoh: *Album Alcova*";
 
                 $this->kirimPesanTelegram($id_obrolan, $pesanSukses);
                 return;
@@ -185,27 +186,31 @@ class ChatBotApi extends BaseController
     /**
      * Fungsi Logika Pencarian Visual di Tabel Fisik gkr_cari (Nama Kolom Bahasa Indonesia)
      */
-    private function prosesPencarian($id_obrolan, $kataKunci, $id_user = null)
+    private function prosesPencarian($id_obrolan, $kataKunci, $id_user = null, $modeAlbum = false)
     {
         $cariModel = new CariModel();
-
-        // TAHAP 1: FULL-TEXT SEARCH di gkr_cari (Akurasi Relevansi)
         $db = \Config\Database::connect();
         $kataKunciAman = $db->escapeString($kataKunci);
 
-        $hasilGambar = $cariModel->where('imageUrl IS NOT NULL')
+        // TAHAP 1: FULL-TEXT SEARCH
+        $hasilSemua = $cariModel->where('imageUrl IS NOT NULL')
                                  ->where('imageUrl !=', '')
                                  ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)
-                                 ->first(); 
+                                 ->findAll();
+                                 
+        $hasilSitusSemua = [];
+        if (empty($hasilSemua)) {
+            $hasilSitusSemua = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()
+                                    ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)
+                                    ->findAll();
+        }
 
-        $hasilSitus = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()
-                                ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAman}*' IN BOOLEAN MODE)", null, false)
-                                ->first();
-
-        // TAHAP 2: LEVENSHTEIN DISTANCE (Penyelamat Typo)
         $isTypo = false;
-        if (!$hasilGambar && !$hasilSitus) {
-            $semuaEntitas = $cariModel->select('id, judul, imageUrl')->findAll();
+        $judulDikoreksi = $kataKunci;
+
+        // TAHAP 2: LEVENSHTEIN DISTANCE
+        if (empty($hasilSemua) && empty($hasilSitusSemua)) {
+            $semuaEntitas = $cariModel->select('id, judul')->findAll();
             $jarakTerdekat = 100;
             $entitasDitemukan = null;
 
@@ -218,41 +223,122 @@ class ChatBotApi extends BaseController
             }
 
             if ($entitasDitemukan) {
-                if (!empty($entitasDitemukan['imageUrl'])) {
-                    $hasilGambar = $cariModel->find($entitasDitemukan['id']);
-                } else {
-                    $hasilSitus = $cariModel->find($entitasDitemukan['id']);
-                }
                 $isTypo = true;
+                $judulDikoreksi = $entitasDitemukan['judul'];
+                $kataKunciAmanTypo = $db->escapeString($judulDikoreksi);
+                
+                // Cari ulang menggunakan FTS berdasarkan kata yang sudah dikoreksi
+                $hasilSemua = $cariModel->where('imageUrl IS NOT NULL')
+                                 ->where('imageUrl !=', '')
+                                 ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAmanTypo}*' IN BOOLEAN MODE)", null, false)
+                                 ->findAll();
+                                 
+                if (empty($hasilSemua)) {
+                     $hasilSitusSemua = $cariModel->groupStart()->where('imageUrl IS NULL')->orWhere('imageUrl', '')->groupEnd()
+                                    ->where("MATCH(judul, kata_kunci, alt, deskripsi) AGAINST('{$kataKunciAmanTypo}*' IN BOOLEAN MODE)", null, false)
+                                    ->findAll();
+                }
+                
+                // Fallback terakhir
+                if (empty($hasilSemua) && empty($hasilSitusSemua)) {
+                     $entitasFix = $cariModel->find($entitasDitemukan['id']);
+                     if (!empty($entitasFix['imageUrl'])) {
+                         $hasilSemua = [$entitasFix];
+                     } else {
+                         $hasilSitusSemua = [$entitasFix];
+                     }
+                }
             }
         }
-
-        if ($hasilGambar || $hasilSitus) {
-            // 1. Ambil Judul Utama (Prioritas: Gambar -> Situs)
-            $judulMentah = $hasilGambar ? $hasilGambar['judul'] : $hasilSitus['judul'];
-            
-            // 2. Format menjadi Title Case (Huruf Kapital di Setiap Kata)
-            $judulRapih = ucwords(strtolower($judulMentah));
-            
-            // 3. Buat URL Pencarian Dinamis menggunakan judul asli dari DB agar akurat
-            $urlPencarian = base_url('cari?q=' . urlencode($judulMentah) . '&type=images');
         
-            // 4. Susun Caption Sederhana (Dengan format Bold Markdown di Judul)
-            if ($isTypo) {
-                $keterangan = "🔍 *Mungkin Maksud Anda:*\n\n";
-            } else {
-                $keterangan = "Pencarian Ditemukan!\n\n";
-            }
-            $keterangan .= "*{$judulRapih}*\n";
-            $keterangan .= "Klik: [Lihat Selengkapnya]({$urlPencarian})";
+        $totalHasil = count($hasilSemua) + count($hasilSitusSemua);
 
-            // Jika ada gambar, kirim sebagai SendPhoto dengan Caption
-            if ($hasilGambar && !empty($hasilGambar['imageUrl'])) {
-                $urlGambar = (strpos($hasilGambar['imageUrl'], 'http') === 0) ? $hasilGambar['imageUrl'] : 'https://foto.gkr.my.id/' . ltrim($hasilGambar['imageUrl'], '/');
-                $this->kirimFotoTelegram($id_obrolan, $urlGambar, $keterangan);
-            } else {
-                // Jika hanya situs, kirim sebagai teks
-                $this->kirimPesanTelegram($id_obrolan, $keterangan);
+        if ($totalHasil > 0) {
+            // Ambil item teratas
+            $itemUtama = !empty($hasilSemua) ? $hasilSemua[0] : $hasilSitusSemua[0];
+            $judulMentah = $itemUtama['judul'];
+            $judulRapih = ucwords(strtolower($judulMentah));
+            $urlPencarian = base_url('cari?q=' . urlencode($judulMentah) . '&type=images');
+
+            // --- LOGIKA ALBUM ---
+            if ($modeAlbum) {
+                // Logika Penyelamat 1 (Typo Trap)
+                if ($isTypo) {
+                    $keterangan = "🔍 *Mungkin yang Anda cari '{$judulRapih}'*";
+                    if ($totalHasil > 1) {
+                        $keterangan .= " (Total {$totalHasil} Varian)\n\n";
+                    } else {
+                        $keterangan .= "\n\n";
+                    }
+                    $keterangan .= "*{$judulRapih}*\n";
+                    $keterangan .= "Klik: [Lihat Detail Barangnya]({$urlPencarian})";
+                    if ($totalHasil > 1) {
+                        $sisa = $totalHasil - 1;
+                        $keterangan .= "\n\n👉 [Lihat {$sisa} Varian {$judulRapih} Lainnya di Web]({$urlPencarian})";
+                    }
+                    
+                    if (!empty($itemUtama['imageUrl'])) {
+                        $urlGambar = (strpos($itemUtama['imageUrl'], 'http') === 0) ? $itemUtama['imageUrl'] : 'https://foto.gkr.my.id/' . ltrim($itemUtama['imageUrl'], '/');
+                        $this->kirimFotoTelegram($id_obrolan, $urlGambar, $keterangan);
+                    } else {
+                        $this->kirimPesanTelegram($id_obrolan, $keterangan);
+                    }
+                } else {
+                    // Eksekusi Album Normal
+                    if (!empty($hasilSemua) && count($hasilSemua) > 1) {
+                        $keteranganAlbum = "👉 [Lihat Semua Varian {$judulRapih} di Web]({$urlPencarian})";
+                        $suksesAlbum = $this->kirimAlbumTelegram($id_obrolan, $hasilSemua, $keteranganAlbum);
+                        
+                        // Logika Penyelamat 2 (Bom Waktu Broken Link)
+                        if (!$suksesAlbum) {
+                            $keteranganDarurat = "⚠️ *Tidak ada gambar \"{$judulRapih}\" yang dapat dimuat secara massal (Terdapat gangguan jaringan server gambar).*\n\n";
+                            $keteranganDarurat .= "Klik: [Lihat Detail Barangnya]({$urlPencarian})\n";
+                            if ($totalHasil > 1) {
+                                $sisa = $totalHasil - 1;
+                                $keteranganDarurat .= "👉 [Lihat {$sisa} Varian {$judulRapih} Lainnya di Web]({$urlPencarian})";
+                            }
+                            $this->kirimPesanTelegram($id_obrolan, $keteranganDarurat);
+                        }
+                    } else {
+                        // Jika minta album tapi hasil cuma 1 (atau hanya situs)
+                        $keterangan = "Pencarian Ditemukan!\n\n*{$judulRapih}*\nKlik: [Lihat Selengkapnya]({$urlPencarian})";
+                        if (!empty($itemUtama['imageUrl'])) {
+                            $urlGambar = (strpos($itemUtama['imageUrl'], 'http') === 0) ? $itemUtama['imageUrl'] : 'https://foto.gkr.my.id/' . ltrim($itemUtama['imageUrl'], '/');
+                            $this->kirimFotoTelegram($id_obrolan, $urlGambar, $keterangan);
+                        } else {
+                            $this->kirimPesanTelegram($id_obrolan, $keterangan);
+                        }
+                    }
+                }
+            } 
+            // --- LOGIKA CARI NORMAL (HIBRIDA) ---
+            else {
+                if ($isTypo) {
+                    $keterangan = "🔍 *Mungkin yang Anda cari '{$judulRapih}'*";
+                } else {
+                    $keterangan = "Pencarian Ditemukan!";
+                }
+                
+                if ($totalHasil > 1) {
+                    $keterangan .= " (Total {$totalHasil} Varian)\n\n";
+                } else {
+                    $keterangan .= "\n\n";
+                }
+                
+                $keterangan .= "*{$judulRapih}*\n";
+                $keterangan .= "Klik: [Lihat Detail Barangnya]({$urlPencarian})";
+                
+                if ($totalHasil > 1) {
+                    $sisa = $totalHasil - 1;
+                    $keterangan .= "\n\n👉 [Lihat {$sisa} Varian {$judulRapih} Lainnya di Web]({$urlPencarian})";
+                }
+
+                if (!empty($itemUtama['imageUrl'])) {
+                    $urlGambar = (strpos($itemUtama['imageUrl'], 'http') === 0) ? $itemUtama['imageUrl'] : 'https://foto.gkr.my.id/' . ltrim($itemUtama['imageUrl'], '/');
+                    $this->kirimFotoTelegram($id_obrolan, $urlGambar, $keterangan);
+                } else {
+                    $this->kirimPesanTelegram($id_obrolan, $keterangan);
+                }
             }
 
             // --- LOG AUDIT (PILAR 3) ---
@@ -316,5 +402,52 @@ class ChatBotApi extends BaseController
             // FALLBACK: Jika gambar rusak/hilang, Bot tetap mengirimkan teks balasan agar tidak terlihat "mogok"
             $this->kirimPesanTelegram($id_obrolan, $keterangan . "\n\n*(Visual gambar gagal dimuat dari server, namun tautan di atas tetap dapat Anda akses)*");
         }
+    }
+
+    /**
+     * Helper: Kirim Album MediaGroup via API Telegram
+     * Mengembalikan true jika sukses, false jika gagal (broken link dll)
+     */
+    private function kirimAlbumTelegram($id_obrolan, $hasilSemua, $keteranganUtama)
+    {
+        $url = $this->apiUrl . $this->botToken . '/sendMediaGroup';
+        
+        $media = [];
+        $maksimalAlbum = 10;
+        $counter = 0;
+        
+        foreach ($hasilSemua as $item) {
+            if ($counter >= $maksimalAlbum) break;
+            
+            $urlGambar = (strpos($item['imageUrl'], 'http') === 0) ? $item['imageUrl'] : 'https://foto.gkr.my.id/' . ltrim($item['imageUrl'], '/');
+            
+            $photoObj = [
+                'type'  => 'photo',
+                'media' => $urlGambar
+            ];
+            
+            if ($counter === 0) {
+                $photoObj['caption'] = $keteranganUtama;
+                $photoObj['parse_mode'] = 'Markdown';
+            }
+            
+            $media[] = $photoObj;
+            $counter++;
+        }
+        
+        $data = [
+            'chat_id' => $id_obrolan,
+            'media'   => json_encode($media)
+        ];
+
+        $klien = \Config\Services::curlrequest(['http_errors' => false]);
+        $response = $klien->post($url, ['form_params' => $data]);
+        
+        if ($response->getStatusCode() !== 200) {
+            log_message('error', 'Telegram SendMediaGroup Error: ' . $response->getBody());
+            return false;
+        }
+        
+        return true;
     }
 }

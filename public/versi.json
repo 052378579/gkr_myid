@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "11-08-2026 07:12:00 WIB",
-    "versi_diperbarui": "0.8.11",
+    "tanggal_diperbarui": "12-08-2026 09:00:00 WIB",
+    "versi_diperbarui": "0.8.12",
     "data": [
         {
             "id": 1,
@@ -360,6 +360,24 @@
                 "Sinkronisasi komprehensif terhadap 8 pilar dokumen internal tim (PRD.md, Memory.md, Skills.md, Task.md, StyleGuide.md) dan etalase publik GitHub (README.md, struktur_folder.md, Tautan.md)."
             ],
             "created_at": "2026-08-11 06:55:00"
+        },
+        {
+            "id": 18,
+            "versi": "0.8.12",
+            "tanggal_rilis": "2026-08-12",
+            "judul": "Peluncuran Mode Album Telegram & Kecerdasan Koreksi Kata",
+            "deskripsi": "Pembaruan ini membawakan asisten Telegram yang jauh lebih interaktif, memungkinkan Anda meminta tampilan katalog dalam bentuk galeri foto memukau, serta kemampuan asisten cerdas untuk memaafkan kesalahan ketik (typo).",
+            "improvements": [
+                "Peluncuran Fitur 'Album': Kini Anda dapat mengetikkan 'Album <Nama Barang>' di Telegram untuk langsung menerima galeri kumpulan foto produk sekaligus (bisa digeser).",
+                "Kecerdasan Koreksi Salah Ketik (Typo): Asisten kini mampu mendeteksi jika Anda salah mengeja nama barang saat sedang terburu-buru, dan akan otomatis memberikan rekomendasi katalog yang tepat."
+            ],
+            "fixes": [
+                "Menghilangkan kendala terhentinya respon asisten Telegram saat beberapa gambar produk kebetulan sedang tidak dapat dimuat."
+            ],
+            "patches": [
+                "Peningkatan stabilitas pelaporan otomatis harian agar berjalan lebih senyap dan akurat di latar belakang."
+            ],
+            "created_at": "2026-08-12 09:00:00"
         }
     ]
 }

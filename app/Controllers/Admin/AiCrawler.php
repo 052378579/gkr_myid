@@ -50,6 +50,11 @@ class AiCrawler extends BaseController
                 }
             }
             pclose($handle);
+            
+            // Kirim notifikasi Telegram saat proses AI selesai
+            helper('telegram');
+            $statusMode = ($mode === 'reset') ? 'HARD RESET' : 'SINKRONISASI INKREMENTAL';
+            send_telegram_notification('AI Trainer', '/mnt/sdcard/ai-scanner/', "Mode {$statusMode} berhasil dieksekusi");
         } else {
             echo "\n[ERROR] Gagal mengeksekusi skrip Python.\n";
             @ob_flush(); @flush();

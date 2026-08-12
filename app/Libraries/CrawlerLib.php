@@ -352,61 +352,10 @@ class CrawlerLib
             $this->out("<span style='color: #ffc107;'>[AI WARNING]</span> <span style='color: #d4d4d4;'>Database kosong! Ekspor dibatalkan untuk mencegah amnesia AI.</span>", 'yellow');
         }
 
-        $this->sendTelegramNotification($targetPath, $itemsAdded);
+        helper('telegram');
+        $itemInfo = ($itemsAdded > 0) ? "{$itemsAdded} Item Baru Ditambahkan" : "Perayapan Selesai (0 Item Baru)";
+        send_telegram_notification('Crawler', $targetPath, $itemInfo);
 
         return $kesimpulan;
-    }
-
-    private function sendTelegramNotification($target, $itemsAdded)
-    {
-        $botToken = env('BOT_TOKEN');
-        $chatId   = env('CHAT_ID');
-
-        if (empty($botToken) || empty($chatId)) {
-            return;
-        }
-
-        // Deteksi Label Server (DEV vs PROD)
-        $serverIp   = $_SERVER['SERVER_ADDR'] ?? '';
-        $serverHost = $_SERVER['HTTP_HOST'] ?? gethostname();
-        $env        = defined('ENVIRONMENT') ? ENVIRONMENT : 'production';
-        
-        $identitas = strtolower($serverIp . ' | ' . $serverHost . ' | ' . $env);
-        
-        if (str_contains($identitas, '192.168.1.4') || str_contains($identitas, '10.147.17.40') || str_contains($identitas, 'gkr.budi.biz.id') || $env === 'development') {
-            $serverLabel = 'DEV';
-        } elseif (str_contains($identitas, '192.168.1.17') || str_contains($identitas, '10.147.17.60') || str_contains($identitas, 'gkr.my.id')) {
-            $serverLabel = 'PROD';
-        } else {
-            $serverLabel = 'TIDAK DIKENAL';
-        }
-
-        date_default_timezone_set('Asia/Jakarta');
-        $waktu = date('d-m-Y H:i:s');
-
-        $itemInfo = ($itemsAdded > 0) ? "{$itemsAdded} Item Baru Ditambahkan" : "Perayapan Selesai (0 Item Baru)";
-
-        $pesan = "🤖 <b>Auto Crawler Selesai!</b>\n\n";
-        $pesan .= "🖥️ <b>Server:</b> " . $serverLabel . "\n";
-        $pesan .= "📂 <b>Direktori:</b> " . htmlspecialchars($target) . "\n";
-        $pesan .= "⏰ <b>Waktu:</b> " . $waktu . " WIB\n\n";
-        $pesan .= "💾 " . htmlspecialchars($itemInfo);
-
-        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
-        
-        try {
-            $client = \Config\Services::curlrequest();
-            $client->post($url, [
-                'form_params' => [
-                    'chat_id'    => $chatId,
-                    'text'       => $pesan,
-                    'parse_mode' => 'HTML'
-                ],
-                'timeout' => 5,
-                'verify'  => false
-            ]);
-        } catch (\Exception $e) {
-            log_message('error', 'Telegram Crawler Notification Error: ' . $e->getMessage());
-        }
     }
 }
