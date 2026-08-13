@@ -33,3 +33,7 @@ Task.md
 .agents/
 .DS_Store
 Thumbs.db
+# Abaikan database AI Trainer lokal
+python_services/produk.index
+python_services/mapping.json
+python_services/buku_catatan_ai.json
