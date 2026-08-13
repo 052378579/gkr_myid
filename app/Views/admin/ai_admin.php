@@ -24,7 +24,7 @@
                 <div>
                     <div class="mb-3">
                         <label class="form-label fw-bold text-secondary" style="font-size: 0.85rem;">Direktori Gambar</label>
-                        <input type="text" class="form-control" value="BUYER, GRACIA, SWATCHES, WEB" disabled>
+                        <input type="text" v-model="url" class="form-control" placeholder="/var/www/FOTO" required :disabled="isCrawling">
                         <div class="form-text mt-1" style="font-size: 0.75rem;">Mengekstrak ciri visual dan memuat ulang otak AI.</div>
                     </div>
                     

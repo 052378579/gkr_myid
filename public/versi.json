@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "12-08-2026 09:00:00 WIB",
-    "versi_diperbarui": "0.8.12",
+    "tanggal_diperbarui": "13-08-2026 13:00:00 WIB",
+    "versi_diperbarui": "0.8.13",
     "data": [
         {
             "id": 1,
@@ -377,7 +377,24 @@
             "patches": [
                 "Peningkatan stabilitas pelaporan otomatis harian agar berjalan lebih senyap dan akurat di latar belakang."
             ],
-            "created_at": "2026-08-12 09:00:00"
+        },
+        {
+            "id": 19,
+            "versi": "0.8.13",
+            "tanggal_rilis": "2026-08-13",
+            "judul": "Otomatisasi Jadwal & Modernisasi Notifikasi",
+            "deskripsi": "Pembaruan ini membawakan stabilitas paripurna dengan menyerahkan kendali penjadwalan pembaruan katalog ke sistem orkestrasi modern, sehingga server aplikasi dapat berjalan jauh lebih senyap, lega, dan tangguh.",
+            "improvements": [
+                "Transisi ke sistem penjadwalan modern yang menjamin pembaruan katalog dan mesin AI selalu tepat waktu tanpa membebani server utama.",
+                "Penyempurnaan mekanisme notifikasi internal agar pengiriman laporan harian berjalan seketika tanpa jeda pemuatan (loading)."
+            ],
+            "fixes": [
+                "Menghilangkan potensi keterlambatan (delay) pada pengiriman laporan harian berkat sistem antrean (webhook) asinkron."
+            ],
+            "patches": [
+                "Peningkatan keamanan rute internal aplikasi untuk melindungi akses mesin otomasi."
+            ],
+            "created_at": "2026-08-13 13:00:00"
         }
     ]
 }

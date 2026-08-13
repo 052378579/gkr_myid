@@ -38,23 +38,21 @@ if (!function_exists('send_telegram_notification')) {
         date_default_timezone_set('Asia/Jakarta');
         $waktu = date('d-m-Y H:i:s');
 
-        $pesan = "🤖 <b>Auto {$jenis_proses} Selesai!</b>\n\n";
-        $pesan .= "🖥️ <b>Server:</b> " . $serverLabel . "\n";
-        $pesan .= "📂 <b>Direktori:</b> " . htmlspecialchars($direktori) . "\n";
-        $pesan .= "⏰ <b>Waktu:</b> " . $waktu . " WIB\n\n";
-        $pesan .= "💾 " . htmlspecialchars($info_tambahan);
+        $payload = [
+            'event'     => 'crawler_done',
+            'server'    => $serverLabel,
+            'waktu'     => $waktu . ' WIB',
+            'direktori' => $direktori,
+            'info'      => $info_tambahan
+        ];
 
-        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+        $url = "http://10.147.17.40:5678/webhook/gracia_telegram";
         
         try {
             $client = \Config\Services::curlrequest();
             $client->post($url, [
-                'form_params' => [
-                    'chat_id'    => $chatId,
-                    'text'       => $pesan,
-                    'parse_mode' => 'HTML'
-                ],
-                'timeout' => 30, // Melonggarkan Timeout (Sesuai Preferensi: Tidak agresif)
+                'json'    => $payload,
+                'timeout' => 5, // Local webhook, fast timeout
                 'verify'  => false
             ]);
         } catch (\Exception $e) {

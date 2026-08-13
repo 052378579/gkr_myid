@@ -2,6 +2,7 @@ const { createApp, ref, computed, nextTick } = Vue;
 
 createApp({
     setup() {
+        const url = ref('');
         const isCrawling = ref(false);
         const output = ref('<span style="color: #6c757d;">Menunggu perintah sinkronisasi...</span><br>');
         const terminalBody = ref(null);
@@ -56,6 +57,7 @@ createApp({
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
+                    body: 'url=' + encodeURIComponent(url.value || '/var/www/FOTO'),
                     signal: abortController.signal
                 });
 
@@ -121,6 +123,7 @@ createApp({
             terminalBody,
             elapsedTime,
             formattedTime,
+            url,
             startCrawl,
             stopCrawl
         };

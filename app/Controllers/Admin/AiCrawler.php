@@ -27,13 +27,15 @@ class AiCrawler extends BaseController
         ini_set('max_execution_time', '0');
 
         $mode = $this->request->getGetPost('mode') ?? 'sync';
+        $url_input = $this->request->getPost('url') ?: '/var/www/FOTO';
+        $safe_url = escapeshellarg($url_input);
         
         if ($mode === 'reset') {
-            echo "Menjalankan AI Scanner Engine (Mode HARD RESET)...\n";
-            $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_reset.py 2>&1';
+            echo "Menjalankan AI Scanner Engine (Mode HARD RESET) pada $url_input...\n";
+            $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_reset.py ' . $safe_url . ' 2>&1';
         } else {
-            echo "Menjalankan AI Scanner Engine (Mode SINKRONISASI INKREMENTAL)...\n";
-            $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_sync.py 2>&1';
+            echo "Menjalankan AI Scanner Engine (Mode SINKRONISASI INKREMENTAL) pada $url_input...\n";
+            $cmd = 'cd /var/www/gkr_myid/python_services && /mnt/sdcard/ai-scanner/env-ai/bin/python -u ai_sync.py ' . $safe_url . ' 2>&1';
         }
 
         @ob_flush(); @flush();
@@ -50,11 +52,7 @@ class AiCrawler extends BaseController
                 }
             }
             pclose($handle);
-            
-            // Kirim notifikasi Telegram saat proses AI selesai
-            helper('telegram');
-            $statusMode = ($mode === 'reset') ? 'HARD RESET' : 'SINKRONISASI INKREMENTAL';
-            send_telegram_notification('AI Trainer', '/mnt/sdcard/ai-scanner/', "Mode {$statusMode} berhasil dieksekusi");
+            // (Notifikasi Webhook Telegram ganda telah dihapus, murni di-handle oleh Python)
         } else {
             echo "\n[ERROR] Gagal mengeksekusi skrip Python.\n";
             @ob_flush(); @flush();
