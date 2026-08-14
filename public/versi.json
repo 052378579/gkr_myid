@@ -1,8 +1,8 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "13-08-2026 13:00:00 WIB",
-    "versi_diperbarui": "0.8.13",
+    "tanggal_diperbarui": "14-08-2026 08:00:00 WIB",
+    "versi_diperbarui": "0.8.14",
     "data": [
         {
             "id": 1,
@@ -377,6 +377,7 @@
             "patches": [
                 "Peningkatan stabilitas pelaporan otomatis harian agar berjalan lebih senyap dan akurat di latar belakang."
             ],
+            "created_at": "2026-08-12 12:00:00"
         },
         {
             "id": 19,
@@ -395,6 +396,25 @@
                 "Peningkatan keamanan rute internal aplikasi untuk melindungi akses mesin otomasi."
             ],
             "created_at": "2026-08-13 13:00:00"
+        },
+        {
+            "id": 20,
+            "versi": "0.8.14",
+            "tanggal_rilis": "2026-08-14",
+            "judul": "Sinkronisasi Arsitektur Direktori AI & Konfigurasi Webhook Independen",
+            "deskripsi": "Pembaruan arsitektur besar-besaran yang meresmikan sistem Pelatih AI berbasis direktori dinamis dan perombakan jaringan komunikasi notifikasi agar berjalan secara independen per peladen (Zero Cross-Network).",
+            "improvements": [
+                "Evolusi Pelatih AI (*AI Trainer*) yang kini mampu diarahkan pada target direktori kustom secara dinamis melalui Dasbor UI.",
+                "Penyempurnaan jaringan komunikasi notifikasi Telegram agar 100% independen (berjalan di saluran lokal), menjamin tidak ada lagi bentrokan data pelaporan lintas-server.",
+                "Penyelarasan seluruh (8) dokumen fundamental ekosistem (termasuk PRD, Memory, dan Standar SOP DevOps)."
+            ],
+            "fixes": [
+                "Menyelamatkan peladen dari risiko kehabisan memori (*Kernel Panic*) dengan mendelegasikan ruang penyimpanan mati (Cache OS & Ledger AI) ke luar batas eMMC STB."
+            ],
+            "patches": [
+                "Peningkatan keamanan pelaporan Telegram dengan identitas ganda (Deteksi IP Lokal & Hostname)."
+            ],
+            "created_at": "2026-08-14 08:00:00"
         }
     ]
 }

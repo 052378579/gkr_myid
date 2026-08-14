@@ -11,9 +11,9 @@ Sistem hibrida ini dirancang untuk mengindeks, menelusuri, dan merekomendasikan 
 * **Pencarian Visual AI (Image-to-Image Search):** Menggunakan PyTorch *MobileNetV3* dan FAISS Vector Database untuk pencocokan kemiripan visual yang sangat presisi, dilengkapi dengan pemotong gambar interaktif (*Cropper.js*).
 * **Pencarian Suara Bahasa Indonesia:** Dukungan penuh *Web Speech API* murni berbahasa Indonesia (`id-ID`) dengan navigasi pintar.
 * **Autocomplete & Search Engine Cerdas:** Rekomendasi kata kunci *real-time* berbasis RESTful API dengan algoritma pengecualian antonim kategori dan perhitungan skor relevansi tingkat tinggi.
-* **Auto-Crawler & AI Trainer:** Sistem perayap katalog terotomatisasi via Cronjob dengan manajemen sinkronisasi inkremental dan fitur pemulihan (*Hard Reset*) via dasbor UI interaktif.
+* **Auto-Crawler & Pelatih AI Dinamis:** Sistem perayap katalog terotomatisasi via Cronjob dengan manajemen sinkronisasi inkremental. Pelatih AI kini mendukung operasi berbasis direktori dinamis (*Directory-Based Training*) dan pemulihan (*Hard Reset*) via dasbor UI interaktif `/admin/ai`.
 * **Arsitektur Frontend Ringkas:** Pendekatan *Zero Inline Script & Style* (Lulus Audit 100%), integrasi *Vue.js*, *DOM Metadata Injection*, dan strategi *Browser Memory Cache* agresif (`ASSET_VERSION`) yang menghemat latensi hingga 90%.
-* **Keamanan RBAC & Telegram Dual-Command Chatbot:** Mode privat berlapis ganda, pendaftaran Telegram Chatbot otentik (*Auto-Bind*), pelacakan jejak audit IP asli menembus *Reverse Proxy*, serta integrasi Chatbot Arsitektur Ganda (Perintah Cepat *Cari* vs Kolase Galeri *Album*) yang anti-beku (*Crash-Proof*).
+* **Keamanan RBAC & Telegram Zero-Cross Webhook:** Mode privat berlapis ganda, pendaftaran Telegram Chatbot otentik (*Auto-Bind*), pelacakan jejak audit IP asli menembus *Reverse Proxy*. Terintegrasi dengan n8n via saluran lokal absolut (`127.0.0.1:5678`) yang mencegah bentrokan lalu lintas antara lingkungan DEV dan PROD. Termasuk pula fitur Chatbot Arsitektur Ganda (Perintah Cepat *Cari* vs Kolase Galeri *Album*) yang anti-beku (*Crash-Proof*).
 * **Dashboard Administrator Interaktif:** Dasbor manajemen visual dengan metrik performa dan grafik *ApexCharts* responsif.
 
 ---
