@@ -52,7 +52,8 @@ def send_telegram_notification(kesimpulan, direktori):
     }
     try:
         # Webhook lokal tanpa otentikasi
-        requests.post("http://10.147.17.40:5678/webhook/gracia_telegram", json=payload, timeout=5)
+        # Gunakan 127.0.0.1 agar masing-masing server (DEV/PROD) menembak n8n lokalnya sendiri
+        requests.post("http://127.0.0.1:5678/webhook/gracia_telegram", json=payload, timeout=5)
     except Exception:
         pass
 

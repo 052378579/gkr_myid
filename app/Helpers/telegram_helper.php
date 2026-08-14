@@ -46,7 +46,7 @@ if (!function_exists('send_telegram_notification')) {
             'info'      => $info_tambahan
         ];
 
-        $url = "http://10.147.17.40:5678/webhook/gracia_telegram";
+        $url = "http://127.0.0.1:5678/webhook/gracia_telegram";
         
         try {
             $client = \Config\Services::curlrequest();
