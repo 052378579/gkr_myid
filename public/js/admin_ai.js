@@ -4,6 +4,7 @@ createApp({
     setup() {
         const url = ref('');
         const isCrawling = ref(false);
+        const isJanitorRunning = ref(false);
         const output = ref('<span style="color: #6c757d;">Menunggu perintah sinkronisasi...</span><br>');
         const terminalBody = ref(null);
         let abortController = null;
@@ -110,6 +111,59 @@ createApp({
             }
         };
 
+        const startJanitor = async () => {
+            if (isCrawling.value || isJanitorRunning.value) return;
+
+            isCrawling.value = true;
+            isJanitorRunning.value = true;
+            output.value = `<span style="color: #4db8ff;">[START]</span> Menjalankan Janitor (Pembersih Sinkronisasi)...<br>`;
+            scrollToBottom();
+
+            abortController = new AbortController();
+
+            try {
+                const response = await fetch(window.AppConfig.apiDoJanitor, {
+                    method: 'POST',
+                    signal: abortController.signal
+                });
+
+                if (!response.body) {
+                    throw new Error('ReadableStream tidak didukung.');
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+                    
+                    lines.forEach(line => {
+                        if (line.trim() !== '') {
+                            output.value += `${line}<br>`;
+                        }
+                    });
+                    
+                    scrollToBottom();
+                }
+
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    output.value += '<br><span style="color: #ffc107;">[DIBATALKAN]</span> Anda telah menghentikan proses Janitor.<br>';
+                } else {
+                    output.value += `<br><span style="color: #dc3545;">[ERROR]</span> ${error.message}<br>`;
+                }
+                scrollToBottom();
+            } finally {
+                isCrawling.value = false;
+                isJanitorRunning.value = false;
+                abortController = null;
+            }
+        };
+
         const stopCrawl = () => {
             if (abortController) {
                 abortController.abort();
@@ -125,7 +179,9 @@ createApp({
             formattedTime,
             url,
             startCrawl,
-            stopCrawl
+            stopCrawl,
+            isJanitorRunning,
+            startJanitor
         };
     }
 }).mount('#crawlApp');

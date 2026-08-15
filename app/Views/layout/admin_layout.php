@@ -46,6 +46,11 @@
                 </a>
             </li>
             <li>
+                <a href="<?= base_url('admin/erp') ?>" class="<?= (uri_string() == 'admin/erp') ? 'active' : '' ?>">
+                    <i class="fas fa-e"></i> ERP Data
+                </a>
+            </li>
+            <li>
                 <a href="<?= base_url('admin/ai') ?>" class="<?= (uri_string() == 'admin/ai') ? 'active' : '' ?>">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> AI Trainer
                 </a>
@@ -156,7 +161,7 @@
                     <!-- Rata Kiri (Left): Ikon Tema -->
                     <div class="text-start flex-shrink-0 d-flex align-items-center">
                         <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary rounded-circle" title="Ubah Tema" style="width: 32px; height: 32px; padding: 0; line-height: 1;">
-                            <span id="themeIcon" style="font-size: 0.9rem;">☀️</span>
+                            <span id="themeIcon" style="font-size: 0.9rem;">â˜€ï¸</span>
                         </button>
                     </div>
 

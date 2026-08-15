@@ -58,4 +58,42 @@ class AiCrawler extends BaseController
             @ob_flush(); @flush();
         }
     }
+
+    public function doJanitor()
+    {
+        ini_set('output_buffering', 'off');
+        ini_set('zlib.output_compression', false);
+        while (@ob_end_flush());
+        ini_set('implicit_flush', true);
+        ob_implicit_flush(true);
+        header('Cache-Control: no-cache');
+        header('Content-Type: text/plain');
+        
+        set_time_limit(0);
+        ini_set('max_execution_time', '0');
+
+        echo "<span style=\"color: #fcc419;\">[START] Memindai database gkr_cari untuk data yatim piatu...</span>\n";
+        @ob_flush(); @flush();
+
+        $cariModel = new \App\Models\CariModel();
+        // findAll() secara otomatis mengecualikan data yang sudah di Soft Delete (karena useSoftDeletes = true)
+        $allData = $cariModel->findAll();
+        
+        $deletedCount = 0;
+        foreach($allData as $item) {
+            if (empty($item['imageUrl'])) continue;
+            
+            $path = '/var/www/FOTO/' . $item['imageUrl'];
+            if (!file_exists($path)) {
+                $cariModel->delete($item['id']);
+                echo "<span style=\"color: #ff6b6b;\">Mendeteksi ID " . $item['id'] . ": " . htmlspecialchars($item['imageUrl']) . " fisik HILANG. Melakukan Soft Delete...</span>\n";
+                @ob_flush(); @flush();
+                $deletedCount++;
+                usleep(10000); // 10ms untuk animasi yang mulus di terminal
+            }
+        }
+        
+        echo "<br><span style=\"color: #51cf66;\">[SELESAI] Janitor berhasil menyembunyikan $deletedCount data yatim piatu.</span>\n";
+        @ob_flush(); @flush();
+    }
 }

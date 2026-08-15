@@ -444,7 +444,7 @@ class Search extends BaseController
             $json = json_decode(file_get_contents($jsonPath), true);
             $versiData = $json['data'] ?? [];
             if (!empty($versiData)) {
-                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
+                usort($versiData, function($a, $b) { return $b['id'] <=> $a['id']; });
                 $dataPencarian['version'] = 'v' . $versiData[0]['versi'];
             }
         }

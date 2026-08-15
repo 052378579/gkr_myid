@@ -59,12 +59,17 @@
             </div>
         </div>
     </div>
+    
+    <!-- Floating Janitor Button -->
+    <button @click="startJanitor" class="btn btn-warning shadow-lg position-fixed bottom-0 end-0 m-4 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; border-radius: 12px; z-index: 1050; border: 2px solid #212529; transition: all 0.2s;" title="Jalankan Janitor (Pembersih Sinkronisasi)" :disabled="isCrawling || isJanitorRunning" :class="{'opacity-50': isCrawling || isJanitorRunning}">
+        <i class="fa-solid fa-broom fs-4" :class="{'fa-bounce': isJanitorRunning}"></i>
+    </button>
 </div>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <?= $this->section('styles') ?>
-<meta name="page-config" data-api-do-crawl="<?= base_url('admin/ai/doCrawl') ?>">
+<meta name="page-config" data-api-do-crawl="<?= base_url('admin/ai/doCrawl') ?>" data-api-do-janitor="<?= base_url('admin/ai/doJanitor') ?>">
 <?= $this->endSection() ?>
-<script src="<?= base_url('js/admin_ai.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+<script src="<?= base_url('js/admin_ai.js') ?>?v=0.8.141"></script>
 <?= $this->endSection() ?>

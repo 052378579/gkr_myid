@@ -1,0 +1,229 @@
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+/* Top Navigation / Header */
+.top-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 40px;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+.top-header .icons {
+    margin-left: 20px;
+    display: flex;
+    gap: 15px;
+    font-size: 1.2rem;
+    align-items: center;
+}
+.profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ccc;
+    object-fit: cover;
+}
+
+/* Main Container */
+.main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Branding */
+.logo-gracia { 
+    font-size: 3.5rem; 
+    font-weight: 800; 
+    font-style: italic; 
+    color: #1e3a8a; 
+    margin-bottom: 0; 
+    line-height: 1; 
+}
+.subtitle { 
+    font-size: 1.2rem; 
+    color: #1e3a8a; 
+    margin-bottom: 30px; 
+    margin-top: 5px;
+}
+
+/* Search Bar */
+.search-box {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 40px;
+}
+.search-input {
+    width: 100%;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+}
+.search-input:focus {
+    border-color: #1e3a8a;
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);
+}
+
+/* Data List Area */
+.data-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+    min-height: 350px;
+    position: relative;
+}
+
+/* Nav Buttons */
+.nav-btn {
+    background: transparent;
+    border: 1px solid #999;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: center;
+}
+.nav-btn:hover:not(:disabled) {
+    border-color: #1e3a8a;
+    color: #1e3a8a;
+    background: #f8f9fa;
+}
+.nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Data List Table (No Borders) */
+.data-list {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+.data-list th, .data-list td {
+    padding: 10px 9px;
+    text-align: left;
+    vertical-align: top;
+    border: none;
+}
+.data-list tr {
+    border-bottom: 1px solid transparent;
+    transition: background 0.2s;
+}
+.data-list tbody tr:hover {
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.col-kode { font-weight: 500; white-space: nowrap; width: 1%; }
+.col-kode a:hover { text-decoration: underline !important; }
+.col-nama { width: 1%; white-space: nowrap; }
+.col-dimensi { white-space: nowrap; width: 1%; }
+.col-material { width: auto; padding-left: 15px; }
+.col-weaving { font-size: 0.85rem; opacity: 0.8; }
+.col-fabric { font-size: 0.85rem; opacity: 0.8; }
+
+/* Row Estimasi (Teks Merah) */
+.row-estimasi td, .row-estimasi span {
+    color: #dc3545 !important;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-top: 1px solid #eee;
+    font-size: 0.85rem;
+    color: #888;
+}
+.footer .version {
+    color: #aaa;
+}
+.loader {
+    display: none;
+    color: #1e3a8a;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+/* Vertical Text Slider */
+.slider-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.slider-words {
+    display: inline-block;
+    overflow: hidden;
+    height: 1.5em; /* Ditinggikan agar huruf 'g' tidak terpotong */
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.slider-words-inner {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end; /* Membuat teks rata kanan */
+    animation: slideUp 10s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.slider-words-inner span {
+    height: 1.5em;
+    line-height: 1.5em;
+    display: inline-flex;
+    align-items: center;
+}
+@keyframes slideUp {
+    0%, 45% { transform: translateY(0); }
+    50%, 95% { transform: translateY(-1.5em); }
+    100% { transform: translateY(-3.0em); }
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 768px) {
+    .main-container {
+        padding-top: 80px; /* Push logo down below the header */
+    }
+    .data-wrapper {
+        display: block; /* Remove flex to allow table full width */
+        padding-bottom: 70px; /* Space for absolute buttons */
+    }
+    .data-list {
+        width: 100%;
+    }
+    .nav-btn {
+        position: absolute;
+        bottom: 10px;
+        background-color: var(--bs-body-bg);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        z-index: 10;
+    }
+    #btnPrev {
+        left: 10px;
+    }
+    #btnNext {
+        right: 10px;
+    }
+}

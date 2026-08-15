@@ -38,6 +38,13 @@ $routes->post('/crawler/resetDb', 'Api\CrawlerApi::resetDb');
 
 $routes->get('/admin/ai', '\App\Controllers\Admin\AiCrawler::index');
 $routes->post('/admin/ai/doCrawl', '\App\Controllers\Admin\AiCrawler::doCrawl');
+$routes->post('/admin/ai/doJanitor', '\App\Controllers\Admin\AiCrawler::doJanitor');
+
+// ERP Crawler Engine (Live Terminal)
+$routes->get('/admin/erp', '\App\Controllers\Admin\ErpController::terminalUI');
+$routes->get('/admin/erp/crawl', '\App\Controllers\Admin\ErpController::streamCrawl');
+$routes->get('/admin/erp/ekstrak', '\App\Controllers\Admin\ErpController::streamEkstrak');
+$routes->post('/admin/erp/reset_db', '\App\Controllers\Admin\ErpController::resetDb');
 
 $routes->post('/api/updateLinkCount', 'Api\GraciaApi::updateLinkCount');
 $routes->post('/api/updateImageCount', 'Api\GraciaApi::updateImageCount');
@@ -74,3 +81,7 @@ $routes->post('/admin/karyawan/delete', '\App\Controllers\Admin\KaryawanControll
 
 // Chatbot Webhook
 $routes->post('/api/chatbot/webhook', '\App\Controllers\Api\ChatBotApi::webhook');
+
+// Live Search ERP
+$routes->get('/erp', '\App\Controllers\ErpSearchController::index');
+$routes->get('/erp/api/search', '\App\Controllers\ErpSearchController::liveSearch');

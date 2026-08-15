@@ -1,0 +1,83 @@
+<?php
+namespace App\Controllers\Admin;
+use App\Controllers\BaseController;
+
+class ErpController extends BaseController
+{
+    public function terminalUI()
+    {
+        return view('admin/erp_view');
+    }
+    
+    public function resetDb()
+    {
+        $db = \Config\Database::connect();
+        try {
+            $db->table('gkr_erp')->truncate();
+            return $this->response->setJSON(['status' => 'ok']);
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+    private function executeLiveStream($scriptName, $prefix = null)
+    {
+        ignore_user_abort(true);
+        set_time_limit(0); 
+        if(session_id()) { session_write_close(); }
+
+        header('Content-Type: text/event-stream');
+        header('Cache-Control: no-cache');
+        header('Connection: keep-alive');
+        header('X-Accel-Buffering: no'); 
+        
+        while (ob_get_level() > 0) { ob_end_flush(); }
+
+        $scriptPath = escapeshellarg(ROOTPATH . "python_services/{$scriptName}");
+        
+        // Tambahkan argumen prefix jika ada
+        if ($prefix !== null) {
+            $safePrefix = escapeshellarg($prefix);
+            $command = "python3 {$scriptPath} {$safePrefix} 2>&1";
+        } else {
+            $command = "python3 {$scriptPath} 2>&1";
+        }
+        
+        $handle = popen($command, 'r');
+
+        if ($handle) {
+            while (!feof($handle)) {
+                $buffer = fgets($handle);
+                if ($buffer !== false) {
+                    echo "data: " . nl2br(htmlspecialchars($buffer)) . "\n\n";
+                    flush(); 
+                }
+                
+                if (connection_aborted()) {
+                    break;
+                }
+            }
+            pclose($handle);
+        } else {
+            echo "data: <span style='color:red;'>[SYSTEM ERROR] Gagal mengeksekusi python.</span>\n\n";
+            flush();
+        }
+        
+        if (!connection_aborted()) {
+            echo "data: [EOF]\n\n"; 
+            flush();
+        }
+        exit(); 
+    }
+
+    public function streamCrawl()
+    {
+        $prefix = $this->request->getGet('prefix') ?? 'FG-';
+        $this->executeLiveStream('erp_crawl.py', $prefix);
+    }
+
+    public function streamEkstrak()
+    {
+        $this->executeLiveStream('erp_ekstrak.py');
+    }
+}

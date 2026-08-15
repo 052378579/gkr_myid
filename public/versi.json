@@ -1,420 +1,474 @@
 {
-    "nama_file": "versi.json",
-    "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "14-08-2026 08:00:00 WIB",
-    "versi_diperbarui": "0.8.14",
-    "data": [
-        {
-            "id": 1,
-            "versi": "0.6.9",
-            "tanggal_rilis": "2026-07-08",
-            "judul": "Peningkatan Stabilitas & Efisiensi Aplikasi",
-            "deskripsi": "Pembaruan ini berfokus pada peningkatan kecepatan pemuatan sistem secara keseluruhan.",
-            "improvements": [],
-            "fixes": [],
-            "patches": [],
-            "created_at": "2026-07-08 06:17:12"
-        },
-        {
-            "id": 2,
-            "versi": "0.6.10",
-            "tanggal_rilis": "2026-07-10",
-            "judul": "Pembaruan Modul Pencarian Katalog",
-            "deskripsi": "Optimasi tata letak gambar pada galeri dan perbaikan pada kelancaran fitur pencarian.",
-            "improvements": [
-                "Alamat hasil pencarian yang lebih mudah dibagikan (dinamis).",
-                "Tampilan galeri gambar yang lebih mulus tanpa efek melompat saat dimuat."
-            ],
-            "fixes": [
-                "Memperbaiki masalah pencarian yang terhenti akibat gambar rusak.",
-                "Penyempurnaan pesan informasi saat sistem mengalami kendala."
-            ],
-            "patches": [
-                "Pembaruan sistem agar peramban pengguna selalu memuat versi terbaru secara otomatis.",
-                "Penyempurnaan warna tautan gambar agar lebih konsisten dan elegan."
-            ],
-            "created_at": "2026-07-10 07:41:08"
-        },
-        {
-            "id": 3,
-            "versi": "0.6.11",
-            "tanggal_rilis": "2026-07-11",
-            "judul": "Penyempurnaan Arsitektur & Antarmuka Dasbor Admin",
-            "deskripsi": "Transisi ke sistem komunikasi internal yang lebih modern, penyempurnaan tampilan (UI), dan pembaruan fitur coretan.",
-            "improvements": [
-                "Penyempurnaan sistem komunikasi data internal aplikasi.",
-                "Standarisasi tata letak halaman agar lebih rapi.",
-                "Peningkatan antarmuka dengan desain modern yang memanjakan mata.",
-                "Peningkatan kecepatan sinkronisasi direktori katalog."
-            ],
-            "fixes": [
-                "Konsistensi penggunaan Bahasa Indonesia di seluruh tampilan aplikasi.",
-                "Penanganan otomatis untuk tautan atau gambar yang sudah kedaluwarsa."
-            ],
-            "patches": [
-                "Penambahan fitur Tempat Sampah (Recycle Bin) untuk keamanan data admin.",
-                "Pembaruan fungsi penyimpanan pada fitur coretan (Doodle).",
-                "Persiapan awal implementasi Tema Gelap (Dark Mode)."
-            ],
-            "created_at": "2026-07-10 19:39:34"
-        },
-        {
-            "id": 4,
-            "versi": "0.6.13",
-            "tanggal_rilis": "2026-07-13",
-            "judul": "Modul Laporan Pegawai & Purchase Order",
-            "deskripsi": "Penambahan fitur Laporan Harian Pegawai dengan proteksi login, serta modul RND Sample Purchase Order terbaru.",
-            "improvements": [
-                "Sistem keamanan login pengguna yang lebih tangguh.",
-                "Penambahan halaman Laporan Harian dengan visual baru.",
-                "Penambahan halaman RND Sample PO yang terpadu."
-            ],
-            "fixes": [
-                "Penyempurnaan tampilan layar antarmuka kotak dialog.",
-                "Perbaikan kelancaran sistem pada pengisian penomoran PO."
-            ],
-            "patches": [],
-            "created_at": "2026-07-13 03:54:28"
-        },
-        {
-            "id": 5,
-            "versi": "0.7.15",
-            "tanggal_rilis": "2026-07-15",
-            "judul": "Penyempurnaan Keamanan Admin & Kualitas Antarmuka UI",
-            "deskripsi": "Rilis ini memboyong peningkatan keamanan hak akses, rombakan sistem kotak dialog (Modal) pada dasbor, serta pemolesan berbagai elemen visual agar lebih interaktif.",
-            "improvements": [
-                "Sistem keamanan hak akses bertingkat untuk melindungi panel admin dari pihak tidak berwenang.",
-                "Pembaruan Kotak Edit Situs menjadi lebih rapi dan elegan.",
-                "Pemilihan Material dan Warna yang lebih praktis melalui menu tarik-turun (Dropdown).",
-                "Profil pengguna interaktif bergaya menu pop-up di pojok beranda.",
-                "Otomatisasi indikator warna merah muda untuk akhir pekan pada widget kalender beranda."
-            ],
-            "fixes": [
-                "Implementasi sistem pembaruan halaman otomatis agar pengguna tidak tertinggal perbaikan terbaru."
-            ],
-            "patches": [],
-            "created_at": "2026-07-14 15:06:59"
-        },
-        {
-            "id": 6,
-            "versi": "0.7.17",
-            "tanggal_rilis": "2026-07-16",
-            "judul": "Era Kecerdasan Buatan: Pencarian Visual",
-            "deskripsi": "Pembaruan revolusioner yang mengintegrasikan Pelatih Kecerdasan Buatan (AI) ke dalam sistem, memungkinkan fitur pencarian visual cerdas.",
-            "improvements": [
-                "Peluncuran fitur pencarian Kecocokan Visual canggih menggunakan penganalisis gambar AI.",
-                "Pembangunan Dasbor Pelatihan AI yang dapat diakses oleh admin.",
-                "Kecepatan pencarian dan respons AI yang sangat tinggi tanpa membebani sistem utama.",
-                "Tampilan proses pelatihan AI yang mengalir secara langsung (Live) pada layar.",
-                "Pembaruan panduan operasional sistem untuk menyelaraskan penggunaan AI."
-            ],
-            "fixes": [
-                "Menghilangkan masalah sistem yang terkadang membeku atau tidak merespons (Timeout).",
-                "Meningkatkan kecerdasan sistem agar mampu memindai semua jenis penamaan file gambar tanpa batasan format khusus."
-            ],
-            "patches": [
-                "Penyempurnaan tata bahasa antarmuka AI menjadi lebih ramah manusia (Contoh: Menjadi 'Kecocokan visual').",
-                "Penambahan ikon kamera yang interaktif pada menu navigasi hasil pencarian."
-            ],
-            "created_at": "2026-07-16 15:38:30"
-        },
-        {
-            "id": 7,
-            "versi": "0.7.18",
-            "tanggal_rilis": "2026-07-18",
-            "judul": "Evolusi Kecerdasan Penggabungan Multi-Sudut",
-            "deskripsi": "Rilis yang menyempurnakan algoritma cerdas agar mampu mengenali dan menyatukan foto produk dari berbagai ragam sudut (depan, samping, dll) menjadi satu identitas utuh, serta memperluas cakupan area pencarian gambar.",
-            "improvements": [
-                "Kecerdasan Buatan (AI) kini mampu menyatukan berbagai variasi foto produk dari segala sudut menjadi satu profil visual tunggal secara otomatis.",
-                "Ekspansi jangkauan penyisiran mesin otomatis untuk memindai seluruh sub-direktori tambahan.",
-                "Standarisasi seluruh dokumen panduan agar memenuhi tingkat Enterprise."
-            ],
-            "fixes": [
-                "Penyempurnaan logika pemotongan nama agar AI lebih toleran terhadap kesalahan ketik (typo) seperti spasi ganda atau tanda hubung pada file gambar."
-            ],
-            "patches": [],
-            "created_at": "2026-07-18 09:28:29"
-        },
-        {
-            "id": 8,
-            "versi": "0.7.19",
-            "tanggal_rilis": "2026-07-19",
-            "judul": "Harmonisasi Panduan Pengguna & Optimasi Kecepatan AI",
-            "deskripsi": "Pembaruan ini merangkum penyelarasan seluruh dokumen tata cara penggunaan aplikasi secara komprehensif, serta konsolidasi folder pemindaian guna mencegah duplikasi rekomendasi gambar.",
-            "improvements": [
-                "Penyusunan menyeluruh panduan operasional proyek.",
-                "Sinkronisasi antarmuka fitur pencarian dengan kemampuan AI terbaru."
-            ],
-            "fixes": [
-                "Penyatuan sumber direktori untuk mencegah kemunculan hasil gambar ganda saat melakukan pencarian.",
-                "Memastikan keselarasan keamanan data antara mode perancangan dan mode publik."
-            ],
-            "patches": [],
-            "created_at": "2026-07-19 00:28:12"
-        },
-        {
-            "id": 9,
-            "versi": "0.7.20",
-            "tanggal_rilis": "2026-07-20",
-            "judul": "Penyempurnaan Dasbor Admin & Pelacakan Aktivitas",
-            "deskripsi": "Pembaruan besar yang berfokus pada pengalaman navigasi Dasbor Administrasi, perapian data karyawan, dan peningkatan akurasi riwayat kunjungan.",
-            "improvements": [
-                "Menyelaraskan halaman Manajemen Karyawan agar mudah diakses lewat bilah menu samping (Sidebar).",
-                "Mengubah isian Divisi Karyawan menjadi menu Dropdown demi mencegah salah ketik nama departemen.",
-                "Penambahan tautan khusus Super Admin pada menu profil.",
-                "Menata ulang hierarki menu Pelatih AI agar lebih mudah diakses.",
-                "Penyelarasan seluruh panduan pengetahuan basis operasi."
-            ],
-            "fixes": [
-                "Memperbaiki akurasi sistem pencatat lokasi pengunjung agar mengenali alamat asli pengguna."
-            ],
-            "patches": [
-                "Pembersihan riwayat pencarian lawas guna menyegarkan kinerja basis data."
-            ],
-            "created_at": "2026-07-20 07:35:01"
-        },
-        {
-            "id": 10,
-            "versi": "0.7.23",
-            "tanggal_rilis": "2026-07-23",
-            "judul": "Peningkatan Ekosistem Stabilitas & Pembaruan Otomatis",
-            "deskripsi": "Rilis yang berfokus pada efisiensi kecepatan muat halaman, pengamanan akses dinamis, serta otomatisasi penomoran riwayat rilis.",
-            "improvements": [
-                "Sistem cerdas yang secara otomatis mengenali dan mengamankan aplikasi berdasarkan jenis jaringan pengunjung.",
-                "Peningkatan kecepatan pemuatan riwayat rilis aplikasi (Changelog) agar tampil instan tanpa jeda pemrosesan basis data.",
-                "Integrasi sistem penomoran rilis otomatis yang menyesuaikan dengan penanggalan kalender berjalan.",
-                "Sinkronisasi penuh terhadap panduan internal penggunaan sistem."
-            ],
-            "fixes": [
-                "Pemusnahan sisa-sisa fungsi usang demi merampingkan ukuran memori aplikasi.",
-                "Penghapusan direktori yang sudah tidak terpakai agar server lebih lega dan higienis."
-            ],
-            "patches": [
-                "Peningkatan tingkat keakuratan sistem pelacakan keamanan (Log Activity)."
-            ],
-            "created_at": "2026-07-23 22:35:00"
-        },
-        {
-            "id": 11,
-            "versi": "0.7.26",
-            "tanggal_rilis": "2026-07-26",
-            "judul": "Peluncuran Chatbot Telegram Terpadu & Harmonisasi Antarmuka",
-            "deskripsi": "Rilis raksasa berfokus pada peluncuran Asisten Chatbot Telegram yang tangguh dan kebal typo, standarisasi tampilan kotak dialog situs menjadi lebih modern, serta peningkatan akurasi pencarian kecerdasan buatan.",
-            "improvements": [
-                "Integrasi Asisten Chatbot Telegram cerdas (@Bot) yang berlapis perlindungan keamanan akses karyawan eksklusif.",
-                "Peningkatan stabilitas tinggi pada Chatbot Telegram agar respons selalu cepat tanpa ada risiko terhenti (Anti-Mogok).",
-                "Chatbot Pintar yang mampu memaafkan kesalahan ejaan (Typo) berkat perpaduan logika teks presisi dan Kecerdasan Buatan.",
-                "Penataan ulang tata letak Formulir Edit Gambar dan Situs menjadi pola elegan 2-Kolom yang memanjakan mata.",
-                "Standarisasi rasio wadah pratinjau gambar agar foto tidak pernah lagi terlihat terpotong.",
-                "Pencarian gambar AI kini jauh lebih akurat dengan penggabungan profil visual dengan lapisan klasifikasi teks.",
-                "Standarisasi penuh terhadap seluruh pilar panduan aplikasi."
-            ],
-            "fixes": [
-                "Memperbaiki kendala perizinan mesin AI internal untuk menjamin kelancaran fungsi tanpa interupsi."
-            ],
-            "patches": [
-                "Implementasi Sistem Laporan Intelijen yang melacak dan menyajikan apakah sebuah riwayat pencarian berasal dari Web atau Telegram.",
-                "Penyematan desain ikon lencana Telegram berwarna biru langit pada antarmuka Dasbor Riwayat Pencarian Admin.",
-                "Peningkatan sistem perlindungan rahasia aplikasi agar dokumentasi khusus pengembang tidak bocor ke publik.",
-                "Standarisasi instruksi pembaruan sistem yang lebih aman untuk mencegah kegagalan peluncuran pembaruan (Deployment)."
-            ],
-            "created_at": "2026-07-26 16:20:00"
-        },
-        {
-            "id": 12,
-            "versi": "0.8.01",
-            "tanggal_rilis": "2026-08-01",
-            "judul": "Evolusi Mesin Pencari Presisi, Google-Grade UI `/cari`, & Refaktorisasi Ekstraksi View Assets",
-            "deskripsi": "Rilis raksasa yang meluncurkan Redesain Presisi Layout Halaman /cari Berstandar Google (Flush Left 10%, Knowledge Card Borderless + Garis Abu-Abu Pemisah Vertikal, Default Fallback SVG Putih Polos, dan Pagination Vector Baseline), Algoritma Pencarian Presisi (Primary Brand Anchor & Category Exclusion), Pencarian Suara Native Bahasa Indonesia, serta Pembersihan Arsitektur Frontend View Assets ke berkas fisik public/css dan public/js.",
-            "improvements": [
-                "Redesain Presisi Layout Halaman Hasil Pencarian (/cari - Google-Grade UI): Penataan Header 24px (Logo Kiri & Menu Profil Kanan), Penyelarasan Vertikal Margin 10% Kiri (Tab Semua, Ditemukan X Hasil, dan Garis Aksen 3px .site-result-item 100% rata lurus vertikal).",
-                "Penerapan Knowledge Panel Card 35% Kanan berlatar transparan tanpa border/shadow luar, dipisahkan oleh Garis Abu-Abu Pemisah Vertikal (border-left: 1px solid #ebebeb; padding-left: 24px;) dari kolom 65% hasil kiri.",
-                "Penggantian Gambar Default Fallback Foto dari logo 'G' / favicon.ico menjadi SVG Putih Polos murni (#ffffff) saat produk tidak memiliki foto.",
-                "Penerapan Logo Pagination c a r i berbasis Tipografi Vektor HTML/CSS Google-Grade (Outfit/Product Sans) yang 100% Rata Lurus Horizontal Baseline (align-items: baseline) dan Rata Tengah (Centered) di Tab Semua (type=sites) dan Tab Gambar (type=images).",
-                "Pemetaan Unit Produksi Strict pada controller Search.php berdasarkan awalan kode_bom (FG-1... -> UNIT 1, FG-2... -> UNIT 2, FG-4... -> UNIT 4).",
-                "Peluncuran modul Pencarian Suara Native Bahasa Indonesia (id-ID) dengan modal visualizer gelombang suara reaktif dan navigasi otomatis ke Tab Gambar Katalog.",
-                "Penerapan Algoritma Primary Brand/Series Anchor Search yang mewajibkan produk memuat kata utama merk (seperti 'bonanza' pada 'bonanza+table'/'bonanza+coffee'), 100% mengeliminasi produk pengotor.",
-                "Penerapan Algoritma Comprehensive Category Antonym Exclusion yang memadukan matriks konflik tiga arah (Table vs Chair vs Lamp) untuk mengeliminasi Leora Dinning Chair dan Mida Table Lamp pada pencarian 'dinning table'.",
-                "Refaktorisasi menyeluruh pada direktori app/Views: Menguraikan seluruh tag style dan script inline ke dalam berkas fisik murni public/css/ dan public/js/ dengan versioning cache busting (?v=<?= time() ?>).",
-                "Penyelarasan penuh terhadap 8 pilar dokumen aplikasi (PRD.md, Memory.md, Skills.md, StyleGuide.md, Task.md, README.md, Tautan.md, struktur_folder.md)."
-            ],
-            "fixes": [
-                "Mengeliminasi garis bingkai rounded border dan shadow pada foto Knowledge Card agar warna latar menyatu 100% tanpa garis pemisah.",
-                "Menghapus duplikasi pagination lama pada bagian bawah footer halaman hasil pencarian.",
-                "Memperbaiki ketidaksejajaran huruf logo pagination c a r i dengan menyelaraskan seluruh karakter pada 1 garis lurus baseline horizontal.",
-                "Memperbaiki masalah pagination yang tidak tampil saat berpindah ke Tab Gambar (type=images).",
-                "Mengeliminasi bayangan sintaks mentah Vue 3 {{ item }} pada beranda melalui integrasi global v-cloak."
-            ],
-            "patches": [
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.01).",
-                "Sinkronisasi penuh terhadap seluruh dokumen internal tim dan etalase publik GitHub."
-            ],
-            "created_at": "2026-08-01 20:04:00"
-        },
-        {
-            "id": 13,
-            "versi": "0.8.03",
-            "tanggal_rilis": "2026-08-03",
-            "judul": "Optimalisasi Knowledge Panel Default, Tabel Admin Responsif, & Pewarnaan Badge Dinamis",
-            "deskripsi": "Rilis yang berfokus pada penyempurnaan nilai bawaan (fallback) panel hasil pencarian dan perombakan arsitektur halaman Manajemen Mesin Pencari agar lebih ergonomis di perangkat seluler.",
-            "improvements": [
-                "Penyempurnaan Knowledge Panel: Sistem kini otomatis merender rapi 'Deskripsi: -', 'Kode BOM: FG-', 'Lihat BOM: BOM-FG-', dan 'Produksi: UNIT -' saat data kosong, diamankan dengan proteksi onMounted Vue JS.",
-                "Penyederhanaan Form Modal Box Edit Data (Admin) menjadi hanya 10 field input, dengan menyembunyikan isian 'Deskripsi Produk' demi keringkasan visual, namun tetap melindungi eksistensi data lamanya via reaktivitas Vue JS.",
-                "Penambahan kolom 'Kode BOM' pada tabel Admin yang dilengkapi inovasi pewarnaan dinamis adaptif (FG-1 Oranye, FG-2 Biru, FG-4 Merah) menggunakan teknik Translucent Opacity 10% untuk kontras mutlak pada Light Mode maupun Dark Mode.",
-                "Pembebasan ruang (*screen real estate*) di layar seluler dengan melenyapkan kotak dropdown pagination (jumlah baris), menyembunyikan kolom URL/Klik/Status, serta membuang ikon edit.",
-                "Sinkronisasi total seluruh dokumen pengembang internal (PRD.md, Memory.md, dll) beserta README repositori etalase publik."
-            ],
-            "fixes": [
-                "Mengeliminasi potensi galat tumpang tindih waktu muat (*race condition*) pada saat memicu hasil klik gambar pertama di halaman pencarian."
-            ],
-            "patches": [
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.03)."
-            ],
-            "created_at": "2026-08-03 20:00:00"
-        },
-        {
-            "id": 14,
-            "versi": "0.8.04",
-            "tanggal_rilis": "2026-08-04",
-            "judul": "Pelatihan Inkremental AI (State Ledger) & Otorisasi Mandiri",
-            "deskripsi": "Rilis revolusioner yang memperkenalkan arsitektur State Ledger untuk Pelatihan AI Inkremental. Memangkas waktu komputasi pembaruan memori AI dari belasan menit menjadi di bawah 1 detik dengan deteksi perubahan diferensial cerdas.",
-            "improvements": [
-                "Penerapan Arsitektur AI State Ledger (gkr_katalog.json) sebagai jembatan anti-amnesia antara web server dan layanan kecerdasan buatan.",
-                "Evolusi mesin pelatih AI dengan skrip ganda: Sinkronisasi Inkremental Harian yang secepat kilat dan Latih Ulang Total untuk pemulihan darurat.",
-                "Peningkatan basis data vektor dari FAISS IndexFlatIP menjadi IndexIDMap lengkap dengan pemetaan identitas persisten (mapping.json).",
-                "Perombakan Terminal UI Admin (/admin/ai) yang kini menyajikan 2 tombol diskrit: Sinkronisasi Inkremental (Hijau) & Latih Ulang Total (Merah).",
-                "Pemutakhiran otonomi Web Server dengan hak akses Sudoers NOPASSWD untuk melakukan hot-reload daemon AI (ai_scanner.service) tanpa hambatan autentikasi."
-            ],
-            "fixes": [
-                "Mengeliminasi masalah kehabisan memori (Crash) dan waktu muat sangat panjang saat server memperbarui indeks katalog harian.",
-                "Menuntaskan masalah perizinan penulisan berkas (Permission Denied) antara layanan sistem root dan pelayan web www-data pada direktori python_services."
-            ],
-            "patches": [
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.04).",
-                "Sinkronisasi komprehensif terhadap 8 pilar dokumen pengembang (PRD.md, Memory.md, dll) beserta etalase GitHub publik (README.md)."
-            ],
-            "created_at": "2026-08-04 10:50:00"
-        },
-        {
-            "id": 15,
-            "versi": "0.8.06",
-            "tanggal_rilis": "2026-08-06",
-            "judul": "Standardisasi Frontend, Eliminasi Inline Script & Responsivitas Antarmuka Beranda",
-            "deskripsi": "Rilis yang berfokus pada perombakan total arsitektur aset antarmuka (frontend) guna mensterilkan penulisan kode sumber halaman, serta penyempurnaan adaptasi tata letak di perangkat seluler.",
-            "improvements": [
-                "Sterilisasi View: Melenyapkan 100% penulisan kode JavaScript dan CSS secara langsung (inline) pada seluruh halaman aplikasi.",
-                "Injeksi Konfigurasi DOM Metadata: Memperkenalkan mekanisme penyuntikan konfigurasi dinamis yang lebih handal melalui tag meta HTML terpusat (config.js).",
-                "Tata Letak Ekstra Responsif (Mobile): Mengoptimalkan tampilan tautan (3D Viewer, Katalog, dan Telegram) agar otomatis membelah menjadi 2 baris proporsional pada gawai seluler.",
-                "Konsolidasi pustaka eksternal (vendor) ke dalam direktori terstruktur public/css/vendor dan public/js/vendor."
-            ],
-            "fixes": [
-                "Perbaikan presisi jarak animasi teks mesin ketik (typewriter) pada fitur Chatbot Telegram."
-            ],
-            "patches": [
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.06)."
-            ],
-            "created_at": "2026-08-06 06:30:00"
-        },
-        {
-            "id": 16,
-            "versi": "0.8.07",
-            "tanggal_rilis": "2026-08-07",
-            "judul": "Resolusi Konflik Akses AI Ledger & Integrasi Real-Time Stopwatch",
-            "deskripsi": "Rilis pemeliharaan yang memecahkan kendala perizinan sistem operasi pada mesin sinkronisasi kecerdasan buatan, sekaligus menanamkan antarmuka penghitung waktu berjalan (Stopwatch) berpresisi milidetik pada panel kendali Dasbor Admin.",
-            "improvements": [
-                "Sentralisasi Cache Busting statis (ASSET_VERSION) yang secara drastis menghemat latensi bandwidth server Production hingga 90%.",
-                "Modul Real-Time Stopwatch Milidetik (mm:ss:ms): Menanamkan penghitung waktu berformat digital superscript dengan laju presisi 10ms di Dasbor Crawler dan AI Trainer.",
-                "Penyegaran Kosakata Panel AI: Mengubah penamaan tombol aksi menjadi lebih teknis dan ringkas, yakni 'Sinkronisasi Vektor' dan 'Hard Reset'.",
-                "Sentralisasi Perlindungan Kedipan (Flicker) Vue: Memindahkan direktif pengaman [v-cloak] ke ruang lingkup global di berkas antarmuka utama (main.css)."
-            ],
-            "fixes": [
-                "PWA Console Log Sterilization: Menyingkirkan peringatan sukses Service Worker di login.js agar pendaftaran pekerja layanan berjalan dalam mode Silent Fallback murni.",
-                "Resolusi Mutlak Konflik Kepemilikan (Ownership Collision): Memindahkan jalur ekspor memori AI (gkr_katalog.json) ke ruang resmi CodeIgniter 4 (writable/uploads/) untuk mencegah penolakan akses (Permission Denied) saat dieksekusi paralel oleh Web Server dan sistem Cronjob.",
-                "Pemusnahan Zombie CSS: Mencabut pemuatan pustaka tata letak usang (style.css) yang membebani memori dan tumpang tindih pada halaman hasil pencarian.",
-                "Pembersihan redundansi deklarasi tata letak Mode Gelap (Dark Mode) ganda pada komponen sorotan utama (Hero Image)."
-            ],
-            "patches": [
-                "Validasi sintaks eksekusi penjadwalan berkala (Enterprise Cronjob) ke format absolut presisi tinggi (/usr/bin/php & /env-ai/bin/python3).",
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.07).",
-                "Sinkronisasi komprehensif seluruh dokumentasi internal tim dan etalase GitHub (PRD.md, struktur_folder.md, dll)."
-            ],
-            "created_at": "2026-08-07 13:03:00"
-        },
-        {
-            "id": 17,
-            "versi": "0.8.11",
-            "tanggal_rilis": "2026-08-11",
-            "judul": "Resolusi Race Condition Vue & Bypassing Cache Browser Lapis Ganda",
-            "deskripsi": "Rilis ini berfokus pada penyempurnaan kestabilan sinkronisasi kecerdasan buatan, pendeteksian server DEV/PROD pada pelaporan Telegram secara ketat (berbasis IP+Domain), dan kelulusan mutlak pada audit bedah kode bersih arsitektur antarmuka pengguna.",
-            "improvements": [
-                "Sistem cerdas AI Trainer (State Ledger) yang mampu mengenali dan melompati pemrosesan pada gambar yang telah tersinkron sebelumnya (Anti-Duplication).",
-                "Pemisahan identitas notifikasi Telegram yang sangat ketat untuk peladen DEV dan PROD dengan mekanisme Unknown Fallback (TIDAK DIKENAL).",
-                "Kelulusan 100% pada audit bedah kebersihan kode antarmuka (Zero Inline Script & Style pada direktori Views)."
-            ],
-            "fixes": [
-                "Menutup celah penggandaan indeks data vektor FAISS yang berpotensi membebani memori mesin pencarian AI.",
-                "Menambal kebocoran identitas laporan harian Telegram yang sebelumnya gagal mendeteksi peladen operasional akibat anomali resolusi domain ZeroTier/lokal."
-            ],
-            "patches": [
-                "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.11).",
-                "Sinkronisasi komprehensif terhadap 8 pilar dokumen internal tim (PRD.md, Memory.md, Skills.md, Task.md, StyleGuide.md) dan etalase publik GitHub (README.md, struktur_folder.md, Tautan.md)."
-            ],
-            "created_at": "2026-08-11 06:55:00"
-        },
-        {
-            "id": 18,
-            "versi": "0.8.12",
-            "tanggal_rilis": "2026-08-12",
-            "judul": "Peluncuran Mode Album Telegram & Kecerdasan Koreksi Kata",
-            "deskripsi": "Pembaruan ini membawakan asisten Telegram yang jauh lebih interaktif, memungkinkan Anda meminta tampilan katalog dalam bentuk galeri foto memukau, serta kemampuan asisten cerdas untuk memaafkan kesalahan ketik (typo).",
-            "improvements": [
-                "Peluncuran Fitur 'Album': Kini Anda dapat mengetikkan 'Album <Nama Barang>' di Telegram untuk langsung menerima galeri kumpulan foto produk sekaligus (bisa digeser).",
-                "Kecerdasan Koreksi Salah Ketik (Typo): Asisten kini mampu mendeteksi jika Anda salah mengeja nama barang saat sedang terburu-buru, dan akan otomatis memberikan rekomendasi katalog yang tepat."
-            ],
-            "fixes": [
-                "Menghilangkan kendala terhentinya respon asisten Telegram saat beberapa gambar produk kebetulan sedang tidak dapat dimuat."
-            ],
-            "patches": [
-                "Peningkatan stabilitas pelaporan otomatis harian agar berjalan lebih senyap dan akurat di latar belakang."
-            ],
-            "created_at": "2026-08-12 12:00:00"
-        },
-        {
-            "id": 19,
-            "versi": "0.8.13",
-            "tanggal_rilis": "2026-08-13",
-            "judul": "Otomatisasi Jadwal & Modernisasi Notifikasi",
-            "deskripsi": "Pembaruan ini membawakan stabilitas paripurna dengan menyerahkan kendali penjadwalan pembaruan katalog ke sistem orkestrasi modern, sehingga server aplikasi dapat berjalan jauh lebih senyap, lega, dan tangguh.",
-            "improvements": [
-                "Transisi ke sistem penjadwalan modern yang menjamin pembaruan katalog dan mesin AI selalu tepat waktu tanpa membebani server utama.",
-                "Penyempurnaan mekanisme notifikasi internal agar pengiriman laporan harian berjalan seketika tanpa jeda pemuatan (loading)."
-            ],
-            "fixes": [
-                "Menghilangkan potensi keterlambatan (delay) pada pengiriman laporan harian berkat sistem antrean (webhook) asinkron."
-            ],
-            "patches": [
-                "Peningkatan keamanan rute internal aplikasi untuk melindungi akses mesin otomasi."
-            ],
-            "created_at": "2026-08-13 13:00:00"
-        },
-        {
-            "id": 20,
-            "versi": "0.8.14",
-            "tanggal_rilis": "2026-08-14",
-            "judul": "Sinkronisasi Arsitektur Direktori AI & Konfigurasi Webhook Independen",
-            "deskripsi": "Pembaruan arsitektur besar-besaran yang meresmikan sistem Pelatih AI berbasis direktori dinamis dan perombakan jaringan komunikasi notifikasi agar berjalan secara independen per peladen (Zero Cross-Network).",
-            "improvements": [
-                "Evolusi Pelatih AI (*AI Trainer*) yang kini mampu diarahkan pada target direktori kustom secara dinamis melalui Dasbor UI.",
-                "Penyempurnaan jaringan komunikasi notifikasi Telegram agar 100% independen (berjalan di saluran lokal), menjamin tidak ada lagi bentrokan data pelaporan lintas-server.",
-                "Penyelarasan seluruh (8) dokumen fundamental ekosistem (termasuk PRD, Memory, dan Standar SOP DevOps)."
-            ],
-            "fixes": [
-                "Menyelamatkan peladen dari risiko kehabisan memori (*Kernel Panic*) dengan mendelegasikan ruang penyimpanan mati (Cache OS & Ledger AI) ke luar batas eMMC STB."
-            ],
-            "patches": [
-                "Peningkatan keamanan pelaporan Telegram dengan identitas ganda (Deteksi IP Lokal & Hostname)."
-            ],
-            "created_at": "2026-08-14 08:00:00"
-        }
-    ]
+    "nama_file":  "versi.json",
+    "nama_proyek":  "gkr_myid",
+    "tanggal_diperbarui":  "15-08-2026 08:00:00 WIB",
+    "versi_diperbarui":  "0.8.15",
+    "data":  [
+                 {
+                     "catatan":  [
+                                     "Penyelarasan UI ERP Data Engine (Bootstrap 5 Grid)",
+                                     "Perbaikan loncatan judul kolom tabel (CSS Flexbox fix)"
+                                 ],
+                     "tanggal_rilis":  "2026-08-15",
+                     "versi":  "0.8.15",
+                     "judul":  "Penataan Ulang UI ERP \u0026 Optimasi CSS",
+                     "deskripsi":  "Pembaruan ini membawakan keselarasan antarmuka (UI) Dasbor ERP dengan ekosistem modern menggunakan Bootstrap 5, serta perbaikan ruang kosong pada tabel pencarian.",
+                     "improvements":  [
+                                          "Migrasi total antarmuka (UI) Dasbor ERP Crawler menuju arsitektur Grid Bootstrap 5 yang selaras dengan Dasbor AI.",
+                                          "Penyempurnaan tombol-tombol antarmuka menjadi bentuk kapsul (rounded-pill) dan tipografi stopwatch."
+                                      ],
+                     "fixes":  [
+                                   "Mengobati masalah \u0027bouncing header\u0027 atau loncatan anomali pada tabel pencarian ERP saat data kosong akibat pengaturan Flexbox yang keliru."
+                               ],
+                     "patches":  [
+
+                                 ],
+                     "created_at":  "2026-08-15 12:00:00",
+                     "id":  22
+                 },
+                 {
+                     "id":  1,
+                     "versi":  "0.6.9",
+                     "tanggal_rilis":  "2026-07-08",
+                     "judul":  "Peningkatan Stabilitas \u0026 Efisiensi Aplikasi",
+                     "deskripsi":  "Pembaruan ini berfokus pada peningkatan kecepatan pemuatan sistem secara keseluruhan.",
+                     "improvements":  [
+
+                                      ],
+                     "fixes":  [
+
+                               ],
+                     "patches":  [
+
+                                 ],
+                     "created_at":  "2026-07-08 06:17:12"
+                 },
+                 {
+                     "id":  2,
+                     "versi":  "0.6.10",
+                     "tanggal_rilis":  "2026-07-10",
+                     "judul":  "Pembaruan Modul Pencarian Katalog",
+                     "deskripsi":  "Optimasi tata letak gambar pada galeri dan perbaikan pada kelancaran fitur pencarian.",
+                     "improvements":  [
+                                          "Alamat hasil pencarian yang lebih mudah dibagikan (dinamis).",
+                                          "Tampilan galeri gambar yang lebih mulus tanpa efek melompat saat dimuat."
+                                      ],
+                     "fixes":  [
+                                   "Memperbaiki masalah pencarian yang terhenti akibat gambar rusak.",
+                                   "Penyempurnaan pesan informasi saat sistem mengalami kendala."
+                               ],
+                     "patches":  [
+                                     "Pembaruan sistem agar peramban pengguna selalu memuat versi terbaru secara otomatis.",
+                                     "Penyempurnaan warna tautan gambar agar lebih konsisten dan elegan."
+                                 ],
+                     "created_at":  "2026-07-10 07:41:08"
+                 },
+                 {
+                     "id":  3,
+                     "versi":  "0.6.11",
+                     "tanggal_rilis":  "2026-07-11",
+                     "judul":  "Penyempurnaan Arsitektur \u0026 Antarmuka Dasbor Admin",
+                     "deskripsi":  "Transisi ke sistem komunikasi internal yang lebih modern, penyempurnaan tampilan (UI), dan pembaruan fitur coretan.",
+                     "improvements":  [
+                                          "Penyempurnaan sistem komunikasi data internal aplikasi.",
+                                          "Standarisasi tata letak halaman agar lebih rapi.",
+                                          "Peningkatan antarmuka dengan desain modern yang memanjakan mata.",
+                                          "Peningkatan kecepatan sinkronisasi direktori katalog."
+                                      ],
+                     "fixes":  [
+                                   "Konsistensi penggunaan Bahasa Indonesia di seluruh tampilan aplikasi.",
+                                   "Penanganan otomatis untuk tautan atau gambar yang sudah kedaluwarsa."
+                               ],
+                     "patches":  [
+                                     "Penambahan fitur Tempat Sampah (Recycle Bin) untuk keamanan data admin.",
+                                     "Pembaruan fungsi penyimpanan pada fitur coretan (Doodle).",
+                                     "Persiapan awal implementasi Tema Gelap (Dark Mode)."
+                                 ],
+                     "created_at":  "2026-07-10 19:39:34"
+                 },
+                 {
+                     "id":  4,
+                     "versi":  "0.6.13",
+                     "tanggal_rilis":  "2026-07-13",
+                     "judul":  "Modul Laporan Pegawai \u0026 Purchase Order",
+                     "deskripsi":  "Penambahan fitur Laporan Harian Pegawai dengan proteksi login, serta modul RND Sample Purchase Order terbaru.",
+                     "improvements":  [
+                                          "Sistem keamanan login pengguna yang lebih tangguh.",
+                                          "Penambahan halaman Laporan Harian dengan visual baru.",
+                                          "Penambahan halaman RND Sample PO yang terpadu."
+                                      ],
+                     "fixes":  [
+                                   "Penyempurnaan tampilan layar antarmuka kotak dialog.",
+                                   "Perbaikan kelancaran sistem pada pengisian penomoran PO."
+                               ],
+                     "patches":  [
+
+                                 ],
+                     "created_at":  "2026-07-13 03:54:28"
+                 },
+                 {
+                     "id":  5,
+                     "versi":  "0.7.15",
+                     "tanggal_rilis":  "2026-07-15",
+                     "judul":  "Penyempurnaan Keamanan Admin \u0026 Kualitas Antarmuka UI",
+                     "deskripsi":  "Rilis ini memboyong peningkatan keamanan hak akses, rombakan sistem kotak dialog (Modal) pada dasbor, serta pemolesan berbagai elemen visual agar lebih interaktif.",
+                     "improvements":  [
+                                          "Sistem keamanan hak akses bertingkat untuk melindungi panel admin dari pihak tidak berwenang.",
+                                          "Pembaruan Kotak Edit Situs menjadi lebih rapi dan elegan.",
+                                          "Pemilihan Material dan Warna yang lebih praktis melalui menu tarik-turun (Dropdown).",
+                                          "Profil pengguna interaktif bergaya menu pop-up di pojok beranda.",
+                                          "Otomatisasi indikator warna merah muda untuk akhir pekan pada widget kalender beranda."
+                                      ],
+                     "fixes":  [
+                                   "Implementasi sistem pembaruan halaman otomatis agar pengguna tidak tertinggal perbaikan terbaru."
+                               ],
+                     "patches":  [
+
+                                 ],
+                     "created_at":  "2026-07-14 15:06:59"
+                 },
+                 {
+                     "id":  6,
+                     "versi":  "0.7.17",
+                     "tanggal_rilis":  "2026-07-16",
+                     "judul":  "Era Kecerdasan Buatan: Pencarian Visual",
+                     "deskripsi":  "Pembaruan revolusioner yang mengintegrasikan Pelatih Kecerdasan Buatan (AI) ke dalam sistem, memungkinkan fitur pencarian visual cerdas.",
+                     "improvements":  [
+                                          "Peluncuran fitur pencarian Kecocokan Visual canggih menggunakan penganalisis gambar AI.",
+                                          "Pembangunan Dasbor Pelatihan AI yang dapat diakses oleh admin.",
+                                          "Kecepatan pencarian dan respons AI yang sangat tinggi tanpa membebani sistem utama.",
+                                          "Tampilan proses pelatihan AI yang mengalir secara langsung (Live) pada layar.",
+                                          "Pembaruan panduan operasional sistem untuk menyelaraskan penggunaan AI."
+                                      ],
+                     "fixes":  [
+                                   "Menghilangkan masalah sistem yang terkadang membeku atau tidak merespons (Timeout).",
+                                   "Meningkatkan kecerdasan sistem agar mampu memindai semua jenis penamaan file gambar tanpa batasan format khusus."
+                               ],
+                     "patches":  [
+                                     "Penyempurnaan tata bahasa antarmuka AI menjadi lebih ramah manusia (Contoh: Menjadi \u0027Kecocokan visual\u0027).",
+                                     "Penambahan ikon kamera yang interaktif pada menu navigasi hasil pencarian."
+                                 ],
+                     "created_at":  "2026-07-16 15:38:30"
+                 },
+                 {
+                     "id":  7,
+                     "versi":  "0.7.18",
+                     "tanggal_rilis":  "2026-07-18",
+                     "judul":  "Evolusi Kecerdasan Penggabungan Multi-Sudut",
+                     "deskripsi":  "Rilis yang menyempurnakan algoritma cerdas agar mampu mengenali dan menyatukan foto produk dari berbagai ragam sudut (depan, samping, dll) menjadi satu identitas utuh, serta memperluas cakupan area pencarian gambar.",
+                     "improvements":  [
+                                          "Kecerdasan Buatan (AI) kini mampu menyatukan berbagai variasi foto produk dari segala sudut menjadi satu profil visual tunggal secara otomatis.",
+                                          "Ekspansi jangkauan penyisiran mesin otomatis untuk memindai seluruh sub-direktori tambahan.",
+                                          "Standarisasi seluruh dokumen panduan agar memenuhi tingkat Enterprise."
+                                      ],
+                     "fixes":  [
+                                   "Penyempurnaan logika pemotongan nama agar AI lebih toleran terhadap kesalahan ketik (typo) seperti spasi ganda atau tanda hubung pada file gambar."
+                               ],
+                     "patches":  [
+
+                                 ],
+                     "created_at":  "2026-07-18 09:28:29"
+                 },
+                 {
+                     "id":  8,
+                     "versi":  "0.7.19",
+                     "tanggal_rilis":  "2026-07-19",
+                     "judul":  "Harmonisasi Panduan Pengguna \u0026 Optimasi Kecepatan AI",
+                     "deskripsi":  "Pembaruan ini merangkum penyelarasan seluruh dokumen tata cara penggunaan aplikasi secara komprehensif, serta konsolidasi folder pemindaian guna mencegah duplikasi rekomendasi gambar.",
+                     "improvements":  [
+                                          "Penyusunan menyeluruh panduan operasional proyek.",
+                                          "Sinkronisasi antarmuka fitur pencarian dengan kemampuan AI terbaru."
+                                      ],
+                     "fixes":  [
+                                   "Penyatuan sumber direktori untuk mencegah kemunculan hasil gambar ganda saat melakukan pencarian.",
+                                   "Memastikan keselarasan keamanan data antara mode perancangan dan mode publik."
+                               ],
+                     "patches":  [
+
+                                 ],
+                     "created_at":  "2026-07-19 00:28:12"
+                 },
+                 {
+                     "id":  9,
+                     "versi":  "0.7.20",
+                     "tanggal_rilis":  "2026-07-20",
+                     "judul":  "Penyempurnaan Dasbor Admin \u0026 Pelacakan Aktivitas",
+                     "deskripsi":  "Pembaruan besar yang berfokus pada pengalaman navigasi Dasbor Administrasi, perapian data karyawan, dan peningkatan akurasi riwayat kunjungan.",
+                     "improvements":  [
+                                          "Menyelaraskan halaman Manajemen Karyawan agar mudah diakses lewat bilah menu samping (Sidebar).",
+                                          "Mengubah isian Divisi Karyawan menjadi menu Dropdown demi mencegah salah ketik nama departemen.",
+                                          "Penambahan tautan khusus Super Admin pada menu profil.",
+                                          "Menata ulang hierarki menu Pelatih AI agar lebih mudah diakses.",
+                                          "Penyelarasan seluruh panduan pengetahuan basis operasi."
+                                      ],
+                     "fixes":  [
+                                   "Memperbaiki akurasi sistem pencatat lokasi pengunjung agar mengenali alamat asli pengguna."
+                               ],
+                     "patches":  [
+                                     "Pembersihan riwayat pencarian lawas guna menyegarkan kinerja basis data."
+                                 ],
+                     "created_at":  "2026-07-20 07:35:01"
+                 },
+                 {
+                     "id":  10,
+                     "versi":  "0.7.23",
+                     "tanggal_rilis":  "2026-07-23",
+                     "judul":  "Peningkatan Ekosistem Stabilitas \u0026 Pembaruan Otomatis",
+                     "deskripsi":  "Rilis yang berfokus pada efisiensi kecepatan muat halaman, pengamanan akses dinamis, serta otomatisasi penomoran riwayat rilis.",
+                     "improvements":  [
+                                          "Sistem cerdas yang secara otomatis mengenali dan mengamankan aplikasi berdasarkan jenis jaringan pengunjung.",
+                                          "Peningkatan kecepatan pemuatan riwayat rilis aplikasi (Changelog) agar tampil instan tanpa jeda pemrosesan basis data.",
+                                          "Integrasi sistem penomoran rilis otomatis yang menyesuaikan dengan penanggalan kalender berjalan.",
+                                          "Sinkronisasi penuh terhadap panduan internal penggunaan sistem."
+                                      ],
+                     "fixes":  [
+                                   "Pemusnahan sisa-sisa fungsi usang demi merampingkan ukuran memori aplikasi.",
+                                   "Penghapusan direktori yang sudah tidak terpakai agar server lebih lega dan higienis."
+                               ],
+                     "patches":  [
+                                     "Peningkatan tingkat keakuratan sistem pelacakan keamanan (Log Activity)."
+                                 ],
+                     "created_at":  "2026-07-23 22:35:00"
+                 },
+                 {
+                     "id":  11,
+                     "versi":  "0.7.26",
+                     "tanggal_rilis":  "2026-07-26",
+                     "judul":  "Peluncuran Chatbot Telegram Terpadu \u0026 Harmonisasi Antarmuka",
+                     "deskripsi":  "Rilis raksasa berfokus pada peluncuran Asisten Chatbot Telegram yang tangguh dan kebal typo, standarisasi tampilan kotak dialog situs menjadi lebih modern, serta peningkatan akurasi pencarian kecerdasan buatan.",
+                     "improvements":  [
+                                          "Integrasi Asisten Chatbot Telegram cerdas (@Bot) yang berlapis perlindungan keamanan akses karyawan eksklusif.",
+                                          "Peningkatan stabilitas tinggi pada Chatbot Telegram agar respons selalu cepat tanpa ada risiko terhenti (Anti-Mogok).",
+                                          "Chatbot Pintar yang mampu memaafkan kesalahan ejaan (Typo) berkat perpaduan logika teks presisi dan Kecerdasan Buatan.",
+                                          "Penataan ulang tata letak Formulir Edit Gambar dan Situs menjadi pola elegan 2-Kolom yang memanjakan mata.",
+                                          "Standarisasi rasio wadah pratinjau gambar agar foto tidak pernah lagi terlihat terpotong.",
+                                          "Pencarian gambar AI kini jauh lebih akurat dengan penggabungan profil visual dengan lapisan klasifikasi teks.",
+                                          "Standarisasi penuh terhadap seluruh pilar panduan aplikasi."
+                                      ],
+                     "fixes":  [
+                                   "Memperbaiki kendala perizinan mesin AI internal untuk menjamin kelancaran fungsi tanpa interupsi."
+                               ],
+                     "patches":  [
+                                     "Implementasi Sistem Laporan Intelijen yang melacak dan menyajikan apakah sebuah riwayat pencarian berasal dari Web atau Telegram.",
+                                     "Penyematan desain ikon lencana Telegram berwarna biru langit pada antarmuka Dasbor Riwayat Pencarian Admin.",
+                                     "Peningkatan sistem perlindungan rahasia aplikasi agar dokumentasi khusus pengembang tidak bocor ke publik.",
+                                     "Standarisasi instruksi pembaruan sistem yang lebih aman untuk mencegah kegagalan peluncuran pembaruan (Deployment)."
+                                 ],
+                     "created_at":  "2026-07-26 16:20:00"
+                 },
+                 {
+                     "id":  12,
+                     "versi":  "0.8.01",
+                     "tanggal_rilis":  "2026-08-01",
+                     "judul":  "Evolusi Mesin Pencari Presisi, Google-Grade UI `/cari`, \u0026 Refaktorisasi Ekstraksi View Assets",
+                     "deskripsi":  "Rilis raksasa yang meluncurkan Redesain Presisi Layout Halaman /cari Berstandar Google (Flush Left 10%, Knowledge Card Borderless + Garis Abu-Abu Pemisah Vertikal, Default Fallback SVG Putih Polos, dan Pagination Vector Baseline), Algoritma Pencarian Presisi (Primary Brand Anchor \u0026 Category Exclusion), Pencarian Suara Native Bahasa Indonesia, serta Pembersihan Arsitektur Frontend View Assets ke berkas fisik public/css dan public/js.",
+                     "improvements":  [
+                                          "Redesain Presisi Layout Halaman Hasil Pencarian (/cari - Google-Grade UI): Penataan Header 24px (Logo Kiri \u0026 Menu Profil Kanan), Penyelarasan Vertikal Margin 10% Kiri (Tab Semua, Ditemukan X Hasil, dan Garis Aksen 3px .site-result-item 100% rata lurus vertikal).",
+                                          "Penerapan Knowledge Panel Card 35% Kanan berlatar transparan tanpa border/shadow luar, dipisahkan oleh Garis Abu-Abu Pemisah Vertikal (border-left: 1px solid #ebebeb; padding-left: 24px;) dari kolom 65% hasil kiri.",
+                                          "Penggantian Gambar Default Fallback Foto dari logo \u0027G\u0027 / favicon.ico menjadi SVG Putih Polos murni (#ffffff) saat produk tidak memiliki foto.",
+                                          "Penerapan Logo Pagination c a r i berbasis Tipografi Vektor HTML/CSS Google-Grade (Outfit/Product Sans) yang 100% Rata Lurus Horizontal Baseline (align-items: baseline) dan Rata Tengah (Centered) di Tab Semua (type=sites) dan Tab Gambar (type=images).",
+                                          "Pemetaan Unit Produksi Strict pada controller Search.php berdasarkan awalan kode_bom (FG-1... -\u003e UNIT 1, FG-2... -\u003e UNIT 2, FG-4... -\u003e UNIT 4).",
+                                          "Peluncuran modul Pencarian Suara Native Bahasa Indonesia (id-ID) dengan modal visualizer gelombang suara reaktif dan navigasi otomatis ke Tab Gambar Katalog.",
+                                          "Penerapan Algoritma Primary Brand/Series Anchor Search yang mewajibkan produk memuat kata utama merk (seperti \u0027bonanza\u0027 pada \u0027bonanza+table\u0027/\u0027bonanza+coffee\u0027), 100% mengeliminasi produk pengotor.",
+                                          "Penerapan Algoritma Comprehensive Category Antonym Exclusion yang memadukan matriks konflik tiga arah (Table vs Chair vs Lamp) untuk mengeliminasi Leora Dinning Chair dan Mida Table Lamp pada pencarian \u0027dinning table\u0027.",
+                                          "Refaktorisasi menyeluruh pada direktori app/Views: Menguraikan seluruh tag style dan script inline ke dalam berkas fisik murni public/css/ dan public/js/ dengan versioning cache busting (?v=\u003c?= time() ?\u003e).",
+                                          "Penyelarasan penuh terhadap 8 pilar dokumen aplikasi (PRD.md, Memory.md, Skills.md, StyleGuide.md, Task.md, README.md, Tautan.md, struktur_folder.md)."
+                                      ],
+                     "fixes":  [
+                                   "Mengeliminasi garis bingkai rounded border dan shadow pada foto Knowledge Card agar warna latar menyatu 100% tanpa garis pemisah.",
+                                   "Menghapus duplikasi pagination lama pada bagian bawah footer halaman hasil pencarian.",
+                                   "Memperbaiki ketidaksejajaran huruf logo pagination c a r i dengan menyelaraskan seluruh karakter pada 1 garis lurus baseline horizontal.",
+                                   "Memperbaiki masalah pagination yang tidak tampil saat berpindah ke Tab Gambar (type=images).",
+                                   "Mengeliminasi bayangan sintaks mentah Vue 3 {{ item }} pada beranda melalui integrasi global v-cloak."
+                               ],
+                     "patches":  [
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.01).",
+                                     "Sinkronisasi penuh terhadap seluruh dokumen internal tim dan etalase publik GitHub."
+                                 ],
+                     "created_at":  "2026-08-01 20:04:00"
+                 },
+                 {
+                     "id":  13,
+                     "versi":  "0.8.03",
+                     "tanggal_rilis":  "2026-08-03",
+                     "judul":  "Optimalisasi Knowledge Panel Default, Tabel Admin Responsif, \u0026 Pewarnaan Badge Dinamis",
+                     "deskripsi":  "Rilis yang berfokus pada penyempurnaan nilai bawaan (fallback) panel hasil pencarian dan perombakan arsitektur halaman Manajemen Mesin Pencari agar lebih ergonomis di perangkat seluler.",
+                     "improvements":  [
+                                          "Penyempurnaan Knowledge Panel: Sistem kini otomatis merender rapi \u0027Deskripsi: -\u0027, \u0027Kode BOM: FG-\u0027, \u0027Lihat BOM: BOM-FG-\u0027, dan \u0027Produksi: UNIT -\u0027 saat data kosong, diamankan dengan proteksi onMounted Vue JS.",
+                                          "Penyederhanaan Form Modal Box Edit Data (Admin) menjadi hanya 10 field input, dengan menyembunyikan isian \u0027Deskripsi Produk\u0027 demi keringkasan visual, namun tetap melindungi eksistensi data lamanya via reaktivitas Vue JS.",
+                                          "Penambahan kolom \u0027Kode BOM\u0027 pada tabel Admin yang dilengkapi inovasi pewarnaan dinamis adaptif (FG-1 Oranye, FG-2 Biru, FG-4 Merah) menggunakan teknik Translucent Opacity 10% untuk kontras mutlak pada Light Mode maupun Dark Mode.",
+                                          "Pembebasan ruang (*screen real estate*) di layar seluler dengan melenyapkan kotak dropdown pagination (jumlah baris), menyembunyikan kolom URL/Klik/Status, serta membuang ikon edit.",
+                                          "Sinkronisasi total seluruh dokumen pengembang internal (PRD.md, Memory.md, dll) beserta README repositori etalase publik."
+                                      ],
+                     "fixes":  [
+                                   "Mengeliminasi potensi galat tumpang tindih waktu muat (*race condition*) pada saat memicu hasil klik gambar pertama di halaman pencarian."
+                               ],
+                     "patches":  [
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.03)."
+                                 ],
+                     "created_at":  "2026-08-03 20:00:00"
+                 },
+                 {
+                     "id":  14,
+                     "versi":  "0.8.04",
+                     "tanggal_rilis":  "2026-08-04",
+                     "judul":  "Pelatihan Inkremental AI (State Ledger) \u0026 Otorisasi Mandiri",
+                     "deskripsi":  "Rilis revolusioner yang memperkenalkan arsitektur State Ledger untuk Pelatihan AI Inkremental. Memangkas waktu komputasi pembaruan memori AI dari belasan menit menjadi di bawah 1 detik dengan deteksi perubahan diferensial cerdas.",
+                     "improvements":  [
+                                          "Penerapan Arsitektur AI State Ledger (gkr_katalog.json) sebagai jembatan anti-amnesia antara web server dan layanan kecerdasan buatan.",
+                                          "Evolusi mesin pelatih AI dengan skrip ganda: Sinkronisasi Inkremental Harian yang secepat kilat dan Latih Ulang Total untuk pemulihan darurat.",
+                                          "Peningkatan basis data vektor dari FAISS IndexFlatIP menjadi IndexIDMap lengkap dengan pemetaan identitas persisten (mapping.json).",
+                                          "Perombakan Terminal UI Admin (/admin/ai) yang kini menyajikan 2 tombol diskrit: Sinkronisasi Inkremental (Hijau) \u0026 Latih Ulang Total (Merah).",
+                                          "Pemutakhiran otonomi Web Server dengan hak akses Sudoers NOPASSWD untuk melakukan hot-reload daemon AI (ai_scanner.service) tanpa hambatan autentikasi."
+                                      ],
+                     "fixes":  [
+                                   "Mengeliminasi masalah kehabisan memori (Crash) dan waktu muat sangat panjang saat server memperbarui indeks katalog harian.",
+                                   "Menuntaskan masalah perizinan penulisan berkas (Permission Denied) antara layanan sistem root dan pelayan web www-data pada direktori python_services."
+                               ],
+                     "patches":  [
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.04).",
+                                     "Sinkronisasi komprehensif terhadap 8 pilar dokumen pengembang (PRD.md, Memory.md, dll) beserta etalase GitHub publik (README.md)."
+                                 ],
+                     "created_at":  "2026-08-04 10:50:00"
+                 },
+                 {
+                     "id":  15,
+                     "versi":  "0.8.06",
+                     "tanggal_rilis":  "2026-08-06",
+                     "judul":  "Standardisasi Frontend, Eliminasi Inline Script \u0026 Responsivitas Antarmuka Beranda",
+                     "deskripsi":  "Rilis yang berfokus pada perombakan total arsitektur aset antarmuka (frontend) guna mensterilkan penulisan kode sumber halaman, serta penyempurnaan adaptasi tata letak di perangkat seluler.",
+                     "improvements":  [
+                                          "Sterilisasi View: Melenyapkan 100% penulisan kode JavaScript dan CSS secara langsung (inline) pada seluruh halaman aplikasi.",
+                                          "Injeksi Konfigurasi DOM Metadata: Memperkenalkan mekanisme penyuntikan konfigurasi dinamis yang lebih handal melalui tag meta HTML terpusat (config.js).",
+                                          "Tata Letak Ekstra Responsif (Mobile): Mengoptimalkan tampilan tautan (3D Viewer, Katalog, dan Telegram) agar otomatis membelah menjadi 2 baris proporsional pada gawai seluler.",
+                                          "Konsolidasi pustaka eksternal (vendor) ke dalam direktori terstruktur public/css/vendor dan public/js/vendor."
+                                      ],
+                     "fixes":  [
+                                   "Perbaikan presisi jarak animasi teks mesin ketik (typewriter) pada fitur Chatbot Telegram."
+                               ],
+                     "patches":  [
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.06)."
+                                 ],
+                     "created_at":  "2026-08-06 06:30:00"
+                 },
+                 {
+                     "id":  16,
+                     "versi":  "0.8.07",
+                     "tanggal_rilis":  "2026-08-07",
+                     "judul":  "Resolusi Konflik Akses AI Ledger \u0026 Integrasi Real-Time Stopwatch",
+                     "deskripsi":  "Rilis pemeliharaan yang memecahkan kendala perizinan sistem operasi pada mesin sinkronisasi kecerdasan buatan, sekaligus menanamkan antarmuka penghitung waktu berjalan (Stopwatch) berpresisi milidetik pada panel kendali Dasbor Admin.",
+                     "improvements":  [
+                                          "Sentralisasi Cache Busting statis (ASSET_VERSION) yang secara drastis menghemat latensi bandwidth server Production hingga 90%.",
+                                          "Modul Real-Time Stopwatch Milidetik (mm:ss:ms): Menanamkan penghitung waktu berformat digital superscript dengan laju presisi 10ms di Dasbor Crawler dan AI Trainer.",
+                                          "Penyegaran Kosakata Panel AI: Mengubah penamaan tombol aksi menjadi lebih teknis dan ringkas, yakni \u0027Sinkronisasi Vektor\u0027 dan \u0027Hard Reset\u0027.",
+                                          "Sentralisasi Perlindungan Kedipan (Flicker) Vue: Memindahkan direktif pengaman [v-cloak] ke ruang lingkup global di berkas antarmuka utama (main.css)."
+                                      ],
+                     "fixes":  [
+                                   "PWA Console Log Sterilization: Menyingkirkan peringatan sukses Service Worker di login.js agar pendaftaran pekerja layanan berjalan dalam mode Silent Fallback murni.",
+                                   "Resolusi Mutlak Konflik Kepemilikan (Ownership Collision): Memindahkan jalur ekspor memori AI (gkr_katalog.json) ke ruang resmi CodeIgniter 4 (writable/uploads/) untuk mencegah penolakan akses (Permission Denied) saat dieksekusi paralel oleh Web Server dan sistem Cronjob.",
+                                   "Pemusnahan Zombie CSS: Mencabut pemuatan pustaka tata letak usang (style.css) yang membebani memori dan tumpang tindih pada halaman hasil pencarian.",
+                                   "Pembersihan redundansi deklarasi tata letak Mode Gelap (Dark Mode) ganda pada komponen sorotan utama (Hero Image)."
+                               ],
+                     "patches":  [
+                                     "Validasi sintaks eksekusi penjadwalan berkala (Enterprise Cronjob) ke format absolut presisi tinggi (/usr/bin/php \u0026 /env-ai/bin/python3).",
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.07).",
+                                     "Sinkronisasi komprehensif seluruh dokumentasi internal tim dan etalase GitHub (PRD.md, struktur_folder.md, dll)."
+                                 ],
+                     "created_at":  "2026-08-07 13:03:00"
+                 },
+                 {
+                     "id":  17,
+                     "versi":  "0.8.11",
+                     "tanggal_rilis":  "2026-08-11",
+                     "judul":  "Resolusi Race Condition Vue \u0026 Bypassing Cache Browser Lapis Ganda",
+                     "deskripsi":  "Rilis ini berfokus pada penyempurnaan kestabilan sinkronisasi kecerdasan buatan, pendeteksian server DEV/PROD pada pelaporan Telegram secara ketat (berbasis IP+Domain), dan kelulusan mutlak pada audit bedah kode bersih arsitektur antarmuka pengguna.",
+                     "improvements":  [
+                                          "Sistem cerdas AI Trainer (State Ledger) yang mampu mengenali dan melompati pemrosesan pada gambar yang telah tersinkron sebelumnya (Anti-Duplication).",
+                                          "Pemisahan identitas notifikasi Telegram yang sangat ketat untuk peladen DEV dan PROD dengan mekanisme Unknown Fallback (TIDAK DIKENAL).",
+                                          "Kelulusan 100% pada audit bedah kebersihan kode antarmuka (Zero Inline Script \u0026 Style pada direktori Views)."
+                                      ],
+                     "fixes":  [
+                                   "Menutup celah penggandaan indeks data vektor FAISS yang berpotensi membebani memori mesin pencarian AI.",
+                                   "Menambal kebocoran identitas laporan harian Telegram yang sebelumnya gagal mendeteksi peladen operasional akibat anomali resolusi domain ZeroTier/lokal."
+                               ],
+                     "patches":  [
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.11).",
+                                     "Sinkronisasi komprehensif terhadap 8 pilar dokumen internal tim (PRD.md, Memory.md, Skills.md, Task.md, StyleGuide.md) dan etalase publik GitHub (README.md, struktur_folder.md, Tautan.md)."
+                                 ],
+                     "created_at":  "2026-08-11 06:55:00"
+                 },
+                 {
+                     "id":  18,
+                     "versi":  "0.8.12",
+                     "tanggal_rilis":  "2026-08-12",
+                     "judul":  "Peluncuran Mode Album Telegram \u0026 Kecerdasan Koreksi Kata",
+                     "deskripsi":  "Pembaruan ini membawakan asisten Telegram yang jauh lebih interaktif, memungkinkan Anda meminta tampilan katalog dalam bentuk galeri foto memukau, serta kemampuan asisten cerdas untuk memaafkan kesalahan ketik (typo).",
+                     "improvements":  [
+                                          "Peluncuran Fitur \u0027Album\u0027: Kini Anda dapat mengetikkan \u0027Album \u003cNama Barang\u003e\u0027 di Telegram untuk langsung menerima galeri kumpulan foto produk sekaligus (bisa digeser).",
+                                          "Kecerdasan Koreksi Salah Ketik (Typo): Asisten kini mampu mendeteksi jika Anda salah mengeja nama barang saat sedang terburu-buru, dan akan otomatis memberikan rekomendasi katalog yang tepat."
+                                      ],
+                     "fixes":  [
+                                   "Menghilangkan kendala terhentinya respon asisten Telegram saat beberapa gambar produk kebetulan sedang tidak dapat dimuat."
+                               ],
+                     "patches":  [
+                                     "Peningkatan stabilitas pelaporan otomatis harian agar berjalan lebih senyap dan akurat di latar belakang."
+                                 ],
+                     "created_at":  "2026-08-12 12:00:00"
+                 },
+                 {
+                     "id":  19,
+                     "versi":  "0.8.13",
+                     "tanggal_rilis":  "2026-08-13",
+                     "judul":  "Otomatisasi Jadwal \u0026 Modernisasi Notifikasi",
+                     "deskripsi":  "Pembaruan ini membawakan stabilitas paripurna dengan menyerahkan kendali penjadwalan pembaruan katalog ke sistem orkestrasi modern, sehingga server aplikasi dapat berjalan jauh lebih senyap, lega, dan tangguh.",
+                     "improvements":  [
+                                          "Transisi ke sistem penjadwalan modern yang menjamin pembaruan katalog dan mesin AI selalu tepat waktu tanpa membebani server utama.",
+                                          "Penyempurnaan mekanisme notifikasi internal agar pengiriman laporan harian berjalan seketika tanpa jeda pemuatan (loading)."
+                                      ],
+                     "fixes":  [
+                                   "Menghilangkan potensi keterlambatan (delay) pada pengiriman laporan harian berkat sistem antrean (webhook) asinkron."
+                               ],
+                     "patches":  [
+                                     "Peningkatan keamanan rute internal aplikasi untuk melindungi akses mesin otomasi."
+                                 ],
+                     "created_at":  "2026-08-13 13:00:00"
+                 },
+                 {
+                     "id":  20,
+                     "versi":  "0.8.14",
+                     "tanggal_rilis":  "2026-08-14",
+                     "judul":  "Sinkronisasi Arsitektur Direktori AI \u0026 Konfigurasi Webhook Independen",
+                     "deskripsi":  "Pembaruan arsitektur besar-besaran yang meresmikan sistem Pelatih AI berbasis direktori dinamis dan perombakan jaringan komunikasi notifikasi agar berjalan secara independen per peladen (Zero Cross-Network).",
+                     "improvements":  [
+                                          "Evolusi Pelatih AI (*AI Trainer*) yang kini mampu diarahkan pada target direktori kustom secara dinamis melalui Dasbor UI.",
+                                          "Penyempurnaan jaringan komunikasi notifikasi Telegram agar 100% independen (berjalan di saluran lokal), menjamin tidak ada lagi bentrokan data pelaporan lintas-server.",
+                                          "Penyelarasan seluruh (8) dokumen fundamental ekosistem (termasuk PRD, Memory, dan Standar SOP DevOps)."
+                                      ],
+                     "fixes":  [
+                                   "Menyelamatkan peladen dari risiko kehabisan memori (*Kernel Panic*) dengan mendelegasikan ruang penyimpanan mati (Cache OS \u0026 Ledger AI) ke luar batas eMMC STB."
+                               ],
+                     "patches":  [
+                                     "Peningkatan keamanan pelaporan Telegram dengan identitas ganda (Deteksi IP Lokal \u0026 Hostname)."
+                                 ],
+                     "created_at":  "2026-08-14 08:00:00"
+                 },
+                 {
+                     "id":  21,
+                     "versi":  "0.8.151",
+                     "tanggal_rilis":  "2026-08-15",
+                     "judul":  "Sterilisasi Ekosistem Frontend \u0026 Integrasi Cache Busting ERP",
+                     "deskripsi":  "Rilis yang berfokus pada pembersihan arsitektur antarmuka dan kepatuhan mutlak terhadap aturan \u0027Zero Inline Script \u0026 Style\u0027 pada modul pencarian internal (ERP).",
+                     "improvements":  [
+                                          "Modul Live Search ERP kini 100% steril dari injeksi skrip maupun tata letak sebaris (Inline Script/Style).",
+                                          "Integrasi mekanisme Cache Busting global (?v=ASSET_VERSION) yang dijamin akan memaksa peramban memuat pembaruan termutakhir tanpa intervensi pengguna."
+                                      ],
+                     "fixes":  [
+                                   "Melucuti ratusan baris gaya (CSS) dan logika aplikasi (JS) dari dalam \u0027erp_search.php\u0027 menjadi aset statis murni yang dilindungi dan terpusat di \u0027public/css\u0027 serta \u0027public/js\u0027."
+                               ],
+                     "patches":  [
+                                     "Sinkronisasi lanjutan terhadap dokumentasi panduan desain internal (StyleGuide)."
+                                 ],
+                     "created_at":  "2026-08-15 08:00:00"
+                 }
+             ]
 }
