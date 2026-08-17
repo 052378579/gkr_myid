@@ -35,12 +35,17 @@ class ErpController extends BaseController
 
         $scriptPath = escapeshellarg(ROOTPATH . "python_services/{$scriptName}");
         
+        $pythonBin = '/mnt/sdcard/ai-scanner/env-ai/bin/python3';
+        if (!file_exists($pythonBin)) {
+            $pythonBin = 'python3';
+        }
+        
         // Tambahkan argumen prefix jika ada
         if ($prefix !== null) {
             $safePrefix = escapeshellarg($prefix);
-            $command = "python3 {$scriptPath} {$safePrefix} 2>&1";
+            $command = "{$pythonBin} {$scriptPath} {$safePrefix} 2>&1";
         } else {
-            $command = "python3 {$scriptPath} 2>&1";
+            $command = "{$pythonBin} {$scriptPath} 2>&1";
         }
         
         $handle = popen($command, 'r');

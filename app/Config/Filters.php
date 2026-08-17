@@ -77,7 +77,7 @@ class Filters extends BaseFilters
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
-            'auth' => ['except' => ['login', 'login/*', 'daftar', 'daftar/*', 'api/chatbot/webhook', 'force-migrate']]
+            'auth' => ['except' => ['login', 'login/*', 'daftar', 'daftar/*', 'api/chatbot/webhook', 'api/users/check', 'force-migrate']]
         ],
         'after' => [
             // 'honeypot',
@@ -113,4 +113,5 @@ class Filters extends BaseFilters
         'superadmin' => ['before' => ['admin', 'admin/*']]
     ];
 }
+
 

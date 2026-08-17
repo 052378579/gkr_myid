@@ -85,3 +85,6 @@ $routes->post('/api/chatbot/webhook', '\App\Controllers\Api\ChatBotApi::webhook'
 // Live Search ERP
 $routes->get('/erp', '\App\Controllers\ErpSearchController::index');
 $routes->get('/erp/api/search', '\App\Controllers\ErpSearchController::liveSearch');
+
+// Seamless Login WAHA
+$routes->get('/api/users/check', '\App\Controllers\Api\UsersApi::check');
