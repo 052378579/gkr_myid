@@ -68,7 +68,26 @@ if (
     $_SERVER['database.default.username'] = 'root';
     $_SERVER['database.default.password'] = '102013';
 } 
-// 2. PROD ZONE (Hak Akses Publik via Domain)
+// 2. PROD INTERNAL ZONE (Akses langsung via ZeroTier IP - tanpa paksa HTTPS)
+// Digunakan untuk monitoring/testing internal tanpa SSL cert pada IP
+elseif (
+    strpos($host, '10.147.17.60') !== false ||
+    strpos($serverIp, '10.147.17.60') !== false
+) {
+    // Set Environment
+    $_SERVER['CI_ENVIRONMENT'] = 'production';
+
+    // Inject Config App â€” HTTP (tidak paksa HTTPS karena IP tanpa SSL cert)
+    $_SERVER['app.baseURL'] = 'http://' . $host . '/';
+    $_SERVER['app.forceGlobalSecureRequests'] = 'false';
+
+    // Inject Config Database (PROD) - sama dengan zona PROD domain
+    $_SERVER['database.default.hostname'] = getenv('DB_PROD_HOST') ?: 'localhost';
+    $_SERVER['database.default.database'] = getenv('DB_PROD_NAME') ?: 'gkr_myid';
+    $_SERVER['database.default.username'] = getenv('DB_PROD_USER') ?: 'root';
+    $_SERVER['database.default.password'] = getenv('DB_PROD_PASS') ?: '102013';
+}
+// 3. PROD ZONE (Hak Akses Publik via Domain)
 elseif (
     strpos($host, 'budi.biz.id') !== false || 
     strpos($host, 'gkr.my.id') !== false ||
@@ -88,7 +107,7 @@ elseif (
     $_SERVER['database.default.username'] = getenv('DB_PROD_USER') ?: 'root';
     $_SERVER['database.default.password'] = getenv('DB_PROD_PASS') ?: '102013';
 } 
-// 3. SECURE FALLBACK (Sapu Jagat Perlindungan dari Bot/Scanner IP Publik)
+// 4. SECURE FALLBACK (Sapu Jagat Perlindungan dari Bot/Scanner IP Publik)
 else {
     $_SERVER['CI_ENVIRONMENT'] = 'production';
     
