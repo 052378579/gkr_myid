@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use CodeIgniter\Boot;
 use Config\Paths;
@@ -81,11 +81,12 @@ elseif (
     $_SERVER['app.baseURL'] = 'https://' . $host . '/';
     $_SERVER['app.forceGlobalSecureRequests'] = 'true';
 
-    // Inject Config Database (PROD) - HARAP UBAH USERNAME & PASSWORD INI!
-    $_SERVER['database.default.hostname'] = 'localhost';
-    $_SERVER['database.default.database'] = 'gkr_myid';
-    $_SERVER['database.default.username'] = 'user_gkr_prod';
-    $_SERVER['database.default.password'] = 'password_prod_anda_disini';
+    // Inject Config Database (PROD) - dibaca dari .env PROD (gitignored, aman dari Git)
+    // .env PROD diedit manual via SSH; tidak terpengaruh git reset --hard maupun git clean -fd
+    $_SERVER['database.default.hostname'] = getenv('DB_PROD_HOST') ?: 'localhost';
+    $_SERVER['database.default.database'] = getenv('DB_PROD_NAME') ?: 'gkr_myid';
+    $_SERVER['database.default.username'] = getenv('DB_PROD_USER') ?: 'root';
+    $_SERVER['database.default.password'] = getenv('DB_PROD_PASS') ?: '102013';
 } 
 // 3. SECURE FALLBACK (Sapu Jagat Perlindungan dari Bot/Scanner IP Publik)
 else {
