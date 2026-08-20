@@ -21,10 +21,10 @@ window.addEventListener('resize', updatePlaceholder);
 updatePlaceholder();
 
 // Live Search Event (Debounced)
-searchInput.addEventListener('input', function(e) {
+searchInput.addEventListener('input', function (e) {
     currentQuery = e.target.value.trim();
     currentPage = 1; // Reset to page 1 on new search
-    
+
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
         fetchData();
@@ -39,7 +39,7 @@ function changePage(direction) {
 
 function fetchData() {
     loader.style.display = 'block';
-    
+
     fetch(`/erp/api/search?q=${encodeURIComponent(currentQuery)}&page=${currentPage}`)
         .then(response => response.json())
         .then(data => {
@@ -47,7 +47,7 @@ function fetchData() {
             if (data.status === 'success') {
                 renderData(data.data);
                 totalCount.innerText = data.total;
-                
+
                 // Handle Pagination Buttons
                 btnPrev.disabled = (currentPage === 1);
                 btnNext.disabled = (currentPage * data.limit) >= data.total;
@@ -62,7 +62,7 @@ function fetchData() {
 
 function renderData(items) {
     resultBody.innerHTML = '';
-    
+
     if (items.length === 0) {
         resultBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-5">Tidak ada data ditemukan.</td></tr>';
         return;
@@ -70,17 +70,17 @@ function renderData(items) {
 
     items.forEach(item => {
         const tr = document.createElement('tr');
-        
+
         // Cek isi weaving dan fabric
         const weavingHtml = item.weaving ? `<span class="col-weaving">[W: ${item.weaving}]</span>` : '';
         const fabricHtml = item.fabric ? `<span class="col-fabric">[F: ${item.fabric}]</span>` : '';
-        
+
         // Cek kata 'estimasi' atau 'cancel' (case-insensitive) di semua kolom data
         const rowDataString = Object.values(item).join(' ').toLowerCase();
         if (rowDataString.includes('estimasi') || rowDataString.includes('cancel')) {
             tr.classList.add('row-estimasi');
         }
-        
+
         let kodeColor = "#1e3a8a"; // Default Biru Gracia
         if (item.kode_bom) {
             if (item.kode_bom.startsWith("FG-1")) {
@@ -93,20 +93,28 @@ function renderData(items) {
                 kodeColor = "#dc3545"; // Danger Bootstrap
             }
         }
-        
-        const kodeHtml = item.kode_bom 
-            ? `<a href="http://103.39.49.86:82/desk#Form/Item/${item.kode_bom}" target="_blank" style="text-decoration: none; color: ${kodeColor}; font-weight: 600;">${item.kode_bom}</a>` 
+
+        const kodeHtml = item.kode_bom
+            ? `<a href="http://103.39.49.86:82/desk#Form/Item/${item.kode_bom}" target="_blank" style="text-decoration: none; color: ${kodeColor}; font-weight: 600;">${item.kode_bom}</a>`
             : '-';
-        
+
         let materialHtml = item.material ? item.material.replace(/FRAME/gi, '<strong>$&</strong>').replace(/\+/g, '<strong>+</strong>').replace(/estimasi/gi, '<strong>$&</strong>') : '-';
         // Format Dimensi agar bagian dalam kurung turun ke baris baru
         let dimensiText = item.dimensi || '-';
         let dimensiHtml = dimensiText.replace(/(\s*\(.*?\))/, '<br>$1');
 
-        
+        // Logika Truncate Nama Barang (Max 25 Karakter)
+        let namaBarang = item.item_name || '-';
+        let namaAsli = item.item_name || '';
+
+        if (namaBarang !== '-' && namaBarang.length > 25) {
+            namaBarang = namaBarang.substring(0, 25) + '...';
+        }
+
+
         tr.innerHTML = `
             <td class="col-kode">${kodeHtml}</td>
-            <td class="col-nama">${item.item_name || '-'}</td>
+            <td class="col-nama" title="${namaAsli}">${namaBarang}</td>
             <td class="col-dimensi d-none d-md-table-cell" style="min-width: 150px;">${dimensiHtml}</td>
             <td class="col-material d-none d-md-table-cell">
                 ${materialHtml} 

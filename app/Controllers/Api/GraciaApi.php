@@ -13,6 +13,36 @@ class GraciaApi extends BaseController
         header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
     }
 
+    public function getBom()
+    {
+        $kode = $this->request->getGet('kode');
+
+        if (empty($kode)) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Parameter kode barang wajib disertakan.'
+            ]);
+        }
+
+        $db = \Config\Database::connect();
+        $builder = $db->table('gkr_erp');
+        $builder->where('kode_bom', $kode);
+        $builder->orderBy('terakhir_ditarik', 'DESC');
+        $data = $builder->get()->getRowArray();
+
+        if ($data) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'data' => $data
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'BOM tidak ditemukan di database ERP Gracia.'
+            ]);
+        }
+    }
+
     public function updateLinkCount()
     {
         $id = $this->request->getPost('id');

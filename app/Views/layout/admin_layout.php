@@ -66,9 +66,22 @@
                 </a>
             </li>
             <li>
-                <a href="<?= base_url('admin/log') ?>" class="<?= (uri_string() == 'admin/log') ? 'active' : '' ?>">
+                <a href="#collapseLog" data-bs-toggle="collapse" class="<?= (strpos(uri_string(), 'admin/log') === 0) ? 'active' : '' ?>">
                     <i class="fas fa-clipboard-list"></i> Log
+                    <i class="fas fa-chevron-down float-end mt-1" style="font-size: 0.8rem;"></i>
                 </a>
+                <ul class="collapse <?= (strpos(uri_string(), 'admin/log') === 0) ? 'show' : '' ?> list-unstyled" id="collapseLog" style="padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0;">
+                    <li class="mb-1">
+                        <a href="<?= base_url('admin/log/cari') ?>" class="<?= (uri_string() == 'admin/log/cari' || uri_string() == 'admin/log') ? 'active' : '' ?>" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-search" style="width: 20px; text-align: center;"></i> Log Cari
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?= base_url('admin/log/user') ?>" class="<?= (uri_string() == 'admin/log/user') ? 'active' : '' ?>" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
+                            <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Log User
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="mt-auto">
                 <hr class="my-2" style="border-top: 2px solid #2B3385; opacity: 0.3;">

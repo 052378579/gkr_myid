@@ -116,25 +116,17 @@ def main():
         print(f"[ERROR DB] {str(e)}", flush=True)
         sys.exit(1)
 
-    print("[INIT] Mereset seluruh kolom hasil ekstraksi...", flush=True)
-    try:
-        sql_reset = """
-            UPDATE gkr_erp 
-            SET item_name = NULL, 
-                dimensi = NULL, 
-                material = NULL, 
-                weaving = NULL, 
-                fabric = NULL
-        """
-        cursor.execute(sql_reset)
-        print("[OK] Seluruh kolom (kecuali kode_bom & item_master) berhasil dikosongkan.", flush=True)
-    except Exception as e:
-        print(f"[ERROR RESET] {str(e)}", flush=True)
-
-    print("[INIT] Mengambil seluruh data untuk diekstrak ulang...", flush=True)
+    print("[INIT] Mencari data baru yang belum diekstrak (Incremental)...", flush=True)
     
-    # Ambil SEMUA data karena baru saja direset
-    sql_select = "SELECT kode_bom, item_master FROM gkr_erp"
+    # Hanya ambil data yang kolom hasil ekstraksinya masih kosong
+    sql_select = """
+        SELECT kode_bom, item_master 
+        FROM gkr_erp
+        WHERE item_name IS NULL 
+           OR dimensi IS NULL 
+           OR material IS NULL 
+           OR fabric IS NULL
+    """
     cursor.execute(sql_select)
     rows = cursor.fetchall()
     

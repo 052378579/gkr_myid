@@ -85,7 +85,8 @@ class CrawlCommand extends BaseCommand
         CLI::newLine();
         CLI::write('Proses crawling telah selesai dilakukan', 'green');
         
-        $this->sendTelegramNotification($target, $kesimpulan);
+        // Mematikan notifikasi bawaan CodeIgniter agar tidak dobel dengan N8N
+        // this->sendTelegramNotification($target, $kesimpulan);
     }
     private function sendTelegramNotification($target, $kesimpulan)
     {

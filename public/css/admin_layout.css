@@ -52,7 +52,18 @@ body {
     background-color: var(--bs-secondary-bg);
     color: var(--gkr-primary, #2B3385);
     font-weight: 500;
-    border-left: 4px solid var(--gkr-primary, #2B3385);
+}
+
+@media (min-width: 768px) {
+    .admin-sidebar .sidebar-menu li a {
+        border-left: 4px solid transparent;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .admin-sidebar .sidebar-menu li a:hover,
+    .admin-sidebar .sidebar-menu li a.active {
+        border-left: 4px solid var(--gkr-primary, #2B3385);
+    }
 }
 
 .admin-sidebar .sidebar-menu li a i {

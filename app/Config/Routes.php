@@ -29,12 +29,16 @@ $routes->get('/admin', '\App\Controllers\Admin\AdminController::index');
 $routes->get('/admin/dashboard', '\App\Controllers\Admin\AdminController::dashboard');
 $routes->get('/admin/cari', '\App\Controllers\Admin\AdminController::cari');
 $routes->get('/admin/doodle', '\App\Controllers\Admin\AdminController::doodle');
-$routes->get('/admin/log', '\App\Controllers\Admin\AdminController::log');
+$routes->get('/admin/log', '\App\Controllers\Admin\AdminController::log_cari');
+$routes->get('/admin/log/cari', '\App\Controllers\Admin\AdminController::log_cari');
+$routes->get('/admin/log/user', '\App\Controllers\Admin\AdminController::log_user');
 $routes->get('/trend', 'TrendController::index');
 $routes->get('/awan_kata', 'AwanKata::index');
 $routes->get('/admin/crawl', '\App\Controllers\Admin\Crawler::index');
-$routes->post('/crawler/doCrawl', 'Api\CrawlerApi::doCrawl');
-$routes->post('/crawler/resetDb', 'Api\CrawlerApi::resetDb');
+$routes->group('crawler', ['filter' => 'superadmin'], static function ($routes) {
+    $routes->post('doCrawl', 'Api\CrawlerApi::doCrawl');
+    $routes->post('resetDb', 'Api\CrawlerApi::resetDb');
+});
 
 $routes->get('/admin/ai', '\App\Controllers\Admin\AiCrawler::index');
 $routes->post('/admin/ai/doCrawl', '\App\Controllers\Admin\AiCrawler::doCrawl');
@@ -87,4 +91,9 @@ $routes->get('/erp', '\App\Controllers\ErpSearchController::index');
 $routes->get('/erp/api/search', '\App\Controllers\ErpSearchController::liveSearch');
 
 // Seamless Login WAHA
-$routes->get('/api/users/check', '\App\Controllers\Api\UsersApi::check');
+
+$routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
+    $routes->get('erp/bom', 'Api\GraciaApi::getBom');
+    $routes->get('users/check', 'Api\UsersApi::check');
+});
+$routes->get('/admin/erp/data', '\App\Controllers\Admin\AdminController::erp_data');

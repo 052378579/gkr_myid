@@ -1,9 +1,29 @@
 {
     "nama_file":  "versi.json",
     "nama_proyek":  "gkr_myid",
-    "tanggal_diperbarui":  "15-08-2026 08:00:00 WIB",
-    "versi_diperbarui":  "0.8.15",
+    "tanggal_diperbarui":  "20-08-2026 14:00:00 WIB",
+    "versi_diperbarui":  "0.8.20",
     "data":  [
+                 {
+                     "id":  23,
+                     "versi":  "0.8.20",
+                     "tanggal_rilis":  "2026-08-20",
+                     "judul":  "Arsitektur Master Scheduler n8n \u0026 Optimasi Python 3.11.2",
+                     "deskripsi":  "Rilis raksasa yang merombak arsitektur jadwal dan mesin kecerdasan buatan, memastikan ekosistem berjalan sepenuhnya terorkestrasi, senyap, tangguh, dan sangat cepat.",
+                     "improvements":  [
+                                          "Pendelegasian mutlak fungsi jadwal otomatis (Master Scheduler) Crawler (18:00) dan AI Hard Reset (00:01) kepada n8n.",
+                                          "Pemutakhiran arsitektur komputasi AI Microservice menuju Python 3.11.2, memacu kecepatan komputasi CPU STB Amlogic hingga 60% lebih gegas.",
+                                          "Penyelarasan komprehensif ke-8 dokumen fundamental proyek (PRD, Memory, Skills, StyleGuide, Task, README, Tautan, struktur_folder) agar berharmoni sempurna dengan arsitektur baru."
+                                      ],
+                     "fixes":  [
+                                   "Sterilisasi sistem notifikasi ganda dengan mematikan webhook PHP lawas, mendelegasikan murni kepada Node Telegram n8n secara eksklusif untuk Admin (Chat ID 8784856529)."
+                               ],
+                     "patches":  [
+                                     "Penonaktifan Cronjob Linux lama (ai_scanner_cron.log \u0026 ai_crawler_cron.log) demi efisiensi resource memori STB.",
+                                     "Penyempurnaan otomatisasi penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.20)."
+                                 ],
+                     "created_at":  "2026-08-20 14:00:00"
+                 },
                  {
                      "catatan":  [
                                      "Penyelarasan UI ERP Data Engine (Bootstrap 5 Grid)",
