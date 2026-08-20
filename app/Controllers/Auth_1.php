@@ -90,31 +90,6 @@ class Auth extends BaseController
             $logUserModel = new LogUserModel();
             $logUserModel->catatAktivitas($user['id_user'], 'masuk', $this->request->getIPAddress(), (string) $this->request->getUserAgent());
 
-            // --- NOTIFIKASI WHATSAPP WAHA (N8N) ---
-            $jenis_kelamin = isset($user['jenis_kelamin']) ? $user['jenis_kelamin'] : 'L';
-            $sapaan = ($jenis_kelamin === 'P') ? 'Ibu' : 'Bapak';
-            
-            $no_hp_format = $user['no_hp'];
-            if (substr($no_hp_format, 0, 1) === '0') {
-                $no_hp_format = '62' . substr($no_hp_format, 1);
-            }
-
-            $payload = json_encode([
-                'no_hp'        => $no_hp_format,
-                'nama_lengkap' => $user['nama_lengkap'],
-                'sapaan'       => $sapaan
-            ]);
-
-            $ch = curl_init('http://localhost:5678/webhook/wa-login-notif');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 2); 
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-            curl_exec($ch);
-            curl_close($ch);
-            // --------------------------------------
-
             return redirect()->to('/')->with('success', 'Selamat datang ' . $user['nama_lengkap'] . '');
         } else {
             // Catat Log Percobaan Gagal
