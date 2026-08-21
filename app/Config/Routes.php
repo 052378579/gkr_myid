@@ -97,3 +97,7 @@ $routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
     $routes->get('users/check', 'Api\UsersApi::check');
 });
 $routes->get('/admin/erp/data', '\App\Controllers\Admin\AdminController::erp_data');
+
+// Shortlink WAHA ERP Redirect
+$routes->get('/go/(:segment)', 'Redirect::erp/$1');
+
