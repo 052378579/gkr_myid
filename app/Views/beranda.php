@@ -165,7 +165,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                 </div>
                 <span class="text-muted mx-3 d-none d-md-inline">|</span>
                 <div class="d-flex justify-content-center align-items-center mt-1 mt-md-0">
-                    <a href="/erp" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium d-inline-flex align-items-center justify-content-start" style="color: var(--gkr-primary); font-size: 0.95rem; width: 195px;">
+                    <a href="/erp" rel="noopener noreferrer" class="text-decoration-none fw-medium d-inline-flex align-items-center justify-content-start" style="color: var(--gkr-primary); font-size: 0.95rem; width: 195px;">
                         <!-- <i class="fa-brands fa-e me-1"></i> -->
                         <span class="typewriter-text">Live Search ERP</span>
                         <sup class="text-danger fade-in-new ms-1">New</sup>

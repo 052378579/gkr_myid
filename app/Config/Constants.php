@@ -85,4 +85,4 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest a
  | Konstanta statis penangkal cache browser. Wajib dinaikkan
  | seiring dengan rilis /versi baru.
  */
-defined('ASSET_VERSION') || define('ASSET_VERSION', '0.8.20');
+defined('ASSET_VERSION') || define('ASSET_VERSION', '0.8.27');

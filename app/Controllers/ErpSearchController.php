@@ -49,9 +49,8 @@ class ErpSearchController extends BaseController
                     ->like('kode_bom', $query)
                     ->orLike('item_name', $query)
                     ->orLike('dimensi', $query)
-                    ->orLike('material', $query)
-                    ->orLike('weaving', $query)
-                    ->orLike('fabric', $query)
+                    ->orLike('finishing', $query)
+                    ->orLike('buyer', $query)
                     ->groupEnd();
         }
 
@@ -59,8 +58,8 @@ class ErpSearchController extends BaseController
         $totalResults = $builder->countAllResults(false);
 
         // Fetch data
-        $builder->select('kode_bom, item_name, dimensi, material, weaving, fabric')
-                ->orderBy('terakhir_ditarik', 'DESC')
+        $builder->select('kode_bom, bom_name, item_name, dimensi, finishing, buyer')
+                ->orderBy('erp_modified', 'DESC')
                 ->limit($limit, $offset);
         
         $results = $builder->get()->getResultArray();

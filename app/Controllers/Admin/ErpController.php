@@ -20,7 +20,7 @@ class ErpController extends BaseController
         }
     }
 
-    private function executeLiveStream($scriptName, $prefix = null)
+    private function executeLiveStream($scriptName, $args = null)
     {
         ignore_user_abort(true);
         set_time_limit(0); 
@@ -40,10 +40,9 @@ class ErpController extends BaseController
             $pythonBin = 'python3';
         }
         
-        // Tambahkan argumen prefix jika ada
-        if ($prefix !== null) {
-            $safePrefix = escapeshellarg($prefix);
-            $command = "{$pythonBin} {$scriptPath} {$safePrefix} 2>&1";
+        if ($args !== null) {
+            $safeArgs = escapeshellarg($args);
+            $command = "{$pythonBin} {$scriptPath} {$safeArgs} 2>&1";
         } else {
             $command = "{$pythonBin} {$scriptPath} 2>&1";
         }
@@ -57,10 +56,7 @@ class ErpController extends BaseController
                     echo "data: " . nl2br(htmlspecialchars($buffer)) . "\n\n";
                     flush(); 
                 }
-                
-                if (connection_aborted()) {
-                    break;
-                }
+                if (connection_aborted()) { break; }
             }
             pclose($handle);
         } else {
@@ -77,12 +73,17 @@ class ErpController extends BaseController
 
     public function streamCrawl()
     {
-        $prefix = $this->request->getGet('prefix') ?? 'FG-';
-        $this->executeLiveStream('erp_crawl.py', $prefix);
+        $this->executeLiveStream('erp_crawl.py');
     }
 
-    public function streamEkstrak()
+    public function ekstrak()
     {
-        $this->executeLiveStream('erp_ekstrak.py');
+        $this->executeLiveStream('erp_ekstrak.py', '--inc');
+    }
+
+    public function lanjutan()
+    {
+        $this->executeLiveStream('erp_update.py');
     }
 }
+

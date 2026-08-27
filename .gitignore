@@ -20,20 +20,25 @@ vendor/
 # -------------------------------------------------------------------
 *.sql
 *.psd
-*.txt
-*.md
-!README.md
-Task.md
-
+public/uploads/*
+!public/uploads/index.html
 # -------------------------------------------------------------------
 # 4. OS & IDE CONFIG FILES
 # -------------------------------------------------------------------
 .vscode/
 .idea/
-.agents/
+
 .DS_Store
 Thumbs.db
 # Abaikan database AI Trainer lokal
 python_services/produk.index
 python_services/mapping.json
 python_services/buku_catatan_ai.json
+
+# -------------------------------------------------------------------
+# 5. DOKUMEN AGENTIC & SKENARIO LOKAL (SANGAT RAHASIA)
+# -------------------------------------------------------------------
+*.txt
+*.md
+!README.md
+.agents/*

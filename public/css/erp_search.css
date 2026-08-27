@@ -1,5 +1,5 @@
 body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -80,13 +80,8 @@ body {
 
 /* Data List Area */
 .data-wrapper {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-    gap: 20px;
+    /* Adjusted in PHP with Bootstrap classes for positioning */
     min-height: 350px;
-    position: relative;
 }
 
 /* Nav Buttons */
@@ -103,7 +98,8 @@ body {
     color: #666;
     cursor: pointer;
     transition: all 0.2s;
-    align-self: center;
+    background-color: #fff;
+    z-index: 10;
 }
 .nav-btn:hover:not(:disabled) {
     border-color: #1e3a8a;
@@ -115,35 +111,37 @@ body {
     cursor: not-allowed;
 }
 
-/* Data List Table (No Borders) */
+/* Data List Table */
 .data-list {
     width: 100%;
     max-width: 1100px;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
-.data-list th, .data-list td {
-    padding: 10px 9px;
+.data-list th {
+    padding: 15px 10px;
+    font-weight: 600;
+    color: #333;
+    border: none;
+}
+.data-list td {
+    padding: 15px 10px; /* Jarak atas bawah 15px (total 30px row spacing) */
     text-align: left;
     vertical-align: top;
     border: none;
 }
 .data-list tr {
-    border-bottom: 1px solid transparent;
+    background-color: #ffffff; /* Latar belakang baris putih bersih */
+    border-bottom: 1px solid #eee; /* Garis bawah halus */
     transition: background 0.2s;
 }
 .data-list tbody tr:hover {
-    background: #f8f9fa;
-    border-bottom: 1px solid #eee;
+    background-color: #f8f9fa; /* Hover abu-abu muda */
 }
 
-.col-kode { font-weight: 500; white-space: nowrap; width: 1%; }
+/* Column styles removed here since explicit widths are in HTML table-layout fixed */
+
 .col-kode a:hover { text-decoration: underline !important; }
-.col-nama { width: 1%; white-space: nowrap; }
-.col-dimensi { white-space: nowrap; width: 1%; }
-.col-material { width: auto; padding-left: 15px; }
-.col-weaving { font-size: 0.85rem; opacity: 0.8; }
-.col-fabric { font-size: 0.85rem; opacity: 0.8; }
 
 /* Row Estimasi (Teks Merah) */
 .row-estimasi td, .row-estimasi span {
@@ -179,14 +177,14 @@ body {
 .slider-words {
     display: inline-block;
     overflow: hidden;
-    height: 1.5em; /* Ditinggikan agar huruf 'g' tidak terpotong */
+    height: 1.5em;
     vertical-align: middle;
     margin-right: 6px;
 }
 .slider-words-inner {
     display: inline-flex;
     flex-direction: column;
-    align-items: flex-end; /* Membuat teks rata kanan */
+    align-items: flex-end;
     animation: slideUp 10s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 .slider-words-inner span {
@@ -204,26 +202,25 @@ body {
 /* Mobile specific adjustments */
 @media (max-width: 768px) {
     .main-container {
-        padding-top: 80px; /* Push logo down below the header */
+        padding-top: 80px; 
     }
     .data-wrapper {
-        display: block; /* Remove flex to allow table full width */
-        padding-bottom: 70px; /* Space for absolute buttons */
+        padding-bottom: 70px;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
     .data-list {
         width: 100%;
+        table-layout: auto !important; /* Biarkan otomatis di HP */
     }
     .nav-btn {
         position: absolute;
         bottom: 10px;
+        top: auto !important;
+        transform: none !important;
         background-color: var(--bs-body-bg);
         box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        z-index: 10;
     }
-    #btnPrev {
-        left: 10px;
-    }
-    #btnNext {
-        right: 10px;
-    }
+    #btnPrev { left: 10px; }
+    #btnNext { right: 10px; }
 }

@@ -1,9 +1,50 @@
 {
     "nama_file":  "versi.json",
     "nama_proyek":  "gkr_myid",
-    "tanggal_diperbarui":  "20-08-2026 14:00:00 WIB",
-    "versi_diperbarui":  "0.8.20",
+    "tanggal_diperbarui":  "27-08-2026 12:40:00 WIB",
+    "versi_diperbarui":  "0.8.27",
     "data":  [
+                 {
+                     "id":  25,
+                     "versi":  "0.8.27",
+                     "tanggal_rilis":  "2026-08-27",
+                     "judul":  "Evolusi Tipografi Zero-Latency, Standarisasi Crawler, & Pengamanan Git",
+                     "deskripsi":  "Pembaruan komprehensif yang mengadopsi Tipografi ala Google untuk performa instan tanpa kedipan (Zero-Latency), standarisasi UI Web Crawler berbasis split-screen Vue 3, serta pengamanan ketat konfigurasi agen kecerdasan buatan dari repositori publik.",
+                     "improvements":  [
+                                          "Adopsi Arsitektur Tipografi ala Google (Performance First): Mengganti seluruh pemuatan font eksternal (Google Fonts) dengan System Font Stack yang merender UI seketika tanpa fenomena layar berkedip (FOUT).",
+                                          "Perombakan Antarmuka Web Crawler (/admin/crawl): Migrasi ke arsitektur split-screen mandiri (Standalone Vue 3) yang identik dengan dasbor ERP, dilengkapi mode Fullscreen (F11) dan notifikasi cerdas SweetAlert2."
+                                      ],
+                     "fixes":  [
+                                   "Menyelaraskan celah konsistensi desain antara modul AI, ERP, dan Crawler agar 100% seragam dan responsif.",
+                                   "Menghapus pemborosan koneksi jaringan (preconnect) menuju peladen font eksternal."
+                               ],
+                     "patches":  [
+                                     "Penguncian Repositori (Gitignore): Mengamankan dokumen skenario rahasia lokal dan konfigurasi agen (/.agents/*) secara eksplisit agar tidak terunggah ke repositori publik Github.",
+                                     "Penyempurnaan penomoran versi sesuai kalender rilis (Calendar Versioning 0.8.27).",
+                                     "Sinkronisasi komprehensif terhadap 12 pilar dokumen panduan operasi kecerdasan buatan (AGENTS, AI_Python, INDEX, MEMORY, PRD, RULES, Skills, StyleGuide, Task, Tautan, Telegram_Chatbot, WAHA_n8n)."
+                                 ],
+                     "created_at":  "2026-08-27 12:40:00"
+                 },
+                 {
+                     "id":  24,
+                     "versi":  "0.8.21",
+                     "tanggal_rilis":  "2026-08-25",
+                     "judul":  "Arsitektur Wireframe & Eliminasi Layout Shift",
+                     "deskripsi":  "Pembaruan Vibe Code untuk merancang tata letak Wireframe Beranda, memperkenalkan efek visual Warna Pelangi (Google AI Rainbow Glow Effect), dan mengatasi bug CSS Layout Shift (ruang kosong 4px).",
+                     "improvements":  [
+                                          "Merancang Wireframe Preview untuk Route Beranda yang memuat susunan akurat Logo GRACIA, Search Box, Tanggal, Apps Grid, dan Avatar.",
+                                          "Integrasi gaya visual Warna Pelangi (Google AI Rainbow Glow Effect) pada elemen antarmuka.",
+                                          "Penyelarasan komprehensif terhadap arsitektur Frontend Analysis dan Backend Analysis."
+                                      ],
+                     "fixes":  [
+                                   "Mengatasi tuntas permasalahan CSS Layout Shift Bug, termasuk sterilisasi ruang kosong ekstra sebesar 4 piksel pada sidebar menu normal.",
+                                   "Standardisasi format pemotongan teks menggunakan Elipsis (titik 3: '...')."
+                               ],
+                     "patches":  [
+                                     "Sinkronisasi total dokumen (PRD, Memory, Skills, StyleGuide, Task, README, Tautan, struktur_folder) dengan standar Vibe Code terbaru."
+                                 ],
+                     "created_at":  "2026-08-25 14:00:00"
+                 },
                  {
                      "id":  23,
                      "versi":  "0.8.20",

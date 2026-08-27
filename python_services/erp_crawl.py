@@ -2,7 +2,7 @@ import requests
 import pymysql
 import sys
 import time
-import re
+import json
 
 # --- KONFIGURASI ---
 ERP_URL = "http://103.39.49.86:82"
@@ -16,7 +16,7 @@ db_config = {
     "database": "gkr_myid",
     "autocommit": True
 }
-LIMIT = 5000
+LIMIT = 1000
 
 def get_session():
     session = requests.Session()
@@ -34,13 +34,7 @@ def get_session():
         sys.exit(1)
 
 def main():
-    # Ambil argumen prefix dari PHP (misal: "FG-1" atau "FG-")
-    prefix_bom = "FG-"
-    if len(sys.argv) > 1:
-        prefix_bom = sys.argv[1].strip()
-
-    print(f"[INIT] Memulai Crawler ERPNext Inkremental (via Master Item) untuk Prefix: {prefix_bom}% ...", flush=True)
-    time.sleep(1)
+    target_prefixes = ["FG-1", "FG-2", "FG-3", "FG-4"]
 
     try:
         conn = pymysql.connect(**db_config)
@@ -51,84 +45,95 @@ def main():
         sys.exit(1)
 
     session = get_session()
+    total_tersimpan_global = 0
     
-    offset = 0
-    total_tersimpan = 0
-    
-    while True:
-        try:
-            print(f"Menarik baris {offset} sampai {offset + LIMIT} dari server...", flush=True)
-            # URL API sekarang MENGANDALKAN filter ERPNext!
-            # Fields: name (Kode Item), item_name (Nama pendek), description (Spek panjang)
-            api_endpoint = f"{ERP_URL}/api/resource/Item?limit_page_length={LIMIT}&limit_start={offset}&fields=[\"name\",\"item_name\",\"description\"]&filters=[[\"name\",\"like\",\"{prefix_bom}%\"]]"
-            response = session.get(api_endpoint, timeout=30)
-            
-            if response.status_code != 200:
-                print(f"[ERROR API] Response {response.status_code}: {response.text}", flush=True)
-                break
+    for p_bom in target_prefixes:
+        print(f"[INIT] Memulai Crawling Masif (Direct API) untuk Prefix: {p_bom}% ...", flush=True)
+        time.sleep(1)
+        offset = 0
+        
+        while True:
+            try:
+                print(f"Menarik baris {offset} sampai {offset + LIMIT} (Prefix {p_bom}%)...", flush=True)
                 
-            data = response.json()
-            items = data.get("data", [])
-            
-            if not items:
-                break
+                # Tambahkan 'modified' ke daftar fields
+                filters = json.dumps([["item","like",f"{p_bom}%"], ["is_default","=",1], ["is_active","=",1]])
+                fields = json.dumps(["name","item","item_name","packing","finishing","buyer","modified"])
+                api_endpoint = f"{ERP_URL}/api/resource/BOM?limit_page_length={LIMIT}&limit_start={offset}&fields={fields}&filters={filters}"
                 
-            batch_data = []
-            sampah = 0
-            # Double check filtering lokal
-            for item in items:
-                raw_name = item.get("name", "")
-                item_name = item.get("item_name", "") or ""
-                description = item.get("description", "") or ""
+                response = session.get(api_endpoint, timeout=30)
                 
-                # Gabungkan nama pendek dan spek menjadi satu teks mentah panjang
-                # Agar algoritma pemisah kolom (regex) tetap bekerja
-                item_master = f"{item_name} {description}".strip()
+                if response.status_code != 200:
+                    print(f"[ERROR API] Response {response.status_code}: {response.text[:200]}", flush=True)
+                    break
+                    
+                data = response.json()
+                items = data.get("data", [])
                 
-                # Hanya simpan yang punya kata "FG-"
-                match = re.search(r'(FG-\d+)', raw_name.upper())
-                if match:
-                    kode_bom_bersih = match.group(1)
-
-                    # 1. Aturan Wajib (Hanya izinkan awalan 1, 2, 3, 4)
-                    if not (kode_bom_bersih.startswith('FG-1') or 
-                            kode_bom_bersih.startswith('FG-2') or 
-                            kode_bom_bersih.startswith('FG-3') or 
-                            kode_bom_bersih.startswith('FG-4')):
+                if not items:
+                    break
+                    
+                batch_data = []
+                sampah = 0
+                
+                for item in items:
+                    bom_name = item.get("name", "")
+                    kode_bom = item.get("item", "")
+                    item_name = item.get("item_name", "")
+                    packing = item.get("packing", "")
+                    finishing = item.get("finishing", "")
+                    buyer = item.get("buyer", "")
+                    modified = item.get("modified", None)
+                    
+                    if isinstance(packing, str) and len(packing) > 100: packing = packing[:97] + "..."
+                    if isinstance(finishing, str) and len(finishing) > 100: finishing = finishing[:97] + "..."
+                    if isinstance(buyer, str) and len(buyer) > 100: buyer = buyer[:97] + "..."
+                    
+                    kode_upper = kode_bom.upper()
+                    
+                    if kode_upper in ['FG-1', 'FG-10000']:
                         sampah += 1
                         continue
                         
-                    # 2. Pengecualian Spesifik (Blokir mutlak)
-                    if kode_bom_bersih in ['FG-1', 'FG-10000']:
+                    if len(kode_upper) != 8:
+                        sampah += 1
+                        continue
+                        
+                    if not kode_upper[3:].isdigit():
                         sampah += 1
                         continue
 
-                    batch_data.append((kode_bom_bersih, item_master))
-                else:
-                    sampah += 1
+                    batch_data.append((kode_bom, bom_name, item_name, packing, finishing, buyer, modified))
 
-            if batch_data:
-                sql = """
-                    INSERT IGNORE INTO gkr_erp (kode_bom, item_master, terakhir_ditarik) 
-                    VALUES (%s, %s, CURRENT_TIMESTAMP)
-                """
-                cursor.executemany(sql, batch_data)
-                total_tersimpan += len(batch_data)
+                if batch_data:
+                    sql = """
+                        INSERT INTO gkr_erp (kode_bom, bom_name, item_name, packing, finishing, buyer, erp_modified) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE
+                        bom_name = VALUES(bom_name),
+                        item_name = VALUES(item_name),
+                        packing = VALUES(packing),
+                        finishing = VALUES(finishing),
+                        buyer = VALUES(buyer),
+                        erp_modified = VALUES(erp_modified)
+                    """
+                    cursor.executemany(sql, batch_data)
+                    total_tersimpan_global += len(batch_data)
+                    
+                print(f"-> Diabaikan (Varian/Kotoran): {sampah} baris.", flush=True)
+                print(f"-> Tersimpan & Ter-Update: {len(batch_data)} baris (Total: {total_tersimpan_global})", flush=True)
+                    
+                offset += LIMIT
+                time.sleep(1) 
                 
-            print(f"-> Diabaikan: {sampah} baris sampah.", flush=True)
-            print(f"-> Tersimpan & Ter-Update: {len(batch_data)} baris FG murni (Total: {total_tersimpan})", flush=True)
+            except requests.exceptions.RequestException as e:
+                print(f"[ERROR JARINGAN] Terputus saat narik data: {str(e)}", flush=True)
+                break
+            except Exception as e:
+                print(f"[ERROR SYSTEM] {str(e)}", flush=True)
+                break
                 
-            offset += LIMIT
-            time.sleep(1) 
-            
-        except requests.exceptions.RequestException as e:
-            print(f"[ERROR JARINGAN] Terputus saat narik data: {str(e)}", flush=True)
-            break
-        except Exception as e:
-            print(f"[ERROR SYSTEM] {str(e)}", flush=True)
-            break
-            
-    print(f"[SELESAI] Penarikan selesai! Total {total_tersimpan} data Finished Goods (FG) tersimpan.", flush=True)
+    print(f"[SELESAI] Penarikan selesai! Keseluruhan {total_tersimpan_global} BOM ditarik lengkap dengan Timestamp.", flush=True)
     cursor.close()
     conn.close()
 

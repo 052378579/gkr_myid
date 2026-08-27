@@ -14,7 +14,7 @@ function updatePlaceholder() {
     if (window.innerWidth <= 768) {
         searchInput.placeholder = "Cari: Kode, Nama Barang";
     } else {
-        searchInput.placeholder = "Cari: Kode, Nama Barang, Material, Warna, Anyam, atau Fabric";
+        searchInput.placeholder = "Cari: Kode, Nama Barang, Finishing, atau Buyer";
     }
 }
 window.addEventListener('resize', updatePlaceholder);
@@ -51,6 +51,9 @@ function fetchData() {
                 // Handle Pagination Buttons
                 btnPrev.disabled = (currentPage === 1);
                 btnNext.disabled = (currentPage * data.limit) >= data.total;
+            } else {
+                console.error("API Error: ", data);
+                resultBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-5">Error: ${data.message || 'Respons tidak valid dari server'}</td></tr>`;
             }
         })
         .catch(err => {
@@ -71,55 +74,53 @@ function renderData(items) {
     items.forEach(item => {
         const tr = document.createElement('tr');
 
-        // Cek isi weaving dan fabric
-        const weavingHtml = item.weaving ? `<span class="col-weaving">[W: ${item.weaving}]</span>` : '';
-        const fabricHtml = item.fabric ? `<span class="col-fabric">[F: ${item.fabric}]</span>` : '';
-
-        // Cek kata 'estimasi' atau 'cancel' (case-insensitive) di semua kolom data
-        const rowDataString = Object.values(item).join(' ').toLowerCase();
-        if (rowDataString.includes('estimasi') || rowDataString.includes('cancel')) {
-            tr.classList.add('row-estimasi');
-        }
-
-        let kodeColor = "#1e3a8a"; // Default Biru Gracia
+        let kodeClass = "text-primary"; // Default Biru Bootstrap
         if (item.kode_bom) {
             if (item.kode_bom.startsWith("FG-1")) {
-                kodeColor = "#fd7e14"; // Orange Bootstrap
+                kodeClass = "text-warning"; 
             } else if (item.kode_bom.startsWith("FG-2")) {
-                kodeColor = "#0d6efd"; // Primary Bootstrap
+                kodeClass = "text-primary"; 
             } else if (item.kode_bom.startsWith("FG-3")) {
-                kodeColor = "#198754"; // Success Bootstrap
+                kodeClass = "text-success"; 
             } else if (item.kode_bom.startsWith("FG-4")) {
-                kodeColor = "#dc3545"; // Danger Bootstrap
+                kodeClass = "text-danger"; 
             }
         }
 
+        // Menggunakan bom_name untuk printview BOM jika tersedia, kalau tidak pakai kode_bom sebagai fallback
+        const namaBomLink = item.bom_name && item.bom_name !== '-' ? item.bom_name : item.kode_bom;
+        
         const kodeHtml = item.kode_bom
-            ? `<a href="http://103.39.49.86:82/desk#Form/Item/${item.kode_bom}" target="_blank" style="text-decoration: none; color: ${kodeColor}; font-weight: 600;">${item.kode_bom}</a>`
+            ? `<a href="http://103.39.49.86:82/printview?doctype=BOM&name=${encodeURIComponent(namaBomLink)}&format=BOM%20Rincian&no_letterhead=0" target="_blank" class="${kodeClass}" style="text-decoration: none; font-weight: 600;">${item.kode_bom}</a>`
             : '-';
+            
+        let bomNameHtml = item.bom_name && item.bom_name !== '-' ? `<div class="text-muted small text-truncate">${item.bom_name}</div>` : '';
 
-        let materialHtml = item.material ? item.material.replace(/FRAME/gi, '<strong>$&</strong>').replace(/\+/g, '<strong>+</strong>').replace(/estimasi/gi, '<strong>$&</strong>') : '-';
+        let namaBarang = item.item_name || '-';
+        let namaAsli = item.item_name || '';
+        
+        let finishingHtml = item.finishing && item.finishing !== '-' ? `<div class="text-muted small text-truncate d-none d-md-block">${item.finishing}</div>` : '';
+        let buyerHtmlMobile = item.buyer && item.buyer !== '-' ? `<div class="text-muted small text-truncate d-block d-md-none" title="${item.buyer}">${item.buyer}</div>` : '';
+
         // Format Dimensi agar bagian dalam kurung turun ke baris baru
         let dimensiText = item.dimensi || '-';
         let dimensiHtml = dimensiText.replace(/(\s*\(.*?\))/, '<br>$1');
-
-        // Logika Truncate Nama Barang (Max 25 Karakter)
-        let namaBarang = item.item_name || '-';
-        let namaAsli = item.item_name || '';
-
-        if (namaBarang !== '-' && namaBarang.length > 25) {
-            namaBarang = namaBarang.substring(0, 25) + '...';
-        }
-
+        
+        let buyerHtmlDesktop = item.buyer || '-';
 
         tr.innerHTML = `
-            <td class="col-kode">${kodeHtml}</td>
-            <td class="col-nama" title="${namaAsli}">${namaBarang}</td>
-            <td class="col-dimensi d-none d-md-table-cell" style="min-width: 150px;">${dimensiHtml}</td>
-            <td class="col-material d-none d-md-table-cell">
-                ${materialHtml} 
-                ${weavingHtml} 
-                ${fabricHtml}
+            <td class="col-kode">
+                <div class="text-truncate">${kodeHtml}</div>
+                ${bomNameHtml}
+            </td>
+            <td class="col-nama">
+                <div class="text-truncate" title="${namaAsli}">${namaBarang}</div>
+                ${finishingHtml}
+                ${buyerHtmlMobile}
+            </td>
+            <td class="col-dimensi d-none d-md-table-cell">${dimensiHtml}</td>
+            <td class="col-buyer d-none d-md-table-cell">
+                <div class="text-truncate" title="${buyerHtmlDesktop}">${buyerHtmlDesktop}</div>
             </td>
         `;
         resultBody.appendChild(tr);

@@ -6,6 +6,7 @@
     <title>Live Search ERP</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="<?= base_url('css/erp_search.css') ?>?v=<?= ASSET_VERSION ?>">
 </head>
 <body>
@@ -110,7 +111,7 @@
         $finalAltLogo = $altLogo ?? 'GRACIA';
         ?>
         <a href="<?= base_url('/') ?>">
-            <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" style="height: 60px;" class="mb-2" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';">
+            <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" style="width: 250px; height: auto;" class="mb-2" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';">
         </a>
         
         <div class="subtitle slider-container">
@@ -125,23 +126,23 @@
         </div>
 
         <div class="search-box">
-            <input type="text" id="searchInput" class="search-input" placeholder="Cari: Kode, Nama Barang, Material, Warna, Anyam, atau Fabric" autocomplete="off">
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari: Kode, Nama Barang, Finishing, atau Buyer" autocomplete="off">
         </div>
         
         <div class="loader" id="loader">
             <i class="fas fa-spinner fa-spin"></i> Mencari...
         </div>
 
-        <div class="data-wrapper">
-            <button class="nav-btn" id="btnPrev" onclick="changePage(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+        <div class="data-wrapper position-relative w-100 px-5">
+            <button class="nav-btn position-absolute top-50 start-0 translate-middle-y ms-2" id="btnPrev" onclick="changePage(-1)" disabled><i class="fas fa-chevron-left"></i></button>
             
-            <table class="data-list" id="dataTable">
+            <table class="data-list mx-auto" id="dataTable" style="table-layout: fixed; width: 100%;">
                 <thead>
                     <tr style="border-bottom: 2px solid #eee;">
-                        <th class="col-kode">Kode BOM</th>
-                        <th class="col-nama">Nama Barang</th>
-                        <th class="col-dimensi d-none d-md-table-cell">Dimensi</th>
-                        <th class="col-material d-none d-md-table-cell">Deskripsi Material, Warna, Fabric</th>
+                        <th class="col-kode" style="width: 180px;">Kode BOM</th>
+                        <th class="col-nama" style="width: auto;">Nama Barang</th>
+                        <th class="col-dimensi d-none d-md-table-cell" style="width: 220px;">Dimensi</th>
+                        <th class="col-buyer d-none d-md-table-cell" style="width: 170px;">Buyer</th>
                     </tr>
                 </thead>
                 <tbody id="resultBody">
@@ -149,7 +150,7 @@
                 </tbody>
             </table>
             
-            <button class="nav-btn" id="btnNext" onclick="changePage(1)" disabled><i class="fas fa-chevron-right"></i></button>
+            <button class="nav-btn position-absolute top-50 end-0 translate-middle-y me-2" id="btnNext" onclick="changePage(1)" disabled><i class="fas fa-chevron-right"></i></button>
         </div>
 
     </div>
@@ -161,7 +162,7 @@
             <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
             <div class="flex-grow-1 text-start">
                 <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 text-muted hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">
-                    <span id="themeIcon">ðŸŒ“ Tema</span>
+                    <span id="themeIcon">🌓 Tema</span>
                 </button>
             </div>
 
@@ -184,4 +185,3 @@
     <script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>
-

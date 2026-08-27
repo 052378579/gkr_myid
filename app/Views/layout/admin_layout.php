@@ -17,6 +17,27 @@
         data-base-url="<?= base_url() ?>" 
         data-csrf-token="<?= csrf_token() ?>">
     
+    <style>
+        a.topbar-nav-link {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--bs-body-color) !important;
+            text-decoration: none;
+            padding: 0.35rem 0.75rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        a.topbar-nav-link.active {
+            color: #2B3385 !important;
+            font-weight: 700;
+        }
+        a.topbar-nav-link:hover,
+        a.topbar-nav-link.active:hover {
+            background-color: #2B3385 !important;
+            color: #ffffff !important;
+        }
+    </style>
+    
     <?= $this->renderSection('styles') ?>
 </head>
 <body class="bg-body text-body">
@@ -40,21 +61,7 @@
                     <i class="fas fa-search"></i> Mesin Pencari
                 </a>
             </li>
-            <li>
-                <a href="<?= base_url('admin/crawl') ?>" class="<?= (uri_string() == 'admin/crawl' || uri_string() == 'crawl') ? 'active' : '' ?>">
-                    <i class="fas fa-spider"></i> Crawler
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/erp') ?>" class="<?= (uri_string() == 'admin/erp') ? 'active' : '' ?>">
-                    <i class="fas fa-e"></i> ERP Data
-                </a>
-            </li>
-            <li>
-                <a href="<?= base_url('admin/ai') ?>" class="<?= (uri_string() == 'admin/ai') ? 'active' : '' ?>">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Trainer
-                </a>
-            </li>
+
             <li>
                 <a href="<?= base_url('admin/doodle') ?>" class="<?= (uri_string() == 'admin/doodle') ? 'active' : '' ?>">
                     <i class="fas fa-palette"></i> Doodle
@@ -106,6 +113,10 @@
             </div>
             
             <div class="d-flex align-items-center gap-3">
+                <a href="<?= base_url('admin/ai') ?>" class="d-none d-md-block topbar-nav-link <?= (uri_string() == 'admin/ai') ? 'active' : '' ?>">AI Trainer</a>
+                <a href="<?= base_url('admin/crawl') ?>" class="d-none d-md-block topbar-nav-link <?= (uri_string() == 'admin/crawl' || uri_string() == 'crawl') ? 'active' : '' ?>">Crawler</a>
+                <a href="<?= base_url('admin/erp') ?>" class="d-none d-md-block topbar-nav-link <?= (uri_string() == 'admin/erp' || strpos(uri_string(), 'admin/erp/') === 0) ? 'active' : '' ?>">ERP</a>
+                
                 <div class="dropdown" id="calendarDropdownWrap">
                     <a href="#" id="calendarDropdownToggle" class="text-body fw-medium text-decoration-none d-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="font-size: 0.9rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary, #2B3385)'" onmouseout="this.style.color=''">
                         <?php
@@ -174,7 +185,7 @@
                     <!-- Rata Kiri (Left): Ikon Tema -->
                     <div class="text-start flex-shrink-0 d-flex align-items-center">
                         <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary rounded-circle" title="Ubah Tema" style="width: 32px; height: 32px; padding: 0; line-height: 1;">
-                            <span id="themeIcon" style="font-size: 0.9rem;">â˜€ï¸</span>
+                            <span id="themeIcon" style="font-size: 0.9rem;">ÃƒÂ¢Ã‹Å“Ã¢â€šÂ¬ÃƒÂ¯Ã‚Â¸Ã‚Â</span>
                         </button>
                     </div>
 

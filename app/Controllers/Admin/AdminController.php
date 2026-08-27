@@ -92,7 +92,7 @@ class AdminController extends BaseController
         }
         
         $erpData = $erpModel
-            ->orderBy('terakhir_ditarik', 'DESC')
+            ->orderBy('erp_modified', 'DESC')
             ->paginate($perPage, 'erpData');
 
         $serverIP = $_SERVER['SERVER_ADDR'] ?? '10.147.17.40';

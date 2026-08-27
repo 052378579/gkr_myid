@@ -10,7 +10,6 @@ class ErpModel extends Model
     protected $primaryKey = 'kode_bom';
     protected $returnType = 'array';
     protected $allowedFields = [
-        'id_erp', 'kode_bom', 'item_master', 'item_name', 'dimensi', 
-        'material', 'weaving', 'fabric', 'terakhir_ditarik', 'terakhir_diekstrak'
+        'kode_bom', 'item_name', 'dimensi', 'bom_name', 'packing', 'finishing', 'load_40', 'load_40_hc', 'buyer', 'minimum_selling_price', 'suggested_selling_price', 'erp_modified', 'created_at', 'updated_at'
     ];
 }

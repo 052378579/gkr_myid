@@ -47,7 +47,8 @@ $routes->post('/admin/ai/doJanitor', '\App\Controllers\Admin\AiCrawler::doJanito
 // ERP Crawler Engine (Live Terminal)
 $routes->get('/admin/erp', '\App\Controllers\Admin\ErpController::terminalUI');
 $routes->get('/admin/erp/crawl', '\App\Controllers\Admin\ErpController::streamCrawl');
-$routes->get('/admin/erp/ekstrak', '\App\Controllers\Admin\ErpController::streamEkstrak');
+$routes->get('/admin/erp/ekstrak', '\App\Controllers\Admin\ErpController::ekstrak');
+$routes->get('/admin/erp/lanjutan', '\App\Controllers\Admin\ErpController::lanjutan');
 $routes->post('/admin/erp/reset_db', '\App\Controllers\Admin\ErpController::resetDb');
 
 $routes->post('/api/updateLinkCount', 'Api\GraciaApi::updateLinkCount');
@@ -90,8 +91,11 @@ $routes->post('/api/chatbot/webhook', '\App\Controllers\Api\ChatBotApi::webhook'
 $routes->get('/erp', '\App\Controllers\ErpSearchController::index');
 $routes->get('/erp/api/search', '\App\Controllers\ErpSearchController::liveSearch');
 
-// Seamless Login WAHA
+// Background Remover AI
+$routes->get('bg-remover', 'BackgroundRemover::index');
+$routes->post('bg-remover/process', 'BackgroundRemover::process');
 
+// Seamless Login WAHA
 $routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
     $routes->get('erp/bom', 'Api\GraciaApi::getBom');
     $routes->get('users/check', 'Api\UsersApi::check');
@@ -100,4 +104,3 @@ $routes->get('/admin/erp/data', '\App\Controllers\Admin\AdminController::erp_dat
 
 // Shortlink WAHA ERP Redirect
 $routes->get('/go/(:segment)', 'Redirect::erp/$1');
-

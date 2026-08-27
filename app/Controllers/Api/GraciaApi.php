@@ -27,7 +27,7 @@ class GraciaApi extends BaseController
         $db = \Config\Database::connect();
         $builder = $db->table('gkr_erp');
         $builder->where('kode_bom', $kode);
-        $builder->orderBy('terakhir_ditarik', 'DESC');
+        $builder->orderBy('erp_modified', 'DESC');
         $data = $builder->get()->getRowArray();
 
         if ($data) {
