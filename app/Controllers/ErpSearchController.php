@@ -58,7 +58,7 @@ class ErpSearchController extends BaseController
         $totalResults = $builder->countAllResults(false);
 
         // Fetch data
-        $builder->select('kode_bom, bom_name, item_name, dimensi, finishing, buyer')
+        $builder->select('kode_bom, bom_name, item_name, dimensi, finishing, buyer, erp_modified')
                 ->orderBy('erp_modified', 'DESC')
                 ->limit($limit, $offset);
         

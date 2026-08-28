@@ -125,7 +125,7 @@ body {
     border: none;
 }
 .data-list td {
-    padding: 15px 10px; /* Jarak atas bawah 15px (total 30px row spacing) */
+    padding: 12.5px 10px; /* Jarak atas bawah 12.5px (total 25px row spacing) */
     text-align: left;
     vertical-align: top;
     border: none;

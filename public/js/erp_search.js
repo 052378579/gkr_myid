@@ -63,6 +63,29 @@ function fetchData() {
         });
 }
 
+function timeAgo(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString.replace(' ', 'T'));
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+
+    if (diffInSeconds < 60) return `${diffInSeconds} detik yang lalu`;
+    
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes} menit lalu`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} jam lalu`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 2) return `1 hari lalu`;
+    
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `update: ${day}-${month}-${year}`;
+}
+
 function renderData(items) {
     resultBody.innerHTML = '';
 
@@ -106,7 +129,11 @@ function renderData(items) {
         let dimensiText = item.dimensi || '-';
         let dimensiHtml = dimensiText.replace(/(\s*\(.*?\))/, '<br>$1');
         
-        let buyerHtmlDesktop = item.buyer || '-';
+        let buyerText = item.buyer || '-';
+        let timeAgoHtml = '';
+        if (item.buyer && item.buyer !== '-' && item.erp_modified) {
+            timeAgoHtml = `<div class="text-muted small text-truncate" style="margin-top: 2px;">${timeAgo(item.erp_modified)}</div>`;
+        }
 
         tr.innerHTML = `
             <td class="col-kode">
@@ -120,7 +147,8 @@ function renderData(items) {
             </td>
             <td class="col-dimensi d-none d-md-table-cell">${dimensiHtml}</td>
             <td class="col-buyer d-none d-md-table-cell">
-                <div class="text-truncate" title="${buyerHtmlDesktop}">${buyerHtmlDesktop}</div>
+                <div class="text-truncate" title="${buyerText}">${buyerText}</div>
+                ${timeAgoHtml}
             </td>
         `;
         resultBody.appendChild(tr);
