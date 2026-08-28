@@ -30,7 +30,16 @@ class CrawlerApi extends BaseController
         $mesinPencari = new CrawlerLib();
         
         if (str_starts_with($tautan, '/var/www/FOTO')) {
-            $mesinPencari->crawlLocalDirectory($tautan);
+            $cmd = "cd " . ROOTPATH . "python_services && python3 foto_crawler.py " . escapeshellarg($tautan) . " 2>&1";
+            $handle = popen($cmd, 'r');
+            while (!feof($handle)) {
+                $buffer = fgets($handle);
+                if ($buffer !== false) {
+                    echo $buffer;
+                    @ob_flush(); @flush();
+                }
+            }
+            pclose($handle);
         } else {
             $mesinPencari->followLinks($tautan, 1, 3);
         }
