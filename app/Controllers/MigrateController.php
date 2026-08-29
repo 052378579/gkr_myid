@@ -45,9 +45,30 @@ class MigrateController extends BaseController
                 $db->query("ALTER TABLE `gkr_cari` ADD FULLTEXT KEY `ft_pencarian` (`judul`, `kata_kunci`, `alt`, `deskripsi`);");
             } catch (\Throwable $e) {}
 
-            echo "Migrasi Penyelarasan Kolom Bahasa Indonesia SANGAT SUKSES! Kolom gkr_cari (judul, deskripsi, kata_kunci, klik, rusak) telah diperbarui.";
+            
+            try {
+                $db->query("CREATE TABLE IF NOT EXISTS `gkr_chat_history` (
+                  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                  `chat_id` VARCHAR(100) NOT NULL,
+                  `no_hp` VARCHAR(20) NOT NULL,
+                  `sender` ENUM('user', 'bot') NOT NULL,
+                  `intent` VARCHAR(30) DEFAULT NULL,
+                  `message` TEXT NOT NULL,
+                  `media_url` TEXT DEFAULT NULL,
+                  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                  PRIMARY KEY (`id`),
+                  INDEX `idx_no_hp` (`no_hp`),
+                  INDEX `idx_chat_id` (`chat_id`),
+                  INDEX `idx_created_at` (`created_at`),
+                  INDEX `idx_intent` (`intent`)
+                );");
+            } catch (\Throwable $e) {
+                echo "Gagal membuat gkr_chat_history: " . $e->getMessage() . "<br>";
+            }
+echo "Migrasi Penyelarasan Kolom Bahasa Indonesia SANGAT SUKSES! Kolom gkr_cari (judul, deskripsi, kata_kunci, klik, rusak) telah diperbarui.";
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 }
+

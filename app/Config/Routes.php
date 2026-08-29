@@ -104,3 +104,9 @@ $routes->get('/admin/erp/data', '\App\Controllers\Admin\AdminController::erp_dat
 
 // Shortlink WAHA ERP Redirect
 $routes->get('/go/(:segment)', 'Redirect::erp/$1');
+
+// Rute Asisten Gracia (Web)
+$routes->get('/ai', '\App\Controllers\AiController::index', ['filter' => 'auth']);
+$routes->get('/api/ai/messages', '\App\Controllers\AiController::getMessages', ['filter' => 'auth']);
+$routes->post('/api/ai/chat', '\App\Controllers\AiController::sendMessage', ['filter' => 'auth']);
+
