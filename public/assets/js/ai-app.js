@@ -3,6 +3,8 @@ const { createApp, ref, onMounted, nextTick } = Vue;
 createApp({
     setup() {
         const messages = ref([]);
+        const sessions = ref([]);
+        const activeSessionId = ref('main');
         const newMessage = ref('');
         const isLoading = ref(false);
         const chatContainer = ref(null);
@@ -15,16 +17,35 @@ createApp({
             });
         };
 
+        const fetchSessions = async () => {
+            try {
+                const response = await axios.get('/api/ai/sessions');
+                if (response.data && !response.data.error) {
+                    sessions.value = response.data;
+                }
+            } catch (error) {
+                console.error("Gagal mengambil daftar sesi:", error);
+            }
+        };
+
         const fetchMessages = async () => {
             try {
-                const response = await axios.get('/api/ai/messages');
+                const response = await axios.get(`/api/ai/messages?session_id=${activeSessionId.value}`);
                 if (response.data && !response.data.error) {
                     messages.value = response.data;
                     scrollToBottom();
+                } else if (response.data && response.data.error) {
+                    messages.value = [];
                 }
             } catch (error) {
                 console.error("Gagal mengambil riwayat pesan:", error);
+                messages.value = [];
             }
+        };
+
+        const selectSession = async (id) => {
+            activeSessionId.value = id;
+            await fetchMessages();
         };
 
         const sendMessage = async () => {
@@ -48,6 +69,7 @@ createApp({
             try {
                 const formData = new FormData();
                 formData.append('message', text);
+                formData.append('session_id', activeSessionId.value);
 
                 const response = await axios.post('/api/ai/chat', formData);
                 
@@ -80,24 +102,61 @@ createApp({
             return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
         };
 
-        const createNewChat = () => {
-            // For now, since unified session uses 1 history based on phone number
-            alert("Sesi baru. (Untuk skenario Unified Session, ini bisa membersihkan layar cache lokal saja).");
+        const createNewChat = async () => {
+            try {
+                const response = await axios.post('/api/ai/sessions');
+                if (response.data && response.data.status === 'success') {
+                    const newId = response.data.session.id;
+                    await fetchSessions();
+                    activeSessionId.value = newId;
+                    messages.value = [];
+                }
+            } catch (error) {
+                console.error("Gagal membuat sesi baru:", error);
+            }
+        };
+
+        const deleteSession = async (id) => {
+            if (!confirm('Apakah Anda yakin ingin menghapus sesi ini?')) return;
+            try {
+                const response = await axios.delete(`/api/ai/sessions/${id}`);
+                if (response.data && response.data.status === 'success') {
+                    if (activeSessionId.value === id) {
+                        activeSessionId.value = 'main';
+                        await fetchMessages();
+                    }
+                    await fetchSessions();
+                }
+            } catch (error) {
+                console.error("Gagal menghapus sesi:", error);
+            }
         };
 
         onMounted(() => {
+            fetchSessions();
             fetchMessages();
+            
+            // Initialize Fancybox for dynamic content
+            if (typeof Fancybox !== 'undefined') {
+                Fancybox.bind("[data-fancybox]", {
+                    // Custom options if needed
+                });
+            }
         });
 
         return {
             messages,
+            sessions,
+            activeSessionId,
             newMessage,
             isLoading,
             chatContainer,
             sendMessage,
             renderMarkdown,
             formatTime,
-            createNewChat
+            createNewChat,
+            selectSession,
+            deleteSession
         };
     }
 }).mount('#app');

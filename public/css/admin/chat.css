@@ -1,0 +1,49 @@
+.chat-container {
+    background-color: #f8f9fa;
+}
+.session-list .list-group-item {
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+.session-list .list-group-item:hover {
+    background-color: #e9ecef;
+}
+.session-list .list-group-item.active {
+    background-color: #2b3385 !important;
+    border-color: #2b3385 !important;
+    border-left: 4px solid #fff;
+}
+.chat-detail-panel {
+    background-color: #e5ddd5;
+}
+.chat-messages-bg {
+    background-image: url('https://i.pinimg.com/736x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg'); /* WhatsApp style generic bg */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-color: rgba(229, 221, 213, 0.85);
+}
+.chat-bubble {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    position: relative;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    margin-bottom: 4px;
+}
+.bubble-user {
+    background-color: #ffffff;
+    border-top-left-radius: 0;
+}
+.bubble-bot {
+    background-color: #d9fdd3;
+    border-top-right-radius: 0;
+}
+.chat-text {
+    word-break: break-word;
+    color: #111b21;
+    line-height: 1.4;
+}

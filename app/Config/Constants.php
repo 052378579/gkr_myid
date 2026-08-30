@@ -78,4 +78,4 @@ defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database 
 defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
 
-defined('ASSET_VERSION') || define('ASSET_VERSION', '0.8.272');
+defined('ASSET_VERSION') || define('ASSET_VERSION', '0.8.30');

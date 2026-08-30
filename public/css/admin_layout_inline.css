@@ -1,0 +1,18 @@
+a.topbar-nav-link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--bs-body-color) !important;
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+a.topbar-nav-link.active {
+    color: #2B3385 !important;
+    font-weight: 700;
+}
+a.topbar-nav-link:hover,
+a.topbar-nav-link.active:hover {
+    background-color: #2B3385 !important;
+    color: #ffffff !important;
+}

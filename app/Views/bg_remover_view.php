@@ -6,19 +6,7 @@
     <title>BG Remover</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <style>
-        .preview-box { height: 350px; object-fit: contain; width: 100%; }
-        .bg-checker { 
-            background-image: 
-                linear-gradient(45deg, #ddd 25%, transparent 25%), 
-                linear-gradient(-45deg, #ddd 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, #ddd 75%), 
-                linear-gradient(-45deg, transparent 75%, #ddd 75%); 
-            background-size: 20px 20px; 
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px; 
-            background-color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('css/bg_remover.css') ?>?v=<?= ASSET_VERSION ?>">
 </head>
 <body class="bg-light pb-5">
     <div id="rnd" class="container pt-5">
@@ -59,53 +47,6 @@
         </div>
     </div>
 
-    <script>
-        const { createApp, ref } = Vue;
-
-        createApp({
-            setup() {
-                const selectedFile = ref(null);
-                const isLoading = ref(false);
-                const originalImage = ref(null);
-                const resultImage = ref(null);
-                const errorMessage = ref(null);
-
-                const handleFileUpload = (event) => {
-                    selectedFile.value = event.target.files[0];
-                };
-
-                const uploadImage = async () => {
-                    if (!selectedFile.value) return;
-
-                    isLoading.value = true;
-                    errorMessage.value = null;
-                    
-                    const formData = new FormData();
-                    formData.append('image', selectedFile.value);
-
-                    try {
-                        const response = await fetch('<?= base_url('bg-remover/process') ?>', {
-                            method: 'POST',
-                            body: formData
-                        });
-                        const data = await response.json();
-
-                        if (data.success) {
-                            originalImage.value = data.original;
-                            resultImage.value = data.result;
-                        } else {
-                            errorMessage.value = data.error;
-                        }
-                    } catch (error) {
-                        errorMessage.value = "Koneksi ke server terputus atau terjadi kesalahan sistem.";
-                    } finally {
-                        isLoading.value = false;
-                    }
-                };
-
-                return { selectedFile, isLoading, originalImage, resultImage, errorMessage, handleFileUpload, uploadImage };
-            }
-        }).mount('#rnd');
-    </script>
+    <script src="<?= base_url('js/bg_remover.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 </body>
 </html>

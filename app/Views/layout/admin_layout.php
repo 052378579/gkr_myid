@@ -17,26 +17,7 @@
         data-base-url="<?= base_url() ?>" 
         data-csrf-token="<?= csrf_token() ?>">
     
-    <style>
-        a.topbar-nav-link {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--bs-body-color) !important;
-            text-decoration: none;
-            padding: 0.35rem 0.75rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        a.topbar-nav-link.active {
-            color: #2B3385 !important;
-            font-weight: 700;
-        }
-        a.topbar-nav-link:hover,
-        a.topbar-nav-link.active:hover {
-            background-color: #2B3385 !important;
-            color: #ffffff !important;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= base_url('css/admin_layout_inline.css') ?>?v=<?= ASSET_VERSION ?>">
     
     <?= $this->renderSection('styles') ?>
 </head>
@@ -59,6 +40,11 @@
             <li>
                 <a href="<?= base_url('admin/cari') ?>" class="<?= (uri_string() == 'admin/cari') ? 'active' : '' ?>">
                     <i class="fas fa-search"></i> Mesin Pencari
+                </a>
+            </li>
+            <li>
+                <a href="<?= base_url('admin/chat') ?>" class="<?= (uri_string() == 'admin/chat') ? 'active' : '' ?>">
+                    <i class="fas fa-robot"></i> Chatbot
                 </a>
             </li>
 
@@ -221,3 +207,4 @@
 <?= $this->include('components/toast') ?>
 </body>
 </html>
+

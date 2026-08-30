@@ -5,21 +5,7 @@
 <?= $this->section('styles') ?>
 <link rel="stylesheet" href="<?= base_url('css/admin_ai.css') ?>">
 <meta name="page-config" data-api-do-crawl="<?= base_url('admin/ai/doCrawl') ?>" data-api-do-janitor="<?= base_url('admin/ai/doJanitor') ?>">
-<style>
-    /* Full screen split layout overrides */
-    html, body { height: 100vh; overflow: hidden; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important; }
-    .main-container { flex-grow: 1; display: flex; overflow: hidden; padding: 0; margin: 0; height: 100vh; }
-    .terminal-wrapper { height: 100%; border-left: 5px solid #333; }
-    
-    .terminal-scroll {
-        scrollbar-width: thin;
-        scrollbar-color: #555 #1e1e1e;
-    }
-    .terminal-scroll::-webkit-scrollbar { width: 8px; }
-    .terminal-scroll::-webkit-scrollbar-track { background: #1e1e1e; }
-    .terminal-scroll::-webkit-scrollbar-thumb { background-color: #555; border-radius: 4px; }
-</style>
+<link rel="stylesheet" href="<?= base_url('css/admin_ai.css') ?>?v=<?= ASSET_VERSION ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -91,22 +77,10 @@
     </button>
 </div>
 
-<script>
-    // Toggle Fullscreen Function
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.log(`Error attempting to enable fullscreen: ${err.message}`);
-            });
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        }
-    }
-</script>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="<?= base_url('js/admin_ai.js') ?>?v=0.8.141"></script>
+<script src="<?= base_url('js/admin_ai.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>
+

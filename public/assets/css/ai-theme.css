@@ -8,7 +8,7 @@
     --ai-border: #404249;
     --ai-text: #e3e5e8;
     --ai-text-muted: #b5bac1;
-    --ai-user-bubble: #5865f2;
+    --ai-user-bubble: #2B3385;
     --ai-user-text: #ffffff;
     --ai-bot-bubble: #2b2d31;
     --ai-bot-border: #404249;
@@ -22,8 +22,8 @@
     --ai-border: #d4d7dc;
     --ai-text: #313338;
     --ai-text-muted: #4e5058;
-    --ai-user-bubble: #5865f2;
-    --ai-user-text: #ffffff;
+    --ai-user-bubble: var(--gkr-primary);
+    --ai-user-text: var(--gkr-primary-text);
     --ai-bot-bubble: #f2f3f5;
     --ai-bot-border: #d4d7dc;
 }
@@ -209,4 +209,37 @@
 .ai-mini-footer a:hover,
 .ai-mini-footer button:hover {
     color: var(--ai-user-bubble) !important;
+}
+
+/* Bot Icon in Navbar (No background) */
+.bot-icon-navbar {
+    width: 28px;
+    height: 28px;
+    background-image: url('/assets/icon/gkr_biru.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+}
+html[data-bs-theme="dark"] .bot-icon-navbar {
+    background-image: url('/assets/icon/gkr_putih.png');
+}
+
+/* Bot Icon in Avatar */
+.bot-avatar-circle {
+    background-color: transparent !important;
+    border: 1px solid var(--gkr-primary) !important;
+}
+
+.bot-icon-avatar {
+    width: 24px;
+    height: 24px;
+    background-image: url('/assets/icon/gkr_biru.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+}
+html[data-bs-theme="dark"] .bot-icon-avatar {
+    background-image: url('/assets/icon/gkr_putih.png');
 }

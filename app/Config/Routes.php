@@ -109,4 +109,13 @@ $routes->get('/go/(:segment)', 'Redirect::erp/$1');
 $routes->get('/ai', '\App\Controllers\AiController::index', ['filter' => 'auth']);
 $routes->get('/api/ai/messages', '\App\Controllers\AiController::getMessages', ['filter' => 'auth']);
 $routes->post('/api/ai/chat', '\App\Controllers\AiController::sendMessage', ['filter' => 'auth']);
+$routes->get('/api/ai/sessions', '\App\Controllers\AiController::getSessions', ['filter' => 'auth']);
+$routes->post('/api/ai/sessions', '\App\Controllers\AiController::createSession', ['filter' => 'auth']);
+$routes->delete('/api/ai/sessions/(:num)', '\App\Controllers\AiController::deleteSession/$1', ['filter' => 'auth']);
 
+
+// Waha Chat History Dashboard
+$routes->get('/admin/chat', '\App\Controllers\Admin\ChatController::index');
+$routes->get('/api/admin/chat', '\App\Controllers\Admin\ChatController::api_get_logs');
+$routes->post('/api/admin/chat/clear', '\App\Controllers\Admin\ChatController::api_clear_chat', ['filter' => 'superadmin']);
+$routes->get('/ai/updateDb', 'AiController::updateDb');

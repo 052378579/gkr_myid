@@ -240,7 +240,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
         <div class="flex-grow-1 text-start">
             <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 text-muted hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">
-                <span id="themeIcon">ðŸŒ“ Tema</span>
+                <span id="themeIcon">Ã°Å¸Å’â€œ Tema</span>
             </button>
         </div>
 
@@ -251,7 +251,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
 
         <!-- BAGIAN KANAN: Versi -->
         <div class="flex-grow-1 text-end">
-            <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"><?= esc($version) ?></a>
+            <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">v<?= ASSET_VERSION ?></a>
         </div>
         
     </div>

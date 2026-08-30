@@ -1,14 +1,32 @@
 {
     "nama_file":  "versi.json",
     "nama_proyek":  "gkr_myid",
-    "tanggal_diperbarui":  "27-08-2026 12:40:00 WIB",
-    "versi_diperbarui":  "0.8.27",
+    "tanggal_diperbarui":  "30-08-2026 12:00:00 WIB",
+    "versi_diperbarui":  "0.8.30",
     "data":  [
+                 {
+                     "id":  26,
+                     "versi":  "0.8.30",
+                     "tanggal_rilis":  "2026-08-30",
+                     "judul":  "Sterilisasi Frontend Lanjutan \u0026 Rilis Final 0.8.30",
+                     "deskripsi":  "Rilis ini menuntaskan pembersihan arsitektur antarmuka (Frontend) untuk 4 halaman tersisa, menempatkan aplikasi pada kepatuhan 100% Zero Inline Script \u0026 Style.",
+                     "improvements":  [
+                                          "Menyelesaikan ekstraksi skrip dan gaya sebaris (inline) untuk seluruh halaman admin (Crawl, ERP, AI).",
+                                          "Menerapkan mekanisme integrasi aset statis melalui pengikatan cache-busting dinamis berbasis ASSET_VERSION."
+                                      ],
+                     "fixes":  [
+                                   "Membersihkan ratusan baris tata letak dan skrip Vue dari dalam berkas PHP menjadi aset terpisah yang sangat ringan diakses."
+                               ],
+                     "patches":  [
+                                     "Pemeliharaan performa tampilan melalui pemisahan file .js dan .css pada aplikasi."
+                                 ],
+                     "created_at":  "2026-08-30 12:00:00"
+                 },
                  {
                      "id":  25,
                      "versi":  "0.8.27",
                      "tanggal_rilis":  "2026-08-27",
-                     "judul":  "Evolusi Tipografi Zero-Latency, Standarisasi Crawler, & Pengamanan Git",
+                     "judul":  "Evolusi Tipografi Zero-Latency, Standarisasi Crawler, \u0026 Pengamanan Git",
                      "deskripsi":  "Pembaruan komprehensif yang mengadopsi Tipografi ala Google untuk performa instan tanpa kedipan (Zero-Latency), standarisasi UI Web Crawler berbasis split-screen Vue 3, serta pengamanan ketat konfigurasi agen kecerdasan buatan dari repositori publik.",
                      "improvements":  [
                                           "Adopsi Arsitektur Tipografi ala Google (Performance First): Mengganti seluruh pemuatan font eksternal (Google Fonts) dengan System Font Stack yang merender UI seketika tanpa fenomena layar berkedip (FOUT).",
@@ -29,7 +47,7 @@
                      "id":  24,
                      "versi":  "0.8.21",
                      "tanggal_rilis":  "2026-08-25",
-                     "judul":  "Arsitektur Wireframe & Eliminasi Layout Shift",
+                     "judul":  "Arsitektur Wireframe \u0026 Eliminasi Layout Shift",
                      "deskripsi":  "Pembaruan Vibe Code untuk merancang tata letak Wireframe Beranda, memperkenalkan efek visual Warna Pelangi (Google AI Rainbow Glow Effect), dan mengatasi bug CSS Layout Shift (ruang kosong 4px).",
                      "improvements":  [
                                           "Merancang Wireframe Preview untuk Route Beranda yang memuat susunan akurat Logo GRACIA, Search Box, Tanggal, Apps Grid, dan Avatar.",
@@ -38,7 +56,7 @@
                                       ],
                      "fixes":  [
                                    "Mengatasi tuntas permasalahan CSS Layout Shift Bug, termasuk sterilisasi ruang kosong ekstra sebesar 4 piksel pada sidebar menu normal.",
-                                   "Standardisasi format pemotongan teks menggunakan Elipsis (titik 3: '...')."
+                                   "Standardisasi format pemotongan teks menggunakan Elipsis (titik 3: \u0027...\u0027)."
                                ],
                      "patches":  [
                                      "Sinkronisasi total dokumen (PRD, Memory, Skills, StyleGuide, Task, README, Tautan, struktur_folder) dengan standar Vibe Code terbaru."

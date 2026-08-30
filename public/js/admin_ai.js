@@ -185,3 +185,15 @@ createApp({
         };
     }
 }).mount('#crawlApp');
+// Toggle Fullscreen Function
+window.toggleFullscreen = function() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log(Error attempting to enable fullscreen: );
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+};
