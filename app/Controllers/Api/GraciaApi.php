@@ -144,6 +144,16 @@ class GraciaApi extends BaseController
                 ('fiber', 'concreate')
             ");
 
+            // 3. Buat tabel sesi pencarian gambar (gkr_cari_image)
+            $db->query("CREATE TABLE IF NOT EXISTS `gkr_cari_image` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `chat_id` varchar(100) NOT NULL,
+              `search_results` json NOT NULL,
+              `created_at` datetime DEFAULT current_timestamp(),
+              PRIMARY KEY (`id`),
+              KEY `idx_chat_id` (`chat_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
             return $this->response->setJSON([
                 'status' => 'sukses',
                 'pesan'  => 'Basis data gkr_cari (Kolom Bahasa Indonesia) berhasil disiapkan.',

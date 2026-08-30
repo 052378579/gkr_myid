@@ -230,27 +230,40 @@ class Search extends BaseController
             $this->formatResultUrls($dataPencarian['results'], $urlPrefix);
 
         } elseif ($tipe === 'image_results') {
-            $kodeBom = session()->get('search_kode_bom');
-            $aiResults = session()->get('search_ai_results');
+            $sid = $this->request->getGet('sid');
             
-            if (empty($kodeBom)) {
+            if (empty($sid)) {
                 return redirect()->to('/');
             }
 
-            if (strpos($kodeBom, 'SWATCH:') === 0) {
+            $db = \Config\Database::connect();
+            $sesi = $db->table('gkr_cari_image')->where('id', $sid)->get()->getRowArray();
+            
+            if (empty($sesi)) {
+                return redirect()->to('/');
+            }
+            
+            $aiResults = json_decode($sesi['search_results'], true);
+            $kodeBomList = [];
+            
+            if (!empty($aiResults) && is_array($aiResults)) {
+                foreach ($aiResults as $res) {
+                    if (!empty($res['kode_bom'])) {
+                        $kodeBomList[] = $res['kode_bom'];
+                    }
+                }
+                $kodeBomList = array_unique($kodeBomList);
+            }
+
+            if (empty($kodeBomList)) {
                 $dataPencarian['totalResults'] = 0;
                 $dataPencarian['results'] = [];
                 $dataPencarian['pager'] = null;
             } else {
-                $kodeBomList = [$kodeBom];
-                if (!empty($aiResults) && is_array($aiResults)) {
-                    $kodeBomList = array_unique(array_column($aiResults, 'kode_bom'));
-                }
-
                 $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->groupStart();
                 foreach ($kodeBomList as $kb) {
                     if (strpos($kb, 'SWATCH:') !== 0) {
-                        $cariModel->orLike('judul', $kb)->orLike('imageUrl', $kb);
+                        $cariModel->orLike('judul', $kb)->orLike('imageUrl', $kb)->orLike('kode_bom', $kb);
                     }
                 }
                 $cariModel->groupEnd()->where('rusak', 0);
@@ -259,7 +272,7 @@ class Search extends BaseController
                 $cariModel->where('imageUrl IS NOT NULL')->where('imageUrl !=', '')->groupStart();
                 foreach ($kodeBomList as $kb) {
                     if (strpos($kb, 'SWATCH:') !== 0) {
-                        $cariModel->orLike('judul', $kb)->orLike('imageUrl', $kb);
+                        $cariModel->orLike('judul', $kb)->orLike('imageUrl', $kb)->orLike('kode_bom', $kb);
                     }
                 }
                 $cariModel->groupEnd()->where('rusak', 0);
