@@ -12,6 +12,7 @@ class SuperAdminFilter implements FilterInterface
     {
         // Pertama pastikan mereka sudah login
         if (!session()->get('isLoggedIn')) {
+            session()->set('redirect_url', (string) current_url(true));
             return redirect()->to('/login')->with('error', 'Akses ditolak.<br>Silahkan masuk terlebih dahulu');
         }
 

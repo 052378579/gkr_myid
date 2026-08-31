@@ -115,7 +115,10 @@ class Auth extends BaseController
             curl_close($ch);
             // --------------------------------------
 
-            return redirect()->to('/')->with('success', 'Selamat datang ' . $user['nama_lengkap'] . '');
+            $redirectUrl = session()->get('redirect_url') ?? '/';
+            session()->remove('redirect_url');
+
+            return redirect()->to($redirectUrl)->with('success', 'Selamat datang ' . $user['nama_lengkap'] . '');
         } else {
             // Catat Log Percobaan Gagal
             $logUserModel = new LogUserModel();
