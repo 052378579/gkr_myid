@@ -1,4 +1,4 @@
-let koneksiSSE = null;
+﻿let koneksiSSE = null;
 let timerInterval = null;
 let startTime = null;
 
@@ -190,7 +190,7 @@ function hardReset() {
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
-            console.log(Error attempting to enable fullscreen: );
+            console.log("Error attempting to enable fullscreen: ", err);
         });
     } else {
         if (document.exitFullscreen) {
@@ -198,3 +198,4 @@ function toggleFullscreen() {
         }
     }
 }
+

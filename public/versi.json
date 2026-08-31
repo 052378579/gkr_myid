@@ -1,4 +1,4 @@
-{
+﻿{
     "nama_file":  "versi.json",
     "nama_proyek":  "gkr_myid",
     "tanggal_diperbarui":  "30-08-2026 12:00:00 WIB",
@@ -14,6 +14,7 @@
                                           "Perombakan rute pencarian gambar Web dengan Session ID sementara (In-Memory)."
                                       ],
                      "fixes":  [
+                                     "Hotfix: Perbaikan SyntaxError pada fungsi toggleFullscreen di admin_erp.js"
                                ],
                      "patches":  [
                                      "Penyelarasan arsitektur N8N dan webhook WAHA."
@@ -567,3 +568,5 @@
                  }
              ]
 }
+
+
