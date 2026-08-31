@@ -42,7 +42,3 @@ python_services/buku_catatan_ai.json
 *.md
 !README.md
 .agents/*
-
-# Abaikan Constants.php
-app/Config/Constants.php
-

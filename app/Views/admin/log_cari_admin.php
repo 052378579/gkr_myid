@@ -1,4 +1,4 @@
-﻿<?= $this->extend('layout/admin_layout') ?>
+<?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('title') ?>Log Pencarian<?= $this->endSection() ?>
 
@@ -27,11 +27,13 @@
                             <?php foreach ($logCari as $log): ?>
                                 <tr>
                                     <td class="ps-4"><?= esc($log['nama_lengkap'] ?? 'Tamu / Anonim') ?></td>
-                                    <td><span class="fw-medium"><?= esc($log['kata_kunci']) ?></span></td>
+                                    <td><span class="fw-medium"><?= $log['kata_kunci'] === 'UPLOADED_IMAGE' ? '<span class="text-secondary"><i class="fas fa-camera me-1"></i> Foto WA</span>' : esc($log['kata_kunci']) ?></span></td>
                                     <td>
-                                        <?php if (strpos(strtolower($log['tipe_pencarian']), 'gambar') !== false): ?>
-                                            <span class="badge bg-primary rounded-pill"><i class="fas fa-image me-1"></i> <?= esc(ucwords($log['tipe_pencarian'])) ?></span>
-                                        <?php elseif ($log['tipe_pencarian'] === 'situs'): ?>
+                                        <?php 
+                                        $tipe = strtolower($log['tipe_pencarian']);
+                                        if (strpos($tipe, 'gambar') !== false): ?>
+                                            <span class="badge bg-primary rounded-pill"><i class="fas fa-image me-1"></i> Gambar</span>
+                                        <?php elseif ($tipe === 'situs'): ?>
                                             <span class="badge bg-info rounded-pill"><i class="fas fa-globe me-1"></i> Situs</span>
                                         <?php else: ?>
                                             <span class="badge bg-secondary rounded-pill"><i class="fas fa-font me-1"></i> Teks</span>
@@ -39,8 +41,14 @@
                                     </td>
                                     <td><span class="badge bg-light text-dark rounded-pill border"><?= esc($log['jumlah_hasil']) ?></span></td>
                                     <td>
-                                        <?php if (isset($log['source']) && strtolower($log['source']) === 'telegram'): ?>
-                                            <span class="badge bg-primary rounded-pill" style="background-color: #0088cc !important;"><i class="fab fa-telegram-plane me-1"></i> Telegram</span>
+                                        <?php 
+                                        $sumber = isset($log['source']) ? strtolower($log['source']) : 'web';
+                                        if ($sumber === 'telegram'): ?>
+                                            <span class="badge rounded-pill" style="background-color: #0088cc; color: white;"><i class="fab fa-telegram-plane me-1"></i> Telegram</span>
+                                        <?php elseif ($sumber === 'whatsapp'): ?>
+                                            <span class="badge rounded-pill" style="background-color: #25D366; color: white;"><i class="fab fa-whatsapp me-1"></i> WhatsApp</span>
+                                        <?php elseif (strpos($sumber, 'web ai') !== false || $sumber === 'web_ai'): ?>
+                                            <span class="badge bg-dark rounded-pill text-white"><i class="fas fa-robot me-1"></i> Web AI</span>
                                         <?php else: ?>
                                             <span class="badge bg-secondary rounded-pill"><i class="fas fa-globe me-1"></i> Web</span>
                                         <?php endif; ?>
