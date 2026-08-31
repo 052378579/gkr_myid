@@ -139,7 +139,7 @@
                     </button>
                     <h5 class="mb-0 fw-semibold text-light d-flex align-items-center">
                         Asisten
-                        <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="ms-2" style="height: 18px; object-fit: contain;" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';">
+                        <a href="/"><img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="ms-2" style="height: 18px; object-fit: contain;" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';"></a>
                     </h5>
                 </div>
                 <div class="d-flex align-items-center gap-3">
@@ -226,11 +226,11 @@
                             <div class="message-content">
                                 <!-- Lampiran Media (Gambar) dengan Fancybox -->
                                 <div v-if="msg.media_url" class="mb-2">
-                                    <a v-show="!msg.mediaError" :href="msg.media_url" data-fancybox="gallery" :data-caption="msg.message">
+                                    <a v-if="!msg.mediaError" :href="msg.media_url" data-fancybox="gallery" :data-caption="msg.message">
                                         <img :src="msg.media_url" @error="msg.mediaError = true" class="img-fluid rounded" alt="Lampiran Media" style="max-height: 250px; object-fit: cover;">
                                     </a>
                                     <!-- Fallback Kamuflase (Desain Minimalis) -->
-                                    <div v-show="msg.mediaError" class="p-2 px-3 bg-body-tertiary border border-secondary-subtle rounded-3 d-inline-flex align-items-center text-secondary shadow-sm">
+                                    <div v-else class="p-2 px-3 bg-body-tertiary border border-secondary-subtle rounded-3 d-inline-flex align-items-center text-secondary shadow-sm">
                                         <i class="fa-solid fa-image-slash me-2 opacity-75"></i>
                                         <span class="small fw-medium opacity-75">Lampiran Media</span>
                                     </div>
@@ -319,3 +319,5 @@
     <script src="/assets/js/ai-app.js?v=<?= ASSET_VERSION ?? time() ?>"></script>
 </body>
 </html>
+
+

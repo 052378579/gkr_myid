@@ -44,7 +44,10 @@ const chatApp = Vue.createApp({
                 const response = await fetch(`${apiGetLogs}?action=detail&no_hp=${encodeURIComponent(noHp)}`);
                 const result = await response.json();
                 if (result.status === 'success') {
-                    this.chatLogs = result.data;
+                    this.chatLogs = result.data.map(chat => ({
+                        ...chat,
+                        mediaError: false
+                    }));
                     
                     // Scroll to bottom after render
                     setTimeout(() => {
@@ -137,4 +140,5 @@ const chatApp = Vue.createApp({
 });
 
 chatApp.mount('#chatApp');
+
 

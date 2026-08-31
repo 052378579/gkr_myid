@@ -86,11 +86,11 @@
                                     </div>
                                     <!-- Lampiran Media -->
                                     <div v-if="chat.media_url && chat.media_url !== 'null'" class="mb-2">
-                                        <div v-show="!chat.mediaError" class="bg-white p-1 rounded border d-inline-block">
+                                        <div v-if="!chat.mediaError" class="bg-white p-1 rounded border d-inline-block">
                                             <img :src="chat.media_url" @error="chat.mediaError = true" class="img-fluid rounded" style="max-height: 200px; object-fit: contain;" alt="Lampiran Media">
                                         </div>
                                         <!-- Fallback Kamuflase (Desain Minimalis) -->
-                                        <div v-show="chat.mediaError" class="p-2 px-3 bg-body-tertiary border border-secondary-subtle rounded-3 d-inline-flex align-items-center text-secondary shadow-sm">
+                                        <div v-else class="p-2 px-3 bg-body-tertiary border border-secondary-subtle rounded-3 d-inline-flex align-items-center text-secondary shadow-sm">
                                             <i class="fa-solid fa-image-slash me-2 opacity-75"></i>
                                             <span class="small fw-medium opacity-75">Lampiran Media</span>
                                         </div>
@@ -119,4 +119,5 @@
 <?= $this->section('scripts') ?>
 <script src="<?= base_url('js/admin/chat.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>
+
 

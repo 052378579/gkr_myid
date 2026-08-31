@@ -32,7 +32,10 @@ createApp({
             try {
                 const response = await axios.get(`/api/ai/messages?session_id=${activeSessionId.value}`);
                 if (response.data && !response.data.error) {
-                    messages.value = response.data;
+                    messages.value = response.data.map(msg => ({
+                        ...msg,
+                        mediaError: false
+                    }));
                     scrollToBottom();
                 } else if (response.data && response.data.error) {
                     messages.value = [];
@@ -59,6 +62,7 @@ createApp({
                 sender: 'user',
                 message: text,
                 source: 'web',
+                mediaError: false,
                 created_at: new Date().toISOString()
             });
             
@@ -160,3 +164,4 @@ createApp({
         };
     }
 }).mount('#app');
+
