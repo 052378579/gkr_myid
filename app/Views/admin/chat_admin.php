@@ -1,4 +1,4 @@
-<?= $this->extend('layout/admin_layout') ?>
+﻿<?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('title') ?>Chat History<?= $this->endSection() ?>
 
@@ -14,10 +14,10 @@
         <div class="row g-0 h-100">
             <!-- Kolom Kiri: Sesi Chat -->
             <div class="col-md-4 col-lg-3 border-end h-100 d-flex flex-column bg-body-tertiary rounded-start-4" :class="{'d-none d-md-flex': activeNoHp}">
-                <div class="p-3 border-bottom bg-white rounded-top-start-4">
+                <div class="p-3 border-bottom bg-body rounded-top-start-4">
                     <h5 class="mb-3 fw-bold text-primary">Chat Sessions</h5>
                     <div class="input-group input-group-sm shadow-sm">
-                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <span class="input-group-text bg-body border-end-0"><i class="fas fa-search text-muted"></i></span>
                         <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari No HP / Intent..." v-model="search" @input="fetchSessions">
                     </div>
                 </div>
@@ -49,10 +49,10 @@
             </div>
             
             <!-- Kolom Kanan: Detail Percakapan -->
-            <div class="col-md-8 col-lg-9 h-100 d-flex flex-column chat-detail-panel rounded-end-4 bg-light" :class="{'d-none d-md-flex': !activeNoHp}">
+            <div class="col-md-8 col-lg-9 h-100 d-flex flex-column chat-detail-panel rounded-end-4" :class="{'d-none d-md-flex': !activeNoHp}">
                 <template v-if="activeNoHp">
                     <!-- Chat Header -->
-                    <div class="p-3 border-bottom bg-white d-flex align-items-center rounded-top-end-4">
+                    <div class="p-3 border-bottom bg-body d-flex align-items-center rounded-top-end-4">
                         <!-- Tombol Back untuk Mobile -->
                         <button class="btn btn-sm btn-light d-md-none me-2" @click="activeNoHp = null">
                             <i class="fas fa-arrow-left"></i>
@@ -86,7 +86,7 @@
                                     </div>
                                     <!-- Lampiran Media -->
                                     <div v-if="chat.media_url && chat.media_url !== 'null'" class="mb-2">
-                                        <div v-if="!chat.mediaError" class="bg-white p-1 rounded border d-inline-block">
+                                        <div v-if="!chat.mediaError" class="bg-body p-1 rounded border d-inline-block">
                                             <img :src="chat.media_url" @error="chat.mediaError = true" class="img-fluid rounded" style="max-height: 200px; object-fit: contain;" alt="Lampiran Media">
                                         </div>
                                         <!-- Fallback Kamuflase (Desain Minimalis) -->
@@ -119,5 +119,6 @@
 <?= $this->section('scripts') ?>
 <script src="<?= base_url('js/admin/chat.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <?= $this->endSection() ?>
+
 
 
