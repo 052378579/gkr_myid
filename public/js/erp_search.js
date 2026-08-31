@@ -78,12 +78,14 @@ function timeAgo(dateString) {
     if (diffInHours < 24) return `${diffInHours} jam lalu`;
     
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 2) return `1 hari lalu`;
+    if (diffInDays < 7) return `${diffInDays} hari lalu`;
+    
+    if (diffInDays === 7) return `1 minggu lalu`;
     
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `update: ${day}-${month}-${year}`;
+    return `update: ${day}/${month}/${year}`;
 }
 
 function renderData(items) {
@@ -132,7 +134,7 @@ function renderData(items) {
         let buyerText = item.buyer || '-';
         let timeAgoHtml = '';
         if (item.buyer && item.buyer !== '-' && item.erp_modified) {
-            timeAgoHtml = `<div class="text-muted small text-truncate" style="margin-top: 2px;">${timeAgo(item.erp_modified)}</div>`;
+            timeAgoHtml = `<div class="text-muted small fst-italic text-truncate" style="margin-top: 2px;">${timeAgo(item.erp_modified)}</div>`;
         }
 
         tr.innerHTML = `
@@ -157,3 +159,5 @@ function renderData(items) {
 
 // Fetch initial data on page load
 fetchData();
+
+

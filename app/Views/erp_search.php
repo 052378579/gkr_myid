@@ -89,7 +89,7 @@
             }
         ?>
         <div class="dropdown ms-2">
-            <a href="#" class="rounded-circle overflow-hidden text-decoration-none shadow-sm d-inline-block" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; cursor: pointer; border: 2px solid #ffffff;" title="Menu Akun">
+            <a href="#" class="rounded-circle overflow-hidden text-decoration-none shadow-sm d-inline-block" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; cursor: pointer; border: 2px solid var(--bs-body-bg);" title="Menu Akun">
                 <img src="<?= $avatarUrl ?>" alt="Avatar" class="w-100 h-100 object-fit-cover">
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
@@ -162,7 +162,7 @@
             <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
             <div class="flex-grow-1 text-start">
                 <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 text-muted hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">
-                    <span id="themeIcon">🌓 Tema</span>
+                    <span id="themeIcon">ðŸŒ“ Tema</span>
                 </button>
             </div>
 
@@ -173,7 +173,7 @@
 
             <!-- BAGIAN KANAN: Versi -->
             <div class="flex-grow-1 text-end">
-                <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'"><?= esc($version ?? 'v0.8.141') ?></a>
+                <a href="<?= base_url('versi') ?>" class="text-decoration-none text-muted hover-primary" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">v<?= ASSET_VERSION ?></a>
             </div>
             
         </div>
@@ -185,3 +185,5 @@
     <script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>
+
+

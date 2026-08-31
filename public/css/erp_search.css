@@ -1,3 +1,37 @@
+:root, [data-bs-theme="light"] {
+    --erp-row-bg: #ffffff;
+    --erp-row-border: #eee;
+    --erp-row-hover: #f8f9fa;
+    --erp-th-color: #333;
+    
+    --erp-nav-bg: #ffffff;
+    --erp-nav-color: #666;
+    --erp-nav-hover-bg: #f8f9fa;
+    
+    --erp-search-bg: #ffffff;
+    --erp-search-color: inherit;
+    --erp-search-border: #ccc;
+    
+    --erp-top-icons: #666;
+}
+
+[data-bs-theme="dark"] {
+    --erp-row-bg: var(--bs-dark-bg-subtle, #212529);
+    --erp-row-border: var(--bs-border-color, #495057);
+    --erp-row-hover: var(--bs-secondary-bg, #343a40);
+    --erp-th-color: var(--bs-body-color, #dee2e6);
+    
+    --erp-nav-bg: var(--bs-dark-bg-subtle, #212529);
+    --erp-nav-color: #adb5bd;
+    --erp-nav-hover-bg: var(--bs-secondary-bg, #343a40);
+    
+    --erp-search-bg: var(--bs-dark-bg-subtle, #212529);
+    --erp-search-color: var(--bs-body-color, #dee2e6);
+    --erp-search-border: var(--bs-border-color, #495057);
+    
+    --erp-top-icons: var(--bs-body-color, #dee2e6);
+}
+
 body { 
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     min-height: 100vh;
@@ -11,7 +45,7 @@ body {
     padding: 20px 40px;
     align-items: center;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--erp-top-icons);
 }
 .top-header .icons {
     margin-left: 20px;
@@ -67,7 +101,9 @@ body {
     width: 100%;
     padding: 15px 25px;
     border-radius: 30px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--erp-search-border);
+    background-color: var(--erp-search-bg);
+    color: var(--erp-search-color);
     font-size: 1rem;
     outline: none;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -87,7 +123,7 @@ body {
 /* Nav Buttons */
 .nav-btn {
     background: transparent;
-    border: 1px solid #999;
+    border: 1px solid var(--erp-search-border);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -95,16 +131,16 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 1.5rem;
-    color: #666;
+    color: var(--erp-nav-color);
     cursor: pointer;
     transition: all 0.2s;
-    background-color: #fff;
+    background-color: var(--erp-nav-bg);
     z-index: 10;
 }
 .nav-btn:hover:not(:disabled) {
     border-color: #1e3a8a;
     color: #1e3a8a;
-    background: #f8f9fa;
+    background: var(--erp-nav-hover-bg);
 }
 .nav-btn:disabled {
     opacity: 0.3;
@@ -121,22 +157,22 @@ body {
 .data-list th {
     padding: 15px 10px;
     font-weight: 600;
-    color: #333;
+    color: var(--erp-th-color);
     border: none;
 }
 .data-list td {
-    padding: 12.5px 10px; /* Jarak atas bawah 12.5px (total 25px row spacing) */
+    padding: 11px 10px; /* Jarak atas bawah 12.5px (total 25px row spacing) */
     text-align: left;
     vertical-align: top;
     border: none;
 }
 .data-list tr {
-    background-color: #ffffff; /* Latar belakang baris putih bersih */
-    border-bottom: 1px solid #eee; /* Garis bawah halus */
+    background-color: var(--erp-row-bg); /* Latar belakang baris putih bersih */
+    border-bottom: 1px solid var(--erp-row-border); /* Garis bawah halus */
     transition: background 0.2s;
 }
 .data-list tbody tr:hover {
-    background-color: #f8f9fa; /* Hover abu-abu muda */
+    background-color: var(--erp-row-hover); /* Hover abu-abu muda */
 }
 
 /* Column styles removed here since explicit widths are in HTML table-layout fixed */
@@ -145,7 +181,7 @@ body {
 
 /* Row Estimasi (Teks Merah) */
 .row-estimasi td, .row-estimasi span {
-    color: #dc3545 !important;
+    color: var(--bs-danger, #dc3545) !important;
 }
 
 /* Footer */
@@ -154,7 +190,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--erp-row-border);
     font-size: 0.85rem;
     color: #888;
 }
@@ -224,3 +260,6 @@ body {
     #btnPrev { left: 10px; }
     #btnNext { right: 10px; }
 }
+
+
+

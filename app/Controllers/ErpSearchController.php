@@ -17,17 +17,7 @@ class ErpSearchController extends BaseController
             $data['altLogo'] = $doodle['event'];
         }
 
-        // Fetch dynamic version from versi.json
-        $jsonPath = FCPATH . 'versi.json';
-        $data['version'] = 'v0.8.15';
-        if (file_exists($jsonPath)) {
-            $json = json_decode(file_get_contents($jsonPath), true);
-            $versiData = $json['data'] ?? [];
-            if (!empty($versiData)) {
-                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
-                $data['version'] = 'v' . $versiData[0]['versi'];
-            }
-        }
+
 
         return view('erp_search', $data);
     }
@@ -73,3 +63,4 @@ class ErpSearchController extends BaseController
         ]);
     }
 }
+
