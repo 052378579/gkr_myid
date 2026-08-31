@@ -45,15 +45,6 @@ abstract class BaseController extends Controller
 
     protected function getAppVersion()
     {
-        $jsonPath = FCPATH . 'versi.json';
-        if (file_exists($jsonPath)) {
-            $json = json_decode(file_get_contents($jsonPath), true);
-            $versiData = $json['data'] ?? [];
-            if (!empty($versiData)) {
-                usort($versiData, function($a, $b) { return strtotime($b['tanggal_rilis']) - strtotime($a['tanggal_rilis']); });
-                return 'v' . $versiData[0]['versi'];
-            }
-        }
-        return 'v1.0.0';
+        return 'v' . ASSET_VERSION;
     }
 }

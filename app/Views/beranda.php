@@ -122,7 +122,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <?php $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/'; ?>
         <div class="d-flex justify-content-center align-items-center gap-2" style="font-size: 0.95rem;">
             <a href="/ai" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium d-inline-flex align-items-center">
-                <i class="fa-solid fa-robot me-1"></i> AI <sup class="text-danger ms-1" style="font-size: 0.65em; font-weight: bold; animation: fadeInOut 2s infinite;">New</sup>
+                <i class="fa-solid fa-robot me-1"></i> AI <sup class="text-danger fade-in-new ms-1">New</sup>
             </a>
             <span style="color: var(--gkr-primary);">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO BUYER</a>
@@ -166,15 +166,19 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
                     <a href="https://docs.google.com/viewer?url=https://wickerkane.com/WIckerKAne-IFEX-2026.pdf" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
                         <i class="fa-solid fa-book-open"></i> Katalog 2026
                     </a>
+                    <span class="text-muted mx-3">|</span>
+                    <a href="/erp" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
+                        Live Search <b>ERP</b>
+                    </a>
                 </div>
-                <span class="text-muted mx-3 d-none d-md-inline">|</span>
+                <!-- <span class="text-muted mx-3 d-none d-md-inline">|</span>
                 <div class="d-flex justify-content-center align-items-center mt-1 mt-md-0">
                     <a href="/erp" rel="noopener noreferrer" class="text-decoration-none fw-medium d-inline-flex align-items-center justify-content-start" style="color: var(--gkr-primary); font-size: 0.95rem; width: 195px;">
-                        <!-- <i class="fa-brands fa-e me-1"></i> -->
+                        <i class="fa-brands fa-e me-1"></i>
                         <span class="typewriter-text">Live Search ERP</span>
                         <sup class="text-danger fade-in-new ms-1">New</sup>
                     </a>
-                </div>
+                </div> -->
             </div>
         </form>
     </div>

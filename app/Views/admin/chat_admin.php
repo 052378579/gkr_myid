@@ -84,10 +84,18 @@
                                         </span>
                                         <span v-if="chat.intent" class="ms-3 badge bg-dark bg-opacity-25" style="font-size: 0.65rem;">{{ chat.intent }}</span>
                                     </div>
-                                    <div class="chat-text" style="white-space: pre-wrap;">{{ chat.message }}</div>
-                                    <div v-if="chat.media_url && chat.media_url !== 'null'" class="mt-2 text-center bg-white p-1 rounded border">
-                                        <img :src="chat.media_url" class="img-fluid rounded" style="max-height: 200px; object-fit: contain;" alt="Media URL">
+                                    <!-- Lampiran Media -->
+                                    <div v-if="chat.media_url && chat.media_url !== 'null'" class="mb-2">
+                                        <div v-show="!chat.mediaError" class="bg-white p-1 rounded border d-inline-block">
+                                            <img :src="chat.media_url" @error="chat.mediaError = true" class="img-fluid rounded" style="max-height: 200px; object-fit: contain;" alt="Lampiran Media">
+                                        </div>
+                                        <!-- Fallback Kamuflase (Desain Minimalis) -->
+                                        <div v-show="chat.mediaError" class="p-2 px-3 bg-body-tertiary border border-secondary-subtle rounded-3 d-inline-flex align-items-center text-secondary shadow-sm">
+                                            <i class="fa-solid fa-image-slash me-2 opacity-75"></i>
+                                            <span class="small fw-medium opacity-75">Lampiran Media</span>
+                                        </div>
                                     </div>
+                                    <div class="chat-text" style="white-space: pre-wrap;">{{ chat.message }}</div>
                                     <div class="text-end small mt-1 opacity-75" style="font-size: 0.7rem;">
                                         {{ formatTime(chat.created_at) }}
                                     </div>
