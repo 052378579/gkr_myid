@@ -8,9 +8,11 @@ function disableAllButtons(disabled) {
 }
 
 function startTimer(label) {
-    const timerLabel = document.getElementById('timerLabel');
-    const timerValue = document.getElementById('timerValue');
-    timerLabel.innerText = label;
+    const timerLabel = document.getElementById('sw-label');
+    const timerMin = document.getElementById('sw-min');
+    const timerSec = document.getElementById('sw-sec');
+    const timerMs = document.getElementById('sw-ms');
+    if(timerLabel) timerLabel.innerText = label;
     startTime = Date.now();
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -18,7 +20,9 @@ function startTimer(label) {
         let ms = Math.floor((elapsed % 1000) / 10).toString().padStart(2, '0');
         let sec = Math.floor((elapsed / 1000) % 60).toString().padStart(2, '0');
         let min = Math.floor((elapsed / (1000 * 60)) % 60).toString().padStart(2, '0');
-        timerValue.innerText = min + ':' + sec + '.' + ms;
+        if(timerMin) timerMin.innerText = min;
+        if(timerSec) timerSec.innerText = sec;
+        if(timerMs) timerMs.innerText = ms;
     }, 30);
 }
 
@@ -28,7 +32,14 @@ function stopTimer() {
 
 function resetTimer() {
     clearInterval(timerInterval);
-    document.getElementById('timerValue').innerText = '00:00.00';
+    const timerMin = document.getElementById('sw-min');
+    const timerSec = document.getElementById('sw-sec');
+    const timerMs = document.getElementById('sw-ms');
+    const timerLabel = document.getElementById('sw-label');
+    if(timerMin) timerMin.innerText = '00';
+    if(timerSec) timerSec.innerText = '00';
+    if(timerMs) timerMs.innerText = '00';
+    if(timerLabel) timerLabel.innerText = 'WAKTU PROSES';
 }
 
 function jalankanTerminal(mode) {
@@ -198,4 +209,5 @@ function toggleFullscreen() {
         }
     }
 }
+
 
