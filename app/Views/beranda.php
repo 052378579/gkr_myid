@@ -121,6 +121,10 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="mb-3 doodle-img" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';">
         <?php $imgBaseUrl = getenv('app.imgBaseURL') ?: 'https://foto.gkr.my.id/'; ?>
         <div class="d-flex justify-content-center align-items-center gap-2" style="font-size: 0.95rem;">
+            <a href="/ai" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium d-inline-flex align-items-center">
+                <i class="fa-solid fa-robot me-1"></i> AI <sup class="text-danger ms-1" style="font-size: 0.65em; font-weight: bold; animation: fadeInOut 2s infinite;">New</sup>
+            </a>
+            <span style="color: var(--gkr-primary);">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO BUYER</a>
             <span style="color: var(--gkr-primary);">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO GRACIA</a>

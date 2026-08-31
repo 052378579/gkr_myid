@@ -226,9 +226,14 @@
                             <div class="message-content">
                                 <!-- Lampiran Media (Gambar) dengan Fancybox -->
                                 <div v-if="msg.media_url" class="mb-2">
-                                    <a :href="msg.media_url" data-fancybox="gallery" :data-caption="msg.message">
-                                        <img :src="msg.media_url" class="img-fluid rounded" alt="Lampiran Media" style="max-height: 250px; object-fit: cover;">
+                                    <a v-show="!msg.mediaError" :href="msg.media_url" data-fancybox="gallery" :data-caption="msg.message">
+                                        <img :src="msg.media_url" @error="msg.mediaError = true" class="img-fluid rounded" alt="Lampiran Media" style="max-height: 250px; object-fit: cover;">
                                     </a>
+                                    <!-- Fallback Kamuflase (Desain Minimalis) -->
+                                    <div v-show="msg.mediaError" class="p-2 px-3 bg-body-tertiary border border-secondary-subtle rounded-3 d-inline-flex align-items-center text-secondary shadow-sm">
+                                        <i class="fa-solid fa-image-slash me-2 opacity-75"></i>
+                                        <span class="small fw-medium opacity-75">Lampiran Media</span>
+                                    </div>
                                 </div>
                                 <!-- Isi Pesan Teks (Markdown) -->
                                 <div v-html="renderMarkdown(msg.message)"></div>
