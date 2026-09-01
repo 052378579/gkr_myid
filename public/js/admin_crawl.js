@@ -57,7 +57,7 @@ createApp({
         const toggleFullscreen = () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => {
-                    console.log(Error attempting to enable fullscreen: );
+                    console.error('Error attempting to enable fullscreen:', err);
                 });
             } else {
                 if (document.exitFullscreen) {
@@ -129,7 +129,7 @@ createApp({
             if (!url.value) return;
             
             isProcessing.value = true;
-            logs.value = [<span class="prompt">root@server:~#</span> Memulai Crawling: ...];
+            logs.value = ['<span class="prompt">root@server:~#</span> Memulai Crawling: ...'];
             startTimer('WAKTU CRAWLING');
             
             try {
@@ -169,7 +169,7 @@ createApp({
                     heightAuto: false
                 });
             } catch (err) {
-                addLog(<span class="text-danger">[ERROR]  + (err.message || 'Koneksi terputus.') + </span>);
+                addLog('<span class="text-danger">[ERROR] ' + (err.message || 'Koneksi terputus.') + '</span>');
             } finally {
                 stopTimer();
                 isProcessing.value = false;
