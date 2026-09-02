@@ -1,0 +1,96 @@
+{
+  "name": "7. Alat: Cari Katalog",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM gkr_cari WHERE judul LIKE '%{{ $json.query }}%' OR kata_kunci LIKE '%{{ $json.query }}%' LIMIT 5;",
+        "options": {}
+      },
+      "id": "6f7273ab-2bf3-426a-b638-55dd0fdd1462",
+      "name": "Cari Data Katalog",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        16
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "jJHss1Sjb8ikBHdP",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let dbData = $input.all();\nconst baseUrl = \"https://foto.budi.biz.id/\";\n\nif (dbData.length === 0 || Object.keys(dbData[0].json).length === 0) {\n    return [{ json: { hasil: \"Barang tidak ditemukan di katalog untuk pencarian tersebut. Informasikan ke pengguna secara formal.\" } }];\n}\n\nlet hasil_teks = \"Referensi dari katalog:\\n\";\n\ndbData.forEach((row, index) => {\n    let item = row.json;\n    hasil_teks += (index + 1) + \". Nama: \" + (item.judul || \"-\") + \"\\n\";\n    hasil_teks += \"   Kode BOM: \" + (item.kode_bom || \"-\") + \"\\n\";\n    hasil_teks += \"   Tautan Foto: \" + (item.imageUrl ? baseUrl + item.imageUrl : \"Tidak ada gambar\") + \"\\n\\n\";\n});\n\nreturn [{ json: { hasil: hasil_teks } }];"
+      },
+      "id": "2546b553-efa4-456e-8a18-ed03cce87e3b",
+      "name": "Format untuk AI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "query"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        16
+      ],
+      "id": "db796201-a18d-4b87-8cc6-91964a5c62cd",
+      "name": "Mulai"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cari Data Katalog": {
+      "main": [
+        [
+          {
+            "node": "Format untuk AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mulai": {
+      "main": [
+        [
+          {
+            "node": "Cari Data Katalog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "602a2e3f-18a1-408a-8d65-3f99f1075aad",
+  "meta": {
+    "instanceId": "73212eb6afbcfba46f01855519f03014b30e2d2b77978536c861f542c9673ffd"
+  },
+  "nodeGroups": [],
+  "id": "RnEB7l3bOy5SMCSf",
+  "tags": []
+}
