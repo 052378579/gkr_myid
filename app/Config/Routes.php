@@ -103,7 +103,7 @@ $routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
 $routes->get('/admin/erp/data', '\App\Controllers\Admin\AdminController::erp_data');
 
 // Shortlink WAHA ERP Redirect
-$routes->get('/go/(:segment)', 'Redirect::erp/$1');
+$routes->get('/go/(:segment)', 'GoController::erp/$1');
 
 // Rute Asisten Gracia (Web)
 $routes->get('/ai', '\App\Controllers\AiController::index', ['filter' => 'auth']);
