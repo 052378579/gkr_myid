@@ -127,7 +127,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <span style="color: var(--gkr-primary);">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?BUYER" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO BUYER</a>
             <span style="color: var(--gkr-primary);">|</span>
-            <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">FOTO GRACIA</a>
+            <a href="<?= esc($imgBaseUrl) ?>?GRACIA" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium"><span class="d-none d-md-inline">FOTO </span>GRACIA</a>
             <span style="color: var(--gkr-primary);">|</span>
             <a href="<?= esc($imgBaseUrl) ?>?SWATCHES" style="color: var(--gkr-primary); text-decoration: none;" class="fw-medium">SWATCHES</a>
         </div>
@@ -159,16 +159,16 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             </div>
             <div class="mt-3 d-flex flex-column flex-md-row justify-content-center align-items-center gap-2 gap-md-0">            
                 <div class="d-flex justify-content-center align-items-center">
-                    <a href="https://3d.gkr.my.id" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
+                    <a href="https://3d.gkr.my.id" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium d-none d-md-inline" style="color: var(--gkr-primary); font-size: 0.95rem;">
                         <i class="fa-brands fa-unity"></i> 3D Viewer
                     </a>
-                    <span class="text-muted mx-3">|</span>
+                    <span class="text-muted mx-3 d-none d-md-inline">|</span>
                     <a href="https://docs.google.com/viewer?url=https://wickerkane.com/WIckerKAne-IFEX-2026.pdf" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
                         <i class="fa-solid fa-book-open"></i> Katalog 2026
                     </a>
                     <span class="text-muted mx-3">|</span>
                     <a href="/erp" rel="noopener noreferrer" class="text-decoration-none fw-medium" style="color: var(--gkr-primary); font-size: 0.95rem;">
-                        Live Search <b>ERP</b>
+                        <span class="d-none d-md-inline">Live </span>Search <b>ERP</b>
                     </a>
                 </div>
                 <!-- <span class="text-muted mx-3 d-none d-md-inline">|</span>
@@ -248,7 +248,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
         <div class="flex-grow-1 text-start">
             <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 text-muted hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">
-                <span id="themeIcon">Ã°Å¸Å’â€œ Tema</span>
+                <span id="themeIcon">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã¢â‚¬â„¢ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Tema</span>
             </button>
         </div>
 

@@ -126,7 +126,7 @@
         </div>
 
         <!-- Main Chat Area -->
-        <div class="chat-main flex-grow-1 d-flex flex-column position-relative">
+        <div class="chat-main flex-grow-1 d-flex flex-column position-relative" style="min-width: 0;">
             
             <!-- Top Navbar -->
             <header class="p-3 border-bottom border-secondary-subtle d-flex justify-content-between align-items-center bg-body shadow-sm z-1">
@@ -137,19 +137,19 @@
                     <button class="btn btn-sm btn-outline-secondary d-none d-md-block me-3 border-0" type="button" onclick="document.getElementById('sidebarDesktop').classList.toggle('d-md-flex')">
                         <i class="fa-solid fa-bars fs-4"></i>
                     </button>
-                    <h5 class="mb-0 fw-semibold text-light d-flex align-items-center">
+                    <h5 class="mb-0 fw-semibold text-light d-none d-md-flex align-items-center">
                         Asisten
                         <a href="/"><img src="<?= esc($finalUrlLogo) ?>" alt="<?= esc($finalAltLogo) ?>" title="<?= esc($finalAltLogo) ?>" class="ms-2" style="height: 18px; object-fit: contain;" onerror="this.onerror=null; this.src='<?= base_url('Gracia_logo.png') ?>';"></a>
                     </h5>
                 </div>
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2 gap-md-3">
                     <a href="/" class="text-decoration-none text-light fw-medium px-2">
                         <span>Beranda</span>
                     </a>
 
                     <!-- Kalender -->
                     <div class="dropdown" id="calendarDropdownWrap">
-                        <a href="#" id="calendarDropdownToggle" class="text-light small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color=''">
+                        <a href="#" id="calendarDropdownToggle" class="text-light fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color=''">
                             <span class="d-none d-sm-inline"><?= $dateDesktopStr ?></span>
                             <span class="d-sm-none"><?= $dateMobileStr ?></span>
                         </a>
@@ -267,7 +267,7 @@
                     <form @submit.prevent="sendMessage" class="position-relative">
                         <div class="input-group input-group-lg shadow-sm rounded-pill p-1 border border-secondary-subtle">
                             <input type="text" v-model="newMessage" class="form-control border-0 bg-transparent text-light px-4" 
-                                placeholder="Ketik pesan atau perintah ERP/Katalog di sini..." 
+                                placeholder="Tanya Asisten Gracia" 
                                 :disabled="isLoading"
                                 autocomplete="off"
                                 style="box-shadow: none;">

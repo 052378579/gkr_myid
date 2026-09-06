@@ -209,7 +209,9 @@ class AiController extends ResourceController
             $mediaUrl = null;
             if (json_last_error() === JSON_ERROR_NONE) {
                 if (is_array($decodedResponse) && isset($decodedResponse[0])) { $decodedResponse = $decodedResponse[0]; }
-                if (isset($decodedResponse['url_gambar'])) {
+                if (isset($decodedResponse['media_url'])) {
+                    $mediaUrl = $decodedResponse['media_url'];
+                } elseif (isset($decodedResponse['url_gambar'])) {
                     $mediaUrl = $decodedResponse['url_gambar'];
                 }
                 if (isset($decodedResponse['output'])) {
@@ -294,4 +296,5 @@ class AiController extends ResourceController
         }
     }
 }
+
 

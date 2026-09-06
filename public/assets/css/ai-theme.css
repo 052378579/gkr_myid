@@ -1,4 +1,4 @@
-/* Custom Theme CSS for Asisten Gracia */
+﻿/* Custom Theme CSS for Asisten Gracia */
 
 /* Variabel Tema Gelap (Default) */
 :root {
@@ -118,6 +118,8 @@
 }
 
 .message-bubble {
+    min-width: 0;
+    overflow-wrap: break-word;
     max-width: 80%;
     width: fit-content;
     line-height: 1.6;
@@ -243,3 +245,13 @@ html[data-bs-theme="dark"] .bot-icon-navbar {
 html[data-bs-theme="dark"] .bot-icon-avatar {
     background-image: url('/assets/icon/gkr_putih.png');
 }
+
+/* TEST EDIT */
+
+
+.message-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
