@@ -264,14 +264,34 @@
             <!-- Chat Input Form -->
             <div class="chat-input-area p-2 p-md-3 bg-body border-top border-secondary-subtle z-1 shadow-sm">
                 <div class="container-fluid max-w-chat px-0">
+                    
+                    <!-- Pratinjau Gambar Mini -->
+                    <div v-if="previewUrl" class="mb-2 position-relative d-inline-block ms-4 mt-1">
+                        <div class="bg-body-tertiary p-1 rounded-3 shadow-sm border border-secondary-subtle">
+                            <img :src="previewUrl" class="rounded-2" style="height: 64px; width: 64px; object-fit: cover; display: block;" alt="Pratinjau">
+                        </div>
+                        <button type="button" @click="removeImage" class="btn btn-sm btn-danger rounded-circle position-absolute top-0 start-100 translate-middle shadow" style="width: 22px; height: 22px; padding: 0; line-height: 1; z-index: 2;">
+                            <i class="fa-solid fa-xmark" style="font-size: 0.7rem;"></i>
+                        </button>
+                    </div>
+
                     <form @submit.prevent="sendMessage" class="position-relative">
-                        <div class="input-group input-group-lg shadow-sm rounded-pill p-1 border border-secondary-subtle">
-                            <input type="text" v-model="newMessage" class="form-control border-0 bg-transparent text-light px-4" 
-                                placeholder="Tanya Asisten Gracia" 
+                        <!-- Input File Tersembunyi -->
+                        <input type="file" ref="fileInput" class="d-none" accept="image/jpeg, image/png, image/jpg" @change="handleFileSelect">
+                        
+                        <div class="input-group input-group-lg shadow-sm rounded-pill p-1 border border-secondary-subtle bg-body">
+                            <!-- Tombol Lampiran -->
+                            <button class="btn border-0 text-secondary" type="button" @click="$refs.fileInput.click()" :disabled="isLoading" title="Unggah Gambar" style="border-radius: 50rem 0 0 50rem; padding-left: 1.25rem; transition: color 0.2s;" onmouseover="this.classList.add('text-primary')" onmouseout="this.classList.remove('text-primary')">
+                                <i class="fa-solid fa-paperclip fs-5"></i>
+                            </button>
+                            
+                            <input type="text" v-model="newMessage" class="form-control border-0 bg-transparent text-light" 
+                                placeholder="Tanya Asisten Gracia..." 
                                 :disabled="isLoading"
                                 autocomplete="off"
                                 style="box-shadow: none;">
-                            <button class="btn btn-primary rounded-pill px-4" type="submit" :disabled="!newMessage.trim() || isLoading" style="background-color: var(--gkr-primary); color: var(--gkr-primary-text) !important; border: none;">
+                                
+                            <button class="btn btn-primary rounded-pill px-4" type="submit" :disabled="(!newMessage.trim() && !selectedFile) || isLoading" style="background-color: var(--gkr-primary); color: var(--gkr-primary-text) !important; border: none;">
                                 <i class="fa-solid fa-paper-plane" v-if="!isLoading"></i>
                                 <i class="fa-solid fa-circle-notch fa-spin" v-else></i>
                             </button>

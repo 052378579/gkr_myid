@@ -8,6 +8,33 @@ createApp({
         const newMessage = ref('');
         const isLoading = ref(false);
         const chatContainer = ref(null);
+        
+        const selectedFile = ref(null);
+        const previewUrl = ref(null);
+
+        const handleFileSelect = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Ukuran gambar maksimal 5MB.');
+                event.target.value = '';
+                return;
+            }
+
+            selectedFile.value = file;
+            previewUrl.value = URL.createObjectURL(file);
+        };
+
+        const removeImage = () => {
+            selectedFile.value = null;
+            if (previewUrl.value) {
+                URL.revokeObjectURL(previewUrl.value);
+                previewUrl.value = null;
+            }
+            const fileInput = document.querySelector('input[type="file"]');
+            if(fileInput) fileInput.value = '';
+        };
 
         const scrollToBottom = () => {
             nextTick(() => {
@@ -53,29 +80,44 @@ createApp({
 
         const sendMessage = async () => {
             const text = newMessage.value.trim();
-            if (!text) return;
+            const fileToUpload = selectedFile.value;
+            
+            if (!text && !fileToUpload) return;
 
             // Optimistic UI update
             const tempId = Date.now();
-            messages.value.push({
+            const messageObj = {
                 id: tempId,
                 sender: 'user',
                 message: text,
                 source: 'web',
                 mediaError: false,
                 created_at: new Date().toISOString()
-            });
+            };
+            
+            if (previewUrl.value) {
+                messageObj.media_url = previewUrl.value;
+            }
+            messages.value.push(messageObj);
             
             newMessage.value = '';
+            selectedFile.value = null;
+            previewUrl.value = null;
+            const fileInput = document.querySelector('input[type="file"]');
+            if(fileInput) fileInput.value = '';
+            
             isLoading.value = true;
             scrollToBottom();
 
             try {
                 const formData = new FormData();
-                formData.append('message', text);
+                if (text) formData.append('message', text);
                 formData.append('session_id', activeSessionId.value);
+                if (fileToUpload) formData.append('image', fileToUpload);
 
-                const response = await axios.post('/api/ai/chat', formData);
+                const response = await axios.post('/api/ai/chat', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
                 
                 if (response.data && response.data.status === 'success') {
                     // Refresh data for safety or just push bot response
@@ -155,6 +197,10 @@ createApp({
             newMessage,
             isLoading,
             chatContainer,
+            selectedFile,
+            previewUrl,
+            handleFileSelect,
+            removeImage,
             sendMessage,
             renderMarkdown,
             formatTime,

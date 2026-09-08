@@ -149,54 +149,88 @@ class AiController extends ResourceController
         $messageText = $this->request->getPost('message');
         $sessionId = $this->request->getPost('session_id') ?: 'main';
 
-        if (empty($messageText)) {
+        $file = $this->request->getFile('image');
+        $mediaUrlUser = null;
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $newName = $file->getRandomName();
+            $uploadPath = FCPATH . 'dokumen/chat_uploads';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0775, true);
+            }
+            $file->move($uploadPath, $newName);
+            $mediaUrlUser = base_url('dokumen/chat_uploads/' . $newName);
+        }
+
+        if (empty($messageText) && empty($mediaUrlUser)) {
             return $this->response->setJSON(['error' => 'Pesan tidak boleh kosong.'])->setStatusCode(400);
         }
 
         if ($sessionId === 'main') {
-            $this->chatHistoryModel->insert([
-                'chat_id'    => $chatId,
-                'no_hp'      => $noHp,
-                'sender'     => 'user',
-                'message'    => $messageText,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+            try {
+                $this->chatHistoryModel->insert([
+                    'chat_id'    => $chatId,
+                    'no_hp'      => $noHp,
+                    'sender'     => 'user',
+                    'message'    => $messageText ?: '',
+                    'media_url'  => $mediaUrlUser,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            } catch (\Exception $e) {
+                // Jika chat_history tidak punya kolom media_url
+                $this->chatHistoryModel->insert([
+                    'chat_id'    => $chatId,
+                    'no_hp'      => $noHp,
+                    'sender'     => 'user',
+                    'message'    => $messageText ?: '',
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         } else {
-            // Validasi sesi
             $session = $this->aiSesiModel->where('id', $sessionId)->where('user_id', $userId)->first();
             if (!$session) {
                 return $this->response->setJSON(['error' => 'Sesi tidak valid.'])->setStatusCode(404);
             }
 
-            // Update title jika ini pesan pertama
             $pesanCount = $this->aiPesanModel->where('session_id', $sessionId)->countAllResults();
             if ($pesanCount === 0) {
-                $newTitle = mb_substr(strip_tags($messageText), 0, 30) . (mb_strlen($messageText) > 30 ? '...' : '');
+                $titletxt = $messageText ?: 'Gambar Baru';
+                $newTitle = mb_substr(strip_tags($titletxt), 0, 30) . (mb_strlen($titletxt) > 30 ? '...' : '');
                 $this->aiSesiModel->update($sessionId, ['title' => $newTitle]);
             }
 
-            $this->aiPesanModel->insert([
-                'session_id' => $sessionId,
-                'role'       => 'user',
-                'content'    => $messageText,
-                'source'     => 'web',
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
+            try {
+                $this->aiPesanModel->insert([
+                    'session_id' => $sessionId,
+                    'role'       => 'user',
+                    'content'    => $messageText ?: '',
+                    'media_url'  => $mediaUrlUser,
+                    'source'     => 'web',
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            } catch (\Exception $e) {
+                $this->aiPesanModel->insert([
+                    'session_id' => $sessionId,
+                    'role'       => 'user',
+                    'content'    => $messageText ?: '',
+                    'source'     => 'web',
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
 
-        // URL Webhook n8n khusus Web
         $n8nWebhookUrl = 'http://127.0.0.1:5678/webhook/gracia-web'; 
         
         $client = \Config\Services::curlrequest();
         try {
             $response = $client->post($n8nWebhookUrl, [
                 'json' => [
-                    'text' => $messageText,
+                    'text' => $messageText ?: '',
                     'chatId' => $chatId,
                     'no_hp' => $noHp,
-                    'msg_type' => 'text',
+                    'msg_type' => $mediaUrlUser ? 'image' : 'text',
                     'source' => 'web',
-                    'session_id' => $sessionId
+                    'session_id' => $sessionId,
+                    'media_url' => $mediaUrlUser
                 ],
                 'http_errors' => false,
                 'timeout' => 60

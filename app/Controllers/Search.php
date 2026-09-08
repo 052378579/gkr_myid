@@ -231,20 +231,39 @@ class Search extends BaseController
 
         } elseif ($tipe === 'image_results') {
             $sid = $this->request->getGet('sid');
-            
-            if (empty($sid)) {
-                return redirect()->to('/');
-            }
-
-            $db = \Config\Database::connect();
-            $sesi = $db->table('gkr_cari_image')->where('id', $sid)->get()->getRowArray();
-            
-            if (empty($sesi)) {
-                return redirect()->to('/');
-            }
-            
-            $aiResults = json_decode($sesi['search_results'], true);
+            $aiResults = [];
             $kodeBomList = [];
+            
+            if (!empty($sid)) {
+                $db = \Config\Database::connect();
+                $sesi = $db->table('gkr_cari_image')->where('id', $sid)->get()->getRowArray();
+                
+                if (empty($sesi)) {
+                    return redirect()->to('/');
+                }
+                
+                $aiResults = json_decode($sesi['search_results'], true);
+                
+                $bestKode = $sesi['kode_bom'] ?? '';
+                if (empty($bestKode) && !empty($aiResults) && is_array($aiResults)) {
+                    $bestKode = $aiResults[0]['kode_bom'] ?? '';
+                }
+                session()->set('search_kode_bom', $bestKode);
+                session()->set('search_ai_results', $aiResults);
+                session()->set('search_confidence', 0.99);
+                
+            } else {
+                $aiResults = session()->get('search_ai_results');
+                $bestKode = session()->get('search_kode_bom');
+                
+                if (empty($aiResults) && empty($bestKode)) {
+                    return redirect()->to('/');
+                }
+                
+                if (!empty($bestKode)) {
+                    $kodeBomList[] = $bestKode;
+                }
+            }
             
             if (!empty($aiResults) && is_array($aiResults)) {
                 foreach ($aiResults as $res) {
@@ -252,8 +271,9 @@ class Search extends BaseController
                         $kodeBomList[] = $res['kode_bom'];
                     }
                 }
-                $kodeBomList = array_unique($kodeBomList);
             }
+            
+            $kodeBomList = array_unique($kodeBomList);
 
             if (empty($kodeBomList)) {
                 $dataPencarian['totalResults'] = 0;
