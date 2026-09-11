@@ -1,4 +1,4 @@
-﻿# -------------------------------------------------------------------
+# -------------------------------------------------------------------
 # 1. CORE CODEIGNITER 4
 # -------------------------------------------------------------------
 # Abaikan writable (cache, logs, session, upload)
@@ -22,14 +22,15 @@ vendor/
 *.psd
 public/uploads/*
 !public/uploads/index.html
+
 # -------------------------------------------------------------------
 # 4. OS & IDE CONFIG FILES
 # -------------------------------------------------------------------
 .vscode/
 .idea/
-
 .DS_Store
 Thumbs.db
+
 # Abaikan database AI Trainer lokal
 python_services/produk.index
 python_services/mapping.json
@@ -41,4 +42,4 @@ python_services/buku_catatan_ai.json
 *.txt
 *.md
 !README.md
-.agents/*
+/.agents/*

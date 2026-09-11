@@ -58,6 +58,7 @@ $routes->post('/api/dropCol', 'Api\GraciaApi::dropCol');
 $routes->post('/api/storeSite', 'Api\GraciaApi::storeSite');
 $routes->post('/api/storeImage', 'Api\GraciaApi::storeImage');
 $routes->get('/api/setupDb', 'Api\GraciaApi::setupDb');
+$routes->get('/api/spellcheck', 'Api\GraciaApi::spellcheck');
 $routes->get('/api/materials', 'Api\GraciaApi::getMaterials');
 $routes->get('/api/trendData', 'Api\GraciaApi::getTrendData');
 $routes->get('/api/autocomplete', 'Api\GraciaApi::autocomplete');
@@ -83,6 +84,10 @@ $routes->get('/admin/karyawan/getAll', '\App\Controllers\Admin\KaryawanControlle
 $routes->post('/admin/karyawan/store', '\App\Controllers\Admin\KaryawanController::store');
 $routes->post('/admin/karyawan/update', '\App\Controllers\Admin\KaryawanController::update');
 $routes->post('/admin/karyawan/delete', '\App\Controllers\Admin\KaryawanController::delete');
+
+// Kamus NLP
+$routes->get('/admin/kamus', '\App\Controllers\Admin\KamusController::index');
+$routes->post('/admin/kamus/update', '\App\Controllers\Admin\KamusController::update');
 
 // Chatbot Webhook
 $routes->post('/api/chatbot/webhook', '\App\Controllers\Api\ChatBotApi::webhook');

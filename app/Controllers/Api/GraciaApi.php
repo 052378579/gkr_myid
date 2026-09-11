@@ -596,4 +596,14 @@ class GraciaApi extends BaseController
 
         return $this->response->setJSON($results);
     }
+
+    /**
+     * Endpoint untuk fitur Koreksi Typo n8n
+     */
+    public function spellcheck() {
+        $q = $this->request->getGet('q');
+        $spellChecker = new \App\Libraries\SpellChecker();
+        $koreksi = $spellChecker->getCorrection($q);
+        return $this->response->setJSON(['suggestion' => $koreksi]);
+    }
 }

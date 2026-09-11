@@ -14,7 +14,7 @@ class SpellChecker
         }
 
         $cache = \Config\Services::cache();
-        $cacheKey = 'search_dictionary_words';
+        $cacheKey = 'search_dictionary_words_v4';
         $words = $cache->get($cacheKey);
 
         if (!$words) {
@@ -72,14 +72,26 @@ class SpellChecker
             $this->extractWords($combinedText, $words);
         }
 
+        // Ambil data tambahan dari tabel gkr_erp
+        $db = \Config\Database::connect();
+        $erpItems = $db->table('gkr_erp')->select('item_name, kode_bom, dimensi, finishing, buyer')->limit(5000)->get()->getResultArray();
+        foreach ($erpItems as $item) {
+            $combinedText = ($item['item_name'] ?? '') . ' ' .
+                             ($item['kode_bom'] ?? '') . ' ' . 
+                             ($item['dimensi'] ?? '') . ' ' . 
+                             ($item['finishing'] ?? '') . ' ' . 
+                             ($item['buyer'] ?? '');
+            $this->extractWords($combinedText, $words);
+        }
+
         // Hilangkan duplikat dan index ulang
         return array_values(array_unique($words));
     }
 
     private function extractWords(string $text, array &$words)
     {
-        // Hilangkan tanda baca dan ubah ke huruf kecil
-        $text = strtolower(preg_replace('/[^\w\s]/', '', $text));
+        // Hilangkan tanda baca dengan mengubahnya menjadi spasi agar kata tidak menempel
+        $text = strtolower(preg_replace('/[^\w\s]/', ' ', $text));
         $tokens = explode(' ', $text);
         
         foreach ($tokens as $token) {

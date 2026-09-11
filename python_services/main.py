@@ -52,8 +52,8 @@ async def scan_produk(request: Request):
             media_url = data.get("media_url")
             
             if message_id and str(message_id).strip() and str(message_id) != "None":
-                waha_url = f"http://127.0.0.1:3000/api/messages/{message_id}/download"
-                resp = req.get(waha_url, headers={"accept": "image/*"})
+                waha_url = f"http://127.0.0.1:3001/api/messages/{message_id}/download"
+                resp = req.get(waha_url, headers={"accept": "image/*", "X-Api-Key": "pt_gracia_kreasi_rotan"})
                 if resp.status_code == 200:
                     image_bytes = resp.content
             elif media_url and str(media_url).strip() and str(media_url) != "None":

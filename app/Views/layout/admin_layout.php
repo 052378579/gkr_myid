@@ -43,6 +43,11 @@
                 </a>
             </li>
             <li>
+                <a href="<?= base_url('admin/kamus') ?>" class="<?= (uri_string() == 'admin/kamus') ? 'active' : '' ?>">
+                    <i class="fas fa-book"></i> Kamus NLP
+                </a>
+            </li>
+            <li>
                 <a href="<?= base_url('admin/chat') ?>" class="<?= (uri_string() == 'admin/chat') ? 'active' : '' ?>">
                     <i class="fas fa-robot"></i> Chatbot
                 </a>
