@@ -51,20 +51,39 @@ async def scan_produk(request: Request):
             message_id = data.get("messageId")
             media_url = data.get("media_url")
             
+            # PRIORITAS 1: Unduh via message_id (Metode Paling Stabil)
             if message_id and str(message_id).strip() and str(message_id) != "None":
-                waha_url = f"http://127.0.0.1:3001/api/messages/{message_id}/download"
-                resp = req.get(waha_url, headers={"accept": "image/*", "X-Api-Key": "pt_gracia_kreasi_rotan"})
-                if resp.status_code == 200:
-                    image_bytes = resp.content
-            elif media_url and str(media_url).strip() and str(media_url) != "None":
-                if media_url.startswith("http"):
-                    resp = req.get(media_url)
+                waha_url = f"http://10.147.17.40:3001/api/gracia/messages/{message_id}/download"
+                try:
+                    resp = req.get(waha_url, headers={"accept": "image/*", "X-Api-Key": "pt_gracia_kreasi_rotan"})
                     if resp.status_code == 200:
                         image_bytes = resp.content
+                except Exception:
+                    pass
+                    
+            # PRIORITAS 2 (Fallback): Unduh via media_url jika message_id gagal
+            if not image_bytes and media_url and str(media_url).strip() and str(media_url) != "None":
+                media_url = str(media_url).replace("localhost:3000", "10.147.17.40:3001").replace("127.0.0.1:3001", "10.147.17.40:3001")
+                if media_url.startswith("http"):
+                    headers = {"accept": "image/*"}
+                    if "3001" in media_url or "api/files" in media_url:
+                        headers["X-Api-Key"] = "pt_gracia_kreasi_rotan"
+                    try:
+                        resp = req.get(media_url, headers=headers)
+                        if resp.status_code == 200:
+                            image_bytes = resp.content
+                    except Exception:
+                        pass
                 else:
-                    with open(media_url, "rb") as f:
-                        image_bytes = f.read()
+                    try:
+                        with open(media_url, "rb") as f:
+                            image_bytes = f.read()
+                    except Exception:
+                        pass
                         
+        if not image_bytes:
+             with open('debug_log.txt', 'a') as f:
+                 f.write(f'FAIL! url={media_url} msg={message_id}\n')
         if not image_bytes:
              return {"status": "error", "message": "Tidak ada gambar yang valid"}
         
@@ -79,7 +98,7 @@ async def scan_produk(request: Request):
         # Cari 15 foto terdekat (k=15)
         skor, indeks = index_faiss.search(user_vector_np, k=15)
         
-        THRESHOLD = 0.68  # Batas kemiripan minimal 68%
+        THRESHOLD = 0.00  # Diturunkan ke 0%
         
         results = []
         seen_codes = set()
@@ -98,8 +117,8 @@ async def scan_produk(request: Request):
                         "confidence": conf
                     })
         
-        if not results:
-            return {"status": "not_found", "message": "Produk kursi tidak dikenali"}
+        with open('debug_log.txt', 'a') as f:
+             f.write(f"Top match conf={float(skor[0][0])} index={indeks[0][0]}\n")
             
         return {
             "status": "success",
