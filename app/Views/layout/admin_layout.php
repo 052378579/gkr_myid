@@ -108,36 +108,10 @@
                 <a href="<?= base_url('admin/crawl') ?>" class="d-none d-md-block topbar-nav-link <?= (uri_string() == 'admin/crawl' || uri_string() == 'crawl') ? 'active' : '' ?>">Crawler</a>
                 <a href="<?= base_url('admin/erp') ?>" class="d-none d-md-block topbar-nav-link <?= (uri_string() == 'admin/erp' || strpos(uri_string(), 'admin/erp/') === 0) ? 'active' : '' ?>">ERP</a>
                 
-                <div class="dropdown" id="calendarDropdownWrap">
-                    <a href="#" id="calendarDropdownToggle" class="text-body fw-medium text-decoration-none d-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="font-size: 0.9rem; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary, #2B3385)'" onmouseout="this.style.color=''">
-                        <?php
-                            $hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-                            echo $hari[date('w')] . ', ' . date('d/m/Y');
-                        ?>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end p-3 shadow-lg rounded-4 border-0" style="width: 320px; background: rgba(var(--bs-body-bg-rgb), 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--bs-border-color) !important;">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
-                            <div class="text-center fw-bold" style="color: #2B3385; font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
-                            <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                        <table class="table table-sm table-borderless text-center mb-0" style="font-size: 0.85rem;">
-                            <thead>
-                                <tr>
-                                    <th class="text-muted fw-bold" style="font-size: 0.8rem;">W</th>
-                                    <th class="fw-medium">S</th>
-                                    <th class="fw-medium">S</th>
-                                    <th class="fw-medium">R</th>
-                                    <th class="fw-medium">K</th>
-                                    <th class="fw-medium">J</th>
-                                    <th class="text-danger fw-medium">S</th>
-                                    <th class="text-danger fw-medium">M</th>
-                                </tr>
-                            </thead>
-                            <tbody id="calendarBody">
-                            </tbody>
-                        </table>
-                    </div>
+                <div id="calendarDropdownWrap">
+                    <span class="text-body fw-medium text-decoration-none" style="font-size: 0.9rem;">
+                        <?= date('d/m/Y') ?>
+                    </span>
                 </div>
                 
                 <?php 
@@ -176,13 +150,13 @@
                     <!-- Rata Kiri (Left): Ikon Tema -->
                     <div class="text-start flex-shrink-0 d-flex align-items-center">
                         <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary rounded-circle" title="Ubah Tema" style="width: 32px; height: 32px; padding: 0; line-height: 1;">
-                            <span id="themeIcon" style="font-size: 0.9rem;">ÃƒÂ¢Ã‹Å“Ã¢â€šÂ¬ÃƒÂ¯Ã‚Â¸Ã‚Â</span>
+                            <span id="themeIcon" style="font-size: 0.9rem;"><i class="fas fa-circle-half-stroke"></i> Tema</span>
                         </button>
                     </div>
 
                     <!-- Rata Tengah (Center): Kredit Pengembang (Utuh 1 Baris) -->
                     <div class="text-center text-muted text-nowrap flex-shrink-0 px-2" style="min-width: 0;">
-                        <span class="d-none d-sm-inline">Dikembangkan oleh </span><span style="color: #2B3385;" class="fw-bold">RND</span> &copy; <?= date('Y') ?>
+                        <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary, #2B3385); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
                     </div>
 
                     <!-- Rata Kanan (Right): Teks Versi -->
@@ -204,7 +178,7 @@
 <script src="<?= base_url('js/config.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <script src="<?= base_url('js/theme.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <script src="<?= base_url('js/admin_layout.js') ?>?v=<?= ASSET_VERSION ?>"></script>
-<script src="<?= base_url('js/calendar.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+
 
 <?= $this->renderSection('scripts') ?>
 

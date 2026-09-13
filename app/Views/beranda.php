@@ -248,13 +248,13 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
         <div class="flex-grow-1 text-start">
             <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 text-muted hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='inherit'">
-                <span id="themeIcon">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã¢â‚¬â„¢ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ Tema</span>
+                <span id="themeIcon"><i class="fas fa-circle-half-stroke"></i> Tema</span>
             </button>
         </div>
 
         <!-- BAGIAN TENGAH: Copyright -->
         <div class="text-center">
-            <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
+            <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary, #2B3385); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
         </div>
 
         <!-- BAGIAN KANAN: Versi -->

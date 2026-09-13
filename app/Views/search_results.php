@@ -10,8 +10,8 @@
 
 <?= $this->section('content') ?>
 <?php
-$days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-$dateStr = $days[date('w')] . ', ' . date('d/m/Y');
+$dateDesktop = date('d/m/Y');
+$dateMobile = date('d/m/y');
 ?>
 <div class="header-container" id="header-container">
         <div class="desktop-left-wrapper">
@@ -45,34 +45,11 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
         </div>
 
         <div class="header-right-icons d-flex align-items-center gap-3 z-3" style="margin-left: auto !important; padding-right: 0 !important;">
-            <div class="dropdown" id="calendarDropdownWrap">
-                <a href="#" id="calendarDropdownToggle" class="small fw-medium text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="cursor: pointer; transition: color 0.2s; color: var(--bs-body-color);" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='var(--bs-body-color)'">
-                    <span class="d-none d-md-inline"><?= $dateStr ?></span>
-                    <span class="d-inline d-md-none"><?= date('d/m/y') ?></span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end shadow border-0 p-3 mt-2 rounded-4" style="width: 320px; z-index: 1060 !important;">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <button type="button" id="prevMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-left"></i></button>
-                        <div class="text-center fw-bold" style="color: var(--gkr-primary); font-size: 0.95rem;" id="calendarMonthYearLabel"></div>
-                        <button type="button" id="nextMonthBtn" class="btn btn-sm btn-link text-decoration-none text-body p-0 px-2"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <table class="table table-sm table-borderless text-center mb-0" style="font-size: 0.85rem;">
-                        <thead>
-                            <tr>
-                                <th class="text-muted fw-bold" style="font-size: 0.8rem;">W</th>
-                                <th class="fw-medium">S</th>
-                                <th class="fw-medium">S</th>
-                                <th class="fw-medium">R</th>
-                                <th class="fw-medium">K</th>
-                                <th class="fw-medium">J</th>
-                                <th class="text-danger fw-medium">S</th>
-                                <th class="text-danger fw-medium">M</th>
-                            </tr>
-                        </thead>
-                        <tbody id="calendarBody">
-                        </tbody>
-                    </table>
-                </div>
+            <div id="calendarDropdownWrap">
+                <span class="small fw-medium text-decoration-none" style="color: var(--bs-body-color);">
+                    <span class="d-none d-md-inline"><?= $dateDesktop ?></span>
+                    <span class="d-inline d-md-none"><?= $dateMobile ?></span>
+                </span>
             </div>
             
             <div class="dropdown">
@@ -395,12 +372,12 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
             <!-- BAGIAN KIRI: Ikon Mode Gelap/Terang -->
             <div class="flex-grow-1 text-start">
                 <button id="themeToggleBtn" class="btn btn-sm btn-outline-secondary border-0 hover-primary" title="Ubah Mode Tema" style="transition: color 0.2s; color: var(--bs-body-color);" onmouseover="this.style.color='var(--gkr-primary)'" onmouseout="this.style.color='var(--bs-body-color)'">
-                    <span id="themeIcon">🌓 Tema</span>
+                    <span id="themeIcon"><i class="fas fa-circle-half-stroke"></i> Tema</span>
                 </button>
             </div>
             <!-- BAGIAN TENGAH: Copyright -->
             <div class="text-center">
-                <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
+                <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary, #2B3385); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
             </div>
             <!-- BAGIAN KANAN: Versi -->
             <div class="flex-grow-1 text-end">
@@ -484,7 +461,7 @@ $dateStr = $days[date('w')] . ', ' . date('d/m/Y');
     data-search-url="<?= url_to('Search::index') ?>">
 <?= $this->endSection() ?>
 
-<script src="<?= base_url('js/calendar.js') ?>?v=<?= ASSET_VERSION ?>"></script>
+
 <script src="<?= base_url('js/voice_search.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <script src="<?= base_url('js/search.js') ?>?v=<?= ASSET_VERSION ?>"></script>
 <script src="<?= base_url('js/search_results.js') ?>?v=<?= ASSET_VERSION ?>"></script>

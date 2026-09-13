@@ -53,7 +53,7 @@
 
 <footer class="fixed-bottom py-3 w-100" style="background-color: transparent; color: #70757a; font-size: 0.9rem;">
     <div class="text-center w-100 fw-medium">
-        RND &copy; <?= date('Y') ?>
+        <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" class="text-decoration-none" style="color: var(--gkr-primary, #2B3385); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
     </div>
     <div class="position-absolute" style="right: 20px; top: 50%; transform: translateY(-50%);">
         <span class="text-muted fw-medium"><?= esc($version) ?></span>

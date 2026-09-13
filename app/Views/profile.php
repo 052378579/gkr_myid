@@ -13,7 +13,7 @@
             <i class="fas fa-arrow-left me-2"></i> Kembali ke Beranda
         </a>
         <button class="btn text-white border-0 d-flex align-items-center" id="themeToggleBtn" type="button" style="font-weight: 500;">
-            <span id="themeIcon">☀️ Mode Terang</span>
+            <span id="themeIcon"><i class="fas fa-circle-half-stroke"></i> Mode Terang</span>
         </button>
     </div>
 </nav>
