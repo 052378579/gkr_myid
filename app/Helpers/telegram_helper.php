@@ -60,3 +60,41 @@ if (!function_exists('send_telegram_notification')) {
         }
     }
 }
+
+if (!function_exists('kirim_notifikasi_telegram')) {
+    /**
+     * Helper murni untuk mengirim pesan Telegram langsung ke API (Tanpa n8n)
+     *
+     * @param string $chat_id Target Chat ID Administrator
+     * @param string $pesan   Isi pesan berformat Markdown
+     */
+    function kirim_notifikasi_telegram($chat_id, $pesan)
+    {
+        $botToken = env('BOT_TOKEN');
+
+        if (empty($botToken) || empty($chat_id)) {
+            log_message('error', 'Telegram Notification Error: BOT_TOKEN atau CHAT_ID kosong.');
+            return;
+        }
+
+        $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+        
+        $payload = [
+            'chat_id'    => $chat_id,
+            'text'       => $pesan,
+            'parse_mode' => 'Markdown'
+        ];
+
+        try {
+            $client = \Config\Services::curlrequest();
+            $client->post($url, [
+                'form_params' => $payload,
+                'timeout'     => 10,
+                'verify'      => false
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Telegram Notification Error (Direct): ' . $e->getMessage());
+        }
+    }
+}
+

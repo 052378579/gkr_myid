@@ -159,5 +159,3 @@ function renderData(items) {
 
 // Fetch initial data on page load
 fetchData();
-
-

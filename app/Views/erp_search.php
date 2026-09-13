@@ -7,9 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="<?= base_url('css/erp_search.css') ?>?v=<?= ASSET_VERSION ?>">
+    <link rel="stylesheet" href="<?= base_url('css/erp_search.css') ?>?v=<?= time() ?>">
 </head>
-<body>
+<body class="overflow-x-hidden">
 
     <?php
     $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -139,7 +139,7 @@
             <table class="data-list mx-auto" id="dataTable" style="table-layout: fixed; width: 100%;">
                 <thead>
                     <tr style="border-bottom: 2px solid #eee;">
-                        <th class="col-kode" style="width: 180px;">Kode BOM</th>
+                        <th class="col-kode">Kode BOM</th>
                         <th class="col-nama" style="width: auto;">Nama Barang</th>
                         <th class="col-dimensi d-none d-md-table-cell" style="width: 220px;">Dimensi</th>
                         <th class="col-buyer d-none d-md-table-cell" style="width: 170px;">Buyer</th>
@@ -185,5 +185,3 @@
     <script src="<?= base_url('js/calendar.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>
-
-

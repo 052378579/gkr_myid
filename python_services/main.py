@@ -53,7 +53,7 @@ async def scan_produk(request: Request):
             
             # PRIORITAS 1: Unduh via message_id (Metode Paling Stabil)
             if message_id and str(message_id).strip() and str(message_id) != "None":
-                waha_url = f"http://10.147.17.40:3001/api/gracia/messages/{message_id}/download"
+                waha_url = f"http://10.147.17.60:3001/api/gracia/messages/{message_id}/download"
                 try:
                     resp = req.get(waha_url, headers={"accept": "image/*", "X-Api-Key": "pt_gracia_kreasi_rotan"})
                     if resp.status_code == 200:
@@ -63,7 +63,7 @@ async def scan_produk(request: Request):
                     
             # PRIORITAS 2 (Fallback): Unduh via media_url jika message_id gagal
             if not image_bytes and media_url and str(media_url).strip() and str(media_url) != "None":
-                media_url = str(media_url).replace("localhost:3000", "10.147.17.40:3001").replace("127.0.0.1:3001", "10.147.17.40:3001")
+                media_url = str(media_url).replace("localhost:3000", "10.147.17.60:3001").replace("127.0.0.1:3001", "10.147.17.60:3001")
                 if media_url.startswith("http"):
                     headers = {"accept": "image/*"}
                     if "3001" in media_url or "api/files" in media_url:

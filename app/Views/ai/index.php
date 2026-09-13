@@ -189,7 +189,7 @@
                                 <li><a class="dropdown-item" href="<?= base_url('admin') ?>"><i class="fas fa-user-shield text-muted me-2"></i>Admin</a></li>
                             <?php endif; ?>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('logout') ?>" style="color: var(--gkr-primary);"><i class="fas fa-sign-out-alt me-2"></i>Keluar</a></li>
                         </ul>
                     </div>
                 </div>
@@ -310,10 +310,8 @@
                         </button>
                     </div>
                     <!-- Tengah: Hak Cipta -->
-                    <div class="text-center d-none d-sm-block">
-                        <span>Dikembangkan oleh </span>
-                        <a href="https://rnd.gkr.my.id" target="_blank" style="color: var(--gkr-primary); font-weight: 500;">RND</a> 
-                        &copy; <?= date('Y') ?>
+                    <div class="text-center">
+                        <span class="d-none d-sm-inline">Dikembangkan oleh </span><a href="https://rnd.gkr.my.id" target="_blank" class="text-decoration-none" style="color: var(--gkr-primary); font-weight: 500;">RND</a> &copy; <?= date('Y') ?>
                     </div>
                     <!-- Kanan: Versi -->
                     <div class="flex-grow-1 text-end">
@@ -339,5 +337,3 @@
     <script src="/assets/js/ai-app.js?v=<?= ASSET_VERSION ?? time() ?>"></script>
 </body>
 </html>
-
-

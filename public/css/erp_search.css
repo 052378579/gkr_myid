@@ -176,6 +176,11 @@ body {
 }
 
 /* Column styles removed here since explicit widths are in HTML table-layout fixed */
+@media (min-width: 769px) {
+    .col-kode {
+        width: 180px;
+    }
+}
 
 .col-kode a:hover { text-decoration: underline !important; }
 
@@ -247,8 +252,10 @@ body {
     }
     .data-list {
         width: 100%;
-        table-layout: auto !important; /* Biarkan otomatis di HP */
+        /* table-layout: auto !important; Dihapus untuk mengaktifkan text-truncate secara presisi pada seluler */
     }
+    .col-kode { width: 30%; }
+    .col-nama { width: 70%; }
     .nav-btn {
         position: absolute;
         bottom: 10px;
@@ -260,6 +267,3 @@ body {
     #btnPrev { left: 10px; }
     #btnNext { right: 10px; }
 }
-
-
-
