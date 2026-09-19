@@ -1,4 +1,4 @@
-import io
+﻿import io
 import json
 import numpy as np
 import torch
@@ -12,8 +12,23 @@ import faiss
 
 # --- TAMBAHAN UNTUK REMOVE BACKGROUND ---
 from rembg import remove, new_session
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+try:
+    import gudang_api
+    app.include_router(gudang_api.router)
+except Exception as e:
+    @app.get('/api/gkr2/search')
+    def debug_error():
+        return {'type': 'empty', 'error': str(e)}
 
 # Muat database FAISS dan file mapping lokal saat startup server
 index_faiss = faiss.read_index("produk.index")
@@ -191,3 +206,4 @@ async def remove_background(file: UploadFile = File(...)):
         
     except Exception as e:
         return {"status": "error", "message": f"Gagal menghapus background: {str(e)}"}
+
