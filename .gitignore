@@ -31,8 +31,11 @@ public/uploads/*
 .DS_Store
 Thumbs.db
 
-# Direktori penting untuk menjalankan python_services, 
-python_services/*
+# Direktori penting untuk menjalankan python_services dan scripts
+/python_services/*
+!/python_services/.gitkeep
+/scripts/*
+!/scripts/.gitkeep
 
 # -------------------------------------------------------------------
 # 5. DOKUMEN AGENTIC & SKENARIO LOKAL (SANGAT RAHASIA)
@@ -41,3 +44,9 @@ python_services/*
 *.md
 !README.md
 /.agents/*
+
+# -------------------------------------------------------------------
+# 6. GUDANG 2
+# -------------------------------------------------------------------
+public/gudang2/*
+!public/gudang2/.gitkeep

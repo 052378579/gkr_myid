@@ -1,9 +1,30 @@
 {
     "nama_file": "versi.json",
     "nama_proyek": "gkr_myid",
-    "tanggal_diperbarui": "13-09-2026 19:40:00 WIB",
-    "versi_diperbarui": "0.9.13",
+    "tanggal_diperbarui": "20-09-2026 18:00:00 WIB",
+    "versi_diperbarui": "0.9.20",
     "data": [
+        {
+            "id": 30,
+            "versi": "0.9.20",
+            "tanggal_rilis": "2026-09-20",
+            "judul": "Integrasi Dasbor Gudang 2 & Turbo Cache Harian",
+            "deskripsi": "Rilis komprehensif yang membawakan antarmuka pembacaan Excel cerdas untuk Gudang 2, dilengkapi peringatan stok kosong dinamis dan arsitektur Turbo Cache yang di-reset secara mutlak pada pergantian hari.",
+            "improvements": [
+                "Pembangunan integrasi pembaca Excel (Gudang 2) yang elegan dengan indikator warna dinamis dan presisi matematika.",
+                "Peluncuran teknologi Turbo Cache (Bypass) untuk menyajikan dasbor seketika tanpa latensi pembacaan Python.",
+                "Implementasi algoritma perlindungan data usang yang mereset memori secara ketat setiap pukul 00:00 WIB."
+            ],
+            "fixes": [
+                "Sterilisasi galat Z-Index yang sebelumnya menyebabkan kepala tabel Gudang 2 saling tindih dengan Navbar utama."
+            ],
+            "patches": [
+                "Pembaruan kalender rilis dan penomoran mutlak (Calendar Versioning 0.9.20).",
+                "Penguncian aman konfigurasi direktori public/gudang2 pada gitignore.",
+                "Sinkronisasi komprehensif terhadap dokumen pengembang: AGENTS, AI_Python, Bot_Telegram, Dokumentasi Pembersihan n8n, INDEX, MEMORY, NLP_Kamus, Pembersihan_n8n, PRD, RESTFull_Api, RULES, Skills, StyleGuide, Task, Tautan, WAHA_n8n."
+            ],
+            "created_at": "2026-09-20 18:00:00"
+        },
         {
             "id": 29,
             "versi": "0.9.13",

@@ -18,7 +18,7 @@ class SendMemoryAlert extends BaseCommand
         helper('telegram');
 
         // ID Admin Anda (sesuaikan dengan target chat ID administrator)
-        $adminChatId = '8784856529'; 
+        $adminChatId = env('CHAT_ID'); 
 
         // Kirim pesan menggunakan fungsi dari telegram_helper.php
         if (function_exists('kirim_notifikasi_telegram')) {
@@ -29,3 +29,4 @@ class SendMemoryAlert extends BaseCommand
         }
     }
 }
+

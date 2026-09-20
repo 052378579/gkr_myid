@@ -1,7 +1,7 @@
 #!/bin/bash
 # --- KONFIGURASI AMBANG BATAS ---
 # Ubah nilai THRESHOLD sesuai kebutuhan (misal: 85%)
-THRESHOLD=85
+THRESHOLD=90
 
 # Ambil data total dan penggunaan RAM fisik dari perintah 'free'
 TOTAL_MEM=$(free | grep Mem | awk '{print $2}')
@@ -20,7 +20,7 @@ if [ "$PERCENT_MEM" -ge "$THRESHOLD" ]; then
     WAKTU=$(date '+%d-%m-%Y %H:%M:%S WIB')
     
     # Susun pesan darurat sesuai standardisasi visual pelaporan sistem
-    PESAN="🚨 **PERINGATAN KRITIS: Memori Peladen Padat!**%0A%0A🖥️ **Server:** DEV (10.147.17.40)%0A📊 **Penggunaan RAM:** ${PERCENT_MEM}%25 (Ambang Batas: ${THRESHOLD}%25)%0A⏰ **Waktu:** ${WAKTU}%0A%0A⚠️ *Segera periksa beban konkurensi AI Vision untuk mencegah OOM Killer!*"
+    PESAN="🚨 PERINGATAN KRITIS: Server (DEV)%0A%0A🖥️ Server: 10.147.17.40 (DEV)%0A📉 Use RAM: ${PERCENT_MEM}%25 (Batas: ${THRESHOLD}%25)%0A⏰ Waktu: ${WAKTU}%0A%0A👉 Segera periksa beban Memory (RAM)"
 
     # Panggil helper/fungsi pengiriman Telegram via script PHP CodeIgniter yang memanfaatkan telegram_helper.php
     php /var/www/gkr_myid/spark telegram:send-alert "$PESAN"
