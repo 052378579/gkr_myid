@@ -489,9 +489,11 @@ class Search extends BaseController
             $logKataKunci = $kataKunci;
             if ($tipe === 'sites') {
                 $logTipe = 'situs';
-            } elseif ($tipe === 'image_results') {
-                $logTipe = 'gambar (MobileNetV3 & FAISS Vector Database)';
-                $logKataKunci = $kodeBom ?? 'UPLOADED_IMAGE';
+            } elseif ($tipe === 'image_results' || $tipe === 'images') {
+                $logTipe = 'gambar';
+                if ($tipe === 'image_results') {
+                    $logKataKunci = $kodeBom ?? 'UPLOADED_IMAGE';
+                }
             }
             
             $dataLog = [

@@ -31,6 +31,7 @@ $routes->get('/admin/cari', '\App\Controllers\Admin\AdminController::cari');
 $routes->get('/admin/doodle', '\App\Controllers\Admin\AdminController::doodle');
 $routes->get('/admin/log', '\App\Controllers\Admin\AdminController::log_cari');
 $routes->get('/admin/log/cari', '\App\Controllers\Admin\AdminController::log_cari');
+$routes->get('/admin/log/cari/export', '\App\Controllers\Admin\AdminController::export_log');
 $routes->get('/admin/log/user', '\App\Controllers\Admin\AdminController::log_user');
 $routes->get('/trend', 'TrendController::index');
 $routes->get('/awan_kata', 'AwanKata::index');

@@ -29,12 +29,22 @@ class AdminController extends BaseController
     public function log_cari()
     {
         $logCariModel = new \App\Models\LogCariModel();
-            
-        $logCari = $logCariModel
-            ->select('gkr_logcari.*, gkr_users.nama_lengkap')
-            ->join('gkr_users', 'gkr_users.id_user = gkr_logcari.id_user', 'left')
-            ->orderBy('gkr_logcari.waktu', 'DESC')
-            ->paginate(10, 'logCari');
+        
+        $tipe = $this->request->getGet('tipe');
+        $sumber = $this->request->getGet('sumber');
+
+        $logCariModel->select('gkr_logcari.*, gkr_users.nama_lengkap')
+                     ->join('gkr_users', 'gkr_users.id_user = gkr_logcari.id_user', 'left');
+
+        if (!empty($tipe)) {
+            $logCariModel->where('gkr_logcari.tipe_pencarian', $tipe);
+        }
+        if (!empty($sumber)) {
+            $logCariModel->where('gkr_logcari.source', $sumber);
+        }
+
+        $logCari = $logCariModel->orderBy('gkr_logcari.waktu', 'DESC')
+                                ->paginate(10, 'logCari');
 
         $serverIP = $_SERVER['SERVER_ADDR'] ?? '10.147.17.40';
         if (in_array($serverIP, ['127.0.0.1', '::1', 'localhost'])) {
@@ -47,10 +57,92 @@ class AdminController extends BaseController
             'logCari' => $logCari,
             'pagerCari' => $logCariModel->pager,
             'pagerCariCount' => $logCariModel->pager->getPageCount('logCari'),
-            'pagerCariCurrent' => $logCariModel->pager->getCurrentPage('logCari')
+            'pagerCariCurrent' => $logCariModel->pager->getCurrentPage('logCari'),
+            'filterTipe' => $tipe,
+            'filterSumber' => $sumber
         ];
         
         return view('admin/log_cari_admin', $data);
+    }
+
+    public function export_log()
+    {
+        $logCariModel = new \App\Models\LogCariModel();
+        
+        $tipe = $this->request->getGet('tipe');
+        $sumber = $this->request->getGet('sumber');
+        $format = $this->request->getGet('format');
+
+        $logCariModel->select('gkr_logcari.*, gkr_users.nama_lengkap')
+                     ->join('gkr_users', 'gkr_users.id_user = gkr_logcari.id_user', 'left');
+
+        if (!empty($tipe)) {
+            $logCariModel->where('gkr_logcari.tipe_pencarian', $tipe);
+        }
+        if (!empty($sumber)) {
+            $logCariModel->where('gkr_logcari.source', $sumber);
+        }
+
+        $dataLog = $logCariModel->orderBy('gkr_logcari.waktu', 'DESC')->findAll();
+
+        if ($format === 'excel') {
+            header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+            header("Content-Disposition: attachment; filename=Log_Pencarian_" . date('Ymd_His') . ".xls");
+            
+            echo '<table border="1">
+                <tr>
+                    <th>Waktu</th>
+                    <th>Platform</th>
+                    <th>Nama Pengguna</th>
+                    <th>Kata Kunci</th>
+                    <th>Tipe</th>
+                    <th>Alamat IP</th>
+                </tr>';
+            foreach ($dataLog as $log) {
+                $nama = $log['nama_lengkap'] ?? 'Tamu / Anonim';
+                $tipeStr = $log['tipe_pencarian'];
+                if ($log['kata_kunci'] === 'UPLOADED_IMAGE') {
+                    $tipeStr = 'AI Vision';
+                    $log['kata_kunci'] = 'Foto';
+                }
+                echo '<tr>
+                    <td>' . $log['waktu'] . '</td>
+                    <td>' . $log['source'] . '</td>
+                    <td>' . htmlspecialchars($nama) . '</td>
+                    <td>' . htmlspecialchars($log['kata_kunci']) . '</td>
+                    <td>' . htmlspecialchars($tipeStr) . '</td>
+                    <td>' . htmlspecialchars($log['alamat_ip'] ?? '-') . '</td>
+                </tr>';
+            }
+            echo '</table>';
+            exit;
+        } else {
+            // Default to CSV
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename=Log_Pencarian_' . date('Ymd_His') . '.csv');
+            
+            $output = fopen('php://output', 'w');
+            fputcsv($output, ['Waktu', 'Platform', 'Nama Pengguna', 'Kata Kunci', 'Tipe', 'Alamat IP']);
+            
+            foreach ($dataLog as $log) {
+                $nama = $log['nama_lengkap'] ?? 'Tamu / Anonim';
+                $tipeStr = $log['tipe_pencarian'];
+                if ($log['kata_kunci'] === 'UPLOADED_IMAGE') {
+                    $tipeStr = 'AI Vision';
+                    $log['kata_kunci'] = 'Foto';
+                }
+                fputcsv($output, [
+                    $log['waktu'],
+                    $log['source'],
+                    $nama,
+                    $log['kata_kunci'],
+                    $tipeStr,
+                    $log['alamat_ip'] ?? '-'
+                ]);
+            }
+            fclose($output);
+            exit;
+        }
     }
 
     public function log_user()
