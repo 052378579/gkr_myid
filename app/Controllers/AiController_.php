@@ -260,45 +260,7 @@ class AiController extends ResourceController
             }
 
             if (empty(trim($finalAiText))) {
-                // Pengecekan silang (cross-check) pesan dari agen bot di database dalam 5 detik terakhir
-                $timeThreshold = date('Y-m-d H:i:s', time() - 5);
-                $existingMsg = null;
-                
-                if ($sessionId === 'main') {
-                    $existingMsg = $this->chatHistoryModel->where('chat_id', $chatId)
-                                                          ->where('sender', 'bot')
-                                                          ->where('created_at >=', $timeThreshold)
-                                                          ->orderBy('id', 'DESC')
-                                                          ->first();
-                } else {
-                    $existingMsg = $this->aiPesanModel->where('session_id', $sessionId)
-                                                      ->where('role', 'assistant')
-                                                      ->where('created_at >=', $timeThreshold)
-                                                      ->orderBy('id', 'DESC')
-                                                      ->first();
-                }
-                
-                if ($existingMsg) {
-                    $isObject = is_object($existingMsg);
-                    
-                    if ($sessionId === 'main') {
-                        $finalAiText = $isObject ? $existingMsg->message : $existingMsg['message'];
-                        $existingMedia = $isObject ? ($existingMsg->media_url ?? null) : ($existingMsg['media_url'] ?? null);
-                        if (!empty($existingMedia)) {
-                            $mediaUrl = $existingMedia;
-                        }
-                    } else {
-                        $finalAiText = $isObject ? $existingMsg->content : $existingMsg['content'];
-                        $existingMedia = $isObject ? ($existingMsg->media_url ?? null) : ($existingMsg['media_url'] ?? null);
-                        if (!empty($existingMedia)) {
-                            $mediaUrl = $existingMedia;
-                        }
-                    }
-                    
-                    return $this->response->setJSON(['status' => 'success', 'reply' => $finalAiText, 'media_url' => $mediaUrl]);
-                } else {
-                    $finalAiText = "Maaf, saya tidak dapat merespons saat ini.";
-                }
+                $finalAiText = "Maaf, saya tidak dapat merespons saat ini.";
             }
 
             if ($sessionId === 'main') {
